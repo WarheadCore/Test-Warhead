@@ -173,7 +173,7 @@ MetricStopWatch<LoggerType> MakeMetricStopWatch(LoggerType&& loggerFunc)
 #define WH_METRIC_DETAILED_TIMER(category, ...) ((void)0)
 #define WH_METRIC_DETAILED_NO_THRESHOLD_TIMER(category, ...) ((void)0)
 #else
-#  if TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+#  if WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
 #define WH_METRIC_EVENT(category, title, description)                  \
         do {                                                           \
             if (sMetric->IsEnabled())                                  \

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRIDNOTIFIERSIMPL_H
-#define TRINITY_GRIDNOTIFIERSIMPL_H
+#ifndef WARHEAD_GRIDNOTIFIERSIMPL_H
+#define WARHEAD_GRIDNOTIFIERSIMPL_H
 
 #include "GridNotifiers.h"
 #include "Corpse.h"
@@ -557,4 +557,4 @@ void Warhead::LocalizedPacketListDo<Builder>::operator()(Player* p)
         p->SendDirectMessage((*data_list)[i]);
 }
 
-#endif                                                      // TRINITY_GRIDNOTIFIERSIMPL_H
+#endif                                                      // WARHEAD_GRIDNOTIFIERSIMPL_H

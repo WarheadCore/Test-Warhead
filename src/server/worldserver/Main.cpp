@@ -63,8 +63,8 @@
 using namespace boost::program_options;
 namespace fs = boost::filesystem;
 
-#ifndef _TRINITY_CORE_CONFIG
-    #define _TRINITY_CORE_CONFIG  "worldserver.conf"
+#ifndef _WARHEAD_CORE_CONFIG
+    #define _WARHEAD_CORE_CONFIG  "worldserver.conf"
 #endif
 
 #define WORLD_SLEEP_CONST 50
@@ -120,7 +120,7 @@ extern int main(int argc, char** argv)
     Warhead::Impl::CurrentServerProcessHolder::_type = SERVER_PROCESS_WORLDSERVER;
     signal(SIGABRT, &Warhead::AbortHandler);
 
-    auto configFile = fs::absolute(_TRINITY_CORE_CONFIG);
+    auto configFile = fs::absolute(_WARHEAD_CORE_CONFIG);
     std::string configService;
 
     auto vm = GetConsoleArguments(argc, argv, configFile, configService);
@@ -189,7 +189,7 @@ extern int main(int argc, char** argv)
 
     // Set signal handlers (this must be done before starting IoContext threads, because otherwise they would unblock and exit)
     boost::asio::signal_set signals(*ioContext, SIGINT, SIGTERM);
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     signals.add(SIGBREAK);
 #endif
     signals.async_wait(SignalHandler);
@@ -628,7 +628,7 @@ variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, s
     all.add_options()
         ("help,h", "print usage message")
         ("version,v", "print version build info")
-        ("config,c", value<fs::path>(&configFile)->default_value(fs::absolute(_TRINITY_CORE_CONFIG)),
+        ("config,c", value<fs::path>(&configFile)->default_value(fs::absolute(_WARHEAD_CORE_CONFIG)),
                      "use <arg> as configuration file")
         ("update-databases-only,u", "updates databases only")
         ;

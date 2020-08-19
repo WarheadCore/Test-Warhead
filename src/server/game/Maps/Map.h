@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MAP_H
-#define TRINITY_MAP_H
+#ifndef WARHEAD_MAP_H
+#define WARHEAD_MAP_H
 
 #include "Define.h"
 

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SRP6_H
-#define TRINITY_SRP6_H
+#ifndef WARHEAD_SRP6_H
+#define WARHEAD_SRP6_H
 
 #include "AuthDefines.h"
 #include "BigNumber.h"

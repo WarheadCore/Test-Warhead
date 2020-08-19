@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_LOG_H
-#define TRINITYCORE_LOG_H
+#ifndef WARHEADCORE_LOG_H
+#define WARHEADCORE_LOG_H
 
 #include "Define.h"
 #include "AsioHacksFwd.h"
@@ -145,7 +145,7 @@ class WH_COMMON_API Log
 
 #ifdef PERFORMANCE_PROFILING
 #define LOG_MESSAGE_BODY(filterType__, level__, ...) ((void)0)
-#elif TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+#elif WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
 void check_args(char const*, ...) ATTR_PRINTF(1, 2);
 void check_args(std::string const&, ...);
 

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYSERVER_TYPEDEFS_H
-#define TRINITYSERVER_TYPEDEFS_H
+#ifndef WARHEADSERVER_TYPEDEFS_H
+#define WARHEADSERVER_TYPEDEFS_H
 
 #include "Common.h"
 
@@ -72,4 +72,4 @@ namespace Movement
     WH_GAME_API extern UInt32Counter splineIdGen;
 }
 
-#endif // TRINITYSERVER_TYPEDEFS_H
+#endif // WARHEADSERVER_TYPEDEFS_H

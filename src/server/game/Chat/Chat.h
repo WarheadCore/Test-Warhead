@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_CHAT_H
-#define TRINITYCORE_CHAT_H
+#ifndef WARHEADCORE_CHAT_H
+#define WARHEADCORE_CHAT_H
 
 #include "Common.h"
 #include "ChatCommand.h"

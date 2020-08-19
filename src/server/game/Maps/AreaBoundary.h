@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_AREA_BOUNDARY_H
-#define TRINITY_AREA_BOUNDARY_H
+#ifndef WARHEAD_AREA_BOUNDARY_H
+#define WARHEAD_AREA_BOUNDARY_H
 
 #include "Position.h"
 
@@ -165,4 +165,4 @@ class WH_GAME_API BoundaryUnionBoundary : public AreaBoundary
         AreaBoundary const* const _b2;
 };
 
-#endif //TRINITY_AREA_BOUNDARY_H
+#endif //WARHEAD_AREA_BOUNDARY_H

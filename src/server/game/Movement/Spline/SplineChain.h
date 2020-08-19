@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SPLINECHAIN_H
-#define TRINITY_SPLINECHAIN_H
+#ifndef WARHEAD_SPLINECHAIN_H
+#define WARHEAD_SPLINECHAIN_H
 
 #include "MoveSplineInitArgs.h"
 #include <G3D/Vector3.h>

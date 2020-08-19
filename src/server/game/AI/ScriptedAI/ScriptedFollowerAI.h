@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SCRIPTEDFOLLOWERAI_H
-#define TRINITY_SCRIPTEDFOLLOWERAI_H
+#ifndef WARHEAD_SCRIPTEDFOLLOWERAI_H
+#define WARHEAD_SCRIPTEDFOLLOWERAI_H
 
 #include "ScriptedCreature.h"
 

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_LOOTMGR_H
-#define TRINITY_LOOTMGR_H
+#ifndef WARHEAD_LOOTMGR_H
+#define WARHEAD_LOOTMGR_H
 
 #include "Define.h"
 #include "ConditionMgr.h"

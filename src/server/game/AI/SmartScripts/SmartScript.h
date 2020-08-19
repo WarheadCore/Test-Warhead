@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SMARTSCRIPT_H
-#define TRINITY_SMARTSCRIPT_H
+#ifndef WARHEAD_SMARTSCRIPT_H
+#define WARHEAD_SMARTSCRIPT_H
 
 #include "Define.h"
 #include "SmartScriptMgr.h"

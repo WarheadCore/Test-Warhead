@@ -57,7 +57,7 @@ bool WorldSocketMgr::StartWorldNetwork(Warhead::Asio::IoContext& ioContext, std:
 {
     _tcpNoDelay = sConfigMgr->GetBoolDefault("Network.TcpNodelay", true);
 
-    int const max_connections = TRINITY_MAX_LISTEN_CONNECTIONS;
+    int const max_connections = WARHEAD_MAX_LISTEN_CONNECTIONS;
     LOG_DEBUG("misc", "Max allowed socket connections %d", max_connections);
 
     // -1 means use default

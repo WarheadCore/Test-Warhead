@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_ARGON2_H
-#define TRINITY_ARGON2_H
+#ifndef WARHEAD_ARGON2_H
+#define WARHEAD_ARGON2_H
 
 #include "BigNumber.h"
 #include "Define.h"

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_DBCSTORES_H
-#define TRINITY_DBCSTORES_H
+#ifndef WARHEAD_DBCSTORES_H
+#define WARHEAD_DBCSTORES_H
 
 #include "DBCStore.h"
 #include "DBCStructure.h"

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SPELLDEFINES_H
-#define TRINITY_SPELLDEFINES_H
+#ifndef WARHEAD_SPELLDEFINES_H
+#define WARHEAD_SPELLDEFINES_H
 
 #include "Define.h"
 #include "ObjectGuid.h"

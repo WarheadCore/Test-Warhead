@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_PET_H
-#define TRINITYCORE_PET_H
+#ifndef WARHEADCORE_PET_H
+#define WARHEADCORE_PET_H
 
 #include "PetDefines.h"
 #include "TemporarySummon.h"

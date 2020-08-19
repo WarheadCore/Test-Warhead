@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SCRIPTEDCREATURE_H
-#define TRINITY_SCRIPTEDCREATURE_H
+#ifndef WARHEAD_SCRIPTEDCREATURE_H
+#define WARHEAD_SCRIPTEDCREATURE_H
 
 #include "Creature.h"  // convenience include for scripts, all uses of ScriptedCreature also need Creature (except ScriptedCreature itself doesn't need Creature)
 #include "CreatureAI.h"
@@ -408,4 +408,4 @@ inline void GetPlayerListInGrid(Container& container, WorldObject* source, float
     source->GetPlayerListInGrid(container, maxSearchRange);
 }
 
-#endif // TRINITY_SCRIPTEDCREATURE_H
+#endif // WARHEAD_SCRIPTEDCREATURE_H

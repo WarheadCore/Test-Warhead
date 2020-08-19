@@ -237,7 +237,7 @@ void Spell::EffectNULL(SpellEffIndex /*effIndex*/)
 
 void Spell::EffectUnused(SpellEffIndex /*effIndex*/)
 {
-    // NOT USED BY ANY SPELL OR USELESS OR IMPLEMENTED IN DIFFERENT WAY IN TRINITY
+    // NOT USED BY ANY SPELL OR USELESS OR IMPLEMENTED IN DIFFERENT WAY IN WARHEAD
 }
 
 void Spell::EffectResurrectNew(SpellEffIndex effIndex)

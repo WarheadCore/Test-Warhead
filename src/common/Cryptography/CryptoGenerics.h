@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CRYPTO_GENERICS_HPP
-#define TRINITY_CRYPTO_GENERICS_HPP
+#ifndef WARHEAD_CRYPTO_GENERICS_HPP
+#define WARHEAD_CRYPTO_GENERICS_HPP
 
 #include "BigNumber.h"
 #include "CryptoRandom.h"

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRIDSTATES_H
-#define TRINITY_GRIDSTATES_H
+#ifndef WARHEAD_GRIDSTATES_H
+#define WARHEAD_GRIDSTATES_H
 
 #include "GridDefines.h"
 #include "NGrid.h"

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_PLAYERAI_H
-#define TRINITY_PLAYERAI_H
+#ifndef WARHEAD_PLAYERAI_H
+#define WARHEAD_PLAYERAI_H
 
 #include "Common.h"
 #include "UnitAI.h"

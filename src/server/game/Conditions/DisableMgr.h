@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_DISABLEMGR_H
-#define TRINITY_DISABLEMGR_H
+#ifndef WARHEAD_DISABLEMGR_H
+#define WARHEAD_DISABLEMGR_H
 
 #include "Define.h"
 
@@ -67,4 +67,4 @@ namespace DisableMgr
     WH_GAME_API bool IsPathfindingEnabled(uint32 mapId);
 }
 
-#endif //TRINITY_DISABLEMGR_H
+#endif //WARHEAD_DISABLEMGR_H

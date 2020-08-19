@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_STRING_FORMAT_H
-#define TRINITYCORE_STRING_FORMAT_H
+#ifndef WARHEADCORE_STRING_FORMAT_H
+#define WARHEADCORE_STRING_FORMAT_H
 
 #include "fmt/printf.h"
 

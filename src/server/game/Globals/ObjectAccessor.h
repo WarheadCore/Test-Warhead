@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_OBJECTACCESSOR_H
-#define TRINITY_OBJECTACCESSOR_H
+#ifndef WARHEAD_OBJECTACCESSOR_H
+#define WARHEAD_OBJECTACCESSOR_H
 
 #include "ObjectGuid.h"
 #include <shared_mutex>

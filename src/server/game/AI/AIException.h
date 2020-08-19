@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_AIEXCEPTION_H
-#define TRINITY_AIEXCEPTION_H
+#ifndef WARHEAD_AIEXCEPTION_H
+#define WARHEAD_AIEXCEPTION_H
 
 #include "Define.h"
 #include <exception>

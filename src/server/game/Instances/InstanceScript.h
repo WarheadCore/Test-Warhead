@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_INSTANCE_DATA_H
-#define TRINITY_INSTANCE_DATA_H
+#ifndef WARHEAD_INSTANCE_DATA_H
+#define WARHEAD_INSTANCE_DATA_H
 
 #include "ZoneScript.h"
 #include "Common.h"
@@ -314,12 +314,12 @@ class WH_GAME_API InstanceScript : public ZoneScript
         std::vector<InstanceSpawnGroupInfo> const* const _instanceSpawnGroups;
         std::unordered_set<uint32> _activatedAreaTriggers;
 
-    #ifdef TRINITY_API_USE_DYNAMIC_LINKING
+    #ifdef WARHEAD_API_USE_DYNAMIC_LINKING
         // Strong reference to the associated script module
         std::shared_ptr<ModuleReference> module_reference;
-    #endif // #ifndef TRINITY_API_USE_DYNAMIC_LINKING
+    #endif // #ifndef WARHEAD_API_USE_DYNAMIC_LINKING
 
         friend class debug_commandscript;
 };
 
-#endif // TRINITY_INSTANCE_DATA_H
+#endif // WARHEAD_INSTANCE_DATA_H

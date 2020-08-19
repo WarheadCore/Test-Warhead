@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SPLINECHAINMOVEMENTGENERATOR_H
-#define TRINITY_SPLINECHAINMOVEMENTGENERATOR_H
+#ifndef WARHEAD_SPLINECHAINMOVEMENTGENERATOR_H
+#define WARHEAD_SPLINECHAINMOVEMENTGENERATOR_H
 
 #include "SplineChain.h"
 #include "MovementGenerator.h"

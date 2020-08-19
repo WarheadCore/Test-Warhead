@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRIDDEFINES_H
-#define TRINITY_GRIDDEFINES_H
+#ifndef WARHEAD_GRIDDEFINES_H
+#define WARHEAD_GRIDDEFINES_H
 
 #include "Common.h"
 #include "ObjectGuid.h"

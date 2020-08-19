@@ -33,7 +33,7 @@
 #include "Transaction.h"
 #include "MySQLWorkaround.h"
 #include <mysqld_error.h>
-#ifdef TRINITY_DEBUG
+#ifdef WARHEAD_DEBUG
 #include <sstream>
 #include <boost/stacktrace.hpp>
 #endif
@@ -244,7 +244,7 @@ SQLTransaction<T> DatabaseWorkerPool<T>::BeginTransaction()
 template <class T>
 void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction<T> transaction)
 {
-#ifdef TRINITY_DEBUG
+#ifdef WARHEAD_DEBUG
     //! Only analyze transaction weaknesses in Debug mode.
     //! Ideally we catch the faults in Debug mode and then correct them,
     //! so there's no need to waste these CPU cycles in Release mode.
@@ -259,7 +259,7 @@ void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction<T> transaction)
     default:
         break;
     }
-#endif // TRINITY_DEBUG
+#endif // WARHEAD_DEBUG
 
     Enqueue(new TransactionTask(transaction));
 }
@@ -267,7 +267,7 @@ void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction<T> transaction)
 template <class T>
 TransactionCallback DatabaseWorkerPool<T>::AsyncCommitTransaction(SQLTransaction<T> transaction)
 {
-#ifdef TRINITY_DEBUG
+#ifdef WARHEAD_DEBUG
     //! Only analyze transaction weaknesses in Debug mode.
     //! Ideally we catch the faults in Debug mode and then correct them,
     //! so there's no need to waste these CPU cycles in Release mode.
@@ -282,7 +282,7 @@ TransactionCallback DatabaseWorkerPool<T>::AsyncCommitTransaction(SQLTransaction
         default:
             break;
     }
-#endif // TRINITY_DEBUG
+#endif // WARHEAD_DEBUG
 
     TransactionWithResultTask* task = new TransactionWithResultTask(transaction);
     TransactionFuture result = task->GetFuture();
@@ -416,7 +416,7 @@ void DatabaseWorkerPool<T>::Enqueue(SQLOperation* op)
 template <class T>
 T* DatabaseWorkerPool<T>::GetFreeConnection()
 {
-#ifdef TRINITY_DEBUG
+#ifdef WARHEAD_DEBUG
     if (_warnSyncQueries)
     {
         std::ostringstream ss;

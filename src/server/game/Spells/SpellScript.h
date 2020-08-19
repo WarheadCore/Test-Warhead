@@ -117,12 +117,12 @@ class WH_GAME_API _SpellScript
 
     private:
 
-#ifdef TRINITY_API_USE_DYNAMIC_LINKING
+#ifdef WARHEAD_API_USE_DYNAMIC_LINKING
 
         // Strong reference to keep the binary code loaded
         std::shared_ptr<ModuleReference> m_moduleReference;
 
-#endif // #ifndef TRINITY_API_USE_DYNAMIC_LINKING
+#endif // #ifndef WARHEAD_API_USE_DYNAMIC_LINKING
 
     public:
         //

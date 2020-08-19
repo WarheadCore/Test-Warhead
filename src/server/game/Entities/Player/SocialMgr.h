@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_SOCIALMGR_H
-#define __TRINITY_SOCIALMGR_H
+#ifndef __WARHEAD_SOCIALMGR_H
+#define __WARHEAD_SOCIALMGR_H
 
 #include "DatabaseEnvFwd.h"
 #include "Common.h"

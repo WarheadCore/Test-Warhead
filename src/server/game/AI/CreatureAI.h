@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CREATUREAI_H
-#define TRINITY_CREATUREAI_H
+#ifndef WARHEAD_CREATUREAI_H
+#define WARHEAD_CREATUREAI_H
 
 #include "Common.h"
 #include "ObjectDefines.h"

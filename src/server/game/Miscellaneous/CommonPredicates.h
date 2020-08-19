@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_COMMONPREDICATES_H
-#define TRINITY_COMMONPREDICATES_H
+#ifndef WARHEAD_COMMONPREDICATES_H
+#define WARHEAD_COMMONPREDICATES_H
 
 #include "Define.h"
 #include <utility>
@@ -67,4 +67,4 @@ namespace Warhead
 }
 
 
-#endif //TRINITY_COMMONPREDICATES_H
+#endif //WARHEAD_COMMONPREDICATES_H

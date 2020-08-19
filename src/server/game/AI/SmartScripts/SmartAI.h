@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SMARTAI_H
-#define TRINITY_SMARTAI_H
+#ifndef WARHEAD_SMARTAI_H
+#define WARHEAD_SMARTAI_H
 
 #include "Define.h"
 #include "CreatureAI.h"

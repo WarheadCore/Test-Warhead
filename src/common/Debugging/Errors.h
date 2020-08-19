@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_ERRORS_H
-#define TRINITYCORE_ERRORS_H
+#ifndef WARHEADCORE_ERRORS_H
+#define WARHEADCORE_ERRORS_H
 
 #include "Define.h"
 #include <string>
@@ -41,7 +41,7 @@ namespace Warhead
 
 WH_COMMON_API std::string GetDebugInfo();
 
-#if TRINITY_COMPILER == TRINITY_COMPILER_MICROSOFT
+#if WARHEAD_COMPILER == WARHEAD_COMPILER_MICROSOFT
 #define ASSERT_BEGIN __pragma(warning(push)) __pragma(warning(disable: 4127))
 #define ASSERT_END __pragma(warning(pop))
 #else
@@ -49,7 +49,7 @@ WH_COMMON_API std::string GetDebugInfo();
 #define ASSERT_END
 #endif
 
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
 #define EXCEPTION_ASSERTION_FAILURE 0xC0000420L
 #endif
 

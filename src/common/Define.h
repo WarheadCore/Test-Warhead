@@ -15,12 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_DEFINE_H
-#define TRINITY_DEFINE_H
+#ifndef WARHEAD_DEFINE_H
+#define WARHEAD_DEFINE_H
 
 #include "CompilerDefs.h"
 
-#if TRINITY_COMPILER == TRINITY_COMPILER_GNU
+#if WARHEAD_COMPILER == WARHEAD_COMPILER_GNU
 #  if !defined(__STDC_FORMAT_MACROS)
 #    define __STDC_FORMAT_MACROS
 #  endif
@@ -43,19 +43,19 @@
 #include <cinttypes>
 #include <climits>
 
-#define TRINITY_LITTLEENDIAN 0
-#define TRINITY_BIGENDIAN    1
+#define WARHEAD_LITTLEENDIAN 0
+#define WARHEAD_BIGENDIAN    1
 
-#if !defined(TRINITY_ENDIAN)
+#if !defined(WARHEAD_ENDIAN)
 #  if defined (BOOST_BIG_ENDIAN)
-#    define TRINITY_ENDIAN TRINITY_BIGENDIAN
+#    define WARHEAD_ENDIAN WARHEAD_BIGENDIAN
 #  else
-#    define TRINITY_ENDIAN TRINITY_LITTLEENDIAN
+#    define WARHEAD_ENDIAN WARHEAD_LITTLEENDIAN
 #  endif
 #endif
 
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
-#  define TRINITY_PATH_MAX 260
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
+#  define WARHEAD_PATH_MAX 260
 #  define _USE_MATH_DEFINES
 #  ifndef DECLSPEC_NORETURN
 #    define DECLSPEC_NORETURN __declspec(noreturn)
@@ -63,36 +63,36 @@
 #  ifndef DECLSPEC_DEPRECATED
 #    define DECLSPEC_DEPRECATED __declspec(deprecated)
 #  endif //DECLSPEC_DEPRECATED
-#else // TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
-#  define TRINITY_PATH_MAX PATH_MAX
+#else // WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
+#  define WARHEAD_PATH_MAX PATH_MAX
 #  define DECLSPEC_NORETURN
 #  define DECLSPEC_DEPRECATED
-#endif // TRINITY_PLATFORM
+#endif // WARHEAD_PLATFORM
 
 #if !defined(COREDEBUG)
-#  define TRINITY_INLINE inline
+#  define WARHEAD_INLINE inline
 #else //COREDEBUG
-#  if !defined(TRINITY_DEBUG)
-#    define TRINITY_DEBUG
-#  endif //TRINITY_DEBUG
-#  define TRINITY_INLINE
+#  if !defined(WARHEAD_DEBUG)
+#    define WARHEAD_DEBUG
+#  endif //WARHEAD_DEBUG
+#  define WARHEAD_INLINE
 #endif //!COREDEBUG
 
-#if TRINITY_COMPILER == TRINITY_COMPILER_GNU
+#if WARHEAD_COMPILER == WARHEAD_COMPILER_GNU
 #  define ATTR_NORETURN __attribute__((__noreturn__))
 #  define ATTR_PRINTF(F, V) __attribute__ ((__format__ (__printf__, F, V)))
 #  define ATTR_DEPRECATED __attribute__((__deprecated__))
-#else //TRINITY_COMPILER != TRINITY_COMPILER_GNU
+#else //WARHEAD_COMPILER != WARHEAD_COMPILER_GNU
 #  define ATTR_NORETURN
 #  define ATTR_PRINTF(F, V)
 #  define ATTR_DEPRECATED
-#endif //TRINITY_COMPILER == TRINITY_COMPILER_GNU
+#endif //WARHEAD_COMPILER == WARHEAD_COMPILER_GNU
 
-#ifdef TRINITY_API_USE_DYNAMIC_LINKING
-#  if TRINITY_COMPILER == TRINITY_COMPILER_MICROSOFT
+#ifdef WARHEAD_API_USE_DYNAMIC_LINKING
+#  if WARHEAD_COMPILER == WARHEAD_COMPILER_MICROSOFT
 #    define wH_API_EXPORT __declspec(dllexport)
 #    define wH_API_IMPORT __declspec(dllimport)
-#  elif TRINITY_COMPILER == TRINITY_COMPILER_GNU
+#  elif WARHEAD_COMPILER == WARHEAD_COMPILER_GNU
 #    define wH_API_EXPORT __attribute__((visibility("default")))
 #    define wH_API_IMPORT
 #  else
@@ -103,25 +103,25 @@
 #  define wH_API_IMPORT
 #endif
 
-#ifdef TRINITY_API_EXPORT_COMMON
+#ifdef WARHEAD_API_EXPORT_COMMON
 #  define wH_COMMON_API wH_API_EXPORT
 #else
 #  define wH_COMMON_API wH_API_IMPORT
 #endif
 
-#ifdef TRINITY_API_EXPORT_DATABASE
+#ifdef WARHEAD_API_EXPORT_DATABASE
 #  define wH_DATABASE_API wH_API_EXPORT
 #else
 #  define wH_DATABASE_API wH_API_IMPORT
 #endif
 
-#ifdef TRINITY_API_EXPORT_SHARED
+#ifdef WARHEAD_API_EXPORT_SHARED
 #  define wH_SHARED_API wH_API_EXPORT
 #else
 #  define wH_SHARED_API wH_API_IMPORT
 #endif
 
-#ifdef TRINITY_API_EXPORT_GAME
+#ifdef WARHEAD_API_EXPORT_GAME
 #  define wH_GAME_API wH_API_EXPORT
 #else
 #  define wH_GAME_API wH_API_IMPORT
@@ -144,4 +144,4 @@ typedef uint32_t uint32;
 typedef uint16_t uint16;
 typedef uint8_t uint8;
 
-#endif //TRINITY_DEFINE_H
+#endif //WARHEAD_DEFINE_H

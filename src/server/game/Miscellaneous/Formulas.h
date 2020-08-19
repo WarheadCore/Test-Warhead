@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FORMULAS_H
-#define TRINITY_FORMULAS_H
+#ifndef WARHEAD_FORMULAS_H
+#define WARHEAD_FORMULAS_H
 
 #include "DBCStores.h"
 #include "Creature.h"

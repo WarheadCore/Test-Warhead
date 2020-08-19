@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_LANGUAGE_H
-#define __TRINITY_LANGUAGE_H
+#ifndef __WARHEAD_LANGUAGE_H
+#define __WARHEAD_LANGUAGE_H
 
 enum BroadcastTextIds
 {

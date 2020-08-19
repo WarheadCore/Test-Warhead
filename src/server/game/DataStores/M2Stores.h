@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_M2STORES_H
-#define TRINITY_M2STORES_H
+#ifndef WARHEAD_M2STORES_H
+#define WARHEAD_M2STORES_H
 
 #include "Define.h"
 #include "Position.h"

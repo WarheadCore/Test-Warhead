@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SCRIPTEDESCORTAI_H
-#define TRINITY_SCRIPTEDESCORTAI_H
+#ifndef WARHEAD_SCRIPTEDESCORTAI_H
+#define WARHEAD_SCRIPTEDESCORTAI_H
 
 #include "ScriptedCreature.h"
 #include "WaypointDefines.h"

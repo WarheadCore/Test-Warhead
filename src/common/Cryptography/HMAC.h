@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_HMAC_H
-#define TRINITY_HMAC_H
+#ifndef WARHEAD_HMAC_H
+#define WARHEAD_HMAC_H
 
 #include "CryptoConstants.h"
 #include "Define.h"

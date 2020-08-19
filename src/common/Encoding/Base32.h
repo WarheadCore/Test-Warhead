@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_BASE32_H
-#define TRINITY_BASE32_H
+#ifndef WARHEAD_BASE32_H
+#define WARHEAD_BASE32_H
 
 #include "Define.h"
 #include "Optional.h"

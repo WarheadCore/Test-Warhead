@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SCRIPTEDGOSSIP_H
-#define TRINITY_SCRIPTEDGOSSIP_H
+#ifndef WARHEAD_SCRIPTEDGOSSIP_H
+#define WARHEAD_SCRIPTEDGOSSIP_H
 
 #include "GossipDef.h"
 #include "QuestDef.h"

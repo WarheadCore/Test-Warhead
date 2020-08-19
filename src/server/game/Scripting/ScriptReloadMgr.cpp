@@ -19,7 +19,7 @@
 #include "Errors.h"
 #include "Optional.h"
 
-#ifndef TRINITY_API_USE_DYNAMIC_LINKING
+#ifndef WARHEAD_API_USE_DYNAMIC_LINKING
 
 // This method should never be called
 std::shared_ptr<ModuleReference>
@@ -65,7 +65,7 @@ ScriptReloadMgr* ScriptReloadMgr::instance()
 
 namespace fs = boost::filesystem;
 
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     #include <windows.h>
 #else // Posix and Apple
     #include <dlfcn.h>
@@ -79,7 +79,7 @@ namespace fs = boost::filesystem;
 // Returns "" on Windows and "lib" on posix.
 static char const* GetSharedLibraryPrefix()
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     return "";
 #else // Posix
     return "lib";
@@ -89,16 +89,16 @@ static char const* GetSharedLibraryPrefix()
 // Returns "dll" on Windows, "dylib" on OS X, and "so" on posix.
 static char const* GetSharedLibraryExtension()
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     return "dll";
-#elif TRINITY_PLATFORM == TRINITY_PLATFORM_APPLE
+#elif WARHEAD_PLATFORM == WARHEAD_PLATFORM_APPLE
     return "dylib";
 #else // Posix
     return "so";
 #endif
 }
 
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
 typedef HMODULE HandleType;
 #else // Posix
 typedef void* HandleType;
@@ -127,7 +127,7 @@ public:
     void operator() (HandleType handle) const
     {
         // Unload the associated shared library.
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
         bool success = (FreeLibrary(handle) != 0);
 #else // Posix
         bool success = (dlclose(handle) == 0);
@@ -237,7 +237,7 @@ private:
 template<typename Fn>
 static bool GetFunctionFromSharedLibrary(HandleType handle, std::string const& name, Fn& fn)
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     fn = reinterpret_cast<Fn>(GetProcAddress(handle, name.c_str()));
 #else // Posix
     fn = reinterpret_cast<Fn>(dlsym(handle, name.c_str()));
@@ -256,7 +256,7 @@ Optional<std::shared_ptr<ScriptModule>>
             return path;
     }();
 
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     HandleType handle = LoadLibrary(load_path.generic_string().c_str());
 #else // Posix
     HandleType handle = dlopen(load_path.generic_string().c_str(), RTLD_LAZY);
@@ -398,7 +398,7 @@ static std::string CalculateScriptModuleProjectName(std::string const& module)
 /// could block the rebuild of new shared libraries.
 static bool IsDebuggerBlockingRebuild()
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     if (IsDebuggerPresent())
         return true;
 #endif
@@ -1328,7 +1328,7 @@ private:
 
                 auto current_path = fs::current_path();
 
-            #if TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+            #if WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
                 // The worldserver location is ${CMAKE_INSTALL_PREFIX}/bin
                 // on all other platforms then windows
                 current_path = current_path.parent_path();
@@ -1628,4 +1628,4 @@ ScriptReloadMgr* ScriptReloadMgr::instance()
     return &instance;
 }
 
-#endif // #ifndef TRINITY_API_USE_DYNAMIC_LINKING
+#endif // #ifndef WARHEAD_API_USE_DYNAMIC_LINKING

@@ -3743,7 +3743,7 @@ void SmartScript::FillScript(SmartAIEventList e, WorldObject* obj, AreaTriggerEn
     }
     for (SmartScriptHolder& scriptholder : e)
     {
-        #ifndef TRINITY_DEBUG
+        #ifndef WARHEAD_DEBUG
             if (scriptholder.event.event_flags & SMART_EVENT_FLAG_DEBUG_ONLY)
                 continue;
         #endif

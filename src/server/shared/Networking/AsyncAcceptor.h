@@ -28,9 +28,9 @@
 using boost::asio::ip::tcp;
 
 #if BOOST_VERSION >= 106600
-#define TRINITY_MAX_LISTEN_CONNECTIONS boost::asio::socket_base::max_listen_connections
+#define WARHEAD_MAX_LISTEN_CONNECTIONS boost::asio::socket_base::max_listen_connections
 #else
-#define TRINITY_MAX_LISTEN_CONNECTIONS boost::asio::socket_base::max_connections
+#define WARHEAD_MAX_LISTEN_CONNECTIONS boost::asio::socket_base::max_connections
 #endif
 
 class AsyncAcceptor
@@ -84,7 +84,7 @@ public:
             return false;
         }
 
-#if TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
         _acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true), errorCode);
         if (errorCode)
         {
@@ -100,7 +100,7 @@ public:
             return false;
         }
 
-        _acceptor.listen(TRINITY_MAX_LISTEN_CONNECTIONS, errorCode);
+        _acceptor.listen(WARHEAD_MAX_LISTEN_CONNECTIONS, errorCode);
         if (errorCode)
         {
             LOG_INFO("network", "Failed to start listening on %s:%u %s", _endpoint.address().to_string().c_str(), _endpoint.port(), errorCode.message().c_str());

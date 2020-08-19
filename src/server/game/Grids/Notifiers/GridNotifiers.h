@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRIDNOTIFIERS_H
-#define TRINITY_GRIDNOTIFIERS_H
+#ifndef WARHEAD_GRIDNOTIFIERS_H
+#define WARHEAD_GRIDNOTIFIERS_H
 
 #include "Creature.h"
 #include "Corpse.h"

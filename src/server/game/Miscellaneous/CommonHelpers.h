@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_COMMONHELPERS_H
-#define TRINITY_COMMONHELPERS_H
+#ifndef WARHEAD_COMMONHELPERS_H
+#define WARHEAD_COMMONHELPERS_H
 
 #include "Define.h"
 
@@ -36,4 +36,4 @@ namespace Warhead
     }
 }
 
-#endif //TRINITY_COMMONHELPERS_H
+#endif //WARHEAD_COMMONHELPERS_H

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CRYPTORANDOM_H
-#define TRINITY_CRYPTORANDOM_H
+#ifndef WARHEAD_CRYPTORANDOM_H
+#define WARHEAD_CRYPTORANDOM_H
 
 #include "Define.h"
 #include <array>

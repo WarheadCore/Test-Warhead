@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_ARENA_SCORE_H
-#define TRINITY_ARENA_SCORE_H
+#ifndef WARHEAD_ARENA_SCORE_H
+#define WARHEAD_ARENA_SCORE_H
 
 #include "BattlegroundScore.h"
 #include <sstream>
@@ -74,4 +74,4 @@ struct WH_GAME_API ArenaTeamScore
         std::string TeamName;
 };
 
-#endif // TRINITY_ARENA_SCORE_H
+#endif // WARHEAD_ARENA_SCORE_H

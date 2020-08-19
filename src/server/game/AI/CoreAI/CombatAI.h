@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_COMBATAI_H
-#define TRINITY_COMBATAI_H
+#ifndef WARHEAD_COMBATAI_H
+#define WARHEAD_COMBATAI_H
 
 #include "CreatureAI.h"
 

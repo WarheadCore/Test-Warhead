@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SKILL_EXTRA_ITEMS_H
-#define TRINITY_SKILL_EXTRA_ITEMS_H
+#ifndef WARHEAD_SKILL_EXTRA_ITEMS_H
+#define WARHEAD_SKILL_EXTRA_ITEMS_H
 
 #include "Common.h"
 

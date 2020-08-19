@@ -167,7 +167,7 @@ public:
                     tempSummon->SetCanFollowOwner(false);
             }
             else
-                LOG_ERROR("scripts", "TRINITY: npc_ancestral_wolf can not obtain owner or owner is not a player.");
+                LOG_ERROR("scripts", "WARHEAD: npc_ancestral_wolf can not obtain owner or owner is not a player.");
         }
 
         void Reset() override

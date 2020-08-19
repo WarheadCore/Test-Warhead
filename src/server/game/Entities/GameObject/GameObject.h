@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GAMEOBJECT_H
-#define TRINITYCORE_GAMEOBJECT_H
+#ifndef WARHEADCORE_GAMEOBJECT_H
+#define WARHEADCORE_GAMEOBJECT_H
 
 #include "Object.h"
 #include "DatabaseEnvFwd.h"

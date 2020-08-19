@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_DYNAMICOBJECT_H
-#define TRINITYCORE_DYNAMICOBJECT_H
+#ifndef WARHEADCORE_DYNAMICOBJECT_H
+#define WARHEADCORE_DYNAMICOBJECT_H
 
 #include "Object.h"
 #include "MapObject.h"

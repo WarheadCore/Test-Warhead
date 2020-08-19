@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GUILD_H
-#define TRINITYCORE_GUILD_H
+#ifndef WARHEADCORE_GUILD_H
+#define WARHEADCORE_GUILD_H
 
 #include "DatabaseEnvFwd.h"
 #include "ObjectGuid.h"

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MOVEMENTDEFINES_H
-#define TRINITY_MOVEMENTDEFINES_H
+#ifndef WARHEAD_MOVEMENTDEFINES_H
+#define WARHEAD_MOVEMENTDEFINES_H
 
 #include "Common.h"
 

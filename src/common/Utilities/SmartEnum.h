@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SMARTENUM_H
-#define TRINITY_SMARTENUM_H
+#ifndef WARHEAD_SMARTENUM_H
+#define WARHEAD_SMARTENUM_H
 
 #include "IteratorPair.h"
 #include <iterator>

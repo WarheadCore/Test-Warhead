@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CHATCOMMANDARGS_H
-#define TRINITY_CHATCOMMANDARGS_H
+#ifndef WARHEAD_CHATCOMMANDARGS_H
+#define WARHEAD_CHATCOMMANDARGS_H
 
 #include "ChatCommandHelpers.h"
 #include "ChatCommandTags.h"

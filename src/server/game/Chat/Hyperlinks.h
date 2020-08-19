@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_HYPERLINKS_H
-#define TRINITY_HYPERLINKS_H
+#ifndef WARHEAD_HYPERLINKS_H
+#define WARHEAD_HYPERLINKS_H
 
 #include "ObjectGuid.h"
 #include <string>

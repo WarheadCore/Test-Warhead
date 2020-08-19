@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_QUEST_H
-#define TRINITYCORE_QUEST_H
+#ifndef WARHEADCORE_QUEST_H
+#define WARHEADCORE_QUEST_H
 
 #include "Common.h"
 #include "DBCEnums.h"

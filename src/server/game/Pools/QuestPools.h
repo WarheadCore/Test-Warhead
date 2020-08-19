@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_QUESTPOOLS_H
-#define TRINITY_QUESTPOOLS_H
+#ifndef WARHEAD_QUESTPOOLS_H
+#define WARHEAD_QUESTPOOLS_H
 
 #include "Define.h"
 #include <unordered_map>

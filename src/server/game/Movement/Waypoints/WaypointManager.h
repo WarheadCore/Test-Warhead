@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_WAYPOINTMANAGER_H
-#define TRINITY_WAYPOINTMANAGER_H
+#ifndef WARHEAD_WAYPOINTMANAGER_H
+#define WARHEAD_WAYPOINTMANAGER_H
 
 #include "Define.h"
 #include "WaypointDefines.h"

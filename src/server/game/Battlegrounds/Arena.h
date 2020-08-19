@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_ARENA_H
-#define TRINITY_ARENA_H
+#ifndef WARHEAD_ARENA_H
+#define WARHEAD_ARENA_H
 
 #include "Battleground.h"
 
@@ -63,4 +63,4 @@ class WH_GAME_API Arena : public Battleground
         void EndBattleground(uint32 winner) override;
 };
 
-#endif // TRINITY_ARENA_H
+#endif // WARHEAD_ARENA_H

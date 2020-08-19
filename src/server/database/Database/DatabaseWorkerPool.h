@@ -208,7 +208,7 @@ class DatabaseWorkerPool
 
         void WarnAboutSyncQueries([[maybe_unused]] bool warn)
         {
-#ifdef TRINITY_DEBUG
+#ifdef WARHEAD_DEBUG
             _warnSyncQueries = warn;
 #endif
         }
@@ -232,7 +232,7 @@ class DatabaseWorkerPool
         std::unique_ptr<MySQLConnectionInfo> _connectionInfo;
         std::vector<uint8> _preparedStatementSize;
         uint8 _async_threads, _synch_threads;
-#ifdef TRINITY_DEBUG
+#ifdef WARHEAD_DEBUG
         static inline thread_local bool _warnSyncQueries = false;
 #endif
 };

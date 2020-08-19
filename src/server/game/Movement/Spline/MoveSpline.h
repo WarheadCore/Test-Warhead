@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYSERVER_MOVEPLINE_H
-#define TRINITYSERVER_MOVEPLINE_H
+#ifndef WARHEADSERVER_MOVEPLINE_H
+#define WARHEADSERVER_MOVEPLINE_H
 
 #include "Spline.h"
 #include "MoveSplineInitArgs.h"
@@ -131,4 +131,4 @@ namespace Movement
         }
     };
 }
-#endif // TRINITYSERVER_MOVEPLINE_H
+#endif // WARHEADSERVER_MOVEPLINE_H

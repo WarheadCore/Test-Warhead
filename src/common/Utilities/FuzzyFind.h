@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FUZZYFIND_H
-#define TRINITY_FUZZYFIND_H
+#ifndef WARHEAD_FUZZYFIND_H
+#define WARHEAD_FUZZYFIND_H
 
 #include <map>
 #include <string>
