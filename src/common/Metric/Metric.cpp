@@ -42,7 +42,7 @@ bool Metric::Connect()
     auto error = stream.error();
     if (error)
     {
-        TC_LOG_ERROR("metric", "Error connecting to '%s:%s', disabling Metric. Error message : %s",
+        LOG_ERROR("metric", "Error connecting to '%s:%s', disabling Metric. Error message : %s",
             _hostname.c_str(), _port.c_str(), error.message().c_str());
         _enabled = false;
         return false;
@@ -58,14 +58,14 @@ void Metric::LoadFromConfigs()
     _updateInterval = sConfigMgr->GetIntDefault("Metric.Interval", 10);
     if (_updateInterval < 1)
     {
-        TC_LOG_ERROR("metric", "'Metric.Interval' config set to %d, overriding to 1.", _updateInterval);
+        LOG_ERROR("metric", "'Metric.Interval' config set to %d, overriding to 1.", _updateInterval);
         _updateInterval = 1;
     }
 
     _overallStatusTimerInterval = sConfigMgr->GetIntDefault("Metric.OverallStatusInterval", 1);
     if (_overallStatusTimerInterval < 1)
     {
-        TC_LOG_ERROR("metric", "'Metric.OverallStatusInterval' config set to %d, overriding to 1.", _overallStatusTimerInterval);
+        LOG_ERROR("metric", "'Metric.OverallStatusInterval' config set to %d, overriding to 1.", _overallStatusTimerInterval);
         _overallStatusTimerInterval = 1;
     }
 
@@ -85,14 +85,14 @@ void Metric::LoadFromConfigs()
         std::string connectionInfo = sConfigMgr->GetStringDefault("Metric.ConnectionInfo", "");
         if (connectionInfo.empty())
         {
-            TC_LOG_ERROR("metric", "'Metric.ConnectionInfo' not specified in configuration file.");
+            LOG_ERROR("metric", "'Metric.ConnectionInfo' not specified in configuration file.");
             return;
         }
 
         Tokenizer tokens(connectionInfo, ';');
         if (tokens.size() != 3)
         {
-            TC_LOG_ERROR("metric", "'Metric.ConnectionInfo' specified with wrong format in configuration file.");
+            LOG_ERROR("metric", "'Metric.ConnectionInfo' specified with wrong format in configuration file.");
             return;
         }
 
@@ -201,7 +201,7 @@ void Metric::SendBatch()
     GetDataStream() >> status_code;
     if (status_code != 204)
     {
-        TC_LOG_ERROR("metric", "Error sending data, returned HTTP code: %u", status_code);
+        LOG_ERROR("metric", "Error sending data, returned HTTP code: %u", status_code);
     }
 
     // Read and ignore the status description

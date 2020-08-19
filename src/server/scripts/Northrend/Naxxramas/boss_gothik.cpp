@@ -445,7 +445,7 @@ class boss_gothik : public CreatureScript
                         {
                             if (RAID_MODE(waves10,waves25).size() <= _waveCount) // bounds check
                             {
-                                TC_LOG_INFO("scripts", "GothikAI: Wave count %d is out of range for difficulty %d.", _waveCount, GetDifficulty());
+                                LOG_INFO("scripts", "GothikAI: Wave count %d is out of range for difficulty %d.", _waveCount, GetDifficulty());
                                 break;
                             }
 

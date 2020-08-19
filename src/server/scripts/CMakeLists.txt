@@ -163,7 +163,7 @@ foreach(SCRIPT_MODULE ${SCRIPT_MODULE_LIST})
       ${SCRIPT_MODULE_PRIVATE_SCRIPTLOADER})
     target_link_libraries(${SCRIPT_MODULE_PROJECT_NAME}
       PRIVATE
-        trinity-core-interface
+        warhead-core-interface
       PUBLIC
         game)
 
@@ -210,7 +210,7 @@ add_library(scripts STATIC
 
 target_link_libraries(scripts
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     game-interface)
 

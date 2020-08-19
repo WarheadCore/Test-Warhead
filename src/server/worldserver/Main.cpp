@@ -155,13 +155,13 @@ extern int main(int argc, char** argv)
     Trinity::Banner::Show("worldserver-daemon",
         [](char const* text)
         {
-            TC_LOG_INFO("server.worldserver", "%s", text);
+            LOG_INFO("server.worldserver", "%s", text);
         },
         []()
         {
-            TC_LOG_INFO("server.worldserver", "Using configuration file %s.", sConfigMgr->GetFilename().c_str());
-            TC_LOG_INFO("server.worldserver", "Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
-            TC_LOG_INFO("server.worldserver", "Using Boost version: %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
+            LOG_INFO("server.worldserver", "Using configuration file %s.", sConfigMgr->GetFilename().c_str());
+            LOG_INFO("server.worldserver", "Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+            LOG_INFO("server.worldserver", "Using Boost version: %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
         }
     );
 
@@ -179,10 +179,10 @@ extern int main(int argc, char** argv)
     if (!pidFile.empty())
     {
         if (uint32 pid = CreatePIDFile(pidFile))
-            TC_LOG_INFO("server.worldserver", "Daemon PID: %u\n", pid);
+            LOG_INFO("server.worldserver", "Daemon PID: %u\n", pid);
         else
         {
-            TC_LOG_ERROR("server.worldserver", "Cannot create PID file %s.\n", pidFile.c_str());
+            LOG_ERROR("server.worldserver", "Cannot create PID file %s.\n", pidFile.c_str());
             return 1;
         }
     }
@@ -287,14 +287,14 @@ extern int main(int argc, char** argv)
 
     if (networkThreads <= 0)
     {
-        TC_LOG_ERROR("server.worldserver", "Network.Threads must be greater than 0");
+        LOG_ERROR("server.worldserver", "Network.Threads must be greater than 0");
         World::StopNow(ERROR_EXIT_CODE);
         return 1;
     }
 
     if (!sWorldSocketMgr.StartWorldNetwork(*ioContext, worldListener, worldPort, networkThreads))
     {
-        TC_LOG_ERROR("server.worldserver", "Failed to initialize network");
+        LOG_ERROR("server.worldserver", "Failed to initialize network");
         World::StopNow(ERROR_EXIT_CODE);
         return 1;
     }
@@ -321,10 +321,10 @@ extern int main(int argc, char** argv)
     {
         freezeDetector = std::make_shared<FreezeDetector>(*ioContext, coreStuckTime * 1000);
         FreezeDetector::Start(freezeDetector);
-        TC_LOG_INFO("server.worldserver", "Starting up anti-freeze thread (%u seconds max stuck time)...", coreStuckTime);
+        LOG_INFO("server.worldserver", "Starting up anti-freeze thread (%u seconds max stuck time)...", coreStuckTime);
     }
 
-    TC_LOG_INFO("server.worldserver", "%s (worldserver-daemon) ready...", GitRevision::GetFullVersion());
+    LOG_INFO("server.worldserver", "%s (worldserver-daemon) ready...", GitRevision::GetFullVersion());
 
     sScriptMgr->OnStartup();
 
@@ -351,7 +351,7 @@ extern int main(int argc, char** argv)
     // set server offline
     LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = flag | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, realm.Id.Realm);
 
-    TC_LOG_INFO("server.worldserver", "Halting process...");
+    LOG_INFO("server.worldserver", "Halting process...");
 
     // 0 - normal shutdown
     // 1 - shutdown at error
@@ -377,7 +377,7 @@ void ShutdownCLIThread(std::thread* cliThread)
             if (!formatReturnCode)
                 errorBuffer = "Unknown error";
 
-            TC_LOG_DEBUG("server.worldserver", "Error cancelling I/O of CliThread, error code %u, detail: %s", uint32(errorCode), errorBuffer);
+            LOG_DEBUG("server.worldserver", "Error cancelling I/O of CliThread, error code %u, detail: %s", uint32(errorCode), errorBuffer);
 
             if (!formatReturnCode)
                 LocalFree((LPSTR)errorBuffer);
@@ -484,7 +484,7 @@ void FreezeDetector::Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, bo
             // possible freeze
             else if (getMSTimeDiff(freezeDetector->_lastChangeMsTime, curtime) > freezeDetector->_maxCoreStuckTimeInMs)
             {
-                TC_LOG_ERROR("server.worldserver", "World Thread hangs, kicking out server!");
+                LOG_ERROR("server.worldserver", "World Thread hangs, kicking out server!");
                 ABORT();
             }
 
@@ -502,7 +502,7 @@ AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext)
     AsyncAcceptor* acceptor = new AsyncAcceptor(ioContext, raListener, raPort);
     if (!acceptor->Bind())
     {
-        TC_LOG_ERROR("server.worldserver", "Failed to bind RA socket acceptor");
+        LOG_ERROR("server.worldserver", "Failed to bind RA socket acceptor");
         delete acceptor;
         return nullptr;
     }
@@ -524,7 +524,7 @@ bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
     Optional<boost::asio::ip::tcp::endpoint> externalAddress = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[2].GetString(), "");
     if (!externalAddress)
     {
-        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[2].GetString().c_str());
+        LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[2].GetString().c_str());
         return false;
     }
 
@@ -533,7 +533,7 @@ bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
     Optional<boost::asio::ip::tcp::endpoint> localAddress = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[3].GetString(), "");
     if (!localAddress)
     {
-        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[3].GetString().c_str());
+        LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[3].GetString().c_str());
         return false;
     }
 
@@ -542,7 +542,7 @@ bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
     Optional<boost::asio::ip::tcp::endpoint> localSubmask = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[4].GetString(), "");
     if (!localSubmask)
     {
-        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[4].GetString().c_str());
+        LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[4].GetString().c_str());
         return false;
     }
 
@@ -577,11 +577,11 @@ bool StartDB()
     realm.Id.Realm = sConfigMgr->GetIntDefault("RealmID", 0);
     if (!realm.Id.Realm)
     {
-        TC_LOG_ERROR("server.worldserver", "Realm ID not defined in configuration file");
+        LOG_ERROR("server.worldserver", "Realm ID not defined in configuration file");
         return false;
     }
 
-    TC_LOG_INFO("server.worldserver", "Realm running as realm ID %d", realm.Id.Realm);
+    LOG_INFO("server.worldserver", "Realm running as realm ID %d", realm.Id.Realm);
 
     ///- Clean the database before starting
     ClearOnlineAccounts();
@@ -591,7 +591,7 @@ bool StartDB()
 
     sWorld->LoadDBVersion();
 
-    TC_LOG_INFO("server.worldserver", "Using World DB: %s", sWorld->GetDBVersion());
+    LOG_INFO("server.worldserver", "Using World DB: %s", sWorld->GetDBVersion());
     return true;
 }
 

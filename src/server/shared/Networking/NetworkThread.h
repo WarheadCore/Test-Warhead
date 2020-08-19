@@ -120,13 +120,13 @@ protected:
 
     void Run()
     {
-        TC_LOG_DEBUG("misc", "Network Thread Starting");
+        LOG_DEBUG("misc", "Network Thread Starting");
 
         _updateTimer.expires_from_now(boost::posix_time::milliseconds(10));
         _updateTimer.async_wait(std::bind(&NetworkThread<SocketType>::Update, this));
         _ioContext.run();
 
-        TC_LOG_DEBUG("misc", "Network Thread exits");
+        LOG_DEBUG("misc", "Network Thread exits");
         _newSockets.clear();
         _sockets.clear();
     }

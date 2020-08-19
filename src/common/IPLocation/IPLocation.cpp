@@ -35,7 +35,7 @@ IpLocationStore::~IpLocationStore()
 void IpLocationStore::Load()
 {
     _ipLocationStore.clear();
-    TC_LOG_INFO("server.loading", "Loading IP Location Database...");
+    LOG_INFO("server.loading", "Loading IP Location Database...");
 
     std::string databaseFilePath = sConfigMgr->GetStringDefault("IPLocationFile", "");
     if (databaseFilePath.empty())
@@ -45,13 +45,13 @@ void IpLocationStore::Load()
     std::ifstream databaseFile(databaseFilePath);
     if (!databaseFile)
     {
-        TC_LOG_ERROR("server.loading", "IPLocation: No ip database file exists (%s).", databaseFilePath.c_str());
+        LOG_ERROR("server.loading", "IPLocation: No ip database file exists (%s).", databaseFilePath.c_str());
         return;
     }
 
     if (!databaseFile.is_open())
     {
-        TC_LOG_ERROR("server.loading", "IPLocation: Ip database file (%s) can not be opened.", databaseFilePath.c_str());
+        LOG_ERROR("server.loading", "IPLocation: Ip database file (%s) can not be opened.", databaseFilePath.c_str());
         return;
     }
 
@@ -94,7 +94,7 @@ void IpLocationStore::Load()
 
     databaseFile.close();
 
-    TC_LOG_INFO("server.loading", ">> Loaded " SZFMTD " ip location entries.", _ipLocationStore.size());
+    LOG_INFO("server.loading", ">> Loaded " SZFMTD " ip location entries.", _ipLocationStore.size());
 }
 
 IpLocationRecord const* IpLocationStore::GetLocationRecord(std::string const& ipAddress) const

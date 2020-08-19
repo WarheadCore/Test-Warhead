@@ -82,4 +82,4 @@ endif()
 
 target_compile_definitions(boost
   INTERFACE
-    -DTC_HAS_BROKEN_WSTRING_REGEX)
+    -DwH_HAS_BROKEN_WSTRING_REGEX)

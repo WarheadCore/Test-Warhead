@@ -598,7 +598,7 @@ public:
                 }
             }
             else
-                TC_LOG_ERROR("scripts", "SD2 ERROR: FlagList is empty!");
+                LOG_ERROR("scripts", "SD2 ERROR: FlagList is empty!");
         }
 
         void UpdateAI(uint32 diff) override

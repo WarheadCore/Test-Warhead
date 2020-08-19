@@ -1,5 +1,5 @@
 # Set build-directive (used in core to tell which buildtype we used)
-target_compile_definitions(trinity-compile-option-interface
+target_compile_definitions(warhead-compile-option-interface
   INTERFACE
     -D_BUILD_DIRECTIVE="$<CONFIG>")
 
@@ -11,13 +11,13 @@ endif()
 
 if(PLATFORM EQUAL 32)
   # Required on 32-bit systems to enable SSE2 (standard on x64)
-  target_compile_options(trinity-compile-option-interface
+  target_compile_options(warhead-compile-option-interface
     INTERFACE
       -msse2
       -mfpmath=sse)
 endif()
 if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-  target_compile_definitions(trinity-compile-option-interface
+  target_compile_definitions(warhead-compile-option-interface
     INTERFACE
       -DHAVE_SSE2
       -D__SSE2__)
@@ -25,7 +25,7 @@ if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
 endif()
 
 if(WITH_WARNINGS)
-  target_compile_options(trinity-warning-interface
+  target_compile_options(warhead-warning-interface
     INTERFACE
       -W
       -Wall
@@ -39,7 +39,7 @@ if(WITH_WARNINGS)
 endif()
 
 if(WITH_COREDEBUG)
-  target_compile_options(trinity-compile-option-interface
+  target_compile_options(warhead-compile-option-interface
     INTERFACE
       -g3)
 
@@ -47,14 +47,14 @@ if(WITH_COREDEBUG)
 endif()
 
 if(ASAN)
-  target_compile_options(trinity-compile-option-interface
+  target_compile_options(warhead-compile-option-interface
     INTERFACE
       -fno-omit-frame-pointer
       -fsanitize=address
       -fsanitize-recover=address
       -fsanitize-address-use-after-scope)
 
-  target_link_options(trinity-compile-option-interface
+  target_link_options(warhead-compile-option-interface
     INTERFACE
       -fno-omit-frame-pointer
       -fsanitize=address
@@ -65,12 +65,12 @@ if(ASAN)
 endif()
 
 if(BUILD_SHARED_LIBS)
-  target_compile_options(trinity-compile-option-interface
+  target_compile_options(warhead-compile-option-interface
     INTERFACE
       -fPIC
       -Wno-attributes)
 
-  target_compile_options(trinity-hidden-symbols-interface
+  target_compile_options(warhead-hidden-symbols-interface
     INTERFACE
       -fvisibility=hidden)
 

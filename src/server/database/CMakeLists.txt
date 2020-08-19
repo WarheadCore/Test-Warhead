@@ -49,7 +49,7 @@ add_definitions(-DTRINITY_API_EXPORT_DATABASE)
 
 target_link_libraries(database
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
     mysql
   PUBLIC
     common)

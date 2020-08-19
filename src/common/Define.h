@@ -90,41 +90,41 @@
 
 #ifdef TRINITY_API_USE_DYNAMIC_LINKING
 #  if TRINITY_COMPILER == TRINITY_COMPILER_MICROSOFT
-#    define TC_API_EXPORT __declspec(dllexport)
-#    define TC_API_IMPORT __declspec(dllimport)
+#    define wH_API_EXPORT __declspec(dllexport)
+#    define wH_API_IMPORT __declspec(dllimport)
 #  elif TRINITY_COMPILER == TRINITY_COMPILER_GNU
-#    define TC_API_EXPORT __attribute__((visibility("default")))
-#    define TC_API_IMPORT
+#    define wH_API_EXPORT __attribute__((visibility("default")))
+#    define wH_API_IMPORT
 #  else
 #    error compiler not supported!
 #  endif
 #else
-#  define TC_API_EXPORT
-#  define TC_API_IMPORT
+#  define wH_API_EXPORT
+#  define wH_API_IMPORT
 #endif
 
 #ifdef TRINITY_API_EXPORT_COMMON
-#  define TC_COMMON_API TC_API_EXPORT
+#  define wH_COMMON_API wH_API_EXPORT
 #else
-#  define TC_COMMON_API TC_API_IMPORT
+#  define wH_COMMON_API wH_API_IMPORT
 #endif
 
 #ifdef TRINITY_API_EXPORT_DATABASE
-#  define TC_DATABASE_API TC_API_EXPORT
+#  define wH_DATABASE_API wH_API_EXPORT
 #else
-#  define TC_DATABASE_API TC_API_IMPORT
+#  define wH_DATABASE_API wH_API_IMPORT
 #endif
 
 #ifdef TRINITY_API_EXPORT_SHARED
-#  define TC_SHARED_API TC_API_EXPORT
+#  define wH_SHARED_API wH_API_EXPORT
 #else
-#  define TC_SHARED_API TC_API_IMPORT
+#  define wH_SHARED_API wH_API_IMPORT
 #endif
 
 #ifdef TRINITY_API_EXPORT_GAME
-#  define TC_GAME_API TC_API_EXPORT
+#  define wH_GAME_API wH_API_EXPORT
 #else
-#  define TC_GAME_API TC_API_IMPORT
+#  define wH_GAME_API wH_API_IMPORT
 #endif
 
 #define UI64FMTD "%" PRIu64

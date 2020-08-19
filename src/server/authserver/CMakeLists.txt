@@ -42,7 +42,7 @@ endif()
 
 target_link_libraries(authserver
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     shared)
 

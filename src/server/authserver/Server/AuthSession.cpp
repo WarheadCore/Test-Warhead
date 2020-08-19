@@ -123,14 +123,14 @@ std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B,
 
 /*static*/ void AuthSession::ServerStartup()
 {
-    TC_LOG_INFO("server.authserver", "Updating password hashes...");
+    LOG_INFO("server.authserver", "Updating password hashes...");
     uint32 const start = getMSTime();
     // the auth update query nulls salt/verifier if they cannot be converted
     // if they are non-null but s/v have been cleared, that means a legacy tool touched our auth DB (otherwise, the core might've done it itself, it used to use those hacks too)
     QueryResult result = LoginDatabase.Query("SELECT id, sha_pass_hash, IF((salt IS null) AND (verifier IS null), 0, 1) AS shouldWarn FROM account WHERE s != DEFAULT(s) OR v != DEFAULT(v) OR salt IS NULL OR verifier IS NULL");
     if (!result)
     {
-        TC_LOG_INFO("server.authserver", ">> No password hashes to update - this took us %u ms to realize", GetMSTimeDiffToNow(start));
+        LOG_INFO("server.authserver", ">> No password hashes to update - this took us %u ms to realize", GetMSTimeDiffToNow(start));
         return;
     }
 
@@ -152,7 +152,7 @@ std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B,
                 hadWarning = true;
                 if (shouldUpdate)
                 {
-                    TC_LOG_WARN("server.authserver",
+                    LOG_WARN("server.authserver",
                         "       ========\n"
                         "(!) You appear to be using an outdated external account management tool.\n"
                         "(!!) This is INSECURE, has been deprecated, and will cease to function entirely on September 6, 2020.\n"
@@ -162,7 +162,7 @@ std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B,
                 }
                 else
                 {
-                    TC_LOG_ERROR("server.authserver",
+                    LOG_ERROR("server.authserver",
                         "       ========\n"
                         "(!) You appear to be using an outdated external account management tool.\n"
                         "(!!) This is INSECURE, and the account(s) in question will not be able to log in.\n"
@@ -188,7 +188,7 @@ std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B,
     } while (result->NextRow());
     LoginDatabase.CommitTransaction(tx);
 
-    TC_LOG_INFO("server.authserver", ">> %u password hashes updated in %u ms", c, GetMSTimeDiffToNow(start));
+    LOG_INFO("server.authserver", ">> %u password hashes updated in %u ms", c, GetMSTimeDiffToNow(start));
 }
 
 std::unordered_map<uint8, AuthHandler> AuthSession::InitHandlers()
@@ -236,7 +236,7 @@ _status(STATUS_CHALLENGE), _build(0), _expversion(0) { }
 void AuthSession::Start()
 {
     std::string ip_address = GetRemoteIpAddress().to_string();
-    TC_LOG_TRACE("session", "Accepted connection from %s", ip_address.c_str());
+    LOG_TRACE("session", "Accepted connection from %s", ip_address.c_str());
 
     LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP_INFO);
     stmt->setString(0, ip_address);
@@ -274,7 +274,7 @@ void AuthSession::CheckIpCallback(PreparedQueryResult result)
             pkt << uint8(0x00);
             pkt << uint8(WOW_FAIL_BANNED);
             SendPacket(pkt);
-            TC_LOG_DEBUG("session", "[AuthSession::CheckIpCallback] Banned ip '%s:%d' tries to login!", GetRemoteIpAddress().to_string().c_str(), GetRemotePort());
+            LOG_DEBUG("session", "[AuthSession::CheckIpCallback] Banned ip '%s:%d' tries to login!", GetRemoteIpAddress().to_string().c_str(), GetRemotePort());
             return;
         }
     }
@@ -354,7 +354,7 @@ bool AuthSession::HandleLogonChallenge()
         return false;
 
     std::string login((char const*)challenge->I, challenge->I_len);
-    TC_LOG_DEBUG("server.authserver", "[AuthChallenge] '%s'", login.c_str());
+    LOG_DEBUG("server.authserver", "[AuthChallenge] '%s'", login.c_str());
 
     _build = challenge->build;
     _expversion = uint8(AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG));
@@ -401,7 +401,7 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
     // If the IP is 'locked', check that the player comes indeed from the correct IP address
     if (_accountInfo.IsLockedToIP)
     {
-        TC_LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is locked to IP - '%s' is logging in from '%s'", _accountInfo.Login.c_str(), _accountInfo.LastIP.c_str(), ipAddress.c_str());
+        LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is locked to IP - '%s' is logging in from '%s'", _accountInfo.Login.c_str(), _accountInfo.LastIP.c_str(), ipAddress.c_str());
         if (_accountInfo.LastIP != ipAddress)
         {
             pkt << uint8(WOW_FAIL_LOCKED_ENFORCED);
@@ -414,12 +414,12 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
         if (IpLocationRecord const* location = sIPLocation->GetLocationRecord(ipAddress))
             _ipCountry = location->CountryCode;
 
-        TC_LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is not locked to ip", _accountInfo.Login.c_str());
+        LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is not locked to ip", _accountInfo.Login.c_str());
         if (_accountInfo.LockCountry.empty() || _accountInfo.LockCountry == "00")
-            TC_LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is not locked to country", _accountInfo.Login.c_str());
+            LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is not locked to country", _accountInfo.Login.c_str());
         else if (!_ipCountry.empty())
         {
-            TC_LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is locked to country: '%s' Player country is '%s'", _accountInfo.Login.c_str(), _accountInfo.LockCountry.c_str(), _ipCountry.c_str());
+            LOG_DEBUG("server.authserver", "[AuthChallenge] Account '%s' is locked to country: '%s' Player country is '%s'", _accountInfo.Login.c_str(), _accountInfo.LockCountry.c_str(), _ipCountry.c_str());
             if (_ipCountry != _accountInfo.LockCountry)
             {
                 pkt << uint8(WOW_FAIL_UNLOCKABLE_LOCK);
@@ -436,14 +436,14 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
         {
             pkt << uint8(WOW_FAIL_BANNED);
             SendPacket(pkt);
-            TC_LOG_INFO("server.authserver.banned", "'%s:%d' [AuthChallenge] Banned account %s tried to login!", ipAddress.c_str(), port, _accountInfo.Login.c_str());
+            LOG_INFO("server.authserver.banned", "'%s:%d' [AuthChallenge] Banned account %s tried to login!", ipAddress.c_str(), port, _accountInfo.Login.c_str());
             return;
         }
         else
         {
             pkt << uint8(WOW_FAIL_SUSPENDED);
             SendPacket(pkt);
-            TC_LOG_INFO("server.authserver.banned", "'%s:%d' [AuthChallenge] Temporarily banned account %s tried to login!", ipAddress.c_str(), port, _accountInfo.Login.c_str());
+            LOG_INFO("server.authserver.banned", "'%s:%d' [AuthChallenge] Temporarily banned account %s tried to login!", ipAddress.c_str(), port, _accountInfo.Login.c_str());
             return;
         }
     }
@@ -460,7 +460,7 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
             if (!success)
             {
                 pkt << uint8(WOW_FAIL_DB_BUSY);
-                TC_LOG_ERROR("server.authserver", "[AuthChallenge] Account '%s' has invalid ciphertext for TOTP token key stored", _accountInfo.Login.c_str());
+                LOG_ERROR("server.authserver", "[AuthChallenge] Account '%s' has invalid ciphertext for TOTP token key stored", _accountInfo.Login.c_str());
                 SendPacket(pkt);
                 return;
             }
@@ -471,7 +471,7 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
     {
         if (!sConfigMgr->GetBoolDefault("AllowDeprecatedExternalPasswords", false, true))
         {
-            TC_LOG_ERROR("server.authserver",
+            LOG_ERROR("server.authserver",
                 "       ========\n"
                 "(!) You appear to be using an outdated external account management tool.\n"
                 "(!!) This is INSECURE, and the login attempt from account '%s' was BLOCKED.\n"
@@ -496,7 +496,7 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
         stmt->setUInt32(2, _accountInfo.Id);
         LoginDatabase.Execute(stmt);
 
-        TC_LOG_WARN("server.authserver",
+        LOG_WARN("server.authserver",
             "       ========\n"
             "(!) You appear to be using an outdated external account management tool.\n"
             "(!!) This is INSECURE, has been deprecated, and will cease to function entirely on September 6, 2020.\n"
@@ -545,7 +545,7 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
         if (securityFlags & 0x04)               // Security token input
             pkt << uint8(1);
 
-        TC_LOG_DEBUG("server.authserver", "'%s:%d' [AuthChallenge] account %s is using '%s' locale (%u)",
+        LOG_DEBUG("server.authserver", "'%s:%d' [AuthChallenge] account %s is using '%s' locale (%u)",
             ipAddress.c_str(), port, _accountInfo.Login.c_str(), _localizationName.c_str(), GetLocaleByName(_localizationName));
 
         _status = STATUS_LOGON_PROOF;
@@ -559,7 +559,7 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
 // Logon Proof command handler
 bool AuthSession::HandleLogonProof()
 {
-    TC_LOG_DEBUG("server.authserver", "Entering _HandleLogonProof");
+    LOG_DEBUG("server.authserver", "Entering _HandleLogonProof");
     _status = STATUS_CLOSED;
 
     // Read the packet
@@ -569,7 +569,7 @@ bool AuthSession::HandleLogonProof()
     if (_expversion == NO_VALID_EXP_FLAG)
     {
         // Check if we have the appropriate patch on the disk
-        TC_LOG_DEBUG("network", "Client with invalid version, patching is not implemented");
+        LOG_DEBUG("network", "Client with invalid version, patching is not implemented");
         return false;
     }
 
@@ -612,7 +612,7 @@ bool AuthSession::HandleLogonProof()
             return true;
         }
 
-        TC_LOG_DEBUG("server.authserver", "'%s:%d' User '%s' successfully authenticated", GetRemoteIpAddress().to_string().c_str(), GetRemotePort(), _accountInfo.Login.c_str());
+        LOG_DEBUG("server.authserver", "'%s:%d' User '%s' successfully authenticated", GetRemoteIpAddress().to_string().c_str(), GetRemotePort(), _accountInfo.Login.c_str());
 
         // Update the sessionkey, last_ip, last login time and reset number of failed logins in the account table for this account
         // No SQL injection (escaped user name) and IP address as received by socket
@@ -665,7 +665,7 @@ bool AuthSession::HandleLogonProof()
         packet << uint16(0);    // LoginFlags, 1 has account message
         SendPacket(packet);
 
-        TC_LOG_INFO("server.authserver.hack", "'%s:%d' [AuthChallenge] account %s tried to login with invalid password!",
+        LOG_INFO("server.authserver.hack", "'%s:%d' [AuthChallenge] account %s tried to login with invalid password!",
             GetRemoteIpAddress().to_string().c_str(), GetRemotePort(), _accountInfo.Login.c_str());
 
         uint32 MaxWrongPassCount = sConfigMgr->GetIntDefault("WrongPass.MaxCount", 0);
@@ -700,7 +700,7 @@ bool AuthSession::HandleLogonProof()
                     stmt->setUInt32(1, WrongPassBanTime);
                     LoginDatabase.Execute(stmt);
 
-                    TC_LOG_DEBUG("server.authserver", "'%s:%d' [AuthChallenge] account %s got banned for '%u' seconds because it failed to authenticate '%u' times",
+                    LOG_DEBUG("server.authserver", "'%s:%d' [AuthChallenge] account %s got banned for '%u' seconds because it failed to authenticate '%u' times",
                         GetRemoteIpAddress().to_string().c_str(), GetRemotePort(), _accountInfo.Login.c_str(), WrongPassBanTime, _accountInfo.FailedLogins);
                 }
                 else
@@ -710,7 +710,7 @@ bool AuthSession::HandleLogonProof()
                     stmt->setUInt32(1, WrongPassBanTime);
                     LoginDatabase.Execute(stmt);
 
-                    TC_LOG_DEBUG("server.authserver", "'%s:%d' [AuthChallenge] IP got banned for '%u' seconds because account %s failed to authenticate '%u' times",
+                    LOG_DEBUG("server.authserver", "'%s:%d' [AuthChallenge] IP got banned for '%u' seconds because account %s failed to authenticate '%u' times",
                         GetRemoteIpAddress().to_string().c_str(), GetRemotePort(), WrongPassBanTime, _accountInfo.Login.c_str(), _accountInfo.FailedLogins);
                 }
             }
@@ -729,7 +729,7 @@ bool AuthSession::HandleReconnectChallenge()
         return false;
 
     std::string login((char const*)challenge->I, challenge->I_len);
-    TC_LOG_DEBUG("server.authserver", "[ReconnectChallenge] '%s'", login.c_str());
+    LOG_DEBUG("server.authserver", "[ReconnectChallenge] '%s'", login.c_str());
 
     _build = challenge->build;
     _expversion = uint8(AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG));
@@ -781,7 +781,7 @@ void AuthSession::ReconnectChallengeCallback(PreparedQueryResult result)
 
 bool AuthSession::HandleReconnectProof()
 {
-    TC_LOG_DEBUG("server.authserver", "Entering _HandleReconnectProof");
+    LOG_DEBUG("server.authserver", "Entering _HandleReconnectProof");
     _status = STATUS_CLOSED;
 
     sAuthReconnectProof_C *reconnectProof = reinterpret_cast<sAuthReconnectProof_C*>(GetReadBuffer().GetReadPointer());
@@ -821,7 +821,7 @@ bool AuthSession::HandleReconnectProof()
     }
     else
     {
-        TC_LOG_ERROR("server.authserver.hack", "'%s:%d' [ERROR] user %s tried to login, but session is invalid.", GetRemoteIpAddress().to_string().c_str(),
+        LOG_ERROR("server.authserver.hack", "'%s:%d' [ERROR] user %s tried to login, but session is invalid.", GetRemoteIpAddress().to_string().c_str(),
             GetRemotePort(), _accountInfo.Login.c_str());
         return false;
     }
@@ -829,7 +829,7 @@ bool AuthSession::HandleReconnectProof()
 
 bool AuthSession::HandleRealmList()
 {
-    TC_LOG_DEBUG("server.authserver", "Entering _HandleRealmList");
+    LOG_DEBUG("server.authserver", "Entering _HandleRealmList");
 
     LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_REALM_CHARACTER_COUNTS);
     stmt->setUInt32(0, _accountInfo.Id);

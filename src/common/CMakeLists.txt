@@ -60,7 +60,7 @@ target_include_directories(common
 
 target_link_libraries(common
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     argon2
     boost

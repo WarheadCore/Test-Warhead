@@ -93,7 +93,7 @@ ByteBuffer& operator>>(ByteBuffer& buf, PackedGuidReader const& guid)
 
 void ObjectGuidGeneratorBase::HandleCounterOverflow(HighGuid high)
 {
-    TC_LOG_ERROR("misc", "%s guid overflow!! Can't continue, shutting down server. ", ObjectGuid::GetTypeName(high));
+    LOG_ERROR("misc", "%s guid overflow!! Can't continue, shutting down server. ", ObjectGuid::GetTypeName(high));
     World::StopNow(ERROR_EXIT_CODE);
 }
 

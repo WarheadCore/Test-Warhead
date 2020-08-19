@@ -50,7 +50,7 @@ target_include_directories(game
 
 target_link_libraries(game
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
     efsw
   PUBLIC
     game-interface)

@@ -80,7 +80,7 @@ Channel::Channel(std::string const& name, uint32 team /*= 0*/, std::string const
         if (!banned)
             continue;
 
-        TC_LOG_DEBUG("chat.system", "Channel(%s) loaded player %s into bannedStore", name.c_str(), banned.ToString().c_str());
+        LOG_DEBUG("chat.system", "Channel(%s) loaded player %s into bannedStore", name.c_str(), banned.ToString().c_str());
         _bannedStore.insert(banned);
     }
 }
@@ -602,7 +602,7 @@ void Channel::List(Player const* player) const
     }
 
     std::string channelName = GetName(player->GetSession()->GetSessionDbcLocale());
-    TC_LOG_DEBUG("chat.system", "SMSG_CHANNEL_LIST %s Channel: %s",
+    LOG_DEBUG("chat.system", "SMSG_CHANNEL_LIST %s Channel: %s",
         player->GetSession()->GetPlayerInfo().c_str(), channelName.c_str());
 
     WorldPacket data(SMSG_CHANNEL_LIST, 1 + (channelName.size() + 1) + 1 + 4 + _playersStore.size() * (8 + 1));

@@ -634,7 +634,7 @@ Spell::~Spell()
     {
         // Clean the reference to avoid later crash.
         // If this error is repeating, we may have to add an ASSERT to better track down how we get into this case.
-        TC_LOG_ERROR("spells", "SPELL: deleting spell for spell ID %u. However, spell still referenced.", m_spellInfo->Id);
+        LOG_ERROR("spells", "SPELL: deleting spell for spell ID %u. However, spell still referenced.", m_spellInfo->Id);
         *m_selfContainer = nullptr;
     }
 
@@ -958,7 +958,7 @@ void Spell::SelectEffectImplicitTargets(SpellEffIndex effIndex, SpellImplicitTar
             }
             break;
         case TARGET_SELECT_CATEGORY_NYI:
-            TC_LOG_DEBUG("spells", "SPELL: target type %u, found in spellID %u, effect %u is not implemented yet!", m_spellInfo->Id, effIndex, targetType.GetTarget());
+            LOG_DEBUG("spells", "SPELL: target type %u, found in spellID %u, effect %u is not implemented yet!", m_spellInfo->Id, effIndex, targetType.GetTarget());
             break;
         default:
             ABORT_MSG("Spell::SelectEffectImplicitTargets: received not implemented select target category");
@@ -977,7 +977,7 @@ void Spell::SelectImplicitChannelTargets(SpellEffIndex effIndex, SpellImplicitTa
     Spell* channeledSpell = m_originalCaster->GetCurrentSpell(CURRENT_CHANNELED_SPELL);
     if (!channeledSpell)
     {
-        TC_LOG_DEBUG("spells", "Spell::SelectImplicitChannelTargets: cannot find channel spell for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
+        LOG_DEBUG("spells", "Spell::SelectImplicitChannelTargets: cannot find channel spell for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
         return;
     }
     switch (targetType.GetTarget())
@@ -990,7 +990,7 @@ void Spell::SelectImplicitChannelTargets(SpellEffIndex effIndex, SpellImplicitTa
             if (target && target->ToUnit())
                 AddUnitTarget(target->ToUnit(), 1 << effIndex);
             else
-                TC_LOG_DEBUG("spells", "SPELL: cannot find channel spell target for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
+                LOG_DEBUG("spells", "SPELL: cannot find channel spell target for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
             break;
         }
         case TARGET_DEST_CHANNEL_TARGET:
@@ -1007,7 +1007,7 @@ void Spell::SelectImplicitChannelTargets(SpellEffIndex effIndex, SpellImplicitTa
                 }
             }
             else
-                TC_LOG_DEBUG("spells", "SPELL: cannot find channel spell destination for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
+                LOG_DEBUG("spells", "SPELL: cannot find channel spell destination for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
             break;
         case TARGET_DEST_CHANNEL_CASTER:
         {
@@ -1056,7 +1056,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffIndex effIndex, SpellImplicitTar
     // handle emergency case - try to use other provided targets if no conditions provided
     if (targetType.GetCheckType() == TARGET_CHECK_ENTRY && (!condList || condList->empty()))
     {
-        TC_LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: no conditions entry for target with TARGET_CHECK_ENTRY of spell ID %u, effect %u - selecting default targets", m_spellInfo->Id, effIndex);
+        LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: no conditions entry for target with TARGET_CHECK_ENTRY of spell ID %u, effect %u - selecting default targets", m_spellInfo->Id, effIndex);
         switch (targetType.GetObjectType())
         {
             case TARGET_OBJECT_TYPE_GOBJ:
@@ -1097,7 +1097,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffIndex effIndex, SpellImplicitTar
     WorldObject* target = SearchNearbyTarget(range, targetType.GetObjectType(), targetType.GetCheckType(), condList);
     if (!target)
     {
-        TC_LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: cannot find nearby target for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
+        LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: cannot find nearby target for spell ID %u, effect %u", m_spellInfo->Id, effIndex);
         SendCastResult(SPELL_FAILED_BAD_IMPLICIT_TARGETS);
         finish(false);
         return;
@@ -1106,7 +1106,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffIndex effIndex, SpellImplicitTar
     CallScriptObjectTargetSelectHandlers(target, effIndex, targetType);
     if (!target)
     {
-        TC_LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set NULL target, effect %u", m_spellInfo->Id, effIndex);
+        LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set NULL target, effect %u", m_spellInfo->Id, effIndex);
         SendCastResult(SPELL_FAILED_BAD_IMPLICIT_TARGETS);
         finish(false);
         return;
@@ -1119,7 +1119,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffIndex effIndex, SpellImplicitTar
                 AddUnitTarget(unit, effMask, true, false);
             else
             {
-                TC_LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set object of wrong type, expected unit, got %s, effect %u", m_spellInfo->Id, target->GetGUID().GetTypeName(), effMask);
+                LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set object of wrong type, expected unit, got %s, effect %u", m_spellInfo->Id, target->GetGUID().GetTypeName(), effMask);
                 SendCastResult(SPELL_FAILED_BAD_IMPLICIT_TARGETS);
                 finish(false);
                 return;
@@ -1130,7 +1130,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffIndex effIndex, SpellImplicitTar
                 AddGOTarget(gobjTarget, effMask);
             else
             {
-                TC_LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set object of wrong type, expected gameobject, got %s, effect %u", m_spellInfo->Id, target->GetGUID().GetTypeName(), effMask);
+                LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set object of wrong type, expected gameobject, got %s, effect %u", m_spellInfo->Id, target->GetGUID().GetTypeName(), effMask);
                 SendCastResult(SPELL_FAILED_BAD_IMPLICIT_TARGETS);
                 finish(false);
                 return;
@@ -1141,7 +1141,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffIndex effIndex, SpellImplicitTar
                 AddCorpseTarget(corpseTarget, effMask);
             else
             {
-                TC_LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set object of wrong type, expected corpse, got %s, effect %u", m_spellInfo->Id, target->GetGUID().GetTypeName(), effMask);
+                LOG_DEBUG("spells", "Spell::SelectImplicitNearbyTargets: OnObjectTargetSelect script hook for spell Id %u set object of wrong type, expected corpse, got %s, effect %u", m_spellInfo->Id, target->GetGUID().GetTypeName(), effMask);
                 SendCastResult(SPELL_FAILED_BAD_IMPLICIT_TARGETS);
                 finish(false);
                 return;
@@ -1321,7 +1321,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
             }
             else
             {
-                TC_LOG_DEBUG("spells", "SPELL: unknown target coordinates for spell ID %u", m_spellInfo->Id);
+                LOG_DEBUG("spells", "SPELL: unknown target coordinates for spell ID %u", m_spellInfo->Id);
                 if (WorldObject* target = m_targets.GetObjectTarget())
                     dest = SpellDestination(*target);
             }
@@ -2894,7 +2894,7 @@ void Spell::DoTriggersOnSpellHit(Unit* unit, uint8 effMask)
             if (CanExecuteTriggersOnHit(effMask, i->triggeredByAura) && roll_chance_i(i->chance))
             {
                 m_caster->CastSpell(unit, i->triggeredSpell->Id, true);
-                TC_LOG_DEBUG("spells", "Spell %d triggered spell %d by SPELL_AURA_ADD_TARGET_TRIGGER aura", m_spellInfo->Id, i->triggeredSpell->Id);
+                LOG_DEBUG("spells", "Spell %d triggered spell %d by SPELL_AURA_ADD_TARGET_TRIGGER aura", m_spellInfo->Id, i->triggeredSpell->Id);
 
                 // SPELL_AURA_ADD_TARGET_TRIGGER auras shouldn't trigger auras without duration
                 // set duration of current aura to the triggered spell
@@ -3129,7 +3129,7 @@ SpellCastResult Spell::prepare(SpellCastTargets const& targets, AuraEffect const
     // set timer base at cast time
     ReSetTimer();
 
-    TC_LOG_DEBUG("spells", "Spell::prepare: spell id %u source %u caster %d customCastFlags %u mask %u", m_spellInfo->Id, m_caster->GetEntry(), m_originalCaster ? m_originalCaster->GetEntry() : -1, _triggeredCastFlags, m_targets.GetTargetMask());
+    LOG_DEBUG("spells", "Spell::prepare: spell id %u source %u caster %d customCastFlags %u mask %u", m_spellInfo->Id, m_caster->GetEntry(), m_originalCaster ? m_originalCaster->GetEntry() : -1, _triggeredCastFlags, m_targets.GetTargetMask());
 
     //Containers for channeled spells have to be set
     /// @todoApply this to all cast spells if needed
@@ -3759,7 +3759,7 @@ void Spell::update(uint32 difftime)
 
     if (m_targets.GetUnitTargetGUID() && !m_targets.GetUnitTarget())
     {
-        TC_LOG_DEBUG("spells", "Spell %u is cancelled due to removal of target.", m_spellInfo->Id);
+        LOG_DEBUG("spells", "Spell %u is cancelled due to removal of target.", m_spellInfo->Id);
         cancel();
         return;
     }
@@ -3804,7 +3804,7 @@ void Spell::update(uint32 difftime)
                 // check if there are alive targets left
                 if (!UpdateChanneledTargetList())
                 {
-                    TC_LOG_DEBUG("spells", "Channeled spell %d is removed due to lack of targets", m_spellInfo->Id);
+                    LOG_DEBUG("spells", "Channeled spell %d is removed due to lack of targets", m_spellInfo->Id);
                     m_timer = 0;
 
                     // Also remove applied auras
@@ -3876,7 +3876,7 @@ void Spell::finish(bool ok)
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spell);
         if (spellInfo && spellInfo->SpellIconID == 2056)
         {
-            TC_LOG_DEBUG("spells", "Statue %s is unsummoned in spell %d finish", unitCaster->GetGUID().ToString().c_str(), m_spellInfo->Id);
+            LOG_DEBUG("spells", "Statue %s is unsummoned in spell %d finish", unitCaster->GetGUID().ToString().c_str(), m_spellInfo->Id);
             // Avoid infinite loops with setDeathState(JUST_DIED) being called over and over
             // It might make sense to do this check in Unit::setDeathState() and all overloaded functions
             if(unitCaster->getDeathState() != JUST_DIED)
@@ -4166,7 +4166,7 @@ void Spell::SendSpellStart()
     if (!IsNeedSendToClient())
         return;
 
-    //TC_LOG_DEBUG("spells", "Sending SMSG_SPELL_START id=%u", m_spellInfo->Id);
+    //LOG_DEBUG("spells", "Sending SMSG_SPELL_START id=%u", m_spellInfo->Id);
 
     uint32 castFlags = CAST_FLAG_UNKNOWN_2;
     uint32 schoolImmunityMask = 0;
@@ -4678,7 +4678,7 @@ void Spell::TakeCastItem()
     {
         // This code is to avoid a crash
         // I'm not sure, if this is really an error, but I guess every item needs a prototype
-        TC_LOG_ERROR("spells", "Cast item has no item prototype %s", m_CastItem->GetGUID().ToString().c_str());
+        LOG_ERROR("spells", "Cast item has no item prototype %s", m_CastItem->GetGUID().ToString().c_str());
         return;
     }
 
@@ -4782,7 +4782,7 @@ void Spell::TakePower()
 
     if (powerType >= MAX_POWERS)
     {
-        TC_LOG_ERROR("spells", "Spell::TakePower: Unknown power type '%d'", powerType);
+        LOG_ERROR("spells", "Spell::TakePower: Unknown power type '%d'", powerType);
         return;
     }
 
@@ -5067,7 +5067,7 @@ void Spell::HandleThreatSpells()
             target->GetThreatManager().AddThreat(unitCaster, threatToAdd, m_spellInfo, true);
         }
     }
-    TC_LOG_DEBUG("spells", "Spell %u, added an additional %f threat for %s %u target(s)", m_spellInfo->Id, threat, IsPositive() ? "assisting" : "harming", uint32(m_UniqueTargetInfo.size()));
+    LOG_DEBUG("spells", "Spell %u, added an additional %f threat for %s %u target(s)", m_spellInfo->Id, threat, IsPositive() ? "assisting" : "harming", uint32(m_UniqueTargetInfo.size()));
 }
 
 void Spell::HandleEffects(Unit* pUnitTarget, Item* pItemTarget, GameObject* pGoTarget, Corpse* pCorpseTarget, uint32 i, SpellEffectHandleMode mode)
@@ -6546,7 +6546,7 @@ SpellCastResult Spell::CheckPower() const
     // Check valid power type
     if (m_spellInfo->PowerType >= MAX_POWERS)
     {
-        TC_LOG_ERROR("spells", "Spell::CheckPower: Unknown power type '%d'", m_spellInfo->PowerType);
+        LOG_ERROR("spells", "Spell::CheckPower: Unknown power type '%d'", m_spellInfo->PowerType);
         return SPELL_FAILED_UNKNOWN;
     }
 
@@ -7451,7 +7451,7 @@ SpellEvent::~SpellEvent()
     }
     else
     {
-        TC_LOG_ERROR("spells", "~SpellEvent: %s %s tried to delete non-deletable spell %u. Was not deleted, causes memory leak.",
+        LOG_ERROR("spells", "~SpellEvent: %s %s tried to delete non-deletable spell %u. Was not deleted, causes memory leak.",
             (m_Spell->GetCaster()->GetTypeId() == TYPEID_PLAYER ? "Player" : "Creature"), m_Spell->GetCaster()->GetGUID().ToString().c_str(), m_Spell->m_spellInfo->Id);
         ABORT();
     }
@@ -7807,7 +7807,7 @@ void Spell::LoadScripts()
     sScriptMgr->CreateSpellScripts(m_spellInfo->Id, m_loadedScripts, this);
     for (auto itr = m_loadedScripts.begin(); itr != m_loadedScripts.end(); ++itr)
     {
-        TC_LOG_DEBUG("spells", "Spell::LoadScripts: Script `%s` for spell `%u` is loaded now", (*itr)->_GetScriptName()->c_str(), m_spellInfo->Id);
+        LOG_DEBUG("spells", "Spell::LoadScripts: Script `%s` for spell `%u` is loaded now", (*itr)->_GetScriptName()->c_str(), m_spellInfo->Id);
         (*itr)->Register();
     }
 }

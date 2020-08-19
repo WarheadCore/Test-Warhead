@@ -54,16 +54,16 @@ void WardenMac::Init(WorldSession* pClient, SessionKey const& K)
 
     _inputCrypto.Init(_inputKey);
     _outputCrypto.Init(_outputKey);
-    TC_LOG_DEBUG("warden", "Server side warden for client %u initializing...", pClient->GetAccountId());
-    TC_LOG_DEBUG("warden", "C->S Key: %s", ByteArrayToHexStr(_inputKey).c_str());
-    TC_LOG_DEBUG("warden", "S->C Key: %s", ByteArrayToHexStr(_outputKey).c_str());
-    TC_LOG_DEBUG("warden", "  Seed: %s", ByteArrayToHexStr(_seed).c_str());
-    TC_LOG_DEBUG("warden", "Loading Module...");
+    LOG_DEBUG("warden", "Server side warden for client %u initializing...", pClient->GetAccountId());
+    LOG_DEBUG("warden", "C->S Key: %s", ByteArrayToHexStr(_inputKey).c_str());
+    LOG_DEBUG("warden", "S->C Key: %s", ByteArrayToHexStr(_outputKey).c_str());
+    LOG_DEBUG("warden", "  Seed: %s", ByteArrayToHexStr(_seed).c_str());
+    LOG_DEBUG("warden", "Loading Module...");
 
     MakeModuleForClient();
 
-    TC_LOG_DEBUG("warden", "Module Key: %s", ByteArrayToHexStr(_module->Key).c_str());
-    TC_LOG_DEBUG("warden", "Module ID: %s", ByteArrayToHexStr(_module->Id).c_str());
+    LOG_DEBUG("warden", "Module Key: %s", ByteArrayToHexStr(_module->Key).c_str());
+    LOG_DEBUG("warden", "Module ID: %s", ByteArrayToHexStr(_module->Id).c_str());
     RequestModule();
 }
 
@@ -76,12 +76,12 @@ void WardenMac::InitializeModuleForClient(ClientWardenModule& module)
 
 void WardenMac::InitializeModule()
 {
-    TC_LOG_DEBUG("warden", "Initialize module");
+    LOG_DEBUG("warden", "Initialize module");
 }
 
 void WardenMac::RequestHash()
 {
-    TC_LOG_DEBUG("warden", "Request hash");
+    LOG_DEBUG("warden", "Request hash");
 
     // Create packet structure
     WardenHashRequest Request;
@@ -146,11 +146,11 @@ void WardenMac::HandleHashResult(ByteBuffer &buff)
     if (result != Trinity::Crypto::SHA1::GetDigestOf(reinterpret_cast<uint8*>(keyIn), 16))
     {
         char const* penalty = ApplyPenalty(nullptr);
-        TC_LOG_WARN("warden", "%s failed hash reply. Action: %s", _session->GetPlayerInfo().c_str(), penalty);
+        LOG_WARN("warden", "%s failed hash reply. Action: %s", _session->GetPlayerInfo().c_str(), penalty);
         return;
     }
 
-    TC_LOG_DEBUG("warden", "Request hash reply: succeed");
+    LOG_DEBUG("warden", "Request hash reply: succeed");
 
     // client 7F96EEFDA5B63D20A4DF8E00CBF48304
     //const uint8 client_key[16] = { 0x7F, 0x96, 0xEE, 0xFD, 0xA5, 0xB6, 0x3D, 0x20, 0xA4, 0xDF, 0x8E, 0x00, 0xCB, 0xF4, 0x83, 0x04 };
@@ -170,7 +170,7 @@ void WardenMac::HandleHashResult(ByteBuffer &buff)
 
 void WardenMac::RequestChecks()
 {
-    TC_LOG_DEBUG("warden", "Request data");
+    LOG_DEBUG("warden", "Request data");
 
     ByteBuffer buff;
     buff << uint8(WARDEN_SMSG_CHEAT_CHECKS_REQUEST);
@@ -194,7 +194,7 @@ void WardenMac::RequestChecks()
 
 void WardenMac::HandleCheckResult(ByteBuffer &buff)
 {
-    TC_LOG_DEBUG("warden", "Handle data");
+    LOG_DEBUG("warden", "Handle data");
 
     _dataSent = false;
     _clientResponseTimer = 0;
@@ -227,7 +227,7 @@ void WardenMac::HandleCheckResult(ByteBuffer &buff)
 
     if (sha1Hash != sha1.GetDigest())
     {
-        TC_LOG_DEBUG("warden", "Handle data failed: SHA1 hash is wrong!");
+        LOG_DEBUG("warden", "Handle data failed: SHA1 hash is wrong!");
         //found = true;
     }
 
@@ -242,7 +242,7 @@ void WardenMac::HandleCheckResult(ByteBuffer &buff)
 
     if (ourMD5Hash != theirsMD5Hash)
     {
-        TC_LOG_DEBUG("warden", "Handle data failed: MD5 hash is wrong!");
+        LOG_DEBUG("warden", "Handle data failed: MD5 hash is wrong!");
         //found = true;
     }
 

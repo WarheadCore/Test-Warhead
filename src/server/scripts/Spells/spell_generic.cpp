@@ -273,7 +273,7 @@ class spell_gen_arena_drink : public AuraScript
     {
         if (!spellInfo->Effects[EFFECT_0].IsAura() || spellInfo->Effects[EFFECT_0].ApplyAuraName != SPELL_AURA_MOD_POWER_REGEN)
         {
-            TC_LOG_ERROR("spells", "Aura %d structure has been changed - first aura is no longer SPELL_AURA_MOD_POWER_REGEN", GetId());
+            LOG_ERROR("spells", "Aura %d structure has been changed - first aura is no longer SPELL_AURA_MOD_POWER_REGEN", GetId());
             return false;
         }
 
@@ -4130,7 +4130,7 @@ class spell_gen_mixology_bonus : public AuraScript
                     SetBonusValueForEffect(EFFECT_0, 5, aurEff);
                     break;
                 default:
-                    TC_LOG_ERROR("spells", "SpellId %u couldn't be processed in spell_gen_mixology_bonus", GetId());
+                    LOG_ERROR("spells", "SpellId %u couldn't be processed in spell_gen_mixology_bonus", GetId());
                     break;
             }
             amount += bonus;

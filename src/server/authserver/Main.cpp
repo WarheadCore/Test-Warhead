@@ -114,13 +114,13 @@ int main(int argc, char** argv)
     Trinity::Banner::Show("authserver",
         [](char const* text)
         {
-            TC_LOG_INFO("server.authserver", "%s", text);
+            LOG_INFO("server.authserver", "%s", text);
         },
         []()
         {
-            TC_LOG_INFO("server.authserver", "Using configuration file %s.", sConfigMgr->GetFilename().c_str());
-            TC_LOG_INFO("server.authserver", "Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
-            TC_LOG_INFO("server.authserver", "Using Boost version: %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
+            LOG_INFO("server.authserver", "Using configuration file %s.", sConfigMgr->GetFilename().c_str());
+            LOG_INFO("server.authserver", "Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+            LOG_INFO("server.authserver", "Using Boost version: %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
         }
     );
 
@@ -129,10 +129,10 @@ int main(int argc, char** argv)
     if (!pidFile.empty())
     {
         if (uint32 pid = CreatePIDFile(pidFile))
-            TC_LOG_INFO("server.authserver", "Daemon PID: %u\n", pid);
+            LOG_INFO("server.authserver", "Daemon PID: %u\n", pid);
         else
         {
-            TC_LOG_ERROR("server.authserver", "Cannot create PID file %s.\n", pidFile.c_str());
+            LOG_ERROR("server.authserver", "Cannot create PID file %s.\n", pidFile.c_str());
             return 1;
         }
     }
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 
     if (sRealmList->GetRealms().empty())
     {
-        TC_LOG_ERROR("server.authserver", "No valid realms specified.");
+        LOG_ERROR("server.authserver", "No valid realms specified.");
         return 1;
     }
 
@@ -167,7 +167,7 @@ int main(int argc, char** argv)
     int32 port = sConfigMgr->GetIntDefault("RealmServerPort", 3724);
     if (port < 0 || port > 0xFFFF)
     {
-        TC_LOG_ERROR("server.authserver", "Specified port out of allowed range (1-65535)");
+        LOG_ERROR("server.authserver", "Specified port out of allowed range (1-65535)");
         return 1;
     }
 
@@ -175,7 +175,7 @@ int main(int argc, char** argv)
 
     if (!sAuthSocketMgr.StartNetwork(*ioContext, bindIp, port))
     {
-        TC_LOG_ERROR("server.authserver", "Failed to initialize network");
+        LOG_ERROR("server.authserver", "Failed to initialize network");
         return 1;
     }
 
@@ -221,7 +221,7 @@ int main(int argc, char** argv)
     banExpiryCheckTimer->cancel();
     dbPingTimer->cancel();
 
-    TC_LOG_INFO("server.authserver", "Halting process...");
+    LOG_INFO("server.authserver", "Halting process...");
 
     signals.cancel();
 
@@ -243,7 +243,7 @@ bool StartDB()
     if (!loader.Load())
         return false;
 
-    TC_LOG_INFO("server.authserver", "Started auth database connection pool.");
+    LOG_INFO("server.authserver", "Started auth database connection pool.");
     sLog->SetRealmId(0); // Enables DB appenders when realm is set.
     return true;
 }
@@ -268,7 +268,7 @@ void KeepDatabaseAliveHandler(std::weak_ptr<Trinity::Asio::DeadlineTimer> dbPing
     {
         if (std::shared_ptr<Trinity::Asio::DeadlineTimer> dbPingTimer = dbPingTimerRef.lock())
         {
-            TC_LOG_INFO("server.authserver", "Ping MySQL to keep connection alive");
+            LOG_INFO("server.authserver", "Ping MySQL to keep connection alive");
             LoginDatabase.KeepAlive();
 
             dbPingTimer->expires_from_now(boost::posix_time::minutes(dbPingInterval));

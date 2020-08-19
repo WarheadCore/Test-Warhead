@@ -287,7 +287,7 @@ bool Field::IsNumeric() const
 
 void Field::LogWrongType(char const* getter) const
 {
-    TC_LOG_WARN("sql.sql", "Warning: %s on %s field %s.%s (%s.%s) at index %u.",
+    LOG_WARN("sql.sql", "Warning: %s on %s field %s.%s (%s.%s) at index %u.",
         getter, meta->TypeName, meta->TableAlias, meta->Alias, meta->TableName, meta->Name, meta->Index);
 }
 
