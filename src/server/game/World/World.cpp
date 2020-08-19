@@ -89,18 +89,18 @@
 
 #include <boost/asio/ip/address.hpp>
 
-TC_GAME_API std::atomic<bool> World::m_stopEvent(false);
-TC_GAME_API uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
+WH_GAME_API std::atomic<bool> World::m_stopEvent(false);
+WH_GAME_API uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
 
-TC_GAME_API std::atomic<uint32> World::m_worldLoopCounter(0);
+WH_GAME_API std::atomic<uint32> World::m_worldLoopCounter(0);
 
-TC_GAME_API float World::m_MaxVisibleDistanceOnContinents = DEFAULT_VISIBILITY_DISTANCE;
-TC_GAME_API float World::m_MaxVisibleDistanceInInstances  = DEFAULT_VISIBILITY_INSTANCE;
-TC_GAME_API float World::m_MaxVisibleDistanceInBGArenas   = DEFAULT_VISIBILITY_BGARENAS;
+WH_GAME_API float World::m_MaxVisibleDistanceOnContinents = DEFAULT_VISIBILITY_DISTANCE;
+WH_GAME_API float World::m_MaxVisibleDistanceInInstances  = DEFAULT_VISIBILITY_INSTANCE;
+WH_GAME_API float World::m_MaxVisibleDistanceInBGArenas   = DEFAULT_VISIBILITY_BGARENAS;
 
-TC_GAME_API int32 World::m_visibility_notify_periodOnContinents = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
-TC_GAME_API int32 World::m_visibility_notify_periodInInstances  = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
-TC_GAME_API int32 World::m_visibility_notify_periodInBGArenas   = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
+WH_GAME_API int32 World::m_visibility_notify_periodOnContinents = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
+WH_GAME_API int32 World::m_visibility_notify_periodInInstances  = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
+WH_GAME_API int32 World::m_visibility_notify_periodInBGArenas   = DEFAULT_VISIBILITY_NOTIFY_PERIOD;
 
 /// World constructor
 World::World()
@@ -2203,7 +2203,7 @@ void World::SetInitialWorldSettings()
 
     LOG_INFO("server.worldserver", "World initialized in %u minutes %u seconds", (startupDuration / 60000), ((startupDuration % 60000) / 1000));
 
-    TC_METRIC_EVENT("events", "World initialized", "World initialized in " + std::to_string(startupDuration / 60000) + " minutes " + std::to_string((startupDuration % 60000) / 1000) + " seconds");
+    WH_METRIC_EVENT("events", "World initialized", "World initialized in " + std::to_string(startupDuration / 60000) + " minutes " + std::to_string((startupDuration % 60000) / 1000) + " seconds");
 }
 
 void World::DetectDBCLang()
@@ -2286,7 +2286,7 @@ void World::LoadAutobroadcasts()
 /// Update the World !
 void World::Update(uint32 diff)
 {
-    TC_METRIC_TIMER("world_update_time_total");
+    WH_METRIC_TIMER("world_update_time_total");
     ///- Update the game time and check for shutdown time
     _UpdateGameTime();
     time_t currentGameTime = GameTime::GetGameTime();
@@ -2305,7 +2305,7 @@ void World::Update(uint32 diff)
     ///- Update Who List Storage
     if (m_timers[WUPDATE_WHO_LIST].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update who list"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update who list"));
         m_timers[WUPDATE_WHO_LIST].Reset();
         sWhoListStorageMgr->Update();
     }
@@ -2316,7 +2316,7 @@ void World::Update(uint32 diff)
 
         if (sWorld->getBoolConfig(CONFIG_PRESERVE_CUSTOM_CHANNELS))
         {
-            TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Save custom channels"));
+            WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Save custom channels"));
             ChannelMgr* mgr1 = ASSERT_NOTNULL(ChannelMgr::forTeam(ALLIANCE));
             mgr1->SaveToDB();
             ChannelMgr* mgr2 = ASSERT_NOTNULL(ChannelMgr::forTeam(HORDE));
@@ -2326,32 +2326,32 @@ void World::Update(uint32 diff)
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Check quest reset times"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Check quest reset times"));
         CheckQuestResetTimes();
     }
 
     if (currentGameTime > m_NextRandomBGReset)
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Reset random BG"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Reset random BG"));
         ResetRandomBG();
     }
 
     if (currentGameTime > m_NextCalendarOldEventsDeletionTime)
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Delete old calendar events"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Delete old calendar events"));
         CalendarDeleteOldEvents();
     }
 
     if (currentGameTime > m_NextGuildReset)
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Reset guild cap"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Reset guild cap"));
         ResetGuildCap();
     }
 
     /// <ul><li> Handle auctions when the timer has passed
     if (m_timers[WUPDATE_AUCTIONS].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update expired auctions"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update expired auctions"));
         m_timers[WUPDATE_AUCTIONS].Reset();
 
         ///- Update mails (return old mails with item, or delete them)
@@ -2368,7 +2368,7 @@ void World::Update(uint32 diff)
 
     if (m_timers[WUPDATE_AUCTIONS_PENDING].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update pending auctions"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update pending auctions"));
         m_timers[WUPDATE_AUCTIONS_PENDING].Reset();
 
         sAuctionMgr->UpdatePendingAuctions();
@@ -2377,7 +2377,7 @@ void World::Update(uint32 diff)
     /// <li> Handle AHBot operations
     if (m_timers[WUPDATE_AHBOT].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update AHBot"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update AHBot"));
         sAuctionBot->Update();
         m_timers[WUPDATE_AHBOT].Reset();
     }
@@ -2385,21 +2385,21 @@ void World::Update(uint32 diff)
     /// <li> Handle file changes
     if (m_timers[WUPDATE_CHECK_FILECHANGES].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update HotSwap"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update HotSwap"));
         sScriptReloadMgr->Update();
         m_timers[WUPDATE_CHECK_FILECHANGES].Reset();
     }
 
     {
         /// <li> Handle session updates when the timer has passed
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update sessions"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update sessions"));
         UpdateSessions(diff);
     }
 
     /// <li> Update uptime table
     if (m_timers[WUPDATE_UPTIME].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update uptime"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update uptime"));
         uint32 tmpDiff = GameTime::GetUptime();
         uint32 maxOnlinePlayers = GetMaxPlayerCount();
 
@@ -2420,7 +2420,7 @@ void World::Update(uint32 diff)
     {
         if (m_timers[WUPDATE_CLEANDB].Passed())
         {
-            TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Clean logs table"));
+            WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Clean logs table"));
             m_timers[WUPDATE_CLEANDB].Reset();
 
             LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_LOGS);
@@ -2436,7 +2436,7 @@ void World::Update(uint32 diff)
     /// <li> Handle all other objects
     ///- Update objects when the timer has passed (maps, transport, creatures, ...)
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update maps"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update maps"));
         sMapMgr->Update(diff);
     }
 
@@ -2444,47 +2444,47 @@ void World::Update(uint32 diff)
     {
         if (m_timers[WUPDATE_AUTOBROADCAST].Passed())
         {
-            TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Send autobroadcast"));
+            WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Send autobroadcast"));
             m_timers[WUPDATE_AUTOBROADCAST].Reset();
             SendAutoBroadcast();
         }
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update battlegrounds"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update battlegrounds"));
         sBattlegroundMgr->Update(diff);
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update outdoor pvp"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update outdoor pvp"));
         sOutdoorPvPMgr->Update(diff);
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update battlefields"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update battlefields"));
         sBattlefieldMgr->Update(diff);
     }
 
     ///- Delete all characters which have been deleted X days before
     if (m_timers[WUPDATE_DELETECHARS].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Delete old characters"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Delete old characters"));
         m_timers[WUPDATE_DELETECHARS].Reset();
         Player::DeleteOldCharacters();
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update groups"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update groups"));
         sGroupMgr->Update(diff);
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update LFG"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update LFG"));
         sLFGMgr->Update(diff);
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Process query callbacks"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Process query callbacks"));
         // execute callbacks from sql queries that were queued recently
         ProcessQueryCallbacks();
     }
@@ -2492,7 +2492,7 @@ void World::Update(uint32 diff)
     ///- Erase corpses once every 20 minutes
     if (m_timers[WUPDATE_CORPSES].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Remove old corpses"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Remove old corpses"));
         m_timers[WUPDATE_CORPSES].Reset();
         sMapMgr->DoForAllMaps([](Map* map)
         {
@@ -2503,7 +2503,7 @@ void World::Update(uint32 diff)
     ///- Process Game events when necessary
     if (m_timers[WUPDATE_EVENTS].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update game events"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update game events"));
         m_timers[WUPDATE_EVENTS].Reset();                   // to give time for Update() to be processed
         uint32 nextGameEvent = sGameEventMgr->Update();
         m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
@@ -2513,7 +2513,7 @@ void World::Update(uint32 diff)
     ///- Ping to keep MySQL connections alive
     if (m_timers[WUPDATE_PINGDB].Passed())
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Ping MySQL"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Ping MySQL"));
         m_timers[WUPDATE_PINGDB].Reset();
         LOG_DEBUG("misc", "Ping MySQL to keep connection alive");
         CharacterDatabase.KeepAlive();
@@ -2522,7 +2522,7 @@ void World::Update(uint32 diff)
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update instance reset times"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update instance reset times"));
         // update the instance reset times
         sInstanceSaveMgr->Update();
     }
@@ -2538,21 +2538,21 @@ void World::Update(uint32 diff)
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Process cli commands"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Process cli commands"));
         // And last, but not least handle the issued cli commands
         ProcessCliCommands();
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update world scripts"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update world scripts"));
         sScriptMgr->OnWorldUpdate(diff);
     }
 
     {
-        TC_METRIC_TIMER("world_update_time", TC_METRIC_TAG("type", "Update metrics"));
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update metrics"));
         // Stats logger update
         sMetric->Update();
-        TC_METRIC_VALUE("update_time_diff", diff);
+        WH_METRIC_VALUE("update_time_diff", diff);
     }
 }
 
@@ -3065,9 +3065,9 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
 void World::UpdateSessions(uint32 diff)
 {
     {
-        TC_METRIC_DETAILED_NO_THRESHOLD_TIMER("world_update_time",
-            TC_METRIC_TAG("type", "Add sessions"),
-            TC_METRIC_TAG("parent_type", "Update sessions"));
+        WH_METRIC_DETAILED_NO_THRESHOLD_TIMER("world_update_time",
+            WH_METRIC_TAG("type", "Add sessions"),
+            WH_METRIC_TAG("parent_type", "Update sessions"));
         ///- Add new sessions
         WorldSession* sess = nullptr;
         while (addSessQueue.next(sess))
@@ -3085,7 +3085,7 @@ void World::UpdateSessions(uint32 diff)
         WorldSessionFilter updater(pSession);
 
         [[maybe_unused]] uint32 currentSessionId = itr->first;
-        TC_METRIC_DETAILED_TIMER("world_update_sessions_time", TC_METRIC_TAG("account_id", std::to_string(currentSessionId)));
+        WH_METRIC_DETAILED_TIMER("world_update_sessions_time", WH_METRIC_TAG("account_id", std::to_string(currentSessionId)));
 
         if (!pSession->Update(diff, updater))    // As interval = 0
         {

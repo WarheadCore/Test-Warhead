@@ -136,7 +136,7 @@ enum CalendarLimits
     CALENDAR_OLD_EVENTS_DELETION_TIME = 1 * MONTH,
 };
 
-struct TC_GAME_API CalendarInvite
+struct WH_GAME_API CalendarInvite
 {
     public:
         CalendarInvite(CalendarInvite const& calendarInvite, uint64 inviteId, uint64 eventId)
@@ -195,7 +195,7 @@ struct TC_GAME_API CalendarInvite
         std::string _text;
 };
 
-struct TC_GAME_API CalendarEvent
+struct WH_GAME_API CalendarEvent
 {
     public:
         CalendarEvent(CalendarEvent const& calendarEvent, uint64 eventId)
@@ -278,7 +278,7 @@ typedef std::vector<CalendarInvite*> CalendarInviteStore;
 typedef std::set<CalendarEvent*> CalendarEventStore;
 typedef std::map<uint64 /* eventId */, CalendarInviteStore > CalendarEventInviteStore;
 
-class TC_GAME_API CalendarMgr
+class WH_GAME_API CalendarMgr
 {
     private:
         CalendarMgr();

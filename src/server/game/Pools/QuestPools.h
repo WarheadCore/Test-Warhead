@@ -34,7 +34,7 @@ struct QuestPool
     std::unordered_set<uint32> activeQuests;
 };
 
-class TC_GAME_API QuestPoolMgr
+class WH_GAME_API QuestPoolMgr
 {
     private:
         QuestPoolMgr() {}

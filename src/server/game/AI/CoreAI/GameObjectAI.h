@@ -29,7 +29,7 @@ class Unit;
 class SpellInfo;
 class WorldObject;
 
-class TC_GAME_API GameObjectAI
+class WH_GAME_API GameObjectAI
 {
     protected:
         GameObject* const me;
@@ -99,7 +99,7 @@ class TC_GAME_API GameObjectAI
         virtual void SummonedCreatureDies(Creature* /*summon*/, Unit* /*killer*/) { }
 };
 
-class TC_GAME_API NullGameObjectAI : public GameObjectAI
+class WH_GAME_API NullGameObjectAI : public GameObjectAI
 {
     public:
         explicit NullGameObjectAI(GameObject* go);

@@ -157,7 +157,7 @@ enum TriggerCastFlags : uint32
     TRIGGERED_FULL_DEBUG_MASK                       = 0xFFFFFFFF
 };
 
-struct TC_GAME_API CastSpellExtraArgs
+struct WH_GAME_API CastSpellExtraArgs
 {
     CastSpellExtraArgs() {}
     CastSpellExtraArgs(bool triggered) : TriggerFlags(triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE) {}

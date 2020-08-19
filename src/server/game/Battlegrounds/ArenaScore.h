@@ -21,7 +21,7 @@
 #include "BattlegroundScore.h"
 #include <sstream>
 
-struct TC_GAME_API ArenaScore : public BattlegroundScore
+struct WH_GAME_API ArenaScore : public BattlegroundScore
 {
     friend class Arena;
 
@@ -42,7 +42,7 @@ struct TC_GAME_API ArenaScore : public BattlegroundScore
         uint8 TeamId; // PvPTeamId
 };
 
-struct TC_GAME_API ArenaTeamScore
+struct WH_GAME_API ArenaTeamScore
 {
     friend class Arena;
     friend class Battleground;

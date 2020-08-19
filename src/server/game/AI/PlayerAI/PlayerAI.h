@@ -26,7 +26,7 @@ class Player;
 class Spell;
 class Unit;
 
-class TC_GAME_API PlayerAI : public UnitAI
+class WH_GAME_API PlayerAI : public UnitAI
 {
     public:
         explicit PlayerAI(Player* player);
@@ -92,7 +92,7 @@ class TC_GAME_API PlayerAI : public UnitAI
         bool _isSelfRangedAttacker;
 };
 
-class TC_GAME_API SimpleCharmedPlayerAI : public PlayerAI
+class WH_GAME_API SimpleCharmedPlayerAI : public PlayerAI
 {
     public:
         SimpleCharmedPlayerAI(Player* player) : PlayerAI(player), _castCheckTimer(2500), _chaseCloser(false), _forceFacing(true), _isFollowing(false) { }

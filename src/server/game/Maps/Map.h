@@ -188,7 +188,7 @@ struct PositionFullTerrainStatus
     Optional<LiquidData> liquidInfo;
 };
 
-class TC_GAME_API GridMap
+class WH_GAME_API GridMap
 {
     uint32  _flags;
     union{
@@ -317,7 +317,7 @@ inline bool CompareRespawnInfo::operator()(RespawnInfo const* a, RespawnInfo con
     return a->type < b->type;
 }
 
-class TC_GAME_API Map : public GridRefManager<NGridType>
+class WH_GAME_API Map : public GridRefManager<NGridType>
 {
     friend class MapReference;
     public:
@@ -913,7 +913,7 @@ enum InstanceResetMethod
     INSTANCE_RESET_RESPAWN_DELAY
 };
 
-class TC_GAME_API InstanceMap : public Map
+class WH_GAME_API InstanceMap : public Map
 {
     public:
         InstanceMap(uint32 id, time_t, uint32 InstanceId, uint8 SpawnMode, Map* _parent);
@@ -949,7 +949,7 @@ class TC_GAME_API InstanceMap : public Map
         uint32 i_script_id;
 };
 
-class TC_GAME_API BattlegroundMap : public Map
+class WH_GAME_API BattlegroundMap : public Map
 {
     public:
         BattlegroundMap(uint32 id, time_t, uint32 InstanceId, Map* _parent, uint8 spawnMode);

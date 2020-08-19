@@ -29,7 +29,7 @@ namespace Trinity
     namespace Predicates
     {
         /// Only returns true for the given attacker's current victim, if any
-        class TC_GAME_API IsVictimOf
+        class WH_GAME_API IsVictimOf
         {
             public:
                 IsVictimOf(Unit const* attacker);
@@ -39,7 +39,7 @@ namespace Trinity
         };
 
         template <typename PRED>
-        class TC_GAME_API Inverter
+        class WH_GAME_API Inverter
         {
             public:
                 Inverter(PRED&& p) : _child(std::move(p)) { }

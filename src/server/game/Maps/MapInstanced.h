@@ -22,7 +22,7 @@
 #include "InstanceSaveMgr.h"
 #include "DBCEnums.h"
 
-class TC_GAME_API MapInstanced : public Map
+class WH_GAME_API MapInstanced : public Map
 {
     friend class MapManager;
     public:

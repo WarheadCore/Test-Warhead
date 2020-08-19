@@ -22,10 +22,10 @@
 
 class Player;
 
-TC_GAME_API void LoadSkillDiscoveryTable();
-TC_GAME_API uint32 GetSkillDiscoverySpell(uint32 skillId, uint32 spellId, Player* player);
-TC_GAME_API bool HasDiscoveredAllSpells(uint32 spellId, Player* player);
-TC_GAME_API bool HasDiscoveredAnySpell(uint32 spellId, Player* player);
-TC_GAME_API uint32 GetExplicitDiscoverySpell(uint32 spellId, Player* player);
+WH_GAME_API void LoadSkillDiscoveryTable();
+WH_GAME_API uint32 GetSkillDiscoverySpell(uint32 skillId, uint32 spellId, Player* player);
+WH_GAME_API bool HasDiscoveredAllSpells(uint32 spellId, Player* player);
+WH_GAME_API bool HasDiscoveredAnySpell(uint32 spellId, Player* player);
+WH_GAME_API uint32 GetExplicitDiscoverySpell(uint32 spellId, Player* player);
 
 #endif

@@ -49,7 +49,7 @@ Appender* CreateAppender(uint8 id, std::string const& name, LogLevel level, Appe
     return new AppenderImpl(id, name, level, flags, std::forward<std::vector<char const*>>(extraArgs));
 }
 
-class TC_COMMON_API Log
+class WH_COMMON_API Log
 {
     typedef std::unordered_map<std::string, Logger> LoggerMap;
 

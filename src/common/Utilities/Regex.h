@@ -18,22 +18,22 @@
 #ifndef TrinityCore_Regex_h__
 #define TrinityCore_Regex_h__
 
-#ifndef TC_HAS_BROKEN_WSTRING_REGEX
+#ifndef WH_HAS_BROKEN_WSTRING_REGEX
 #include <regex>
-#define TC_REGEX_NAMESPACE std
+#define WH_REGEX_NAMESPACE std
 #else
 #include <boost/regex.hpp>
-#define TC_REGEX_NAMESPACE boost
+#define WH_REGEX_NAMESPACE boost
 #endif
 
 // regex compatibility layer, required for clang building with libstdc++-4.9
 namespace Trinity
 {
-    using regex = TC_REGEX_NAMESPACE :: regex;
-    using wregex = TC_REGEX_NAMESPACE :: wregex;
+    using regex = WH_REGEX_NAMESPACE :: regex;
+    using wregex = WH_REGEX_NAMESPACE :: wregex;
 
-    using :: TC_REGEX_NAMESPACE :: regex_match;
-    using :: TC_REGEX_NAMESPACE :: regex_search;
+    using :: WH_REGEX_NAMESPACE :: regex_match;
+    using :: WH_REGEX_NAMESPACE :: regex_search;
 }
 
 #endif // TrinityCore_Regex_h__

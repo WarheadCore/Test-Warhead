@@ -22,7 +22,7 @@
 #include <exception>
 #include <string>
 
-class TC_GAME_API InvalidAIException : public std::exception
+class WH_GAME_API InvalidAIException : public std::exception
 {
 public:
     InvalidAIException(char const* msg) : msg_(msg) {}

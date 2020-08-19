@@ -230,14 +230,14 @@ extern int main(int argc, char** argv)
 
     sMetric->Initialize(realm.Name, *ioContext, []()
     {
-        TC_METRIC_VALUE("online_players", sWorld->GetPlayerCount());
+        WH_METRIC_VALUE("online_players", sWorld->GetPlayerCount());
     });
 
-    TC_METRIC_EVENT("events", "Worldserver started", "");
+    WH_METRIC_EVENT("events", "Worldserver started", "");
 
     std::shared_ptr<void> sMetricHandle(nullptr, [](void*)
     {
-        TC_METRIC_EVENT("events", "Worldserver shutdown", "");
+        WH_METRIC_EVENT("events", "Worldserver shutdown", "");
         sMetric->Unload();
     });
 

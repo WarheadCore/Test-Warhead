@@ -24,7 +24,7 @@
 
 namespace Trinity::Crypto
 {
-    class TC_COMMON_API ARC4
+    class WH_COMMON_API ARC4
     {
         public:
             ARC4();

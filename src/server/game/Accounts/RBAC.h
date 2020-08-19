@@ -800,7 +800,7 @@ enum RBACCommandResult
 
 typedef std::set<uint32> RBACPermissionContainer;
 
-class TC_GAME_API RBACPermission
+class WH_GAME_API RBACPermission
 {
     public:
         RBACPermission(uint32 id = 0, std::string const& name = ""):
@@ -835,7 +835,7 @@ class TC_GAME_API RBACPermission
  * - Granted permissions: through linked permissions and directly assigned
  * - Denied permissions: through linked permissions and directly assigned
  */
-class TC_GAME_API RBACData
+class WH_GAME_API RBACData
 {
     public:
         RBACData(uint32 id, std::string const& name, int32 realmId, uint8 secLevel = 255):

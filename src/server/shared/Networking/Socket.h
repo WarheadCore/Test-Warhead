@@ -31,7 +31,7 @@ using boost::asio::ip::tcp;
 
 #define READ_BLOCK_SIZE 4096
 #ifdef BOOST_ASIO_HAS_IOCP
-#define TC_SOCKET_USE_IOCP
+#define WH_SOCKET_USE_IOCP
 #endif
 
 template<class T>
@@ -58,7 +58,7 @@ public:
         if (_closed)
             return false;
 
-#ifndef TC_SOCKET_USE_IOCP
+#ifndef WH_SOCKET_USE_IOCP
         if (_isWritingAsync || (_writeQueue.empty() && !_closing))
             return true;
 
@@ -105,7 +105,7 @@ public:
     {
         _writeQueue.push(std::move(buffer));
 
-#ifdef TC_SOCKET_USE_IOCP
+#ifdef WH_SOCKET_USE_IOCP
         AsyncProcessQueue();
 #endif
     }
@@ -143,7 +143,7 @@ protected:
 
         _isWritingAsync = true;
 
-#ifdef TC_SOCKET_USE_IOCP
+#ifdef WH_SOCKET_USE_IOCP
         MessageBuffer& buffer = _writeQueue.front();
         _socket.async_write_some(boost::asio::buffer(buffer.GetReadPointer(), buffer.GetActiveSize()), std::bind(&Socket<T>::WriteHandler,
             this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
@@ -177,7 +177,7 @@ private:
         ReadHandler();
     }
 
-#ifdef TC_SOCKET_USE_IOCP
+#ifdef WH_SOCKET_USE_IOCP
 
     void WriteHandler(boost::system::error_code error, std::size_t transferedBytes)
     {

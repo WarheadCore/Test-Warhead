@@ -34,7 +34,7 @@ enum Secrets : uint32
     NUM_SECRETS
 };
 
-class TC_SHARED_API SecretMgr
+class WH_SHARED_API SecretMgr
 {
     private:
         SecretMgr() {}

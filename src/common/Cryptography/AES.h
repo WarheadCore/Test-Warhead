@@ -24,7 +24,7 @@
 
 namespace Trinity::Crypto
 {
-    class TC_COMMON_API AES
+    class WH_COMMON_API AES
     {
     public:
         static constexpr size_t IV_SIZE_BYTES = 12;

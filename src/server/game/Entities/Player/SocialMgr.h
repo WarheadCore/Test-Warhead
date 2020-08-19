@@ -98,7 +98,7 @@ enum FriendsResult : uint8
 #define SOCIALMGR_FRIEND_LIMIT  50u
 #define SOCIALMGR_IGNORE_LIMIT  50u
 
-class TC_GAME_API PlayerSocial
+class WH_GAME_API PlayerSocial
 {
     friend class SocialMgr;
 

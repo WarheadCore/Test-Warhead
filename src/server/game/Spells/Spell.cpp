@@ -505,7 +505,7 @@ SpellValue::SpellValue(SpellInfo const* proto)
     CriticalChance = 0.0f;
 }
 
-class TC_GAME_API SpellEvent : public BasicEvent
+class WH_GAME_API SpellEvent : public BasicEvent
 {
     public:
         SpellEvent(Spell* spell);

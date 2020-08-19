@@ -25,7 +25,7 @@
 
 class InstanceScript;
 
-class TC_GAME_API SummonList
+class WH_GAME_API SummonList
 {
 public:
     typedef GuidList StorageType;
@@ -111,7 +111,7 @@ private:
     StorageType _storage;
 };
 
-class TC_GAME_API EntryCheckPredicate
+class WH_GAME_API EntryCheckPredicate
 {
     public:
         EntryCheckPredicate(uint32 entry) : _entry(entry) { }
@@ -121,13 +121,13 @@ class TC_GAME_API EntryCheckPredicate
         uint32 _entry;
 };
 
-class TC_GAME_API DummyEntryCheckPredicate
+class WH_GAME_API DummyEntryCheckPredicate
 {
     public:
         bool operator()(ObjectGuid) { return true; }
 };
 
-struct TC_GAME_API ScriptedAI : public CreatureAI
+struct WH_GAME_API ScriptedAI : public CreatureAI
 {
     public:
         explicit ScriptedAI(Creature* creature);
@@ -304,7 +304,7 @@ struct TC_GAME_API ScriptedAI : public CreatureAI
         bool _isHeroic;
 };
 
-class TC_GAME_API BossAI : public ScriptedAI
+class WH_GAME_API BossAI : public ScriptedAI
 {
     public:
         BossAI(Creature* creature, uint32 bossId);
@@ -349,7 +349,7 @@ class TC_GAME_API BossAI : public ScriptedAI
         uint32 const _bossId;
 };
 
-class TC_GAME_API WorldBossAI : public ScriptedAI
+class WH_GAME_API WorldBossAI : public ScriptedAI
 {
     public:
         WorldBossAI(Creature* creature);

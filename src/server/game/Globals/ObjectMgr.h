@@ -415,15 +415,15 @@ typedef std::multimap<uint32, ScriptInfo> ScriptMap;
 typedef std::map<uint32, ScriptMap> ScriptMapMap;
 typedef std::multimap<uint32 /*spell id*/, std::pair<uint32 /*script id*/, bool /*enabled*/>> SpellScriptsContainer;
 typedef std::pair<SpellScriptsContainer::iterator, SpellScriptsContainer::iterator> SpellScriptsBounds;
-TC_GAME_API extern ScriptMapMap sSpellScripts;
-TC_GAME_API extern ScriptMapMap sEventScripts;
-TC_GAME_API extern ScriptMapMap sWaypointScripts;
+WH_GAME_API extern ScriptMapMap sSpellScripts;
+WH_GAME_API extern ScriptMapMap sEventScripts;
+WH_GAME_API extern ScriptMapMap sWaypointScripts;
 
 std::string GetScriptsTableNameByType(ScriptsType type);
 ScriptMapMap* GetScriptsMapByType(ScriptsType type);
 std::string GetScriptCommandName(ScriptCommands command);
 
-struct TC_GAME_API InstanceSpawnGroupInfo
+struct WH_GAME_API InstanceSpawnGroupInfo
 {
     enum
     {
@@ -438,7 +438,7 @@ struct TC_GAME_API InstanceSpawnGroupInfo
     uint8 Flags;
 };
 
-struct TC_GAME_API SpellClickInfo
+struct WH_GAME_API SpellClickInfo
 {
     uint32 spellId;
     uint8 castFlags;
@@ -889,7 +889,7 @@ SkillRangeType GetSkillRangeType(SkillRaceClassInfoEntry const* rcEntry);
 #define MAX_PET_NAME             12                         // max allowed by client name length
 #define MAX_CHARTER_NAME         24                         // max allowed by client name length
 
-TC_GAME_API bool normalizePlayerName(std::string& name);
+WH_GAME_API bool normalizePlayerName(std::string& name);
 #define SPAWNGROUP_MAP_UNSET            0xFFFFFFFF
 
 struct LanguageDesc
@@ -899,7 +899,7 @@ struct LanguageDesc
     uint32   skill_id;
 };
 
-TC_GAME_API extern LanguageDesc lang_description[LANGUAGES_COUNT];
+WH_GAME_API extern LanguageDesc lang_description[LANGUAGES_COUNT];
 LanguageDesc const* GetLanguageDescByID(uint32 lang);
 
 enum EncounterCreditType : uint8
@@ -937,7 +937,7 @@ enum QueryDataGroup
 
 class PlayerDumpReader;
 
-class TC_GAME_API ObjectMgr
+class WH_GAME_API ObjectMgr
 {
     friend class PlayerDumpReader;
 

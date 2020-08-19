@@ -24,7 +24,7 @@
 
 namespace Trinity::Crypto
 {
-    struct TC_COMMON_API TOTP
+    struct WH_COMMON_API TOTP
     {
         static constexpr size_t RECOMMENDED_SECRET_LENGTH = 20;
         using Secret = std::vector<uint8>;

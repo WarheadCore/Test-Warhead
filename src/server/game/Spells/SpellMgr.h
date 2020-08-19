@@ -421,7 +421,7 @@ enum EffectRadiusIndex
 };
 
 // Spell pet auras
-class TC_GAME_API PetAura
+class WH_GAME_API PetAura
 {
     private:
         typedef std::unordered_map<uint32, uint32> PetAuraMap;
@@ -468,7 +468,7 @@ class TC_GAME_API PetAura
 };
 typedef std::map<uint32, PetAura> SpellPetAuraMap;
 
-struct TC_GAME_API SpellArea
+struct WH_GAME_API SpellArea
 {
     uint32 spellId;
     uint32 areaId;                                          // zone/subzone/or 0 is not limited to zone
@@ -571,7 +571,7 @@ inline bool IsProfessionOrRidingSkill(uint32 skill)
 
 bool IsPartOfSkillLine(uint32 skillId, uint32 spellId);
 
-class TC_GAME_API SpellMgr
+class WH_GAME_API SpellMgr
 {
     // Constructors
     private:

@@ -25,7 +25,7 @@ class Unit;
 
 typedef void(AuraEffect::*pAuraEffectHandler)(AuraApplication const* aurApp, uint8 mode, bool apply) const;
 
-class TC_GAME_API AuraEffect
+class WH_GAME_API AuraEffect
 {
     friend void Aura::_InitEffects(uint8 effMask, Unit* caster, int32 const* baseAmount);
     friend Aura::~Aura();

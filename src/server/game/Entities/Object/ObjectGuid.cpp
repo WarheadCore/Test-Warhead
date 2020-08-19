@@ -106,7 +106,7 @@ void ObjectGuidGeneratorBase::CheckGuidTrigger(ObjectGuid::LowType guidlow)
 }
 
 #define GUID_TRAIT_INSTANTIATE_GUID( HIGH_GUID ) \
-    template class TC_GAME_API ObjectGuidGenerator< HIGH_GUID >;
+    template class WH_GAME_API ObjectGuidGenerator< HIGH_GUID >;
 
 GUID_TRAIT_INSTANTIATE_GUID(HighGuid::Container)
 GUID_TRAIT_INSTANTIATE_GUID(HighGuid::Player)

@@ -315,11 +315,11 @@ Metric* Metric::instance()
     return &instance;
 }
 
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(int8);
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(uint8);
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(int16);
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(uint16);
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(int32);
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(uint32);
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(int64);
-template TC_COMMON_API std::string Metric::FormatInfluxDBValue(uint64);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(int8);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(uint8);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(int16);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(uint16);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(int32);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(uint32);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(int64);
+template WH_COMMON_API std::string Metric::FormatInfluxDBValue(uint64);

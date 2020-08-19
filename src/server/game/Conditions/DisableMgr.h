@@ -60,11 +60,11 @@ enum MMapDisableTypes
 
 namespace DisableMgr
 {
-    TC_GAME_API void LoadDisables();
-    TC_GAME_API bool IsDisabledFor(DisableType type, uint32 entry, WorldObject const* ref, uint8 flags = 0);
-    TC_GAME_API void CheckQuestDisables();
-    TC_GAME_API bool IsVMAPDisabledFor(uint32 entry, uint8 flags);
-    TC_GAME_API bool IsPathfindingEnabled(uint32 mapId);
+    WH_GAME_API void LoadDisables();
+    WH_GAME_API bool IsDisabledFor(DisableType type, uint32 entry, WorldObject const* ref, uint8 flags = 0);
+    WH_GAME_API void CheckQuestDisables();
+    WH_GAME_API bool IsVMAPDisabledFor(uint32 entry, uint8 flags);
+    WH_GAME_API bool IsPathfindingEnabled(uint32 mapId);
 }
 
 #endif //TRINITY_DISABLEMGR_H

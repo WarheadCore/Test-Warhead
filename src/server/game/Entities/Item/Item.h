@@ -58,7 +58,7 @@ enum ItemUpdateState
 
 bool ItemCanGoIntoBag(ItemTemplate const* proto, ItemTemplate const* pBagProto);
 
-class TC_GAME_API Item : public Object
+class WH_GAME_API Item : public Object
 {
     friend void AddItemToUpdateQueueOf(Item* item, Player* player);
     friend void RemoveItemFromUpdateQueueOf(Item* item, Player* player);

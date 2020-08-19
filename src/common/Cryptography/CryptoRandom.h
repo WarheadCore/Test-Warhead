@@ -23,7 +23,7 @@
 
 namespace Trinity::Crypto
 {
-    void TC_COMMON_API GetRandomBytes(uint8* buf, size_t len);
+    void WH_COMMON_API GetRandomBytes(uint8* buf, size_t len);
 
     template <typename Container>
     void GetRandomBytes(Container& c)

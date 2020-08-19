@@ -23,23 +23,23 @@
 
 namespace Trinity
 {
-    DECLSPEC_NORETURN TC_COMMON_API void Assert(char const* file, int line, char const* function, std::string debugInfo, char const* message) ATTR_NORETURN;
-    DECLSPEC_NORETURN TC_COMMON_API void Assert(char const* file, int line, char const* function, std::string debugInfo, char const* message, char const* format, ...) ATTR_NORETURN ATTR_PRINTF(6, 7);
+    DECLSPEC_NORETURN WH_COMMON_API void Assert(char const* file, int line, char const* function, std::string debugInfo, char const* message) ATTR_NORETURN;
+    DECLSPEC_NORETURN WH_COMMON_API void Assert(char const* file, int line, char const* function, std::string debugInfo, char const* message, char const* format, ...) ATTR_NORETURN ATTR_PRINTF(6, 7);
 
-    DECLSPEC_NORETURN TC_COMMON_API void Fatal(char const* file, int line, char const* function, char const* message, ...) ATTR_NORETURN ATTR_PRINTF(4, 5);
+    DECLSPEC_NORETURN WH_COMMON_API void Fatal(char const* file, int line, char const* function, char const* message, ...) ATTR_NORETURN ATTR_PRINTF(4, 5);
 
-    DECLSPEC_NORETURN TC_COMMON_API void Error(char const* file, int line, char const* function, char const* message) ATTR_NORETURN;
+    DECLSPEC_NORETURN WH_COMMON_API void Error(char const* file, int line, char const* function, char const* message) ATTR_NORETURN;
 
-    DECLSPEC_NORETURN TC_COMMON_API void Abort(char const* file, int line, char const* function) ATTR_NORETURN;
-    DECLSPEC_NORETURN TC_COMMON_API void Abort(char const* file, int line, char const* function, char const* message, ...) ATTR_NORETURN;
+    DECLSPEC_NORETURN WH_COMMON_API void Abort(char const* file, int line, char const* function) ATTR_NORETURN;
+    DECLSPEC_NORETURN WH_COMMON_API void Abort(char const* file, int line, char const* function, char const* message, ...) ATTR_NORETURN;
 
-    TC_COMMON_API void Warning(char const* file, int line, char const* function, char const* message);
+    WH_COMMON_API void Warning(char const* file, int line, char const* function, char const* message);
 
-    DECLSPEC_NORETURN TC_COMMON_API void AbortHandler(int sigval) ATTR_NORETURN;
+    DECLSPEC_NORETURN WH_COMMON_API void AbortHandler(int sigval) ATTR_NORETURN;
 
 } // namespace Trinity
 
-TC_COMMON_API std::string GetDebugInfo();
+WH_COMMON_API std::string GetDebugInfo();
 
 #if TRINITY_COMPILER == TRINITY_COMPILER_MICROSOFT
 #define ASSERT_BEGIN __pragma(warning(push)) __pragma(warning(disable: 4127))

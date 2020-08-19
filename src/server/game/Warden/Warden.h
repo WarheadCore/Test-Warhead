@@ -82,7 +82,7 @@ struct ClientWardenModule
 
 class WorldSession;
 
-class TC_GAME_API Warden
+class WH_GAME_API Warden
 {
     public:
         Warden();

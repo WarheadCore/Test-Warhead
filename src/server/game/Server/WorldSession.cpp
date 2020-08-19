@@ -293,7 +293,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     {
         OpcodeClient opcode = static_cast<OpcodeClient>(packet->GetOpcode());
         ClientOpcodeHandler const* opHandle = opcodeTable[opcode];
-        TC_METRIC_DETAILED_TIMER("worldsession_update_opcode_time", TC_METRIC_TAG("opcode", opHandle->Name));
+        WH_METRIC_DETAILED_TIMER("worldsession_update_opcode_time", WH_METRIC_TAG("opcode", opHandle->Name));
 
         try
         {
@@ -417,7 +417,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             break;
     }
 
-    TC_METRIC_VALUE("processed_packets", processedPackets);
+    WH_METRIC_VALUE("processed_packets", processedPackets);
 
     _recvQueue.readd(requeuePackets.begin(), requeuePackets.end());
 
@@ -583,7 +583,7 @@ void WorldSession::LogoutPlayer(bool save)
         //! Call script hook before deletion
         sScriptMgr->OnPlayerLogout(_player);
 
-        TC_METRIC_EVENT("player_events", "Logout", _player->GetName());
+        WH_METRIC_EVENT("player_events", "Logout", _player->GetName());
 
         //! Remove the player from the world
         // the player may not be in the world when logging out

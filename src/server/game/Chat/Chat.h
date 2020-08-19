@@ -38,7 +38,7 @@ class WorldPacket;
 
 struct GameTele;
 
-class TC_GAME_API ChatHandler
+class WH_GAME_API ChatHandler
 {
     public:
         WorldSession* GetSession() { return m_session; }
@@ -148,7 +148,7 @@ class TC_GAME_API ChatHandler
         bool sentErrorMessage;
 };
 
-class TC_GAME_API CliHandler : public ChatHandler
+class WH_GAME_API CliHandler : public ChatHandler
 {
     public:
         typedef void Print(void*, char const*);
@@ -170,7 +170,7 @@ class TC_GAME_API CliHandler : public ChatHandler
         Print* m_print;
 };
 
-class TC_GAME_API AddonChannelCommandHandler : public ChatHandler
+class WH_GAME_API AddonChannelCommandHandler : public ChatHandler
 {
     public:
         using ChatHandler::ChatHandler;

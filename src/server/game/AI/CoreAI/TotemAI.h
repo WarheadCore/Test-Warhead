@@ -25,7 +25,7 @@
 class Creature;
 class Totem;
 
-class TC_GAME_API TotemAI : public NullCreatureAI
+class WH_GAME_API TotemAI : public NullCreatureAI
 {
     public:
         explicit TotemAI(Creature* creature);

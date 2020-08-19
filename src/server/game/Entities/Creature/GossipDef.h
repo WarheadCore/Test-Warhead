@@ -158,7 +158,7 @@ struct QuestMenuItem
 
 typedef std::vector<QuestMenuItem> QuestMenuItemList;
 
-class TC_GAME_API GossipMenu
+class WH_GAME_API GossipMenu
 {
     public:
         GossipMenu();
@@ -223,7 +223,7 @@ class TC_GAME_API GossipMenu
         LocaleConstant _locale;
 };
 
-class TC_GAME_API QuestMenu
+class WH_GAME_API QuestMenu
 {
     public:
         QuestMenu();
@@ -253,7 +253,7 @@ class TC_GAME_API QuestMenu
         QuestMenuItemList _questMenuItems;
 };
 
-class TC_GAME_API PlayerMenu
+class WH_GAME_API PlayerMenu
 {
     public:
         explicit PlayerMenu(WorldSession* session);

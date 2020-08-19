@@ -26,7 +26,7 @@ class Spell;
 
 typedef std::vector<std::pair<Unit*, Spell*>> TargetSpellList;
 
-class TC_GAME_API PetAI : public CreatureAI
+class WH_GAME_API PetAI : public CreatureAI
 {
     public:
         static int32 Permissible(Creature const* creature);

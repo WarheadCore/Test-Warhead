@@ -72,7 +72,7 @@ enum RotateDirection : uint8
     ROTATE_DIRECTION_RIGHT
 };
 
-struct TC_GAME_API ChaseRange
+struct WH_GAME_API ChaseRange
 {
     ChaseRange(float range);
     ChaseRange(float _minRange, float _maxRange);
@@ -85,7 +85,7 @@ struct TC_GAME_API ChaseRange
     float MaxTolerance; // ...and if we are, we will move into this range
 };
 
-struct TC_GAME_API ChaseAngle
+struct WH_GAME_API ChaseAngle
 {
     ChaseAngle(float angle, float _tolerance = M_PI_4);
 

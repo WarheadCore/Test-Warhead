@@ -881,13 +881,13 @@ void Map::Update(uint32 t_diff)
 
     sScriptMgr->OnMapUpdate(this, t_diff);
 
-    TC_METRIC_VALUE("map_creatures", uint64(GetObjectsStore().Size<Creature>()),
-        TC_METRIC_TAG("map_id", std::to_string(GetId())),
-        TC_METRIC_TAG("map_instanceid", std::to_string(GetInstanceId())));
+    WH_METRIC_VALUE("map_creatures", uint64(GetObjectsStore().Size<Creature>()),
+        WH_METRIC_TAG("map_id", std::to_string(GetId())),
+        WH_METRIC_TAG("map_instanceid", std::to_string(GetInstanceId())));
 
-    TC_METRIC_VALUE("map_gameobjects", uint64(GetObjectsStore().Size<GameObject>()),
-        TC_METRIC_TAG("map_id", std::to_string(GetId())),
-        TC_METRIC_TAG("map_instanceid", std::to_string(GetInstanceId())));
+    WH_METRIC_VALUE("map_gameobjects", uint64(GetObjectsStore().Size<GameObject>()),
+        WH_METRIC_TAG("map_id", std::to_string(GetId())),
+        WH_METRIC_TAG("map_instanceid", std::to_string(GetInstanceId())));
 }
 
 struct ResetNotifier
@@ -3731,15 +3731,15 @@ void Map::RemoveFromActive(DynamicObject* obj)
     RemoveFromActiveHelper(obj);
 }
 
-template TC_GAME_API bool Map::AddToMap(Corpse*);
-template TC_GAME_API bool Map::AddToMap(Creature*);
-template TC_GAME_API bool Map::AddToMap(GameObject*);
-template TC_GAME_API bool Map::AddToMap(DynamicObject*);
+template WH_GAME_API bool Map::AddToMap(Corpse*);
+template WH_GAME_API bool Map::AddToMap(Creature*);
+template WH_GAME_API bool Map::AddToMap(GameObject*);
+template WH_GAME_API bool Map::AddToMap(DynamicObject*);
 
-template TC_GAME_API void Map::RemoveFromMap(Corpse*, bool);
-template TC_GAME_API void Map::RemoveFromMap(Creature*, bool);
-template TC_GAME_API void Map::RemoveFromMap(GameObject*, bool);
-template TC_GAME_API void Map::RemoveFromMap(DynamicObject*, bool);
+template WH_GAME_API void Map::RemoveFromMap(Corpse*, bool);
+template WH_GAME_API void Map::RemoveFromMap(Creature*, bool);
+template WH_GAME_API void Map::RemoveFromMap(GameObject*, bool);
+template WH_GAME_API void Map::RemoveFromMap(DynamicObject*, bool);
 
 /* ******* Dungeon Instance Maps ******* */
 

@@ -98,7 +98,7 @@ class Player;
 class Creature;
 class Quest;
 
-class TC_GAME_API GameEventMgr
+class WH_GAME_API GameEventMgr
 {
     private:
         GameEventMgr();
@@ -188,7 +188,7 @@ class TC_GAME_API GameEventMgr
 
 #define sGameEventMgr GameEventMgr::instance()
 
-TC_GAME_API bool IsHolidayActive(HolidayIds id);
-TC_GAME_API bool IsEventActive(uint16 eventId);
+WH_GAME_API bool IsHolidayActive(HolidayIds id);
+WH_GAME_API bool IsEventActive(uint16 eventId);
 
 #endif

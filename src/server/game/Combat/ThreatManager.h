@@ -78,7 +78,7 @@ struct CompareThreatLessThan
 };
 
 // Please check Game/Combat/ThreatManager.h for documentation on how this class works!
-class TC_GAME_API ThreatManager
+class WH_GAME_API ThreatManager
 {
     public:
         typedef boost::heap::fibonacci_heap<ThreatReference const*, boost::heap::compare<CompareThreatLessThan>> threat_list_heap;
@@ -249,7 +249,7 @@ class TC_GAME_API ThreatManager
 };
 
 // Please check Game/Combat/ThreatManager.h for documentation on how this class works!
-class TC_GAME_API ThreatReference
+class WH_GAME_API ThreatReference
 {
     public:
         enum TauntState : uint32 { TAUNT_STATE_DETAUNT = 0, TAUNT_STATE_NONE = 1, TAUNT_STATE_TAUNT = 2 };

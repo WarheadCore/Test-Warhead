@@ -54,7 +54,7 @@ namespace Trinity
 }
 
 /// Storage object for the list of realms on the server
-class TC_SHARED_API RealmList
+class WH_SHARED_API RealmList
 {
 public:
     typedef std::map<RealmHandle, Realm> RealmMap;

@@ -29,7 +29,7 @@ class Unit;
 class WorldObject;
 struct AreaTriggerEntry;
 
-class TC_GAME_API SmartScript
+class WH_GAME_API SmartScript
 {
     public:
         SmartScript();

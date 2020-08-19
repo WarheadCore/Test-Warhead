@@ -43,7 +43,7 @@ enum MovementGeneratorFlags : uint16
     MOVEMENTGENERATOR_FLAG_TRANSITORY = MOVEMENTGENERATOR_FLAG_SPEED_UPDATE_PENDING | MOVEMENTGENERATOR_FLAG_INTERRUPTED
 };
 
-class TC_GAME_API MovementGenerator
+class WH_GAME_API MovementGenerator
 {
     public:
         MovementGenerator() : Mode(0), Priority(0), Flags(MOVEMENTGENERATOR_FLAG_NONE), BaseUnitState(0) { }

@@ -439,7 +439,7 @@ enum ShapeshiftForm
     FORM_SPIRITOFREDEMPTION = 0x20
 };
 
-struct TC_GAME_API AuraCreateInfo
+struct WH_GAME_API AuraCreateInfo
 {
     friend class Aura;
     friend class UnitAura;

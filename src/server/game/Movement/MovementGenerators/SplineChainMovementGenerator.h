@@ -25,7 +25,7 @@
 
 class Unit;
 
-class TC_GAME_API SplineChainMovementGenerator : public MovementGenerator
+class WH_GAME_API SplineChainMovementGenerator : public MovementGenerator
 {
     public:
         explicit SplineChainMovementGenerator(uint32 id, std::vector<SplineChainLink> const& chain, bool walk = false);

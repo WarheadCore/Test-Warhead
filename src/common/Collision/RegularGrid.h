@@ -36,7 +36,7 @@ class NodeCreatorFunc = NodeCreator<Node>,
 class BoundsFunc = BoundsTrait<T>,
 class PositionFunc = PositionTrait<T>
 >
-class TC_COMMON_API RegularGrid2D
+class WH_COMMON_API RegularGrid2D
 {
 public:
 

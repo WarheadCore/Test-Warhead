@@ -5778,10 +5778,10 @@ void AuraEffect::HandleRaidProcFromChargeWithValueAuraProc(AuraApplication* aurA
     target->CastSpell(target, triggerSpellId, args);
 }
 
-template TC_GAME_API void AuraEffect::GetTargetList(std::list<Unit*>&) const;
-template TC_GAME_API void AuraEffect::GetTargetList(std::deque<Unit*>&) const;
-template TC_GAME_API void AuraEffect::GetTargetList(std::vector<Unit*>&) const;
+template WH_GAME_API void AuraEffect::GetTargetList(std::list<Unit*>&) const;
+template WH_GAME_API void AuraEffect::GetTargetList(std::deque<Unit*>&) const;
+template WH_GAME_API void AuraEffect::GetTargetList(std::vector<Unit*>&) const;
 
-template TC_GAME_API void AuraEffect::GetApplicationList(std::list<AuraApplication*>&) const;
-template TC_GAME_API void AuraEffect::GetApplicationList(std::deque<AuraApplication*>&) const;
-template TC_GAME_API void AuraEffect::GetApplicationList(std::vector<AuraApplication*>&) const;
+template WH_GAME_API void AuraEffect::GetApplicationList(std::list<AuraApplication*>&) const;
+template WH_GAME_API void AuraEffect::GetApplicationList(std::deque<AuraApplication*>&) const;
+template WH_GAME_API void AuraEffect::GetApplicationList(std::vector<AuraApplication*>&) const;

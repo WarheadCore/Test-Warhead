@@ -179,9 +179,9 @@ bool DatabaseLoader::Process(std::queue<Predicate>& queue)
     return true;
 }
 
-template TC_DATABASE_API
+template WH_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<LoginDatabaseConnection>(DatabaseWorkerPool<LoginDatabaseConnection>&, std::string const&);
-template TC_DATABASE_API
+template WH_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<CharacterDatabaseConnection>(DatabaseWorkerPool<CharacterDatabaseConnection>&, std::string const&);
-template TC_DATABASE_API
+template WH_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<WorldDatabaseConnection>(DatabaseWorkerPool<WorldDatabaseConnection>&, std::string const&);
