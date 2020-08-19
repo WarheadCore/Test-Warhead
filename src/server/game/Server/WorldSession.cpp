@@ -629,7 +629,7 @@ void WorldSession::KickPlayer(std::string const& reason)
 
 bool WorldSession::ValidateHyperlinksAndMaybeKick(std::string const& str)
 {
-    if (Trinity::Hyperlinks::CheckAllLinks(str))
+    if (Warhead::Hyperlinks::CheckAllLinks(str))
         return true;
 
     LOG_ERROR("network", "Player %s%s sent a message with an invalid link:\n%s", GetPlayer()->GetName().c_str(),

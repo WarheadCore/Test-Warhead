@@ -22,7 +22,7 @@
 #include <string>
 #include <type_traits>
 
-namespace Trinity
+namespace Warhead
 {
     namespace Containers
     {

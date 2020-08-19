@@ -27,7 +27,7 @@
 #include "SharedDefines.h"
 #include "World.h"
 
-namespace Trinity
+namespace Warhead
 {
     namespace Honor
     {
@@ -42,7 +42,7 @@ namespace Trinity
         {
             return uint32(ceil(hk_honor_at_level_f(level, multiplier)));
         }
-    } // namespace Trinity::Honor
+    } // namespace Warhead::Honor
 
     namespace XP
     {
@@ -237,7 +237,7 @@ namespace Trinity
             sScriptMgr->OnGroupRateCalculation(rate, count, isRaid);
             return rate;
         }
-    } // namespace Trinity::XP
-} // namespace Trinity
+    } // namespace Warhead::XP
+} // namespace Warhead
 
 #endif

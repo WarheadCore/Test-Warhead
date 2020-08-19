@@ -29,7 +29,7 @@
 #include "UnitAI.h"
 #include "UpdateData.h"
 
-namespace Trinity
+namespace Warhead
 {
     struct WH_GAME_API VisibleNotifier
     {

@@ -3862,7 +3862,7 @@ enum WorldState : uint32
     WS_DAILY_CALENDAR_DELETION_OLD_EVENTS_TIME = 20009,      // Next daily calendar deletions of old events time
 };
 
-namespace Trinity
+namespace Warhead
 {
 namespace Impl
 {
@@ -3873,7 +3873,7 @@ namespace Impl
     };
 }
 }
-#define THIS_SERVER_PROCESS (Trinity::Impl::CurrentServerProcessHolder::type())
+#define THIS_SERVER_PROCESS (Warhead::Impl::CurrentServerProcessHolder::type())
 
 #define MAX_CREATURE_SPELL_DATA_SLOT 4
 

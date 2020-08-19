@@ -39,7 +39,7 @@ void WardenMac::Init(WorldSession* pClient, SessionKey const& K)
 {
     _session = pClient;
     // Generate Warden Key
-    SessionKeyGenerator<Trinity::Crypto::SHA1> WK(K);
+    SessionKeyGenerator<Warhead::Crypto::SHA1> WK(K);
     WK.Generate(_inputKey.data(), 16);
     WK.Generate(_outputKey.data(), 16);
     /*
@@ -141,9 +141,9 @@ void WardenMac::HandleHashResult(ByteBuffer &buff)
     //const uint8 validHash[20] = { 0x56, 0x8C, 0x05, 0x4C, 0x78, 0x1A, 0x97, 0x2A, 0x60, 0x37, 0xA2, 0x29, 0x0C, 0x22, 0xB5, 0x25, 0x71, 0xA0, 0x6F, 0x4E };
 
     // Verify key
-    Trinity::Crypto::SHA1::Digest result;
+    Warhead::Crypto::SHA1::Digest result;
     buff.read(result);
-    if (result != Trinity::Crypto::SHA1::GetDigestOf(reinterpret_cast<uint8*>(keyIn), 16))
+    if (result != Warhead::Crypto::SHA1::GetDigestOf(reinterpret_cast<uint8*>(keyIn), 16))
     {
         char const* penalty = ApplyPenalty(nullptr);
         LOG_WARN("warden", "%s failed hash reply. Action: %s", _session->GetPlayerInfo().c_str(), penalty);
@@ -216,13 +216,13 @@ void WardenMac::HandleCheckResult(ByteBuffer &buff)
 
     std::string str = "Test string!";
 
-    Trinity::Crypto::SHA1 sha1;
+    Warhead::Crypto::SHA1 sha1;
     sha1.UpdateData(str);
     uint32 magic = 0xFEEDFACE;                              // unsure
     sha1.UpdateData((uint8*)&magic, 4);
     sha1.Finalize();
 
-    std::array<uint8, Trinity::Crypto::SHA1::DIGEST_LENGTH> sha1Hash;
+    std::array<uint8, Warhead::Crypto::SHA1::DIGEST_LENGTH> sha1Hash;
     buff.read(sha1Hash.data(), sha1Hash.size());
 
     if (sha1Hash != sha1.GetDigest())

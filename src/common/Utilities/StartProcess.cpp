@@ -33,7 +33,7 @@
 using namespace boost::process;
 using namespace boost::iostreams;
 
-namespace Trinity
+namespace Warhead
 {
 
 template<typename T>
@@ -260,4 +260,4 @@ std::string SearchExecutableInPath(std::string const& filename)
     }
 }
 
-} // namespace Trinity
+} // namespace Warhead

@@ -93,9 +93,9 @@ void Channel::GetChannelName(std::string& channelName, uint32 channelId, LocaleC
         if (!(channelEntry->Flags & CHANNEL_DBC_FLAG_GLOBAL))
         {
             if (channelEntry->Flags & CHANNEL_DBC_FLAG_CITY_ONLY)
-                channelName = Trinity::StringFormat(channelEntry->Name[locale], sObjectMgr->GetTrinityString(LANG_CHANNEL_CITY, locale));
+                channelName = Warhead::StringFormat(channelEntry->Name[locale], sObjectMgr->GetTrinityString(LANG_CHANNEL_CITY, locale));
             else
-                channelName = Trinity::StringFormat(channelEntry->Name[locale], ASSERT_NOTNULL(zoneEntry)->AreaName[locale]);
+                channelName = Warhead::StringFormat(channelEntry->Name[locale], ASSERT_NOTNULL(zoneEntry)->AreaName[locale]);
         }
         else
             channelName = channelEntry->Name[locale];
@@ -861,7 +861,7 @@ void Channel::LeaveNotify(ObjectGuid guid) const
 template<class Builder>
 void Channel::SendToAll(Builder& builder, ObjectGuid guid /*= ObjectGuid::Empty*/) const
 {
-    Trinity::LocalizedPacketDo<Builder> localizer(builder);
+    Warhead::LocalizedPacketDo<Builder> localizer(builder);
 
     for (PlayerContainer::const_iterator i = _playersStore.begin(); i != _playersStore.end(); ++i)
         if (Player* player = ObjectAccessor::FindConnectedPlayer(i->first))
@@ -872,7 +872,7 @@ void Channel::SendToAll(Builder& builder, ObjectGuid guid /*= ObjectGuid::Empty*
 template<class Builder>
 void Channel::SendToAllButOne(Builder& builder, ObjectGuid who) const
 {
-    Trinity::LocalizedPacketDo<Builder> localizer(builder);
+    Warhead::LocalizedPacketDo<Builder> localizer(builder);
 
     for (PlayerContainer::const_iterator i = _playersStore.begin(); i != _playersStore.end(); ++i)
         if (i->first != who)
@@ -883,7 +883,7 @@ void Channel::SendToAllButOne(Builder& builder, ObjectGuid who) const
 template<class Builder>
 void Channel::SendToOne(Builder& builder, ObjectGuid who) const
 {
-    Trinity::LocalizedPacketDo<Builder> localizer(builder);
+    Warhead::LocalizedPacketDo<Builder> localizer(builder);
 
     if (Player* player = ObjectAccessor::FindConnectedPlayer(who))
         localizer(player);

@@ -483,7 +483,7 @@ void World::LoadConfigSettings(bool reload)
 
     ///- Read the player limit and the Message of the day from the config file
     SetPlayerAmountLimit(sConfigMgr->GetIntDefault("PlayerLimit", 100));
-    Motd::SetMotd(sConfigMgr->GetStringDefault("Motd", "Welcome to a Trinity Core Server."));
+    Motd::SetMotd(sConfigMgr->GetStringDefault("Motd", "Welcome to a Warhead Core Server."));
 
     ///- Read ticket system setting from the config file
     m_bool_configs[CONFIG_ALLOW_TICKETS] = sConfigMgr->GetBoolDefault("AllowTickets", true);
@@ -1578,7 +1578,7 @@ void World::SetInitialWorldSettings()
 
     ///- Loading strings. Getting no records means core load has to be canceled because no error message can be output.
 
-    LOG_INFO("server.loading", "Loading Trinity strings...");
+    LOG_INFO("server.loading", "Loading Warhead strings...");
     if (!sObjectMgr->LoadTrinityStrings())
         exit(1);                                            // Error message displayed in function already
 
@@ -2602,7 +2602,7 @@ void World::SendGlobalGMMessage(WorldPacket const* packet, WorldSession* self, u
     }
 }
 
-namespace Trinity
+namespace Warhead
 {
     class WorldWorldTextBuilder
     {
@@ -2644,7 +2644,7 @@ namespace Trinity
             uint32 i_textId;
             va_list* i_args;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Warhead
 
 /// Send a System Message to all players (except self if mentioned)
 void World::SendWorldText(uint32 string_id, ...)
@@ -2652,8 +2652,8 @@ void World::SendWorldText(uint32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    Trinity::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
+    Warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Warhead::LocalizedPacketListDo<Warhead::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -2671,8 +2671,8 @@ void World::SendGMText(uint32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    Trinity::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
+    Warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Warhead::LocalizedPacketListDo<Warhead::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         // Session should have permissions to receive global gm messages

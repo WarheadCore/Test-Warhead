@@ -31,7 +31,7 @@ class Appender;
 class Logger;
 struct LogMessage;
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {
@@ -64,7 +64,7 @@ class WH_COMMON_API Log
     public:
         static Log* instance();
 
-        void Initialize(Trinity::Asio::IoContext* ioContext);
+        void Initialize(Warhead::Asio::IoContext* ioContext);
         void SetSynchronous();  // Not threadsafe - should only be called from main() after all threads are joined
         void LoadFromConfig();
         void Close();
@@ -74,7 +74,7 @@ class WH_COMMON_API Log
         template<typename Format, typename... Args>
         inline void outMessage(std::string const& filter, LogLevel const level, Format&& fmt, Args&&... args)
         {
-            outMessage(filter, level, Trinity::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+            outMessage(filter, level, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
         }
 
         template<typename Format, typename... Args>
@@ -83,7 +83,7 @@ class WH_COMMON_API Log
             if (!ShouldLog("commands.gm", LOG_LEVEL_INFO))
                 return;
 
-            outCommand(Trinity::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
+            outCommand(Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
         }
 
         void outCharDump(char const* str, uint32 account_id, uint64 guid, char const* name);
@@ -124,8 +124,8 @@ class WH_COMMON_API Log
         std::string m_logsDir;
         std::string m_logsTimestamp;
 
-        Trinity::Asio::IoContext* _ioContext;
-        Trinity::Asio::Strand* _strand;
+        Warhead::Asio::IoContext* _ioContext;
+        Warhead::Asio::Strand* _strand;
 };
 
 #define sLog Log::instance()

@@ -40,9 +40,9 @@
     RaiseException(EXCEPTION_ASSERTION_FAILURE, 0, 2, execeptionArgs);
 #else
 // should be easily accessible in gdb
-extern "C" { WH_COMMON_API char const* TrinityAssertionFailedMessage = nullptr; }
+extern "C" { WH_COMMON_API char const* WarheadAssertionFailedMessage = nullptr; }
 #define Crash(message) \
-    TrinityAssertionFailedMessage = strdup(message); \
+    WarheadAssertionFailedMessage = strdup(message); \
     *((volatile int*)nullptr) = 0; \
     exit(1);
 #endif
@@ -65,7 +65,7 @@ namespace
     }
 }
 
-namespace Trinity
+namespace Warhead
 {
 
 void Assert(char const* file, int line, char const* function, std::string debugInfo, char const* message)
@@ -150,7 +150,7 @@ void AbortHandler(int sigval)
     Crash(formattedMessage.c_str());
 }
 
-} // namespace Trinity
+} // namespace Warhead
 
 std::string GetDebugInfo()
 {

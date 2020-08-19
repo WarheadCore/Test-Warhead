@@ -49,7 +49,7 @@ EndScriptData */
 #include <map>
 #include <set>
 
-using namespace Trinity::ChatCommands;
+using namespace Warhead::ChatCommands;
 class debug_commandscript : public CommandScript
 {
 public:
@@ -1022,8 +1022,8 @@ public:
         else
         {
             Creature* passenger = nullptr;
-            Trinity::AllCreaturesOfEntryInRange check(handler->GetSession()->GetPlayer(), entry, 20.0f);
-            Trinity::CreatureSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(handler->GetSession()->GetPlayer(), passenger, check);
+            Warhead::AllCreaturesOfEntryInRange check(handler->GetSession()->GetPlayer(), entry, 20.0f);
+            Warhead::CreatureSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(handler->GetSession()->GetPlayer(), passenger, check);
             Cell::VisitAllObjects(handler->GetSession()->GetPlayer(), searcher, 30.0f);
             if (!passenger || passenger == target)
                 return false;

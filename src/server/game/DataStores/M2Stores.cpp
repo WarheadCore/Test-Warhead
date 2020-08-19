@@ -255,5 +255,5 @@ void LoadM2Cameras(std::string const& dataPath)
 
 std::vector<FlyByCamera> const* GetFlyByCameras(uint32 cinematicCameraId)
 {
-    return Trinity::Containers::MapGetValuePtr(sFlyByCameraStore, cinematicCameraId);
+    return Warhead::Containers::MapGetValuePtr(sFlyByCameraStore, cinematicCameraId);
 }

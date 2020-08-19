@@ -126,7 +126,7 @@ enum ScriptCommands
     SCRIPT_COMMAND_CALLSCRIPT_TO_UNIT    = 21,               // source = WorldObject (if present used as a search center), datalong = script id, datalong2 = unit lowguid, dataint = script table to use (see ScriptsType)
     SCRIPT_COMMAND_KILL                  = 22,               // source/target = Creature, dataint = remove corpse attribute
 
-    // TrinityCore only
+    // WarheadCore only
     SCRIPT_COMMAND_ORIENTATION           = 30,               // source = Unit, target (datalong > 0) = Unit, datalong = > 0 turn source to face target, o = orientation
     SCRIPT_COMMAND_EQUIP                 = 31,               // soucre = Creature, datalong = equipment id
     SCRIPT_COMMAND_MODEL                 = 32,               // source = Creature, datalong = model id
@@ -1272,7 +1272,7 @@ class WH_GAME_API ObjectMgr
         SpawnGroupTemplateData const* GetSpawnGroupData(SpawnObjectType type, ObjectGuid::LowType spawnId) const { SpawnMetadata const* data = GetSpawnMetadata(type, spawnId); return data ? data->spawnGroupData : nullptr; }
         SpawnGroupTemplateData const* GetDefaultSpawnGroup() const { return &_spawnGroupDataStore.at(0); }
         SpawnGroupTemplateData const* GetLegacySpawnGroup() const { return &_spawnGroupDataStore.at(1); }
-        Trinity::IteratorPair<SpawnGroupLinkContainer::const_iterator> GetSpawnMetadataForGroup(uint32 groupId) const { return Trinity::Containers::MapEqualRange(_spawnGroupMapStore, groupId); }
+        Warhead::IteratorPair<SpawnGroupLinkContainer::const_iterator> GetSpawnMetadataForGroup(uint32 groupId) const { return Warhead::Containers::MapEqualRange(_spawnGroupMapStore, groupId); }
         std::vector<InstanceSpawnGroupInfo> const* GetSpawnGroupsForInstance(uint32 instanceId) const { auto it = _instanceSpawnGroupStore.find(instanceId); return it != _instanceSpawnGroupStore.end() ? &it->second : nullptr; }
 
         MailLevelReward const* GetMailLevelReward(uint32 level, uint32 raceMask) const
@@ -1507,9 +1507,9 @@ class WH_GAME_API ObjectMgr
         std::string const& GetScriptName(uint32 id) const;
         uint32 GetScriptId(std::string const& name);
 
-        Trinity::IteratorPair<SpellClickInfoContainer::const_iterator> GetSpellClickInfoMapBounds(uint32 creature_id) const
+        Warhead::IteratorPair<SpellClickInfoContainer::const_iterator> GetSpellClickInfoMapBounds(uint32 creature_id) const
         {
-            return Trinity::Containers::MapEqualRange(_spellClickInfoStore, creature_id);
+            return Warhead::Containers::MapEqualRange(_spellClickInfoStore, creature_id);
         }
 
         GossipMenusMapBounds GetGossipMenusMapBounds(uint32 uiMenuId) const

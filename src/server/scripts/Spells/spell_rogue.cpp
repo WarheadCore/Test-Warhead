@@ -395,7 +395,7 @@ class spell_rog_killing_spree : public SpellScriptLoader
             {
                 while (!_targets.empty())
                 {
-                    ObjectGuid guid = Trinity::Containers::SelectRandomContainerElement(_targets);
+                    ObjectGuid guid = Warhead::Containers::SelectRandomContainerElement(_targets);
                     if (Unit* target = ObjectAccessor::GetUnit(*GetTarget(), guid))
                     {
                         GetTarget()->CastSpell(target, SPELL_ROGUE_KILLING_SPREE_TELEPORT, true);

@@ -93,8 +93,8 @@ bool SmartAI::LoadPath(uint32 entry)
     _path.nodes = path->nodes;
     for (WaypointNode& waypoint : _path.nodes)
     {
-        Trinity::NormalizeMapCoord(waypoint.x);
-        Trinity::NormalizeMapCoord(waypoint.y);
+        Warhead::NormalizeMapCoord(waypoint.x);
+        Warhead::NormalizeMapCoord(waypoint.y);
         waypoint.moveType = _run ? WAYPOINT_MOVE_TYPE_RUN : WAYPOINT_MOVE_TYPE_WALK;
     }
 

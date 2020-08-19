@@ -469,7 +469,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             {
                 if (IsUnit(target))
                 {
-                    Emote emote = static_cast<Emote>(Trinity::Containers::SelectRandomContainerElement(emotes));
+                    Emote emote = static_cast<Emote>(Warhead::Containers::SelectRandomContainerElement(emotes));
                     target->ToUnit()->HandleEmoteCommand(emote);
                     LOG_DEBUG("scripts.ai", "SmartScript::ProcessAction:: SMART_ACTION_RANDOM_EMOTE: Creature %s handle random emote %u",
                         target->GetGUID().ToString().c_str(), emote);
@@ -533,7 +533,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 break;
 
             if (e.action.cast.targetsLimit > 0 && targets.size() > e.action.cast.targetsLimit)
-                Trinity::Containers::RandomResize(targets, e.action.cast.targetsLimit);
+                Warhead::Containers::RandomResize(targets, e.action.cast.targetsLimit);
 
             bool failedSpellCast = false, successfulSpellCast = false;
 
@@ -597,7 +597,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 break;
 
             if (e.action.cast.targetsLimit)
-                Trinity::Containers::RandomResize(targets, e.action.cast.targetsLimit);
+                Warhead::Containers::RandomResize(targets, e.action.cast.targetsLimit);
 
             TriggerCastFlags triggerFlags = TRIGGERED_NONE;
             if (e.action.cast.castFlags & SMARTCAST_TRIGGERED)
@@ -634,7 +634,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 break;
 
             if (e.action.cast.targetsLimit)
-                Trinity::Containers::RandomResize(targets, e.action.cast.targetsLimit);
+                Warhead::Containers::RandomResize(targets, e.action.cast.targetsLimit);
 
             for (WorldObject* target : targets)
             {
@@ -822,7 +822,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
             if (e.action.fleeAssist.withEmote)
             {
-                Trinity::BroadcastTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_FLEE_FOR_ASSIST, me->GetGender());
+                Warhead::BroadcastTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_FLEE_FOR_ASSIST, me->GetGender());
                 sCreatureTextMgr->SendChatPacket(me, builder, CHAT_MSG_MONSTER_EMOTE);
             }
             LOG_DEBUG("scripts.ai", "SmartScript::ProcessAction:: SMART_ACTION_FLEE_FOR_ASSIST: Creature %s DoFleeToGetAssistance", me->GetGUID().ToString().c_str());
@@ -924,7 +924,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             std::copy_if(std::begin(e.action.randomPhase.phases), std::end(e.action.randomPhase.phases),
                 std::back_inserter(phases), [](uint32 phase) { return phase != 0; });
 
-            uint32 phase = Trinity::Containers::SelectRandomContainerElement(phases);
+            uint32 phase = Warhead::Containers::SelectRandomContainerElement(phases);
             SetPhase(phase);
             LOG_DEBUG("scripts.ai", "SmartScript::ProcessAction: SMART_ACTION_RANDOM_PHASE: Creature %s sets event phase to %u",
                 GetBaseObject()->GetGUID().ToString().c_str(), phase);
@@ -1063,7 +1063,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 me->CallForHelp(float(e.action.callHelp.range));
                 if (e.action.callHelp.withEmote)
                 {
-                    Trinity::BroadcastTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_CALL_FOR_HELP, me->GetGender());
+                    Warhead::BroadcastTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_CALL_FOR_HELP, me->GetGender());
                     sCreatureTextMgr->SendChatPacket(me, builder, CHAT_MSG_MONSTER_EMOTE);
                 }
                 LOG_DEBUG("scripts.ai", "SmartScript::ProcessAction: SMART_ACTION_CALL_FOR_HELP: Creature %s", me->GetGUID().ToString().c_str());
@@ -1223,7 +1223,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 break;
 
             // attack random target
-            if (Unit* target = Trinity::Containers::SelectRandomContainerElement(targets)->ToUnit())
+            if (Unit* target = Warhead::Containers::SelectRandomContainerElement(targets)->ToUnit())
                 me->AI()->AttackStart(target);
             break;
         }
@@ -1481,7 +1481,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             {
                 // we want to move to random element
                 if (!targets.empty())
-                    target = Trinity::Containers::SelectRandomContainerElement(targets);
+                    target = Warhead::Containers::SelectRandomContainerElement(targets);
             }
 
             if (!target)
@@ -1739,7 +1739,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             std::copy_if(std::begin(e.action.randTimedActionList.actionLists), std::end(e.action.randTimedActionList.actionLists),
                 std::back_inserter(actionLists), [](uint32 actionList) { return actionList != 0; });
 
-            uint32 id = Trinity::Containers::SelectRandomContainerElement(actionLists);
+            uint32 id = Warhead::Containers::SelectRandomContainerElement(actionLists);
             if (e.GetTargetType() == SMART_TARGET_NONE)
             {
                 LOG_ERROR("sql.sql", "SmartScript: Entry %d SourceType %u Event %u Action %u is using TARGET_NONE(0) for Script9 target. Please correct target_type in database.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
@@ -2113,7 +2113,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             {
                 if (IsUnit(target))
                 {
-                    uint32 sound = Trinity::Containers::SelectRandomContainerElement(sounds);
+                    uint32 sound = Warhead::Containers::SelectRandomContainerElement(sounds);
 
                     if (e.action.randomSound.distance == 1)
                         target->PlayDistanceSound(sound, onlySelf ? target->ToPlayer() : nullptr);
@@ -2605,7 +2605,7 @@ void SmartScript::GetTargets(ObjectVector& targets, SmartScriptHolder const& e, 
             }
 
             if (e.target.unitRange.maxSize)
-                Trinity::Containers::RandomResize(targets, e.target.unitRange.maxSize);
+                Warhead::Containers::RandomResize(targets, e.target.unitRange.maxSize);
             break;
         }
         case SMART_TARGET_CREATURE_DISTANCE:
@@ -2626,7 +2626,7 @@ void SmartScript::GetTargets(ObjectVector& targets, SmartScriptHolder const& e, 
             }
 
             if (e.target.unitDistance.maxSize)
-                Trinity::Containers::RandomResize(targets, e.target.unitDistance.maxSize);
+                Warhead::Containers::RandomResize(targets, e.target.unitDistance.maxSize);
             break;
         }
         case SMART_TARGET_GAMEOBJECT_DISTANCE:
@@ -2647,7 +2647,7 @@ void SmartScript::GetTargets(ObjectVector& targets, SmartScriptHolder const& e, 
             }
 
             if (e.target.goDistance.maxSize)
-                Trinity::Containers::RandomResize(targets, e.target.goDistance.maxSize);
+                Warhead::Containers::RandomResize(targets, e.target.goDistance.maxSize);
             break;
         }
         case SMART_TARGET_GAMEOBJECT_RANGE:
@@ -2668,7 +2668,7 @@ void SmartScript::GetTargets(ObjectVector& targets, SmartScriptHolder const& e, 
             }
 
             if (e.target.goRange.maxSize)
-                Trinity::Containers::RandomResize(targets, e.target.goRange.maxSize);
+                Warhead::Containers::RandomResize(targets, e.target.goRange.maxSize);
             break;
         }
         case SMART_TARGET_CREATURE_GUID:
@@ -2851,8 +2851,8 @@ void SmartScript::GetWorldObjectsInDist(ObjectVector& targets, float dist) const
     if (!obj)
         return;
 
-    Trinity::AllWorldObjectsInRange u_check(obj, dist);
-    Trinity::WorldObjectListSearcher<Trinity::AllWorldObjectsInRange> searcher(obj, targets, u_check);
+    Warhead::AllWorldObjectsInRange u_check(obj, dist);
+    Warhead::WorldObjectListSearcher<Warhead::AllWorldObjectsInRange> searcher(obj, targets, u_check);
     Cell::VisitAllObjects(obj, searcher, dist);
 }
 
@@ -2984,7 +2984,7 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
                 RecalcTimer(e, 1000, 3000);
                 return;
             }
-            ProcessTimedAction(e, e.event.friendlyCC.repeatMin, e.event.friendlyCC.repeatMax, Trinity::Containers::SelectRandomContainerElement(creatures));
+            ProcessTimedAction(e, e.event.friendlyCC.repeatMin, e.event.friendlyCC.repeatMax, Warhead::Containers::SelectRandomContainerElement(creatures));
             break;
         }
         case SMART_EVENT_FRIENDLY_MISSING_BUFF:
@@ -2995,7 +2995,7 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
             if (creatures.empty())
                 return;
 
-            ProcessTimedAction(e, e.event.missingBuff.repeatMin, e.event.missingBuff.repeatMax, Trinity::Containers::SelectRandomContainerElement(creatures));
+            ProcessTimedAction(e, e.event.missingBuff.repeatMin, e.event.missingBuff.repeatMax, Warhead::Containers::SelectRandomContainerElement(creatures));
             break;
         }
         case SMART_EVENT_HAS_AURA:
@@ -3851,8 +3851,8 @@ Unit* SmartScript::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff) const
         return nullptr;
 
     Unit* unit = nullptr;
-    Trinity::MostHPMissingInRange u_check(me, range, MinHPDiff);
-    Trinity::UnitLastSearcher<Trinity::MostHPMissingInRange> searcher(me, unit, u_check);
+    Warhead::MostHPMissingInRange u_check(me, range, MinHPDiff);
+    Warhead::UnitLastSearcher<Warhead::MostHPMissingInRange> searcher(me, unit, u_check);
     Cell::VisitGridObjects(me, searcher, range);
     return unit;
 }
@@ -3862,8 +3862,8 @@ void SmartScript::DoFindFriendlyCC(std::vector<Creature*>& creatures, float rang
     if (!me)
         return;
 
-    Trinity::FriendlyCCedInRange u_check(me, range);
-    Trinity::CreatureListSearcher<Trinity::FriendlyCCedInRange> searcher(me, creatures, u_check);
+    Warhead::FriendlyCCedInRange u_check(me, range);
+    Warhead::CreatureListSearcher<Warhead::FriendlyCCedInRange> searcher(me, creatures, u_check);
     Cell::VisitGridObjects(me, searcher, range);
 }
 
@@ -3872,8 +3872,8 @@ void SmartScript::DoFindFriendlyMissingBuff(std::vector<Creature*>& creatures, f
     if (!me)
         return;
 
-    Trinity::FriendlyMissingBuffInRange u_check(me, range, spellid);
-    Trinity::CreatureListSearcher<Trinity::FriendlyMissingBuffInRange> searcher(me, creatures, u_check);
+    Warhead::FriendlyMissingBuffInRange u_check(me, range, spellid);
+    Warhead::CreatureListSearcher<Warhead::FriendlyMissingBuffInRange> searcher(me, creatures, u_check);
     Cell::VisitGridObjects(me, searcher, range);
 }
 
@@ -3883,8 +3883,8 @@ Unit* SmartScript::DoFindClosestFriendlyInRange(float range, bool playerOnly) co
         return nullptr;
 
     Unit* unit = nullptr;
-    Trinity::AnyFriendlyUnitInObjectRangeCheck u_check(me, me, range, playerOnly);
-    Trinity::UnitLastSearcher<Trinity::AnyFriendlyUnitInObjectRangeCheck> searcher(me, unit, u_check);
+    Warhead::AnyFriendlyUnitInObjectRangeCheck u_check(me, me, range, playerOnly);
+    Warhead::UnitLastSearcher<Warhead::AnyFriendlyUnitInObjectRangeCheck> searcher(me, unit, u_check);
     Cell::VisitAllObjects(me, searcher, range);
     return unit;
 }

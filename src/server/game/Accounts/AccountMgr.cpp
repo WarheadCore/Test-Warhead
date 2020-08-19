@@ -60,7 +60,7 @@ AccountOpResult AccountMgr::CreateAccount(std::string username, std::string pass
     LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT);
 
     stmt->setString(0, username);
-    auto [salt, verifier] = Trinity::Crypto::SRP6::MakeRegistrationData(username, password);
+    auto [salt, verifier] = Warhead::Crypto::SRP6::MakeRegistrationData(username, password);
     stmt->setBinary(1, salt);
     stmt->setBinary(2, verifier);
     stmt->setString(3, email);
@@ -149,11 +149,11 @@ AccountOpResult AccountMgr::DeleteAccount(uint32 accountId)
     return AccountOpResult::AOR_OK;
 }
 
-// Do not use this. Use the appropriate methods on Trinity::Crypto::SRP6 to do whatever you are trying to do.
+// Do not use this. Use the appropriate methods on Warhead::Crypto::SRP6 to do whatever you are trying to do.
 // See issue #25157.
 static std::string CalculateShaPassHash_DEPRECATED_DONOTUSE(std::string const& name, std::string const& password)
 {
-    return ByteArrayToHexStr(Trinity::Crypto::SHA1::GetDigestOf(name, ":", password));
+    return ByteArrayToHexStr(Warhead::Crypto::SHA1::GetDigestOf(name, ":", password));
 }
 
 AccountOpResult AccountMgr::ChangeUsername(uint32 accountId, std::string newUsername, std::string newPassword)
@@ -180,7 +180,7 @@ AccountOpResult AccountMgr::ChangeUsername(uint32 accountId, std::string newUser
     stmt->setUInt32(1, accountId);
     LoginDatabase.Execute(stmt);
 
-    auto [salt, verifier] = Trinity::Crypto::SRP6::MakeRegistrationData(newUsername, newPassword);
+    auto [salt, verifier] = Warhead::Crypto::SRP6::MakeRegistrationData(newUsername, newPassword);
     stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_LOGON);
     stmt->setBinary(0, salt);
     stmt->setBinary(1, verifier);
@@ -216,7 +216,7 @@ AccountOpResult AccountMgr::ChangePassword(uint32 accountId, std::string newPass
 
     Utf8ToUpperOnlyLatin(username);
     Utf8ToUpperOnlyLatin(newPassword);
-    auto [salt, verifier] = Trinity::Crypto::SRP6::MakeRegistrationData(username, newPassword);
+    auto [salt, verifier] = Warhead::Crypto::SRP6::MakeRegistrationData(username, newPassword);
 
     LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_LOGON);
     stmt->setBinary(0, salt);
@@ -371,9 +371,9 @@ bool AccountMgr::CheckPassword(uint32 accountId, std::string password)
 
     if (PreparedQueryResult result = LoginDatabase.Query(stmt))
     {
-        Trinity::Crypto::SRP6::Salt salt = (*result)[0].GetBinary<Trinity::Crypto::SRP6::SALT_LENGTH>();
-        Trinity::Crypto::SRP6::Verifier verifier = (*result)[1].GetBinary<Trinity::Crypto::SRP6::VERIFIER_LENGTH>();
-        if (Trinity::Crypto::SRP6::CheckLogin(username, password, salt, verifier))
+        Warhead::Crypto::SRP6::Salt salt = (*result)[0].GetBinary<Warhead::Crypto::SRP6::SALT_LENGTH>();
+        Warhead::Crypto::SRP6::Verifier verifier = (*result)[1].GetBinary<Warhead::Crypto::SRP6::VERIFIER_LENGTH>();
+        if (Warhead::Crypto::SRP6::CheckLogin(username, password, salt, verifier))
             return true;
     }
 

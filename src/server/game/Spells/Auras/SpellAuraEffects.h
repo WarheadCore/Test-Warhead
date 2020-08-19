@@ -310,7 +310,7 @@ class WH_GAME_API AuraEffect
         void HandleRaidProcFromChargeWithValueAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo);
 };
 
-namespace Trinity
+namespace Warhead
 {
     // Binary predicate for sorting the priority of absorption aura effects
     class AbsorbAuraOrderPred

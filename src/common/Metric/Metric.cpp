@@ -25,12 +25,12 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
-void Metric::Initialize(std::string const& realmName, Trinity::Asio::IoContext& ioContext, std::function<void()> overallStatusLogger)
+void Metric::Initialize(std::string const& realmName, Warhead::Asio::IoContext& ioContext, std::function<void()> overallStatusLogger)
 {
     _dataStream = std::make_unique<boost::asio::ip::tcp::iostream>();
     _realmName = FormatInfluxDBTagValue(realmName);
-    _batchTimer = std::make_unique<Trinity::Asio::DeadlineTimer>(ioContext);
-    _overallStatusTimer = std::make_unique<Trinity::Asio::DeadlineTimer>(ioContext);
+    _batchTimer = std::make_unique<Warhead::Asio::DeadlineTimer>(ioContext);
+    _overallStatusTimer = std::make_unique<Warhead::Asio::DeadlineTimer>(ioContext);
     _overallStatusLogger = overallStatusLogger;
     LoadFromConfigs();
 }
@@ -236,7 +236,7 @@ void Metric::ScheduleSend()
 void Metric::Unload()
 {
     // Send what's queued only if IoContext is stopped (so only on shutdown)
-    if (_enabled && Trinity::Asio::get_io_context(*_batchTimer).stopped())
+    if (_enabled && Warhead::Asio::get_io_context(*_batchTimer).stopped())
     {
         _enabled = false;
         SendBatch();

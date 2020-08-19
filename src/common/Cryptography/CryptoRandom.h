@@ -21,7 +21,7 @@
 #include "Define.h"
 #include <array>
 
-namespace Trinity::Crypto
+namespace Warhead::Crypto
 {
     void WH_COMMON_API GetRandomBytes(uint8* buf, size_t len);
 

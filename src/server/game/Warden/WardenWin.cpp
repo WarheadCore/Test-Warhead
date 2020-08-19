@@ -39,11 +39,11 @@
 WardenWin::WardenWin() : Warden(), _serverTicks(0)
 {
     _memChecks = sWardenCheckMgr->GetAvailableMemoryChecks();
-    Trinity::Containers::RandomShuffle(_memChecks);
+    Warhead::Containers::RandomShuffle(_memChecks);
     _memChecksIt = _memChecks.begin();
 
     _otherChecks = sWardenCheckMgr->GetAvailableOtherChecks();
-    Trinity::Containers::RandomShuffle(_otherChecks);
+    Warhead::Containers::RandomShuffle(_otherChecks);
     _otherChecksIt = _otherChecks.begin();
 }
 
@@ -51,7 +51,7 @@ void WardenWin::Init(WorldSession* session, SessionKey const& K)
 {
     _session = session;
     // Generate Warden Key
-    SessionKeyGenerator<Trinity::Crypto::SHA1> WK(K);
+    SessionKeyGenerator<Warhead::Crypto::SHA1> WK(K);
     WK.Generate(_inputKey.data(), _inputKey.size());
     WK.Generate(_outputKey.data(), _outputKey.size());
 
@@ -157,7 +157,7 @@ void WardenWin::RequestHash()
 void WardenWin::HandleHashResult(ByteBuffer &buff)
 {
     // Verify key
-    Trinity::Crypto::SHA1::Digest response;
+    Warhead::Crypto::SHA1::Digest response;
     buff.read(response);
     if (response != Module.ClientKeySeedHash)
     {
@@ -186,14 +186,14 @@ void WardenWin::RequestChecks()
     if (_memChecksIt == _memChecks.end())
     {
         LOG_DEBUG("warden", "Finished all mem checks, re-shuffling");
-        Trinity::Containers::RandomShuffle(_memChecks);
+        Warhead::Containers::RandomShuffle(_memChecks);
         _memChecksIt = _memChecks.begin();
     }
 
     if (_otherChecksIt == _otherChecks.end())
     {
         LOG_DEBUG("warden", "Finished all other checks, re-shuffling");
-        Trinity::Containers::RandomShuffle(_otherChecks);
+        Warhead::Containers::RandomShuffle(_otherChecks);
         _otherChecksIt = _otherChecks.begin();
     }
 
@@ -276,9 +276,9 @@ void WardenWin::RequestChecks()
             }
             case MODULE_CHECK:
             {
-                std::array<uint8, 4> seed = Trinity::Crypto::GetRandomBytes<4>();
+                std::array<uint8, 4> seed = Warhead::Crypto::GetRandomBytes<4>();
                 buff.append(seed);
-                buff.append(Trinity::Crypto::HMAC_SHA1::GetDigestOf(seed, check.Str));
+                buff.append(Warhead::Crypto::HMAC_SHA1::GetDigestOf(seed, check.Str));
                 break;
             }
             /*case PROC_CHECK:
@@ -448,7 +448,7 @@ void WardenWin::HandleCheckResult(ByteBuffer &buff)
                 }
 
                 std::vector<uint8> result;
-                result.resize(Trinity::Crypto::SHA1::DIGEST_LENGTH);
+                result.resize(Warhead::Crypto::SHA1::DIGEST_LENGTH);
                 buff.read(result.data(), result.size());
                 if (result != sWardenCheckMgr->GetCheckResultById(id)) // SHA1
                 {

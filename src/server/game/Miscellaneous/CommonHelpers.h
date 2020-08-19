@@ -22,7 +22,7 @@
 
 class Player;
 
-namespace Trinity
+namespace Warhead
 {
     namespace Helpers
     {

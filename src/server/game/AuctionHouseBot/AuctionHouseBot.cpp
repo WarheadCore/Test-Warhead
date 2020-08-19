@@ -312,7 +312,7 @@ uint32 AuctionBotConfig::GetRandChar() const
     if (_AHBotCharacters.empty())
         return 0;
 
-    return Trinity::Containers::SelectRandomContainerElement(_AHBotCharacters);
+    return Warhead::Containers::SelectRandomContainerElement(_AHBotCharacters);
 }
 
 // Picks a random AHBot character, but excludes a specific one. This is used
@@ -332,7 +332,7 @@ uint32 AuctionBotConfig::GetRandCharExclude(uint32 exclude) const
     if (filteredCharacters.empty())
         return 0;
 
-    return Trinity::Containers::SelectRandomContainerElement(filteredCharacters);
+    return Warhead::Containers::SelectRandomContainerElement(filteredCharacters);
 }
 
 bool AuctionBotConfig::IsBotChar(uint32 characterID) const

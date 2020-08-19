@@ -99,7 +99,7 @@ void IpLocationStore::Load()
 
 IpLocationRecord const* IpLocationStore::GetLocationRecord(std::string const& ipAddress) const
 {
-    uint32 ip = Trinity::Net::address_to_uint(Trinity::Net::make_address_v4(ipAddress));
+    uint32 ip = Warhead::Net::address_to_uint(Warhead::Net::make_address_v4(ipAddress));
     auto itr = std::upper_bound(_ipLocationStore.begin(), _ipLocationStore.end(), ip, [](uint32 ip, IpLocationRecord const& loc) { return ip < loc.IpTo; });
     if (itr == _ipLocationStore.end())
         return nullptr;

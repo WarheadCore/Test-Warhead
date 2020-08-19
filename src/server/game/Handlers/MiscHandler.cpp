@@ -236,7 +236,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
     wstrToLower(wpacketPlayerName);
     wstrToLower(wpacketGuildName);
 
-    // client send in case not set max level value 100 but Trinity supports 255 max level,
+    // client send in case not set max level value 100 but Warhead supports 255 max level,
     // update it to show GMs with characters after 100 level
     if (levelMax >= MAX_LEVEL)
         levelMax = STRONG_MAX_LEVEL;

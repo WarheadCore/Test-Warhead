@@ -31,7 +31,7 @@ class SpellInfo;
 class Quest;
 struct TalentEntry;
 
-namespace Trinity::Hyperlinks
+namespace Warhead::Hyperlinks
 {
 
     struct AchievementLinkData

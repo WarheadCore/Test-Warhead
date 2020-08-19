@@ -2691,8 +2691,8 @@ void UnitAura::FillTargetMap(std::unordered_map<Unit*, uint8>& targets, Unit* ca
 
         if (selectionType != TARGET_CHECK_DEFAULT)
         {
-            Trinity::WorldObjectSpellAreaTargetCheck check(radius, GetUnitOwner(), ref, GetUnitOwner(), m_spellInfo, selectionType, condList);
-            Trinity::UnitListSearcher<Trinity::WorldObjectSpellAreaTargetCheck> searcher(GetUnitOwner(), units, check);
+            Warhead::WorldObjectSpellAreaTargetCheck check(radius, GetUnitOwner(), ref, GetUnitOwner(), m_spellInfo, selectionType, condList);
+            Warhead::UnitListSearcher<Warhead::WorldObjectSpellAreaTargetCheck> searcher(GetUnitOwner(), units, check);
             Cell::VisitAllObjects(GetUnitOwner(), searcher, radius);
         }
 
@@ -2753,8 +2753,8 @@ void DynObjAura::FillTargetMap(std::unordered_map<Unit*, uint8>& targets, Unit* 
         std::vector<Unit*> units;
         ConditionContainer* condList = m_spellInfo->Effects[effIndex].ImplicitTargetConditions;
 
-        Trinity::WorldObjectSpellAreaTargetCheck check(radius, GetDynobjOwner(), dynObjOwnerCaster, dynObjOwnerCaster, m_spellInfo, selectionType, condList);
-        Trinity::UnitListSearcher<Trinity::WorldObjectSpellAreaTargetCheck> searcher(GetDynobjOwner(), units, check);
+        Warhead::WorldObjectSpellAreaTargetCheck check(radius, GetDynobjOwner(), dynObjOwnerCaster, dynObjOwnerCaster, m_spellInfo, selectionType, condList);
+        Warhead::UnitListSearcher<Warhead::WorldObjectSpellAreaTargetCheck> searcher(GetDynobjOwner(), units, check);
         Cell::VisitAllObjects(GetDynobjOwner(), searcher, radius);
 
         for (Unit* unit : units)

@@ -2063,7 +2063,7 @@ void Player::Regenerate(Powers power)
             if (GetLevel() < 15)
                 ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (GetLevel() * 0.066f));
 
-            if (recentCast) // Trinity Updates Mana in intervals of 2s, which is correct
+            if (recentCast) // Warhead Updates Mana in intervals of 2s, which is correct
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * m_regenTimer;
             else
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * m_regenTimer;
@@ -5863,7 +5863,7 @@ void Player::UpdateWeaponSkill(Unit* victim, WeaponAttackType attType)
 void Player::UpdateCombatSkills(Unit* victim, WeaponAttackType attType, bool defense)
 {
     uint8 plevel = GetLevel();                              // if defense than victim == attacker
-    uint8 greylevel = Trinity::XP::GetGrayLevel(plevel);
+    uint8 greylevel = Warhead::XP::GetGrayLevel(plevel);
     uint8 moblevel = victim->GetLevelForTarget(this);
 
     if (moblevel > plevel + 5)
@@ -6213,8 +6213,8 @@ void Player::SendActionButtons(uint32 state) const
     data << uint8(state);
     /*
         state can be 0, 1, 2
-        0 - Looks to be sent when initial action buttons get sent, however on Trinity we use 1 since 0 had some difficulties
-        1 - Used in any SMSG_ACTION_BUTTONS packet with button data on Trinity. Only used after spec swaps on retail.
+        0 - Looks to be sent when initial action buttons get sent, however on Warhead we use 1 since 0 had some difficulties
+        1 - Used in any SMSG_ACTION_BUTTONS packet with button data on Warhead. Only used after spec swaps on retail.
         2 - Clears the action bars client sided. This is sent during spec swap before unlearning and before sending the new buttons
     */
     if (state != 2)
@@ -6361,7 +6361,7 @@ void Player::SendMessageToSetInRange(WorldPacket const* data, float dist, bool s
     if (self)
         SendDirectMessage(data);
 
-    Trinity::MessageDistDeliverer notifier(this, data, dist);
+    Warhead::MessageDistDeliverer notifier(this, data, dist);
     Cell::VisitWorldObjects(this, notifier, dist);
 }
 
@@ -6370,7 +6370,7 @@ void Player::SendMessageToSetInRange(WorldPacket const* data, float dist, bool s
     if (self)
         SendDirectMessage(data);
 
-    Trinity::MessageDistDeliverer notifier(this, data, dist, own_team_only);
+    Warhead::MessageDistDeliverer notifier(this, data, dist, own_team_only);
     Cell::VisitWorldObjects(this, notifier, dist);
 }
 
@@ -6381,7 +6381,7 @@ void Player::SendMessageToSet(WorldPacket const* data, Player const* skipped_rcv
 
     // we use World::GetMaxVisibleDistance() because i cannot see why not use a distance
     // update: replaced by GetMap()->GetVisibilityDistance()
-    Trinity::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
+    Warhead::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
     Cell::VisitWorldObjects(this, notifier, GetVisibilityRange());
 }
 
@@ -6553,7 +6553,7 @@ int32 Player::CalculateReputationGain(ReputationSource source, uint32 creatureOr
             break;
     }
 
-    if (rate != 1.0f && creatureOrQuestLevel <= Trinity::XP::GetGrayLevel(GetLevel()))
+    if (rate != 1.0f && creatureOrQuestLevel <= Warhead::XP::GetGrayLevel(GetLevel()))
         percent *= rate;
 
     if (percent <= 0.0f)
@@ -6780,7 +6780,7 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
                 return false;
 
             uint8 k_level = GetLevel();
-            uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
+            uint8 k_grey = Warhead::XP::GetGrayLevel(k_level);
             uint8 v_level = victim->GetLevel();
 
             if (v_level <= k_grey)
@@ -6807,7 +6807,7 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
             else
                 victim_guid.Clear();                     // Don't show HK: <rank> message, only log.
 
-            honor_f = std::ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
+            honor_f = std::ceil(Warhead::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
 
             // count the number of playerkills in one day
             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
@@ -16181,7 +16181,7 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
     return result;
 }
 
-// not used in Trinity, but used in scripting code
+// not used in Warhead, but used in scripting code
 uint16 Player::GetReqKillOrCastCurrentCount(uint32 quest_id, int32 entry) const
 {
     Quest const* qInfo = sObjectMgr->GetQuestTemplate(quest_id);
@@ -17454,7 +17454,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
             m_movementInfo.transport.pos.Relocate(x, y, z, o);
             transport->CalculatePassengerPosition(x, y, z, &o);
 
-            if (!Trinity::IsValidMapCoord(x, y, z, o) ||
+            if (!Warhead::IsValidMapCoord(x, y, z, o) ||
                 // transport size limited
                 std::fabs(m_movementInfo.transport.pos.GetPositionX()) > 250.0f ||
                 std::fabs(m_movementInfo.transport.pos.GetPositionY()) > 250.0f ||
@@ -20543,7 +20543,7 @@ void Player::SetContestedPvP(Player* attackedPlayer)
         AddUnitState(UNIT_STATE_ATTACK_PLAYER);
         SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP);
         // call MoveInLineOfSight for nearby contested guards
-        Trinity::AIRelocationNotifier notifier(*this);
+        Warhead::AIRelocationNotifier notifier(*this);
         Cell::VisitWorldObjects(this, notifier, GetVisibilityRange());
     }
     for (Unit* unit : m_Controlled)
@@ -20551,7 +20551,7 @@ void Player::SetContestedPvP(Player* attackedPlayer)
         if (!unit->HasUnitState(UNIT_STATE_ATTACK_PLAYER))
         {
             unit->AddUnitState(UNIT_STATE_ATTACK_PLAYER);
-            Trinity::AIRelocationNotifier notifier(*unit);
+            Warhead::AIRelocationNotifier notifier(*unit);
             Cell::VisitWorldObjects(this, notifier, GetVisibilityRange());
         }
     }
@@ -22553,7 +22553,7 @@ void Player::UpdateObjectVisibility(bool forced)
 void Player::UpdateVisibilityForPlayer()
 {
     // updates visibility of all objects around point of view for current player
-    Trinity::VisibleNotifier notifier(*this);
+    Warhead::VisibleNotifier notifier(*this);
     Cell::VisitAllObjects(m_seer, notifier, GetSightRange());
     notifier.SendToSelf();   // send gathered data
 }
@@ -23823,7 +23823,7 @@ uint32 Player::GetResurrectionSpellId()
 bool Player::isHonorOrXPTarget(Unit* victim) const
 {
     uint8 v_level = victim->GetLevel();
-    uint8 k_grey  = Trinity::XP::GetGrayLevel(GetLevel());
+    uint8 k_grey  = Warhead::XP::GetGrayLevel(GetLevel());
 
     // Victim level less gray level
     if (v_level <= k_grey && !sWorld->getIntConfig(CONFIG_MIN_CREATURE_SCALED_XP_RATIO))
@@ -24678,7 +24678,7 @@ void Player::RestoreBaseRune(uint8 index)
         return false;
     };
 
-    Trinity::Containers::EraseIf(auras, criteria);
+    Warhead::Containers::EraseIf(auras, criteria);
 
     if (!auras.empty())
         return;

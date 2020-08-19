@@ -22,7 +22,7 @@
 #include <ctime>
 #include <vector>
 
-namespace Trinity::Crypto
+namespace Warhead::Crypto
 {
     struct WH_COMMON_API TOTP
     {

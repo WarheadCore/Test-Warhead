@@ -310,12 +310,12 @@ Optional<std::shared_ptr<ScriptModule>>
 static bool HasValidScriptModuleName(std::string const& name)
 {
     // Detects scripts_NAME.dll's / .so's
-    static Trinity::regex const regex(
-        Trinity::StringFormat("^%s[sS]cripts_[a-zA-Z0-9_]+\\.%s$",
+    static Warhead::regex const regex(
+        Warhead::StringFormat("^%s[sS]cripts_[a-zA-Z0-9_]+\\.%s$",
             GetSharedLibraryPrefix(),
             GetSharedLibraryExtension()));
 
-    return Trinity::regex_match(name, regex);
+    return Warhead::regex_match(name, regex);
 }
 
 /// File watcher responsible for watching shared libraries
@@ -368,17 +368,17 @@ template<typename... T>
 static int InvokeCMakeCommand(T&&... args)
 {
     auto const executable = BuiltInConfig::GetCMakeCommand();
-    return Trinity::StartProcess(executable, {
+    return Warhead::StartProcess(executable, {
         std::forward<T>(args)...
     }, "scripts.hotswap");
 }
 
 /// Invokes an asynchronous CMake process with the given arguments
 template<typename... T>
-static std::shared_ptr<Trinity::AsyncProcessResult> InvokeAsyncCMakeCommand(T&&... args)
+static std::shared_ptr<Warhead::AsyncProcessResult> InvokeAsyncCMakeCommand(T&&... args)
 {
     auto const executable = BuiltInConfig::GetCMakeCommand();
-    return Trinity::StartAsyncProcess(executable, {
+    return Warhead::StartAsyncProcess(executable, {
         std::forward<T>(args)...
     }, "scripts.hotswap");
 }
@@ -458,7 +458,7 @@ class HotSwapScriptReloadMgr final
         // Type of the current running job
         BuildJobType type_;
         // The async process result of the current job
-        std::shared_ptr<Trinity::AsyncProcessResult> async_result_;
+        std::shared_ptr<Warhead::AsyncProcessResult> async_result_;
 
     public:
         explicit BuildJob(std::string script_module_name, std::string script_module_project_name,
@@ -483,7 +483,7 @@ class HotSwapScriptReloadMgr final
 
         BuildJobType GetType() const { return type_; }
 
-        std::shared_ptr<Trinity::AsyncProcessResult> const& GetProcess() const
+        std::shared_ptr<Warhead::AsyncProcessResult> const& GetProcess() const
         {
             ASSERT(async_result_, "Tried to access an empty process handle!");
             return async_result_;
@@ -491,7 +491,7 @@ class HotSwapScriptReloadMgr final
 
         /// Updates the current running job with the given type and async result
         void UpdateCurrentJob(BuildJobType type,
-                              std::shared_ptr<Trinity::AsyncProcessResult> async_result)
+                              std::shared_ptr<Warhead::AsyncProcessResult> async_result)
         {
             ASSERT(type != BuildJobType::BUILD_JOB_NONE, "None isn't allowed here!");
             ASSERT(async_result, "The async result must not be empty!");
@@ -755,9 +755,9 @@ private:
     static fs::path CalculateTemporaryCachePath()
     {
         auto path = fs::temp_directory_path();
-        path /= Trinity::StringFormat("tc_script_cache_%s_%s",
+        path /= Warhead::StringFormat("tc_script_cache_%s_%s",
             GitRevision::GetBranch(),
-            ByteArrayToHexStr(Trinity::Crypto::SHA1::GetDigestOf(sConfigMgr->GetFilename())).c_str());
+            ByteArrayToHexStr(Warhead::Crypto::SHA1::GetDigestOf(sConfigMgr->GetFilename())).c_str());
 
         return path;
     }
@@ -769,7 +769,7 @@ private:
 
         // Create the cache path and increment the library counter to use an unique name for each library
         auto cache_path = temporary_cache_path_;
-        cache_path /= Trinity::StringFormat("%s.%u%s",
+        cache_path /= Warhead::StringFormat("%s.%u%s",
             path.stem().generic_string().c_str(),
             _unique_library_name_counter++,
             path.extension().generic_string().c_str());
@@ -1519,8 +1519,8 @@ void LibraryUpdateListener::handleFileAction(efsw::WatchID watchid, std::string 
 /// Returns true when the given path has a known C++ file extension
 static bool HasCXXSourceFileExtension(fs::path const& path)
 {
-    static Trinity::regex const regex("^\\.(h|hpp|c|cc|cpp)$");
-    return Trinity::regex_match(path.extension().generic_string(), regex);
+    static Warhead::regex const regex("^\\.(h|hpp|c|cc|cpp)$");
+    return Warhead::regex_match(path.extension().generic_string(), regex);
 }
 
 SourceUpdateListener::SourceUpdateListener(fs::path path, std::string script_module_name)

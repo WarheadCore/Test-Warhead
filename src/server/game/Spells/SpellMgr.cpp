@@ -295,9 +295,9 @@ uint32 SpellMgr::GetSpellWithRank(uint32 spell_id, uint32 rank, bool strict) con
     return spell_id;
 }
 
-Trinity::IteratorPair<SpellRequiredMap::const_iterator> SpellMgr::GetSpellsRequiredForSpellBounds(uint32 spell_id) const
+Warhead::IteratorPair<SpellRequiredMap::const_iterator> SpellMgr::GetSpellsRequiredForSpellBounds(uint32 spell_id) const
 {
-    return Trinity::Containers::MapEqualRange(mSpellReq, spell_id);
+    return Warhead::Containers::MapEqualRange(mSpellReq, spell_id);
 }
 
 SpellsRequiringSpellMapBounds SpellMgr::GetSpellsRequiringSpellBounds(uint32 spell_id) const
@@ -641,7 +641,7 @@ bool SpellMgr::IsArenaAllowedEnchancment(uint32 ench_id) const
 
 std::vector<int32> const* SpellMgr::GetSpellLinked(int32 spell_id) const
 {
-    return Trinity::Containers::MapGetValuePtr(mSpellLinkedMap, spell_id);
+    return Warhead::Containers::MapGetValuePtr(mSpellLinkedMap, spell_id);
 }
 
 PetLevelupSpellSet const* SpellMgr::GetPetLevelupSpellList(uint32 petFamily) const

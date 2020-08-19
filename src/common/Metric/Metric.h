@@ -29,7 +29,7 @@
 #include <vector>
 #include <utility>
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {
@@ -67,8 +67,8 @@ private:
     std::iostream& GetDataStream() { return *_dataStream; }
     std::unique_ptr<std::iostream> _dataStream;
     MPSCQueue<MetricData> _queuedData;
-    std::unique_ptr<Trinity::Asio::DeadlineTimer> _batchTimer;
-    std::unique_ptr<Trinity::Asio::DeadlineTimer> _overallStatusTimer;
+    std::unique_ptr<Warhead::Asio::DeadlineTimer> _batchTimer;
+    std::unique_ptr<Warhead::Asio::DeadlineTimer> _overallStatusTimer;
     int32 _updateInterval = 0;
     int32 _overallStatusTimerInterval = 0;
     bool _enabled = false;
@@ -103,7 +103,7 @@ public:
     ~Metric();
     static Metric* instance();
 
-    void Initialize(std::string const& realmName, Trinity::Asio::IoContext& ioContext, std::function<void()> overallStatusLogger);
+    void Initialize(std::string const& realmName, Warhead::Asio::IoContext& ioContext, std::function<void()> overallStatusLogger);
     void LoadFromConfigs();
     void Update();
     bool ShouldLog(std::string const& category, int64 value) const;

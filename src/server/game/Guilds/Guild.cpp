@@ -1741,7 +1741,7 @@ void Guild::HandleMemberDepositMoney(WorldSession* session, uint32 amount)
 
     CharacterDatabase.CommitTransaction(trans);
 
-    _BroadcastEvent(GE_BANK_MONEY_SET, ObjectGuid::Empty, Trinity::StringFormat("%016llX", m_bankMoney).c_str());
+    _BroadcastEvent(GE_BANK_MONEY_SET, ObjectGuid::Empty, Warhead::StringFormat("%016llX", m_bankMoney).c_str());
 
     if (player->GetSession()->HasPermission(rbac::RBAC_PERM_LOG_GM_TRADE))
     {
@@ -1790,7 +1790,7 @@ bool Guild::HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool
     _LogBankEvent(trans, repair ? GUILD_BANK_LOG_REPAIR_MONEY : GUILD_BANK_LOG_WITHDRAW_MONEY, uint8(0), player->GetGUID().GetCounter(), amount);
     CharacterDatabase.CommitTransaction(trans);
 
-    _BroadcastEvent(GE_BANK_MONEY_SET, ObjectGuid::Empty, Trinity::StringFormat("%016llX", m_bankMoney).c_str());
+    _BroadcastEvent(GE_BANK_MONEY_SET, ObjectGuid::Empty, Warhead::StringFormat("%016llX", m_bankMoney).c_str());
     return true;
 }
 

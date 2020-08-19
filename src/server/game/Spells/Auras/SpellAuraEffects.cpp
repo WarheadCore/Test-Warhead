@@ -53,7 +53,7 @@
 // AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK set - aura is recalculated or is just applied/removed - need to redo all things related to m_amount
 // AURA_EFFECT_HANDLE_CHANGE_AMOUNT_SEND_FOR_CLIENT_MASK - logical or of above conditions
 // AURA_EFFECT_HANDLE_STAT - set when stats are reapplied
-// such checks will speedup trinity change amount/send for client operations
+// such checks will speedup warhead change amount/send for client operations
 // because for change amount operation packets will not be send
 // aura effect handlers shouldn't contain any AuraEffect or Aura object modifications
 
@@ -2180,8 +2180,8 @@ void AuraEffect::HandleFeignDeath(AuraApplication const* aurApp, uint8 mode, boo
         */
 
         UnitList targets;
-        Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetMap()->GetVisibilityRange());
-        Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
+        Warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetMap()->GetVisibilityRange());
+        Warhead::UnitListSearcher<Warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
         Cell::VisitAllObjects(target, searcher, target->GetMap()->GetVisibilityRange());
         for (UnitList::iterator iter = targets.begin(); iter != targets.end(); ++iter)
         {

@@ -96,7 +96,7 @@ public:
     {
         // We need to use a copy of SummonList here, otherwise original SummonList would be modified
         StorageType listCopy = _storage;
-        Trinity::Containers::RandomResize<StorageType, Predicate>(listCopy, std::forward<Predicate>(predicate), max);
+        Warhead::Containers::RandomResize<StorageType, Predicate>(listCopy, std::forward<Predicate>(predicate), max);
         DoActionImpl(info, listCopy);
     }
 

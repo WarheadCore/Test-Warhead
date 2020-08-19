@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// \addtogroup Trinityd Trinity Daemon
+/// \addtogroup Warheadd Warhead Daemon
 /// @{
 /// \file
 
@@ -72,8 +72,8 @@ namespace fs = boost::filesystem;
 #ifdef _WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
-char serviceLongName[] = "TrinityCore world service";
-char serviceDescription[] = "TrinityCore World of Warcraft emulator world service";
+char serviceLongName[] = "WarheadCore world service";
+char serviceDescription[] = "WarheadCore World of Warcraft emulator world service";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -86,7 +86,7 @@ int m_ServiceStatus = -1;
 class FreezeDetector
 {
     public:
-    FreezeDetector(Trinity::Asio::IoContext& ioContext, uint32 maxCoreStuckTime)
+    FreezeDetector(Warhead::Asio::IoContext& ioContext, uint32 maxCoreStuckTime)
         : _timer(ioContext), _worldLoopCounter(0), _lastChangeMsTime(getMSTime()), _maxCoreStuckTimeInMs(maxCoreStuckTime) { }
 
         static void Start(std::shared_ptr<FreezeDetector> const& freezeDetector)
@@ -98,27 +98,27 @@ class FreezeDetector
         static void Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, boost::system::error_code const& error);
 
     private:
-        Trinity::Asio::DeadlineTimer _timer;
+        Warhead::Asio::DeadlineTimer _timer;
         uint32 _worldLoopCounter;
         uint32 _lastChangeMsTime;
         uint32 _maxCoreStuckTimeInMs;
 };
 
 void SignalHandler(boost::system::error_code const& error, int signalNumber);
-AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext);
+AsyncAcceptor* StartRaSocketAcceptor(Warhead::Asio::IoContext& ioContext);
 bool StartDB();
 void StopDB();
 void WorldUpdateLoop();
 void ClearOnlineAccounts();
 void ShutdownCLIThread(std::thread* cliThread);
-bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext);
+bool LoadRealmInfo(Warhead::Asio::IoContext& ioContext);
 variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, std::string& cfg_service);
 
-/// Launch the Trinity server
+/// Launch the Warhead server
 extern int main(int argc, char** argv)
 {
-    Trinity::Impl::CurrentServerProcessHolder::_type = SERVER_PROCESS_WORLDSERVER;
-    signal(SIGABRT, &Trinity::AbortHandler);
+    Warhead::Impl::CurrentServerProcessHolder::_type = SERVER_PROCESS_WORLDSERVER;
+    signal(SIGABRT, &Warhead::AbortHandler);
 
     auto configFile = fs::absolute(_TRINITY_CORE_CONFIG);
     std::string configService;
@@ -146,13 +146,13 @@ extern int main(int argc, char** argv)
         return 1;
     }
 
-    std::shared_ptr<Trinity::Asio::IoContext> ioContext = std::make_shared<Trinity::Asio::IoContext>();
+    std::shared_ptr<Warhead::Asio::IoContext> ioContext = std::make_shared<Warhead::Asio::IoContext>();
 
     sLog->RegisterAppender<AppenderDB>();
     // If logs are supposed to be handled async then we need to pass the IoContext into the Log singleton
     sLog->Initialize(sConfigMgr->GetBoolDefault("Log.Async.Enable", false) ? ioContext.get() : nullptr);
 
-    Trinity::Banner::Show("worldserver-daemon",
+    Warhead::Banner::Show("worldserver-daemon",
         [](char const* text)
         {
             LOG_INFO("server.worldserver", "%s", text);
@@ -355,7 +355,7 @@ extern int main(int argc, char** argv)
 
     // 0 - normal shutdown
     // 1 - shutdown at error
-    // 2 - restart command used, this code can be used by restarter for restart Trinityd
+    // 2 - restart command used, this code can be used by restarter for restart Warheadd
 
     return World::GetExitCode();
 }
@@ -494,7 +494,7 @@ void FreezeDetector::Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, bo
     }
 }
 
-AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext)
+AsyncAcceptor* StartRaSocketAcceptor(Warhead::Asio::IoContext& ioContext)
 {
     uint16 raPort = uint16(sConfigMgr->GetIntDefault("Ra.Port", 3443));
     std::string raListener = sConfigMgr->GetStringDefault("Ra.IP", "0.0.0.0");
@@ -511,7 +511,7 @@ AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext)
     return acceptor;
 }
 
-bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
+bool LoadRealmInfo(Warhead::Asio::IoContext& ioContext)
 {
     QueryResult result = LoginDatabase.PQuery("SELECT id, name, address, localAddress, localSubnetMask, port, icon, flag, timezone, allowedSecurityLevel, population, gamebuild FROM realmlist WHERE id = %u", realm.Id.Realm);
     if (!result)
@@ -521,7 +521,7 @@ bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
 
     Field* fields = result->Fetch();
     realm.Name = fields[1].GetString();
-    Optional<boost::asio::ip::tcp::endpoint> externalAddress = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[2].GetString(), "");
+    Optional<boost::asio::ip::tcp::endpoint> externalAddress = Warhead::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[2].GetString(), "");
     if (!externalAddress)
     {
         LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[2].GetString().c_str());
@@ -530,7 +530,7 @@ bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
 
     realm.ExternalAddress = std::make_unique<boost::asio::ip::address>(externalAddress->address());
 
-    Optional<boost::asio::ip::tcp::endpoint> localAddress = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[3].GetString(), "");
+    Optional<boost::asio::ip::tcp::endpoint> localAddress = Warhead::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[3].GetString(), "");
     if (!localAddress)
     {
         LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[3].GetString().c_str());
@@ -539,7 +539,7 @@ bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
 
     realm.LocalAddress = std::make_unique<boost::asio::ip::address>(localAddress->address());
 
-    Optional<boost::asio::ip::tcp::endpoint> localSubmask = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[4].GetString(), "");
+    Optional<boost::asio::ip::tcp::endpoint> localSubmask = Warhead::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[4].GetString(), "");
     if (!localSubmask)
     {
         LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[4].GetString().c_str());

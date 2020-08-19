@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef Trinity_game_Position_h__
-#define Trinity_game_Position_h__
+#ifndef Warhead_game_Position_h__
+#define Warhead_game_Position_h__
 
 #include "Define.h"
 #include <string>
@@ -220,4 +220,4 @@ struct TaggedPosition
     Position Pos;
 };
 
-#endif // Trinity_game_Position_h__
+#endif // Warhead_game_Position_h__

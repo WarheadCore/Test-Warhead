@@ -396,7 +396,7 @@ LootStoreItem const* LootTemplate::LootGroup::Roll(Loot& loot, uint16 lootMode) 
     possibleLoot = EqualChanced;
     possibleLoot.remove_if(LootGroupInvalidSelector(loot, lootMode));
     if (!possibleLoot.empty())                              // If nothing selected yet - an item is taken from equal-chanced part
-        return Trinity::Containers::SelectRandomContainerElement(possibleLoot);
+        return Warhead::Containers::SelectRandomContainerElement(possibleLoot);
 
     return nullptr;                                            // Empty drop from the group
 }

@@ -860,10 +860,10 @@ void AuctionBotSeller::AddNewAuctions(SellerConfiguration& config)
         --items;
 
         // Select random position from missed items table
-        ItemToSell const& sellItem = Trinity::Containers::SelectRandomContainerElement(itemsToSell);
+        ItemToSell const& sellItem = Warhead::Containers::SelectRandomContainerElement(itemsToSell);
 
         // Set itemId with random item ID for selected categories and color, from _itemPool table
-        uint32 itemId = Trinity::Containers::SelectRandomContainerElement(_itemPool[sellItem.Color][sellItem.Itemclass]);
+        uint32 itemId = Warhead::Containers::SelectRandomContainerElement(_itemPool[sellItem.Color][sellItem.Itemclass]);
         ++allItems[sellItem.Color][sellItem.Itemclass]; // Helper table to avoid rescan from DB in this loop. (has we add item in random orders)
 
         if (!itemId)

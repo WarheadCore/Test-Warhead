@@ -22,7 +22,7 @@
 #include <array>
 #include <openssl/evp.h>
 
-namespace Trinity::Crypto
+namespace Warhead::Crypto
 {
     class WH_COMMON_API ARC4
     {

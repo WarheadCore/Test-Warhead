@@ -53,7 +53,7 @@ WorldSocketMgr& WorldSocketMgr::Instance()
     return instance;
 }
 
-bool WorldSocketMgr::StartWorldNetwork(Trinity::Asio::IoContext& ioContext, std::string const& bindIp, uint16 port, int threadCount)
+bool WorldSocketMgr::StartWorldNetwork(Warhead::Asio::IoContext& ioContext, std::string const& bindIp, uint16 port, int threadCount)
 {
     _tcpNoDelay = sConfigMgr->GetBoolDefault("Network.TcpNodelay", true);
 

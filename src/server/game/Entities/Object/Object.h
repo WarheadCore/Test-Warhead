@@ -580,7 +580,7 @@ class WH_GAME_API WorldObject : public Object, public WorldLocation
         bool CanDetectStealthOf(WorldObject const* obj, bool checkAlert = false) const;
 };
 
-namespace Trinity
+namespace Warhead
 {
     // Binary predicate to sort WorldObjects based on the distance to a reference WorldObject
     class ObjectDistanceOrderPred

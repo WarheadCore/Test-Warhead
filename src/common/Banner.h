@@ -20,7 +20,7 @@
 
 #include "Define.h"
 
-namespace Trinity
+namespace Warhead
 {
     namespace Banner
     {

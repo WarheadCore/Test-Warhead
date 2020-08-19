@@ -806,7 +806,7 @@ class WH_GAME_API Spell
         Spell& operator=(Spell const& right) = delete;
 };
 
-namespace Trinity
+namespace Warhead
 {
     struct WH_GAME_API WorldObjectSpellTargetCheck
     {

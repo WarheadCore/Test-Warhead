@@ -23,7 +23,7 @@
 #include "Optional.h"
 #include <string>
 
-namespace Trinity::Crypto
+namespace Warhead::Crypto
 {
     struct WH_COMMON_API Argon2
     {

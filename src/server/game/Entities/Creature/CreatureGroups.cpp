@@ -54,7 +54,7 @@ void FormationMgr::AddCreatureToGroup(ObjectGuid::LowType leaderSpawnId, Creatur
 
         // With dynamic spawn the creature may have just respawned
         // we need to find previous instance of creature and delete it from the formation, as it'll be invalidated
-        auto bounds = Trinity::Containers::MapEqualRange(map->GetCreatureBySpawnIdStore(), creature->GetSpawnId());
+        auto bounds = Warhead::Containers::MapEqualRange(map->GetCreatureBySpawnIdStore(), creature->GetSpawnId());
         for (auto const& pair : bounds)
         {
             Creature* other = pair.second;
@@ -173,7 +173,7 @@ void FormationMgr::LoadCreatureFormations()
 
 FormationInfo* FormationMgr::GetFormationInfo(ObjectGuid::LowType spawnId)
 {
-    return Trinity::Containers::MapGetValuePtr(_creatureGroupMap, spawnId);
+    return Warhead::Containers::MapGetValuePtr(_creatureGroupMap, spawnId);
 }
 
 void FormationMgr::AddFormationMember(ObjectGuid::LowType spawnId, float followAng, float followDist, ObjectGuid::LowType leaderSpawnId, uint32 groupAI)

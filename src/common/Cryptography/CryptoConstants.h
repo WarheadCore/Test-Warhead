@@ -20,7 +20,7 @@
 
 #include "Define.h"
 
-namespace Trinity::Crypto
+namespace Warhead::Crypto
 {
     struct Constants
     {

@@ -39,10 +39,10 @@ RealmList* RealmList::Instance()
 }
 
 // Load the realm list from the database
-void RealmList::Initialize(Trinity::Asio::IoContext& ioContext, uint32 updateInterval)
+void RealmList::Initialize(Warhead::Asio::IoContext& ioContext, uint32 updateInterval)
 {
     _updateInterval = updateInterval;
-    _updateTimer = std::make_unique<Trinity::Asio::DeadlineTimer>(ioContext);
+    _updateTimer = std::make_unique<Warhead::Asio::DeadlineTimer>(ioContext);
     _resolver = std::make_unique<boost::asio::ip::tcp::resolver>(ioContext);
 
     LoadBuildInfo();
@@ -141,21 +141,21 @@ void RealmList::UpdateRealms(boost::system::error_code const& error)
                 std::string localAddressString = fields[3].GetString();
                 std::string localSubmaskString = fields[4].GetString();
 
-                Optional<boost::asio::ip::tcp::endpoint> externalAddress = Trinity::Net::Resolve(*_resolver, boost::asio::ip::tcp::v4(), externalAddressString, "");
+                Optional<boost::asio::ip::tcp::endpoint> externalAddress = Warhead::Net::Resolve(*_resolver, boost::asio::ip::tcp::v4(), externalAddressString, "");
                 if (!externalAddress)
                 {
                     LOG_ERROR("server.authserver", "Could not resolve address %s for realm \"%s\" id %u", externalAddressString.c_str(), name.c_str(), realmId);
                     continue;
                 }
 
-                Optional<boost::asio::ip::tcp::endpoint> localAddress = Trinity::Net::Resolve(*_resolver, boost::asio::ip::tcp::v4(), localAddressString, "");
+                Optional<boost::asio::ip::tcp::endpoint> localAddress = Warhead::Net::Resolve(*_resolver, boost::asio::ip::tcp::v4(), localAddressString, "");
                 if (!localAddress)
                 {
                     LOG_ERROR("server.authserver", "Could not resolve localAddress %s for realm \"%s\" id %u", localAddressString.c_str(), name.c_str(), realmId);
                     continue;
                 }
 
-                Optional<boost::asio::ip::tcp::endpoint> localSubmask = Trinity::Net::Resolve(*_resolver, boost::asio::ip::tcp::v4(), localSubmaskString, "");
+                Optional<boost::asio::ip::tcp::endpoint> localSubmask = Warhead::Net::Resolve(*_resolver, boost::asio::ip::tcp::v4(), localSubmaskString, "");
                 if (!localSubmask)
                 {
                     LOG_ERROR("server.authserver", "Could not resolve localSubnetMask %s for realm \"%s\" id %u", localSubmaskString.c_str(), name.c_str(), realmId);

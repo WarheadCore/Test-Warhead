@@ -302,7 +302,7 @@ void PlayerDump::InitializeTables()
                 // item0 - item18
                 for (uint32 j = 0; j < EQUIPMENT_SLOT_END; ++j)
                 {
-                    std::string itColumn = Trinity::StringFormat("item%u", j);
+                    std::string itColumn = Warhead::StringFormat("item%u", j);
                     MarkDependentColumn(t, itColumn, GUID_TYPE_ITEM);
                 }
                 break;
@@ -926,7 +926,7 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                 if (name.empty())
                 {
                     // generate a temporary name
-                    std::string guidPart = Trinity::StringFormat("%X", guid);
+                    std::string guidPart = Warhead::StringFormat("%X", guid);
                     std::size_t maxCharsFromOriginalName = MAX_PLAYER_NAME - guidPart.length();
 
                     name = GetColumn(ts, line, "name").substr(0, maxCharsFromOriginalName) + guidPart;

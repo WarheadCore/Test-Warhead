@@ -28,7 +28,7 @@
 
 class BigNumber;
 
-namespace Trinity::Impl
+namespace Warhead::Impl
 {
     struct GenericHashImpl
     {
@@ -110,10 +110,10 @@ namespace Trinity::Impl
     };
 }
 
-namespace Trinity::Crypto
+namespace Warhead::Crypto
 {
-    using SHA1 = Trinity::Impl::GenericHash<EVP_sha1, Constants::SHA1_DIGEST_LENGTH_BYTES>;
-    using SHA256 = Trinity::Impl::GenericHash<EVP_sha256, Constants::SHA256_DIGEST_LENGTH_BYTES>;
+    using SHA1 = Warhead::Impl::GenericHash<EVP_sha1, Constants::SHA1_DIGEST_LENGTH_BYTES>;
+    using SHA256 = Warhead::Impl::GenericHash<EVP_sha256, Constants::SHA256_DIGEST_LENGTH_BYTES>;
 }
 
 #endif

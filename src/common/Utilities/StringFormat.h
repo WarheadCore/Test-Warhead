@@ -20,7 +20,7 @@
 
 #include "fmt/printf.h"
 
-namespace Trinity
+namespace Warhead
 {
     /// Default TC string format function.
     template<typename Format, typename... Args>

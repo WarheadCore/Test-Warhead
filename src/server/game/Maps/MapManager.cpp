@@ -233,7 +233,7 @@ void MapManager::DoDelayedMovesAndRemoves() { }
 
 bool MapManager::ExistMapAndVMap(uint32 mapid, float x, float y)
 {
-    GridCoord p = Trinity::ComputeGridCoord(x, y);
+    GridCoord p = Warhead::ComputeGridCoord(x, y);
 
     int gx = (MAX_NUMBER_OF_GRIDS - 1) - p.x_coord;
     int gy = (MAX_NUMBER_OF_GRIDS - 1) - p.y_coord;

@@ -64,7 +64,7 @@ struct SummonPropertiesEntry;
 enum Difficulty : uint8;
 enum WeatherState : uint32;
 
-namespace Trinity { struct ObjectUpdater; }
+namespace Warhead { struct ObjectUpdater; }
 namespace VMAP { enum class ModelIgnoreFlags : uint32; }
 
 struct ScriptAction
@@ -345,7 +345,7 @@ class WH_GAME_API Map : public GridRefManager<NGridType>
         template<class T> bool AddToMap(T *);
         template<class T> void RemoveFromMap(T *, bool);
 
-        void VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<Trinity::ObjectUpdater, GridTypeMapContainer> &gridVisitor, TypeContainerVisitor<Trinity::ObjectUpdater, WorldTypeMapContainer> &worldVisitor);
+        void VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<Warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor, TypeContainerVisitor<Warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor);
         virtual void Update(uint32);
 
         float GetVisibilityRange() const { return m_VisibleDistance; }
@@ -362,13 +362,13 @@ class WH_GAME_API Map : public GridRefManager<NGridType>
 
         bool IsRemovalGrid(float x, float y) const
         {
-            GridCoord p = Trinity::ComputeGridCoord(x, y);
+            GridCoord p = Warhead::ComputeGridCoord(x, y);
             return !getNGrid(p.x_coord, p.y_coord) || getNGrid(p.x_coord, p.y_coord)->GetGridState() == GRID_STATE_REMOVAL;
         }
         bool IsRemovalGrid(Position const& pos) const { return IsRemovalGrid(pos.GetPositionX(), pos.GetPositionY()); }
 
         bool IsGridLoaded(uint32 gridId) const { return IsGridLoaded(GridCoord(gridId % MAX_NUMBER_OF_GRIDS, gridId / MAX_NUMBER_OF_GRIDS)); }
-        bool IsGridLoaded(float x, float y) const { return IsGridLoaded(Trinity::ComputeGridCoord(x, y)); }
+        bool IsGridLoaded(float x, float y) const { return IsGridLoaded(Warhead::ComputeGridCoord(x, y)); }
         bool IsGridLoaded(Position const& pos) const { return IsGridLoaded(pos.GetPositionX(), pos.GetPositionY()); }
 
         bool GetUnloadLock(GridCoord const& p) const { return getNGrid(p.x_coord, p.y_coord)->getUnloadLock(); }

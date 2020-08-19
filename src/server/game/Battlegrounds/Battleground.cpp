@@ -597,8 +597,8 @@ void Battleground::SendBroadcastText(uint32 id, ChatMsg msgType, WorldObject con
         return;
     }
 
-    Trinity::BroadcastTextBuilder builder(nullptr, msgType, id, GENDER_MALE, target);
-    Trinity::LocalizedPacketDo<Trinity::BroadcastTextBuilder> localizer(builder);
+    Warhead::BroadcastTextBuilder builder(nullptr, msgType, id, GENDER_MALE, target);
+    Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder> localizer(builder);
     BroadcastWorker(localizer);
 }
 
@@ -807,7 +807,7 @@ uint32 Battleground::GetBonusHonorFromKill(uint32 kills) const
 {
     //variable kills means how many honorable kills you scored (so we need kills * honor_for_one_kill)
     uint32 maxLevel = std::min<uint32>(GetMaxLevel(), 80U);
-    return Trinity::Honor::hk_honor_at_level(maxLevel, float(kills));
+    return Warhead::Honor::hk_honor_at_level(maxLevel, float(kills));
 }
 
 void Battleground::BlockMovement(Player* player)
@@ -1587,8 +1587,8 @@ void Battleground::SendMessageToAll(uint32 entry, ChatMsg msgType, Player const*
     if (!entry)
         return;
 
-    Trinity::TrinityStringChatBuilder builder(nullptr, msgType, entry, source);
-    Trinity::LocalizedPacketDo<Trinity::TrinityStringChatBuilder> localizer(builder);
+    Warhead::TrinityStringChatBuilder builder(nullptr, msgType, entry, source);
+    Warhead::LocalizedPacketDo<Warhead::TrinityStringChatBuilder> localizer(builder);
     BroadcastWorker(localizer);
 }
 
@@ -1600,8 +1600,8 @@ void Battleground::PSendMessageToAll(uint32 entry, ChatMsg msgType, Player const
     va_list ap;
     va_start(ap, source);
 
-    Trinity::TrinityStringChatBuilder builder(nullptr, msgType, entry, source, &ap);
-    Trinity::LocalizedPacketDo<Trinity::TrinityStringChatBuilder> localizer(builder);
+    Warhead::TrinityStringChatBuilder builder(nullptr, msgType, entry, source, &ap);
+    Warhead::LocalizedPacketDo<Warhead::TrinityStringChatBuilder> localizer(builder);
     BroadcastWorker(localizer);
 
     va_end(ap);

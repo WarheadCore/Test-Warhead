@@ -64,7 +64,7 @@ class WH_GAME_API ChatHandler
         template<typename... Args>
         void PSendSysMessage(char const* fmt, Args&&... args)
         {
-            SendSysMessage(Trinity::StringFormat(fmt, std::forward<Args>(args)...).c_str());
+            SendSysMessage(Warhead::StringFormat(fmt, std::forward<Args>(args)...).c_str());
         }
 
         template<typename... Args>
@@ -76,7 +76,7 @@ class WH_GAME_API ChatHandler
         template<typename... Args>
         std::string PGetParseString(uint32 entry, Args&&... args) const
         {
-            return Trinity::StringFormat(GetTrinityString(entry), std::forward<Args>(args)...);
+            return Warhead::StringFormat(GetTrinityString(entry), std::forward<Args>(args)...);
         }
 
         bool _ParseCommands(char const* text);

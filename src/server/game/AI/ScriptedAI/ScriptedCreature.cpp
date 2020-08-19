@@ -265,8 +265,8 @@ void ScriptedAI::ForceCombatStopForCreatureEntry(uint32 entry, float maxSearchRa
     LOG_DEBUG("scripts.ai", "ScriptedAI::ForceCombatStopForCreatureEntry: called on '%s'. Debug info: %s", me->GetGUID().ToString().c_str(), me->GetDebugInfo().c_str());
 
     std::list<Creature*> creatures;
-    Trinity::AllCreaturesOfEntryInRange check(me, entry, maxSearchRange);
-    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, creatures, check);
+    Warhead::AllCreaturesOfEntryInRange check(me, entry, maxSearchRange);
+    Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, creatures, check);
 
     if (!samePhase)
         searcher.i_phaseMask = PHASEMASK_ANYWHERE;
@@ -414,8 +414,8 @@ void ScriptedAI::DoTeleportAll(float x, float y, float z, float o)
 Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 {
     Unit* unit = nullptr;
-    Trinity::MostHPMissingInRange u_check(me, range, minHPDiff);
-    Trinity::UnitLastSearcher<Trinity::MostHPMissingInRange> searcher(me, unit, u_check);
+    Warhead::MostHPMissingInRange u_check(me, range, minHPDiff);
+    Warhead::UnitLastSearcher<Warhead::MostHPMissingInRange> searcher(me, unit, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return unit;
@@ -424,8 +424,8 @@ Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 Unit* ScriptedAI::DoSelectBelowHpPctFriendlyWithEntry(uint32 entry, float range, uint8 minHPDiff, bool excludeSelf)
 {
     Unit* unit = nullptr;
-    Trinity::FriendlyBelowHpPctEntryInRange u_check(me, entry, range, minHPDiff, excludeSelf);
-    Trinity::UnitLastSearcher<Trinity::FriendlyBelowHpPctEntryInRange> searcher(me, unit, u_check);
+    Warhead::FriendlyBelowHpPctEntryInRange u_check(me, entry, range, minHPDiff, excludeSelf);
+    Warhead::UnitLastSearcher<Warhead::FriendlyBelowHpPctEntryInRange> searcher(me, unit, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return unit;
@@ -434,8 +434,8 @@ Unit* ScriptedAI::DoSelectBelowHpPctFriendlyWithEntry(uint32 entry, float range,
 std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 {
     std::list<Creature*> list;
-    Trinity::FriendlyCCedInRange u_check(me, range);
-    Trinity::CreatureListSearcher<Trinity::FriendlyCCedInRange> searcher(me, list, u_check);
+    Warhead::FriendlyCCedInRange u_check(me, range);
+    Warhead::CreatureListSearcher<Warhead::FriendlyCCedInRange> searcher(me, list, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return list;
@@ -444,8 +444,8 @@ std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float range, uint32 uiSpellid)
 {
     std::list<Creature*> list;
-    Trinity::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
-    Trinity::CreatureListSearcher<Trinity::FriendlyMissingBuffInRange> searcher(me, list, u_check);
+    Warhead::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
+    Warhead::CreatureListSearcher<Warhead::FriendlyMissingBuffInRange> searcher(me, list, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return list;
@@ -455,8 +455,8 @@ Player* ScriptedAI::GetPlayerAtMinimumRange(float minimumRange)
 {
     Player* player = nullptr;
 
-    Trinity::PlayerAtMinimumRangeAway check(me, minimumRange);
-    Trinity::PlayerSearcher<Trinity::PlayerAtMinimumRangeAway> searcher(me, player, check);
+    Warhead::PlayerAtMinimumRangeAway check(me, minimumRange);
+    Warhead::PlayerSearcher<Warhead::PlayerAtMinimumRangeAway> searcher(me, player, check);
     Cell::VisitWorldObjects(me, searcher, minimumRange);
 
     return player;

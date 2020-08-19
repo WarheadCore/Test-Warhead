@@ -36,7 +36,7 @@ class CommandArgs;
 template <typename T>
 struct CommandArgsConsumerSingle
 {
-    using arginfo = Trinity::ChatCommands::ArgInfo<T>;
+    using arginfo = Warhead::ChatCommands::ArgInfo<T>;
     static char const* TryConsumeTo(T& val, char const* args)
     {
         return arginfo::TryConsume(val, args);
@@ -62,11 +62,11 @@ struct CommandArgsVariantConsumer
 };
 
 template <typename... Ts>
-struct CommandArgsConsumerSingle<Trinity::ChatCommands::Variant<Ts...>>
+struct CommandArgsConsumerSingle<Warhead::ChatCommands::Variant<Ts...>>
 {
-    static char const* TryConsumeTo(Trinity::ChatCommands::Variant<Ts...>& val, char const* args)
+    static char const* TryConsumeTo(Warhead::ChatCommands::Variant<Ts...>& val, char const* args)
     {
-        return CommandArgsVariantConsumer::TryConsumeTo<Trinity::ChatCommands::Variant<Ts...>, Ts...>(val, args);
+        return CommandArgsVariantConsumer::TryConsumeTo<Warhead::ChatCommands::Variant<Ts...>, Ts...>(val, args);
     }
 };
 

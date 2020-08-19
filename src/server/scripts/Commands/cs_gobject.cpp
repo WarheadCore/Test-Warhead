@@ -47,7 +47,7 @@ EndScriptData */
 bool HandleNpcSpawnGroup(ChatHandler* handler, char const* args);
 bool HandleNpcDespawnGroup(ChatHandler* handler, char const* args);
 
-using namespace Trinity::ChatCommands;
+using namespace Warhead::ChatCommands;
 class gobject_commandscript : public CommandScript
 {
 public:

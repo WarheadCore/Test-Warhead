@@ -296,8 +296,8 @@ bool OPvPCapturePoint::Update(uint32 diff)
     }
 
     std::list<Player*> players;
-    Trinity::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius);
-    Trinity::PlayerListSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(m_capturePoint, players, checker);
+    Warhead::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius);
+    Warhead::PlayerListSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(m_capturePoint, players, checker);
     Cell::VisitWorldObjects(m_capturePoint, searcher, radius);
 
     for (std::list<Player*>::iterator itr = players.begin(); itr != players.end(); ++itr)
@@ -641,7 +641,7 @@ void OutdoorPvP::OnCreatureRemove(Creature* creature)
 void OutdoorPvP::SendDefenseMessage(uint32 zoneId, uint32 id)
 {
     DefenseMessageBuilder builder(zoneId, id);
-    Trinity::LocalizedPacketDo<DefenseMessageBuilder> localizer(builder);
+    Warhead::LocalizedPacketDo<DefenseMessageBuilder> localizer(builder);
     BroadcastWorker(localizer, zoneId);
 }
 

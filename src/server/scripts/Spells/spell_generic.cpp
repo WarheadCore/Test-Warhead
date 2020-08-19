@@ -833,8 +833,8 @@ class spell_gen_cannibalize : public SpellScript
         float max_range = GetSpellInfo()->GetMaxRange(false);
         WorldObject* result = nullptr;
         // search for nearby enemy corpse in range
-        Trinity::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
-        Trinity::WorldObjectSearcher<Trinity::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
+        Warhead::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
+        Warhead::WorldObjectSearcher<Warhead::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
         Cell::VisitWorldObjects(caster, searcher, max_range);
         if (!result)
             Cell::VisitGridObjects(caster, searcher, max_range);
@@ -3126,7 +3126,7 @@ class spell_gen_replenishment : public SpellScript
 
         if (targets.size() > maxTargets)
         {
-            targets.sort(Trinity::PowerPctOrderPred(POWER_MANA));
+            targets.sort(Warhead::PowerPctOrderPred(POWER_MANA));
             targets.resize(maxTargets);
         }
     }
@@ -3209,7 +3209,7 @@ class spell_gen_spectator_cheer_trigger : public SpellScript
     void HandleDummy(SpellEffIndex /*effIndex*/)
     {
         if (roll_chance_i(40))
-            GetCaster()->HandleEmoteCommand(Trinity::Containers::SelectRandomContainerElement(EmoteArray));
+            GetCaster()->HandleEmoteCommand(Warhead::Containers::SelectRandomContainerElement(EmoteArray));
     }
 
     void Register() override
@@ -4277,7 +4277,7 @@ class spell_corrupting_plague_aura : public AuraScript
 
         std::list<Creature*> targets;
         CorruptingPlagueSearcher creature_check(owner, 15.0f);
-        Trinity::CreatureListSearcher<CorruptingPlagueSearcher> creature_searcher(owner, targets, creature_check);
+        Warhead::CreatureListSearcher<CorruptingPlagueSearcher> creature_searcher(owner, targets, creature_check);
         Cell::VisitGridObjects(owner, creature_searcher, 15.0f);
 
         if (!targets.empty())
@@ -4335,7 +4335,7 @@ class spell_stasis_field_aura : public AuraScript
 
         std::list<Creature*> targets;
         StasisFieldSearcher creature_check(owner, 15.0f);
-        Trinity::CreatureListSearcher<StasisFieldSearcher> creature_searcher(owner, targets, creature_check);
+        Warhead::CreatureListSearcher<StasisFieldSearcher> creature_searcher(owner, targets, creature_check);
         Cell::VisitGridObjects(owner, creature_searcher, 15.0f);
 
         if (!targets.empty())

@@ -104,7 +104,7 @@ public:
     {
         go_tablet_of_the_sevenAI(GameObject* go) : GameObjectAI(go) { }
 
-        /// @todo use gossip option ("Transcript the Tablet") instead, if Trinity adds support.
+        /// @todo use gossip option ("Transcript the Tablet") instead, if Warhead adds support.
         bool GossipHello(Player* player) override
         {
             if (me->GetGoType() != GAMEOBJECT_TYPE_QUESTGIVER)

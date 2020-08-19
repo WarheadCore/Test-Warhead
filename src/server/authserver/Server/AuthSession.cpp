@@ -75,9 +75,9 @@ static_assert(sizeof(sAuthLogonChallenge_C) == (1 + 1 + 2 + 4 + 1 + 1 + 1 + 2 + 
 typedef struct AUTH_LOGON_PROOF_C
 {
     uint8   cmd;
-    Trinity::Crypto::SRP6::EphemeralKey A;
-    Trinity::Crypto::SHA1::Digest clientM;
-    Trinity::Crypto::SHA1::Digest crc_hash;
+    Warhead::Crypto::SRP6::EphemeralKey A;
+    Warhead::Crypto::SHA1::Digest clientM;
+    Warhead::Crypto::SHA1::Digest crc_hash;
     uint8   number_of_keys;
     uint8   securityFlags;
 } sAuthLogonProof_C;
@@ -87,7 +87,7 @@ typedef struct AUTH_LOGON_PROOF_S
 {
     uint8   cmd;
     uint8   error;
-    Trinity::Crypto::SHA1::Digest M2;
+    Warhead::Crypto::SHA1::Digest M2;
     uint32  AccountFlags;
     uint32  SurveyId;
     uint16  LoginFlags;
@@ -98,7 +98,7 @@ typedef struct AUTH_LOGON_PROOF_S_OLD
 {
     uint8   cmd;
     uint8   error;
-    Trinity::Crypto::SHA1::Digest M2;
+    Warhead::Crypto::SHA1::Digest M2;
     uint32  unk2;
 } sAuthLogonProof_S_Old;
 static_assert(sizeof(sAuthLogonProof_S_Old) == (1 + 1 + 20 + 4));
@@ -107,7 +107,7 @@ typedef struct AUTH_RECONNECT_PROOF_C
 {
     uint8   cmd;
     uint8   R1[16];
-    Trinity::Crypto::SHA1::Digest R2, R3;
+    Warhead::Crypto::SHA1::Digest R2, R3;
     uint8   number_of_keys;
 } sAuthReconnectProof_C;
 static_assert(sizeof(sAuthReconnectProof_C) == (1 + 16 + 20 + 20 + 1));
@@ -141,8 +141,8 @@ std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B,
     do
     {
         uint32 const id = (*result)[0].GetUInt32();
-        auto [salt, verifier] = Trinity::Crypto::SRP6::MakeRegistrationDataFromHash_DEPRECATED_DONOTUSE(
-            HexStrToByteArray<Trinity::Crypto::SHA1::DIGEST_LENGTH>((*result)[1].GetString())
+        auto [salt, verifier] = Warhead::Crypto::SRP6::MakeRegistrationDataFromHash_DEPRECATED_DONOTUSE(
+            HexStrToByteArray<Warhead::Crypto::SHA1::DIGEST_LENGTH>((*result)[1].GetString())
         );
 
         if ((*result)[2].GetInt64())
@@ -456,7 +456,7 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
         _totpSecret = fields[9].GetBinary();
         if (auto const& secret = sSecretMgr->GetSecret(SECRET_TOTP_MASTER_KEY))
         {
-            bool success = Trinity::Crypto::AEDecrypt<Trinity::Crypto::AES>(*_totpSecret, *secret);
+            bool success = Warhead::Crypto::AEDecrypt<Warhead::Crypto::AES>(*_totpSecret, *secret);
             if (!success)
             {
                 pkt << uint8(WOW_FAIL_DB_BUSY);
@@ -487,9 +487,9 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
         }
 
         // if this is reached, s/v were reset and we need to recalculate from sha_pass_hash
-        Trinity::Crypto::SHA1::Digest sha_pass_hash;
+        Warhead::Crypto::SHA1::Digest sha_pass_hash;
         HexStrToByteArray(fields[10].GetString(), sha_pass_hash);
-        auto [salt, verifier] = Trinity::Crypto::SRP6::MakeRegistrationDataFromHash_DEPRECATED_DONOTUSE(sha_pass_hash);
+        auto [salt, verifier] = Warhead::Crypto::SRP6::MakeRegistrationDataFromHash_DEPRECATED_DONOTUSE(sha_pass_hash);
         LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_LOGON);
         stmt->setBinary(0, salt);
         stmt->setBinary(1, verifier);
@@ -508,8 +508,8 @@ void AuthSession::LogonChallengeCallback(PreparedQueryResult result)
     }
     else
     {
-        Trinity::Crypto::SRP6::Salt salt = fields[11].GetBinary<Trinity::Crypto::SRP6::SALT_LENGTH>();
-        Trinity::Crypto::SRP6::Verifier verifier = fields[12].GetBinary<Trinity::Crypto::SRP6::VERIFIER_LENGTH>();
+        Warhead::Crypto::SRP6::Salt salt = fields[11].GetBinary<Warhead::Crypto::SRP6::SALT_LENGTH>();
+        Warhead::Crypto::SRP6::Verifier verifier = fields[12].GetBinary<Warhead::Crypto::SRP6::VERIFIER_LENGTH>();
         _srp6.emplace(_accountInfo.Login, salt, verifier);
     }
 
@@ -587,7 +587,7 @@ bool AuthSession::HandleLogonProof()
             GetReadBuffer().ReadCompleted(sizeof(size) + size);
 
             uint32 incomingToken = atoi(token.c_str());
-            tokenSuccess = Trinity::Crypto::TOTP::ValidateToken(*_totpSecret, incomingToken);
+            tokenSuccess = Warhead::Crypto::TOTP::ValidateToken(*_totpSecret, incomingToken);
             memset(_totpSecret->data(), 0, _totpSecret->size());
         }
         else if (!sentToken && !_totpSecret)
@@ -626,7 +626,7 @@ bool AuthSession::HandleLogonProof()
         LoginDatabase.DirectExecute(stmt);
 
         // Finish SRP6 and send the final result to the client
-        Trinity::Crypto::SHA1::Digest M2 = Trinity::Crypto::SRP6::GetSessionVerifier(logonProof->A, logonProof->clientM, _sessionKey);
+        Warhead::Crypto::SHA1::Digest M2 = Warhead::Crypto::SRP6::GetSessionVerifier(logonProof->A, logonProof->clientM, _sessionKey);
 
         ByteBuffer packet;
         if (_expversion & POST_BC_EXP_FLAG)                 // 2.x and 3.x clients
@@ -769,7 +769,7 @@ void AuthSession::ReconnectChallengeCallback(PreparedQueryResult result)
 
     _accountInfo.LoadResult(fields);
     _sessionKey = fields[9].GetBinary<SESSION_KEY_LENGTH>();
-    Trinity::Crypto::GetRandomBytes(_reconnectProof);
+    Warhead::Crypto::GetRandomBytes(_reconnectProof);
     _status = STATUS_RECONNECT_PROOF;
 
     pkt << uint8(WOW_SUCCESS);
@@ -792,7 +792,7 @@ bool AuthSession::HandleReconnectProof()
     BigNumber t1;
     t1.SetBinary(reconnectProof->R1, 16);
 
-    Trinity::Crypto::SHA1 sha;
+    Warhead::Crypto::SHA1 sha;
     sha.UpdateData(_accountInfo.Login);
     sha.UpdateData(t1.ToByteArray<16>());
     sha.UpdateData(_reconnectProof);
@@ -939,13 +939,13 @@ void AuthSession::RealmListCallback(PreparedQueryResult result)
     _status = STATUS_AUTHED;
 }
 
-bool AuthSession::VerifyVersion(uint8 const* a, int32 aLength, Trinity::Crypto::SHA1::Digest const& versionProof, bool isReconnect)
+bool AuthSession::VerifyVersion(uint8 const* a, int32 aLength, Warhead::Crypto::SHA1::Digest const& versionProof, bool isReconnect)
 {
     if (!sConfigMgr->GetBoolDefault("StrictVersionCheck", false))
         return true;
 
-    Trinity::Crypto::SHA1::Digest zeros;
-    Trinity::Crypto::SHA1::Digest const* versionHash = nullptr;
+    Warhead::Crypto::SHA1::Digest zeros;
+    Warhead::Crypto::SHA1::Digest const* versionHash = nullptr;
     if (!isReconnect)
     {
         RealmBuildInfo const* buildInfo = sRealmList->GetBuildInfo(_build);
@@ -966,7 +966,7 @@ bool AuthSession::VerifyVersion(uint8 const* a, int32 aLength, Trinity::Crypto::
     else
         versionHash = &zeros;
 
-    Trinity::Crypto::SHA1 version;
+    Warhead::Crypto::SHA1 version;
     version.UpdateData(a, aLength);
     version.UpdateData(*versionHash);
     version.Finalize();

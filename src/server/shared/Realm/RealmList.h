@@ -44,7 +44,7 @@ namespace boost
     }
 }
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {
@@ -63,7 +63,7 @@ public:
 
     ~RealmList();
 
-    void Initialize(Trinity::Asio::IoContext& ioContext, uint32 updateInterval);
+    void Initialize(Warhead::Asio::IoContext& ioContext, uint32 updateInterval);
     void Close();
 
     RealmMap const& GetRealms() const { return _realms; }
@@ -83,7 +83,7 @@ private:
     std::vector<RealmBuildInfo> _builds;
     RealmMap _realms;
     uint32 _updateInterval;
-    std::unique_ptr<Trinity::Asio::DeadlineTimer> _updateTimer;
+    std::unique_ptr<Warhead::Asio::DeadlineTimer> _updateTimer;
     std::unique_ptr<boost::asio::ip::tcp_resolver> _resolver;
 };
 

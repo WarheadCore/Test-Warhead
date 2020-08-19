@@ -24,7 +24,7 @@
 #include <vector>
 #include <string>
 
-namespace Trinity
+namespace Warhead
 {
 
 /// Starts a process with the given arguments and parameters and will block
@@ -65,6 +65,6 @@ WH_COMMON_API std::shared_ptr<AsyncProcessResult>
 /// and returns a non-empty string when it was found.
 WH_COMMON_API std::string SearchExecutableInPath(std::string const& filename);
 
-} // namespace Trinity
+} // namespace Warhead
 
 #endif // Process_h__

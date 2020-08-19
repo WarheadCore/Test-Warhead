@@ -306,7 +306,7 @@ WH_COMMON_API bool IsIPAddress(char const* ipaddress);
 WH_COMMON_API uint32 CreatePIDFile(std::string const& filename);
 WH_COMMON_API uint32 GetPID();
 
-namespace Trinity::Impl
+namespace Warhead::Impl
 {
     WH_COMMON_API std::string ByteArrayToHexStr(uint8 const* bytes, size_t length, bool reverse = false);
     WH_COMMON_API void HexStrToByteArray(std::string const& str, uint8* out, size_t outlen, bool reverse = false);
@@ -315,13 +315,13 @@ namespace Trinity::Impl
 template <typename Container>
 std::string ByteArrayToHexStr(Container const& c, bool reverse = false)
 {
-    return Trinity::Impl::ByteArrayToHexStr(std::data(c), std::size(c), reverse);
+    return Warhead::Impl::ByteArrayToHexStr(std::data(c), std::size(c), reverse);
 }
 
 template <size_t Size>
 void HexStrToByteArray(std::string const& str, std::array<uint8, Size>& buf, bool reverse = false)
 {
-    Trinity::Impl::HexStrToByteArray(str, buf.data(), Size, reverse);
+    Warhead::Impl::HexStrToByteArray(str, buf.data(), Size, reverse);
 }
 template <size_t Size>
 std::array<uint8, Size> HexStrToByteArray(std::string const& str, bool reverse = false)
@@ -336,7 +336,7 @@ inline std::vector<uint8> HexStrToByteVector(std::string const& str, bool revers
     std::vector<uint8> buf;
     size_t const sz = (str.size() / 2);
     buf.resize(sz);
-    Trinity::Impl::HexStrToByteArray(str, buf.data(), sz, reverse);
+    Warhead::Impl::HexStrToByteArray(str, buf.data(), sz, reverse);
     return buf;
 }
 

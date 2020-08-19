@@ -55,7 +55,7 @@ ByteBufferSourceException::ByteBufferSourceException(size_t pos, size_t size,
 
 ByteBufferInvalidValueException::ByteBufferInvalidValueException(char const* type, char const* value)
 {
-    message().assign(Trinity::StringFormat("Invalid %s value (%s) found in ByteBuffer", type, value));
+    message().assign(Warhead::StringFormat("Invalid %s value (%s) found in ByteBuffer", type, value));
 }
 
 ByteBuffer& ByteBuffer::operator>>(float& value)

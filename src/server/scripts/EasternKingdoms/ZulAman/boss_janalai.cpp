@@ -237,8 +237,8 @@ class boss_janalai : public CreatureScript
                 float x, y, z;
                 me->GetPosition(x, y, z);
 
-                Trinity::AllCreaturesOfEntryInRange check(me, NPC_EGG, 100);
-                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, NPC_EGG, 100);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
                 Cell::VisitGridObjects(me, searcher, me->GetGridActivationRange());
 
                 //LOG_ERROR("scripts", "Eggs %d at middle", templist.size());
@@ -261,8 +261,8 @@ class boss_janalai : public CreatureScript
                 float x, y, z;
                 me->GetPosition(x, y, z);
 
-                Trinity::AllCreaturesOfEntryInRange check(me, NPC_FIRE_BOMB, 100);
-                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, NPC_FIRE_BOMB, 100);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
                 Cell::VisitGridObjects(me, searcher, me->GetGridActivationRange());
 
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)
@@ -511,8 +511,8 @@ class npc_janalai_hatcher : public CreatureScript
                 float x, y, z;
                 me->GetPosition(x, y, z);
 
-                Trinity::AllCreaturesOfEntryInRange check(me, 23817, 50);
-                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, 23817, 50);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
                 Cell::VisitGridObjects(me, searcher, me->GetGridActivationRange());
 
                 //LOG_ERROR("scripts", "Eggs %d at %d", templist.size(), side);

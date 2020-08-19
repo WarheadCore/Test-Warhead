@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TrinityCore_Regex_h__
-#define TrinityCore_Regex_h__
+#ifndef WarheadCore_Regex_h__
+#define WarheadCore_Regex_h__
 
 #ifndef WH_HAS_BROKEN_WSTRING_REGEX
 #include <regex>
@@ -27,7 +27,7 @@
 #endif
 
 // regex compatibility layer, required for clang building with libstdc++-4.9
-namespace Trinity
+namespace Warhead
 {
     using regex = WH_REGEX_NAMESPACE :: regex;
     using wregex = WH_REGEX_NAMESPACE :: wregex;
@@ -36,4 +36,4 @@ namespace Trinity
     using :: WH_REGEX_NAMESPACE :: regex_search;
 }
 
-#endif // TrinityCore_Regex_h__
+#endif // WarheadCore_Regex_h__

@@ -26,7 +26,7 @@
 #include <array>
 #include <optional>
 
-namespace Trinity::Crypto
+namespace Warhead::Crypto
 {
     class WH_COMMON_API SRP6
     {

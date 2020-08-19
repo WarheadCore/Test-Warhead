@@ -42,7 +42,7 @@ bool DBUpdaterUtil::CheckExecutable()
     boost::filesystem::path exe(GetCorrectedMySQLExecutable());
     if (!is_regular_file(exe))
     {
-        exe = Trinity::SearchExecutableInPath("mysql");
+        exe = Warhead::SearchExecutableInPath("mysql");
         if (!exe.empty() && is_regular_file(exe))
         {
             // Correct the path to the cli
@@ -214,7 +214,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
 
     if (!is_directory(sourceDirectory))
     {
-        LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\trinitycore). Shutting down.", sourceDirectory.generic_string().c_str());
+        LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\warheadcore). Shutting down.", sourceDirectory.generic_string().c_str());
         return false;
     }
 
@@ -236,7 +236,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
         return false;
     }
 
-    std::string const info = Trinity::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
+    std::string const info = Warhead::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
         result.recent, result.archived);
 
     if (!result.updated)
@@ -378,7 +378,7 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
         args.emplace_back(database);
 
     // Invokes a mysql process which doesn't leak credentials to logs
-    int const ret = Trinity::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
+    int const ret = Warhead::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
                                  "sql.updates", path.generic_string(), true);
 
     if (ret != EXIT_SUCCESS)
@@ -386,7 +386,7 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
         LOG_FATAL("sql.updates", "Applying of file \'%s\' to database \'%s\' failed!" \
             " If you are a user, please pull the latest revision from the repository. "
             "Also make sure you have not applied any of the databases with your sql client. "
-            "You cannot use auto-update system and import sql files from TrinityCore repository with your sql client. "
+            "You cannot use auto-update system and import sql files from WarheadCore repository with your sql client. "
             "If you are a developer, please fix your sql query.",
             path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
 

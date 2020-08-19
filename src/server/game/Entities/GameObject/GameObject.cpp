@@ -248,7 +248,7 @@ void GameObject::RemoveFromWorld()
         WorldObject::RemoveFromWorld();
 
         if (m_spawnId)
-            Trinity::Containers::MultimapErasePair(GetMap()->GetGameObjectBySpawnIdStore(), m_spawnId, this);
+            Warhead::Containers::MultimapErasePair(GetMap()->GetGameObjectBySpawnIdStore(), m_spawnId, this);
         GetMap()->GetObjectsStore().Remove<GameObject>(GetGUID());
     }
 }
@@ -652,16 +652,16 @@ void GameObject::Update(uint32 diff)
                     if (GetOwner())
                     {
                         // Hunter trap: Search units which are unfriendly to the trap's owner
-                        Trinity::NearestAttackableNoTotemUnitInObjectRangeCheck checker(this, radius);
-                        Trinity::UnitLastSearcher<Trinity::NearestAttackableNoTotemUnitInObjectRangeCheck> searcher(this, target, checker);
+                        Warhead::NearestAttackableNoTotemUnitInObjectRangeCheck checker(this, radius);
+                        Warhead::UnitLastSearcher<Warhead::NearestAttackableNoTotemUnitInObjectRangeCheck> searcher(this, target, checker);
                         Cell::VisitAllObjects(this, searcher, radius);
                     }
                     else
                     {
                         // Environmental trap: Any player
                         Player* player = nullptr;
-                        Trinity::AnyPlayerInObjectRangeCheck checker(this, radius);
-                        Trinity::PlayerSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
+                        Warhead::AnyPlayerInObjectRangeCheck checker(this, radius);
+                        Warhead::PlayerSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
                         Cell::VisitWorldObjects(this, searcher, radius);
                         target = player;
                     }
@@ -1120,7 +1120,7 @@ bool GameObject::LoadFromDB(ObjectGuid::LowType spawnId, Map* map, bool addToMap
         {
             // despawn all active objects, and remove their respawns
             std::vector<GameObject*> toUnload;
-            for (auto const& pair : Trinity::Containers::MapEqualRange(map->GetGameObjectBySpawnIdStore(), spawnId))
+            for (auto const& pair : Warhead::Containers::MapEqualRange(map->GetGameObjectBySpawnIdStore(), spawnId))
                 toUnload.push_back(pair.second);
             for (GameObject* obj : toUnload)
                 map->AddObjectToRemoveList(obj);
@@ -1236,7 +1236,7 @@ void GameObject::SaveRespawnTime(uint32 forceDelay)
         }
 
         uint32 thisRespawnTime = forceDelay ? GameTime::GetGameTime() + forceDelay : m_respawnTime;
-        GetMap()->SaveRespawnTime(SPAWN_TYPE_GAMEOBJECT, m_spawnId, GetEntry(), thisRespawnTime, Trinity::ComputeGridCoord(GetPositionX(), GetPositionY()).GetId());
+        GetMap()->SaveRespawnTime(SPAWN_TYPE_GAMEOBJECT, m_spawnId, GetEntry(), thisRespawnTime, Warhead::ComputeGridCoord(GetPositionX(), GetPositionY()).GetId());
     }
 }
 
@@ -1400,8 +1400,8 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
 GameObject* GameObject::LookupFishingHoleAround(float range)
 {
     GameObject* ok = nullptr;
-    Trinity::NearestGameObjectFishingHole u_check(*this, range);
-    Trinity::GameObjectSearcher<Trinity::NearestGameObjectFishingHole> checker(this, ok, u_check);
+    Warhead::NearestGameObjectFishingHole u_check(*this, range);
+    Warhead::GameObjectSearcher<Warhead::NearestGameObjectFishingHole> checker(this, ok, u_check);
     Cell::VisitGridObjects(this, checker, range);
     return ok;
 }
@@ -1860,7 +1860,7 @@ void GameObject::Use(Unit* user)
                 if (info->summoningRitual.casterTargetSpell && info->summoningRitual.casterTargetSpell != 1) // No idea why this field is a bool in some cases
                     for (uint32 i = 0; i < info->summoningRitual.casterTargetSpellTargets; i++)
                         // m_unique_users can contain only player GUIDs
-                        if (Player* target = ObjectAccessor::GetPlayer(*this, Trinity::Containers::SelectRandomContainerElement(m_unique_users)))
+                        if (Player* target = ObjectAccessor::GetPlayer(*this, Warhead::Containers::SelectRandomContainerElement(m_unique_users)))
                             spellCaster->CastSpell(target, info->summoningRitual.casterTargetSpell, true);
 
                 // finish owners spell

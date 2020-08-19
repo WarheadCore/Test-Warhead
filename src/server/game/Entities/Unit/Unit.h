@@ -1841,7 +1841,7 @@ class WH_GAME_API Unit : public WorldObject
         bool _isIgnoringCombat;
 };
 
-namespace Trinity
+namespace Warhead
 {
     // Binary predicate for sorting Units based on percent value of a power
     class PowerPctOrderPred

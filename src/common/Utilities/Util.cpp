@@ -119,13 +119,13 @@ std::string secsToTimeString(uint64 timeInSecs, TimeFormat timeFormat, bool hour
     if (timeFormat == TimeFormat::Numeric)
     {
         if (days)
-            return Trinity::StringFormat("%u:%02u:%02u:%02u", days, hours, minutes, secs);
+            return Warhead::StringFormat("%u:%02u:%02u:%02u", days, hours, minutes, secs);
         else if (hours)
-            return Trinity::StringFormat("%u:%02u:%02u", hours, minutes, secs);
+            return Warhead::StringFormat("%u:%02u:%02u", hours, minutes, secs);
         else if (minutes)
-            return Trinity::StringFormat("%u:%02u", minutes, secs);
+            return Warhead::StringFormat("%u:%02u", minutes, secs);
         else
-            return Trinity::StringFormat("0:%02u", secs);
+            return Warhead::StringFormat("0:%02u", secs);
     }
 
     std::ostringstream ss;
@@ -283,7 +283,7 @@ std::string TimeToTimestampStr(time_t t)
     //       HH     hour (2 digits 00-23)
     //       MM     minutes (2 digits 00-59)
     //       SS     seconds (2 digits 00-59)
-    return Trinity::StringFormat("%04d-%02d-%02d_%02d-%02d-%02d", aTm.tm_year + 1900, aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
+    return Warhead::StringFormat("%04d-%02d-%02d_%02d-%02d-%02d", aTm.tm_year + 1900, aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
 }
 
 std::string TimeToHumanReadable(time_t t)
@@ -302,7 +302,7 @@ bool IsIPAddress(char const* ipaddress)
         return false;
 
     boost::system::error_code error;
-    Trinity::Net::make_address(ipaddress, error);
+    Warhead::Net::make_address(ipaddress, error);
     return !error;
 }
 
@@ -370,7 +370,7 @@ bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
 {
     try
     {
-        Trinity::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
+        Warhead::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
         out = utf8::utf8to16(utf8str, utf8str+csize, out);
         wsize -= out.remaining(); // remaining unused space
         wstr[wsize] = L'\0';
@@ -616,7 +616,7 @@ bool Utf8ToUpperOnlyLatin(std::string& utf8String)
     return WStrToUtf8(wstr, utf8String);
 }
 
-std::string Trinity::Impl::ByteArrayToHexStr(uint8 const* bytes, size_t arrayLen, bool reverse /* = false */)
+std::string Warhead::Impl::ByteArrayToHexStr(uint8 const* bytes, size_t arrayLen, bool reverse /* = false */)
 {
     int32 init = 0;
     int32 end = arrayLen;
@@ -640,7 +640,7 @@ std::string Trinity::Impl::ByteArrayToHexStr(uint8 const* bytes, size_t arrayLen
     return ss.str();
 }
 
-void Trinity::Impl::HexStrToByteArray(std::string const& str, uint8* out, size_t outlen, bool reverse /*= false*/)
+void Warhead::Impl::HexStrToByteArray(std::string const& str, uint8* out, size_t outlen, bool reverse /*= false*/)
 {
     ASSERT(str.size() == (2 * outlen));
 

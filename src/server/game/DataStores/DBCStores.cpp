@@ -137,7 +137,7 @@ DBCStorage <MovieEntry> sMovieStore(MovieEntryfmt);
 
 DBCStorage<NamesProfanityEntry> sNamesProfanityStore(NamesProfanityEntryfmt);
 DBCStorage<NamesReservedEntry> sNamesReservedStore(NamesReservedEntryfmt);
-typedef std::array<std::vector<Trinity::wregex>, TOTAL_LOCALES> NameValidationRegexContainer;
+typedef std::array<std::vector<Warhead::wregex>, TOTAL_LOCALES> NameValidationRegexContainer;
 NameValidationRegexContainer NamesProfaneValidators;
 NameValidationRegexContainer NamesReservedValidators;
 
@@ -450,10 +450,10 @@ void LoadDBCStores(const std::string& dataPath)
         ASSERT(conversionResult);
 
         if (namesProfanity->Language != -1)
-            NamesProfaneValidators[namesProfanity->Language].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
+            NamesProfaneValidators[namesProfanity->Language].emplace_back(wname, Warhead::regex::perl | Warhead::regex::icase | Warhead::regex::optimize);
         else
             for (uint32 i = 0; i < TOTAL_LOCALES; ++i)
-                NamesProfaneValidators[i].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
+                NamesProfaneValidators[i].emplace_back(wname, Warhead::regex::perl | Warhead::regex::icase | Warhead::regex::optimize);
     }
 
     for (NamesReservedEntry const* namesReserved : sNamesReservedStore)
@@ -464,10 +464,10 @@ void LoadDBCStores(const std::string& dataPath)
         ASSERT(conversionResult);
 
         if (namesReserved->Language != -1)
-            NamesReservedValidators[namesReserved->Language].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
+            NamesReservedValidators[namesReserved->Language].emplace_back(wname, Warhead::regex::perl | Warhead::regex::icase | Warhead::regex::optimize);
         else
             for (uint32 i = 0; i < TOTAL_LOCALES; ++i)
-                NamesReservedValidators[i].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
+                NamesReservedValidators[i].emplace_back(wname, Warhead::regex::perl | Warhead::regex::icase | Warhead::regex::optimize);
     }
 
     for (PvPDifficultyEntry const* entry : sPvPDifficultyStore)
@@ -888,7 +888,7 @@ CharacterFacialHairStylesEntry const* GetCharFacialHairEntry(uint8 race, uint8 g
 CharSectionsEntry const* GetCharSectionEntry(uint8 race, CharSectionType genType, uint8 gender, uint8 type, uint8 color)
 {
     uint32 const key = uint32(genType) | uint32(gender << 8) | uint32(race << 16);
-    for (auto const& section : Trinity::Containers::MapEqualRange(sCharSectionMap, key))
+    for (auto const& section : Warhead::Containers::MapEqualRange(sCharSectionMap, key))
     {
         if (section.second->VariationIndex == type && section.second->ColorIndex == color)
             return section.second;
@@ -958,13 +958,13 @@ ResponseCodes ValidateName(std::wstring const& name, LocaleConstant locale)
     if (locale >= TOTAL_LOCALES)
         return RESPONSE_FAILURE;
 
-    for (Trinity::wregex const& regex : NamesProfaneValidators[locale])
-        if (Trinity::regex_search(name, regex))
+    for (Warhead::wregex const& regex : NamesProfaneValidators[locale])
+        if (Warhead::regex_search(name, regex))
             return CHAR_NAME_PROFANE;
 
     // regexes at TOTAL_LOCALES are loaded from NamesReserved which is not locale specific
-    for (Trinity::wregex const& regex : NamesReservedValidators[locale])
-        if (Trinity::regex_search(name, regex))
+    for (Warhead::wregex const& regex : NamesReservedValidators[locale])
+        if (Warhead::regex_search(name, regex))
             return CHAR_NAME_RESERVED;
 
     return CHAR_NAME_SUCCESS;

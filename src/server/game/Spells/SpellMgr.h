@@ -602,7 +602,7 @@ class WH_GAME_API SpellMgr
         uint32 GetSpellWithRank(uint32 spell_id, uint32 rank, bool strict = false) const;
 
         // Spell Required table
-        Trinity::IteratorPair<SpellRequiredMap::const_iterator> GetSpellsRequiredForSpellBounds(uint32 spell_id) const;
+        Warhead::IteratorPair<SpellRequiredMap::const_iterator> GetSpellsRequiredForSpellBounds(uint32 spell_id) const;
         SpellsRequiringSpellMapBounds GetSpellsRequiringSpellBounds(uint32 spell_id) const;
         bool IsSpellRequiringSpell(uint32 spellid, uint32 req_spellid) const;
 

@@ -548,7 +548,7 @@ LfgCompatibility LFGQueue::CheckCompatibility(GuidList check)
     proposal.cancelTime = GameTime::GetGameTime() + LFG_TIME_PROPOSAL;
     proposal.state = LFG_PROPOSAL_INITIATING;
     proposal.leader.Clear();
-    proposal.dungeonId = Trinity::Containers::SelectRandomContainerElement(proposalDungeons);
+    proposal.dungeonId = Warhead::Containers::SelectRandomContainerElement(proposalDungeons);
 
     bool leader = false;
     for (LfgRolesMap::const_iterator itRoles = proposalRoles.begin(); itRoles != proposalRoles.end(); ++itRoles)

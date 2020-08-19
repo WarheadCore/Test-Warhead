@@ -2492,7 +2492,7 @@ void Spell::EffectAddHonor(SpellEffIndex /*effIndex*/)
     // do not allow to add too many honor for player (50 * 21) = 1040 at level 70, or (50 * 31) = 1550 at level 80
     if (damage <= 50)
     {
-        uint32 honor_reward = Trinity::Honor::hk_honor_at_level(unitTarget->GetLevel(), float(damage));
+        uint32 honor_reward = Warhead::Honor::hk_honor_at_level(unitTarget->GetLevel(), float(damage));
         unitTarget->ToPlayer()->RewardHonor(nullptr, 1, honor_reward);
         LOG_DEBUG("spells", "SpellEffect::AddHonor (spell_id %u) rewards %u honor points (scale) to player %s", m_spellInfo->Id, honor_reward, unitTarget->ToPlayer()->GetGUID().ToString().c_str());
     }
@@ -4204,13 +4204,13 @@ void Spell::EffectForceDeselect(SpellEffIndex /*effIndex*/)
     // clear focus
     WorldPacket data(SMSG_BREAK_TARGET, unitCaster->GetPackGUID().size());
     data << unitCaster->GetPackGUID();
-    Trinity::MessageDistDelivererToHostile notifierBreak(unitCaster, &data, dist);
+    Warhead::MessageDistDelivererToHostile notifierBreak(unitCaster, &data, dist);
     Cell::VisitWorldObjects(unitCaster, notifierBreak, dist);
 
     // and selection
     data.Initialize(SMSG_CLEAR_TARGET, 8);
     data << uint64(unitCaster->GetGUID());
-    Trinity::MessageDistDelivererToHostile notifierClear(unitCaster, &data, dist);
+    Warhead::MessageDistDelivererToHostile notifierClear(unitCaster, &data, dist);
     Cell::VisitWorldObjects(unitCaster, notifierClear, dist);
 
     // we should also force pets to remove us from current target

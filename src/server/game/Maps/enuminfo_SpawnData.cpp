@@ -20,7 +20,7 @@
 #include "SmartEnum.h"
 #include <stdexcept>
 
-namespace Trinity
+namespace Warhead
 {
 namespace Impl
 {

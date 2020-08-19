@@ -1184,9 +1184,9 @@ void Spell::SelectImplicitConeTargets(SpellEffIndex effIndex, SpellImplicitTarge
 
     if (uint32 containerTypeMask = GetSearcherTypeMask(objectType, condList))
     {
-        Trinity::WorldObjectSpellConeTargetCheck check(coneAngle, radius, m_caster, m_spellInfo, selectionType, condList);
-        Trinity::WorldObjectListSearcher<Trinity::WorldObjectSpellConeTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
-        SearchTargets<Trinity::WorldObjectListSearcher<Trinity::WorldObjectSpellConeTargetCheck> >(searcher, containerTypeMask, m_caster, m_caster, radius);
+        Warhead::WorldObjectSpellConeTargetCheck check(coneAngle, radius, m_caster, m_spellInfo, selectionType, condList);
+        Warhead::WorldObjectListSearcher<Warhead::WorldObjectSpellConeTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
+        SearchTargets<Warhead::WorldObjectListSearcher<Warhead::WorldObjectSpellConeTargetCheck> >(searcher, containerTypeMask, m_caster, m_caster, radius);
 
         CallScriptObjectAreaTargetSelectHandlers(targets, effIndex, targetType);
 
@@ -1197,7 +1197,7 @@ void Spell::SelectImplicitConeTargets(SpellEffIndex effIndex, SpellImplicitTarge
             {
                 if (Unit* unitCaster = m_caster->ToUnit())
                     maxTargets += unitCaster->GetTotalAuraModifierByAffectMask(SPELL_AURA_MOD_MAX_AFFECTED_TARGETS, m_spellInfo);
-                Trinity::Containers::RandomResize(targets, maxTargets);
+                Warhead::Containers::RandomResize(targets, maxTargets);
             }
 
             for (WorldObject* itr : targets)
@@ -1283,7 +1283,7 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
         {
             if (Unit* unitCaster = m_caster->ToUnit())
                 maxTargets += unitCaster->GetTotalAuraModifierByAffectMask(SPELL_AURA_MOD_MAX_AFFECTED_TARGETS, m_spellInfo);
-            Trinity::Containers::RandomResize(targets, maxTargets);
+            Warhead::Containers::RandomResize(targets, maxTargets);
         }
 
         for (WorldObject* itr : targets)
@@ -1617,13 +1617,13 @@ void Spell::SelectImplicitTrajTargets(SpellEffIndex effIndex, SpellImplicitTarge
     float srcToDestDelta = m_targets.GetDstPos()->m_positionZ - srcPos.m_positionZ;
 
     std::list<WorldObject*> targets;
-    Trinity::WorldObjectSpellTrajTargetCheck check(dist2d, &srcPos, m_caster, m_spellInfo, targetType.GetCheckType(), m_spellInfo->Effects[effIndex].ImplicitTargetConditions);
-    Trinity::WorldObjectListSearcher<Trinity::WorldObjectSpellTrajTargetCheck> searcher(m_caster, targets, check, GRID_MAP_TYPE_MASK_ALL);
-    SearchTargets<Trinity::WorldObjectListSearcher<Trinity::WorldObjectSpellTrajTargetCheck> > (searcher, GRID_MAP_TYPE_MASK_ALL, m_caster, &srcPos, dist2d);
+    Warhead::WorldObjectSpellTrajTargetCheck check(dist2d, &srcPos, m_caster, m_spellInfo, targetType.GetCheckType(), m_spellInfo->Effects[effIndex].ImplicitTargetConditions);
+    Warhead::WorldObjectListSearcher<Warhead::WorldObjectSpellTrajTargetCheck> searcher(m_caster, targets, check, GRID_MAP_TYPE_MASK_ALL);
+    SearchTargets<Warhead::WorldObjectListSearcher<Warhead::WorldObjectSpellTrajTargetCheck> > (searcher, GRID_MAP_TYPE_MASK_ALL, m_caster, &srcPos, dist2d);
     if (targets.empty())
         return;
 
-    targets.sort(Trinity::ObjectDistanceOrderPred(m_caster));
+    targets.sort(Warhead::ObjectDistanceOrderPred(m_caster));
 
     float b = tangent(m_targets.GetElevation());
     float a = (srcToDestDelta - dist2d * b) / (dist2d * dist2d);
@@ -1852,9 +1852,9 @@ WorldObject* Spell::SearchNearbyTarget(float range, SpellTargetObjectTypes objec
     uint32 containerTypeMask = GetSearcherTypeMask(objectType, condList);
     if (!containerTypeMask)
         return nullptr;
-    Trinity::WorldObjectSpellNearbyTargetCheck check(range, m_caster, m_spellInfo, selectionType, condList);
-    Trinity::WorldObjectLastSearcher<Trinity::WorldObjectSpellNearbyTargetCheck> searcher(m_caster, target, check, containerTypeMask);
-    SearchTargets<Trinity::WorldObjectLastSearcher<Trinity::WorldObjectSpellNearbyTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, range);
+    Warhead::WorldObjectSpellNearbyTargetCheck check(range, m_caster, m_spellInfo, selectionType, condList);
+    Warhead::WorldObjectLastSearcher<Warhead::WorldObjectSpellNearbyTargetCheck> searcher(m_caster, target, check, containerTypeMask);
+    SearchTargets<Warhead::WorldObjectLastSearcher<Warhead::WorldObjectSpellNearbyTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, range);
     return target;
 }
 
@@ -1863,9 +1863,9 @@ void Spell::SearchAreaTargets(std::list<WorldObject*>& targets, float range, Pos
     uint32 containerTypeMask = GetSearcherTypeMask(objectType, condList);
     if (!containerTypeMask)
         return;
-    Trinity::WorldObjectSpellAreaTargetCheck check(range, position, m_caster, referer, m_spellInfo, selectionType, condList);
-    Trinity::WorldObjectListSearcher<Trinity::WorldObjectSpellAreaTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
-    SearchTargets<Trinity::WorldObjectListSearcher<Trinity::WorldObjectSpellAreaTargetCheck> > (searcher, containerTypeMask, m_caster, position, range);
+    Warhead::WorldObjectSpellAreaTargetCheck check(range, position, m_caster, referer, m_spellInfo, selectionType, condList);
+    Warhead::WorldObjectListSearcher<Warhead::WorldObjectSpellAreaTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
+    SearchTargets<Warhead::WorldObjectListSearcher<Warhead::WorldObjectSpellAreaTargetCheck> > (searcher, containerTypeMask, m_caster, position, range);
 }
 
 void Spell::SearchChainTargets(std::list<WorldObject*>& targets, uint32 chainTargets, WorldObject* target, SpellTargetObjectTypes objectType, SpellTargetCheckTypes selectType, ConditionContainer* condList, bool isChainHeal)
@@ -1967,8 +1967,8 @@ void Spell::SearchChainTargets(std::list<WorldObject*>& targets, uint32 chainTar
 GameObject* Spell::SearchSpellFocus()
 {
     GameObject* focus = nullptr;
-    Trinity::GameObjectFocusCheck check(m_caster, m_spellInfo->RequiresSpellFocus);
-    Trinity::GameObjectSearcher<Trinity::GameObjectFocusCheck> searcher(m_caster, focus, check);
+    Warhead::GameObjectFocusCheck check(m_caster, m_spellInfo->RequiresSpellFocus);
+    Warhead::GameObjectSearcher<Warhead::GameObjectFocusCheck> searcher(m_caster, focus, check);
     SearchTargets(searcher, GRID_MAP_TYPE_MASK_GAMEOBJECT, m_caster, m_caster, m_caster->GetVisibilityRange());
     return focus;
 }
@@ -8175,7 +8175,7 @@ void Spell::CallScriptOnResistAbsorbCalculateHandlers(DamageInfo const& damageIn
     }
 }
 
-namespace Trinity
+namespace Warhead
 {
 
 WorldObjectSpellTargetCheck::WorldObjectSpellTargetCheck(WorldObject* caster, WorldObject* referer, SpellInfo const* spellInfo,
@@ -8341,4 +8341,4 @@ bool WorldObjectSpellTrajTargetCheck::operator()(WorldObject* target) const
     return WorldObjectSpellTargetCheck::operator ()(target);
 }
 
-} //namespace Trinity
+} //namespace Warhead

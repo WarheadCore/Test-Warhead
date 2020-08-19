@@ -57,8 +57,8 @@ DatabaseWorkerPool<T>::DatabaseWorkerPool()
       _async_threads(0), _synch_threads(0)
 {
     WPFatal(mysql_thread_safe(), "Used MySQL library isn't thread-safe.");
-    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "TrinityCore does not support MySQL versions below 5.1");
-    WPFatal(mysql_get_client_version() == MYSQL_VERSION_ID, "Used MySQL library version (%s id %lu) does not match the version id used to compile TrinityCore (id %u). Search on forum for TCE00011.",
+    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "WarheadCore does not support MySQL versions below 5.1");
+    WPFatal(mysql_get_client_version() == MYSQL_VERSION_ID, "Used MySQL library version (%s id %lu) does not match the version id used to compile WarheadCore (id %u). Search on forum for TCE00011.",
         mysql_get_client_info(), mysql_get_client_version(), MYSQL_VERSION_ID);
 }
 
@@ -385,7 +385,7 @@ uint32 DatabaseWorkerPool<T>::OpenConnections(InternalIndex type, uint8 numConne
         }
         else if (connection->GetServerVersion() < MIN_MYSQL_SERVER_VERSION)
         {
-            LOG_ERROR("sql.driver", "TrinityCore does not support MySQL versions below 5.1");
+            LOG_ERROR("sql.driver", "WarheadCore does not support MySQL versions below 5.1");
             return 1;
         }
         else
@@ -449,7 +449,7 @@ char const* DatabaseWorkerPool<T>::GetDatabaseName() const
 template <class T>
 void DatabaseWorkerPool<T>::Execute(char const* sql)
 {
-    if (Trinity::IsFormatEmptyOrNull(sql))
+    if (Warhead::IsFormatEmptyOrNull(sql))
         return;
 
     BasicStatementTask* task = new BasicStatementTask(sql);
@@ -466,7 +466,7 @@ void DatabaseWorkerPool<T>::Execute(PreparedStatement<T>* stmt)
 template <class T>
 void DatabaseWorkerPool<T>::DirectExecute(char const* sql)
 {
-    if (Trinity::IsFormatEmptyOrNull(sql))
+    if (Warhead::IsFormatEmptyOrNull(sql))
         return;
 
     T* connection = GetFreeConnection();

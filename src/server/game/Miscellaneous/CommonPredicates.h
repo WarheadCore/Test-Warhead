@@ -24,7 +24,7 @@
 class Unit;
 class WorldObject;
 
-namespace Trinity
+namespace Warhead
 {
     namespace Predicates
     {
