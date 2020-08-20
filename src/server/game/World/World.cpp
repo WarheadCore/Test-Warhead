@@ -477,7 +477,6 @@ void World::LoadConfigSettings(bool reload)
             LOG_ERROR("misc", "World settings reload fail: %s.", configError.c_str());
             return;
         }
-        sLog->LoadFromConfig();
         sMetric->LoadFromConfigs();
     }
 
@@ -1228,6 +1227,7 @@ void World::LoadConfigSettings(bool reload)
         else
             LOG_ERROR("server.loading", "ClientCacheVersion can't be negative %d, ignored.", clientCacheId);
     }
+    
     LOG_INFO("server.loading", "Client cache version set to: %u", m_int_configs[CONFIG_CLIENTCACHE_VERSION]);
 
     m_int_configs[CONFIG_GUILD_EVENT_LOG_COUNT] = sConfigMgr->GetIntDefault("Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS);
@@ -1387,8 +1387,28 @@ void World::LoadConfigSettings(bool reload)
 
     VMAP::VMapFactory::createOrGetVMapManager()->setEnableLineOfSightCalc(enableLOS);
     VMAP::VMapFactory::createOrGetVMapManager()->setEnableHeightCalc(enableHeight);
-    LOG_INFO("server.loading", "VMap support included. LineOfSight: %i, getHeight: %i, indoorCheck: %i", enableLOS, enableHeight, enableIndoor);
-    LOG_INFO("server.loading", "VMap data directory is: %svmaps", m_dataPath.c_str());
+
+    if (!reload)
+    {
+        auto VMAPBoolToString = [](bool value) -> std::string
+        {
+            if (value)
+                return "Enable";
+
+            return "Disable";
+        };
+
+        LOG_INFO("server.loading", "");
+        LOG_INFO("server.loading", "Loading data configurations...");
+        LOG_INFO("server.loading", "> Using DataDir:        %s", m_dataPath.c_str());
+        LOG_INFO("server.loading", "> VMap data directory is: %svmaps", m_dataPath.c_str());
+        LOG_INFO("server.loading", "");
+        LOG_INFO("server.loading", "Loading VMap configurations...");
+        LOG_INFO("server.loading", "> Line Of Sight:        %s", VMAPBoolToString(enableLOS).c_str());
+        LOG_INFO("server.loading", "> Get Height:           %s", VMAPBoolToString(enableHeight).c_str());
+        LOG_INFO("server.loading", "> Indoor Check:         %s", VMAPBoolToString(enableIndoor).c_str());
+        LOG_INFO("server.loading", "");
+    }
 
     m_int_configs[CONFIG_MAX_WHO] = sConfigMgr->GetIntDefault("MaxWhoListReturns", 49);
     m_bool_configs[CONFIG_START_ALL_SPELLS] = sConfigMgr->GetBoolDefault("PlayerStart.AllSpells", false);
@@ -1527,9 +1547,6 @@ void World::LoadConfigSettings(bool reload)
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    if (uint32 realmId = sConfigMgr->GetIntDefault("RealmID", 0)) // 0 reserved for auth
-        sLog->SetRealmId(realmId);
-
     ///- Server startup begin
     uint32 startupBegin = getMSTime();
 
