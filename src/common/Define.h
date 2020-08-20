@@ -90,41 +90,41 @@
 
 #ifdef WARHEAD_API_USE_DYNAMIC_LINKING
 #  if WARHEAD_COMPILER == WARHEAD_COMPILER_MICROSOFT
-#    define wH_API_EXPORT __declspec(dllexport)
-#    define wH_API_IMPORT __declspec(dllimport)
+#    define WH_API_EXPORT __declspec(dllexport)
+#    define WH_API_IMPORT __declspec(dllimport)
 #  elif WARHEAD_COMPILER == WARHEAD_COMPILER_GNU
-#    define wH_API_EXPORT __attribute__((visibility("default")))
-#    define wH_API_IMPORT
+#    define WH_API_EXPORT __attribute__((visibility("default")))
+#    define WH_API_IMPORT
 #  else
 #    error compiler not supported!
 #  endif
 #else
-#  define wH_API_EXPORT
-#  define wH_API_IMPORT
+#  define WH_API_EXPORT
+#  define WH_API_IMPORT
 #endif
 
 #ifdef WARHEAD_API_EXPORT_COMMON
-#  define wH_COMMON_API wH_API_EXPORT
+#  define WH_COMMON_API WH_API_EXPORT
 #else
-#  define wH_COMMON_API wH_API_IMPORT
+#  define WH_COMMON_API WH_API_IMPORT
 #endif
 
 #ifdef WARHEAD_API_EXPORT_DATABASE
-#  define wH_DATABASE_API wH_API_EXPORT
+#  define WH_DATABASE_API WH_API_EXPORT
 #else
-#  define wH_DATABASE_API wH_API_IMPORT
+#  define WH_DATABASE_API WH_API_IMPORT
 #endif
 
 #ifdef WARHEAD_API_EXPORT_SHARED
-#  define wH_SHARED_API wH_API_EXPORT
+#  define WH_SHARED_API WH_API_EXPORT
 #else
-#  define wH_SHARED_API wH_API_IMPORT
+#  define WH_SHARED_API WH_API_IMPORT
 #endif
 
 #ifdef WARHEAD_API_EXPORT_GAME
-#  define wH_GAME_API wH_API_EXPORT
+#  define WH_GAME_API WH_API_EXPORT
 #else
-#  define wH_GAME_API wH_API_IMPORT
+#  define WH_GAME_API WH_API_IMPORT
 #endif
 
 #define UI64FMTD "%" PRIu64

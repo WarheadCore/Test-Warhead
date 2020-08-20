@@ -22,21 +22,21 @@
 
 namespace GitRevision
 {
-    wH_COMMON_API char const* GetHash();
-    wH_COMMON_API char const* GetDate();
-    wH_COMMON_API char const* GetBranch();
-    wH_COMMON_API char const* GetCMakeCommand();
-    wH_COMMON_API char const* GetCMakeVersion();
-    wH_COMMON_API char const* GetHostOSVersion();
-    wH_COMMON_API char const* GetBuildDirectory();
-    wH_COMMON_API char const* GetSourceDirectory();
-    wH_COMMON_API char const* GetMySQLExecutable();
-    wH_COMMON_API char const* GetFullDatabase();
-    wH_COMMON_API char const* GetFullVersion();
-    wH_COMMON_API char const* GetCompanyNameStr();
-    wH_COMMON_API char const* GetLegalCopyrightStr();
-    wH_COMMON_API char const* GetFileVersionStr();
-    wH_COMMON_API char const* GetProductVersionStr();
+    WH_COMMON_API char const* GetHash();
+    WH_COMMON_API char const* GetDate();
+    WH_COMMON_API char const* GetBranch();
+    WH_COMMON_API char const* GetCMakeCommand();
+    WH_COMMON_API char const* GetCMakeVersion();
+    WH_COMMON_API char const* GetHostOSVersion();
+    WH_COMMON_API char const* GetBuildDirectory();
+    WH_COMMON_API char const* GetSourceDirectory();
+    WH_COMMON_API char const* GetMySQLExecutable();
+    WH_COMMON_API char const* GetFullDatabase();
+    WH_COMMON_API char const* GetFullVersion();
+    WH_COMMON_API char const* GetCompanyNameStr();
+    WH_COMMON_API char const* GetLegalCopyrightStr();
+    WH_COMMON_API char const* GetFileVersionStr();
+    WH_COMMON_API char const* GetProductVersionStr();
 }
 
 #endif

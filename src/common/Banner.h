@@ -24,7 +24,7 @@ namespace Warhead
 {
     namespace Banner
     {
-        wH_COMMON_API void Show(char const* applicationName, void(*log)(char const* text), void(*logExtraInfo)());
+        WH_COMMON_API void Show(char const* applicationName, void(*log)(char const* text), void(*logExtraInfo)());
     }
 }
 

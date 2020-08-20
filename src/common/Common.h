@@ -99,9 +99,9 @@ enum LocaleConstant : uint8
 #define MAX_LOCALES 8
 #define MAX_ACCOUNT_TUTORIAL_VALUES 8
 
-wH_COMMON_API extern char const* localeNames[TOTAL_LOCALES];
+WH_COMMON_API extern char const* localeNames[TOTAL_LOCALES];
 
-wH_COMMON_API LocaleConstant GetLocaleByName(std::string const& name);
+WH_COMMON_API LocaleConstant GetLocaleByName(std::string const& name);
 
 // we always use stdlib std::max/std::min, undefine some not C++ standard defines (Win API and some other platforms)
 #ifdef max
