@@ -1695,6 +1695,7 @@ void World::SetInitialWorldSettings()
 
     sObjectMgr->SetDBCLocaleIndex(GetDefaultDbcLocale());        // Get once for all the locale index of DBC language (console/broadcasts)
     LOG_INFO("server.loading", ">> Localization strings loaded in %u ms", GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 
     LOG_INFO("server.loading", "Loading Account Roles and Permissions...");
     sAccountMgr->LoadRBAC();
@@ -1713,6 +1714,7 @@ void World::SetInitialWorldSettings()
 
     LOG_INFO("server.loading", "Loading Transport animations and rotations...");
     sTransportMgr->LoadTransportAnimationAndRotation();
+    LOG_INFO("server.loading", "");
 
     LOG_INFO("server.loading", "Loading Spell Rank Data...");
     sSpellMgr->LoadSpellRanks();
@@ -1848,12 +1850,14 @@ void World::SetInitialWorldSettings()
 
     LOG_INFO("server.loading", "Loading Quests Starters and Enders...");
     sObjectMgr->LoadQuestStartersAndEnders();                    // must be after quest load
+    LOG_INFO("server.loading", "");
 
     LOG_INFO("server.loading", "Loading Quests Greetings...");
     sObjectMgr->LoadQuestGreetings();                           // must be loaded after creature_template, gameobject_template tables
 
     LOG_INFO("server.loading", "Loading Objects Pooling Data...");
     sPoolMgr->LoadFromDB();
+
     LOG_INFO("server.loading", "Loading Quest Pooling Data...");
     sQuestPoolMgr->LoadFromDB();                                // must be after quest templates
 
@@ -1952,14 +1956,19 @@ void World::SetInitialWorldSettings()
 
     LOG_INFO("server.loading", "Loading Achievements...");
     sAchievementMgr->LoadAchievementReferenceList();
+
     LOG_INFO("server.loading", "Loading Achievement Criteria Lists...");
     sAchievementMgr->LoadAchievementCriteriaList();
+
     LOG_INFO("server.loading", "Loading Achievement Criteria Data...");
     sAchievementMgr->LoadAchievementCriteriaData();
+
     LOG_INFO("server.loading", "Loading Achievement Rewards...");
     sAchievementMgr->LoadRewards();
+
     LOG_INFO("server.loading", "Loading Achievement Reward Locales...");
     sAchievementMgr->LoadRewardLocales();
+
     LOG_INFO("server.loading", "Loading Completed Achievements...");
     sAchievementMgr->LoadCompletedAchievements();
 
@@ -2152,6 +2161,7 @@ void World::SetInitialWorldSettings()
 
     LOG_INFO("server.loading", "Initialize AuctionHouseBot...");
     sAuctionBot->Initialize();
+    LOG_INFO("server.loading", "");
 
     LOG_INFO("server.loading", "Initializing chat channels...");
     ChannelMgr::LoadFromDB();
@@ -2189,6 +2199,7 @@ void World::SetInitialWorldSettings()
 
     LOG_INFO("server.loading", "Deleting expired bans...");
     LoginDatabase.Execute("DELETE FROM ip_banned WHERE unbandate <= UNIX_TIMESTAMP() AND unbandate<>bandate");      // One-time query
+    LOG_INFO("server.loading", "");
 
     LOG_INFO("server.loading", "Initializing quest reset times...");
     InitQuestResetTimes();
@@ -2218,7 +2229,9 @@ void World::SetInitialWorldSettings()
 
     uint32 startupDuration = GetMSTimeDiffToNow(startupBegin);
 
+    LOG_INFO("server.worldserver", "");
     LOG_INFO("server.worldserver", "World initialized in %u minutes %u seconds", (startupDuration / 60000), ((startupDuration % 60000) / 1000));
+    LOG_INFO("server.worldserver", "");
 
     WH_METRIC_EVENT("events", "World initialized", "World initialized in " + std::to_string(startupDuration / 60000) + " minutes " + std::to_string((startupDuration % 60000) / 1000) + " seconds");
 }
@@ -2264,6 +2277,7 @@ void World::DetectDBCLang()
     m_defaultDbcLocale = LocaleConstant(default_locale);
 
     LOG_INFO("server.loading", "Using %s DBC Locale as default. All available DBC locales: %s", localeNames[m_defaultDbcLocale], availableLocalsStr.empty() ? "<none>" : availableLocalsStr.c_str());
+    LOG_INFO("server.loading", "");
 }
 
 void World::LoadAutobroadcasts()
@@ -2281,6 +2295,7 @@ void World::LoadAutobroadcasts()
     if (!result)
     {
         LOG_INFO("server.loading", ">> Loaded 0 autobroadcasts definitions. DB table `autobroadcast` is empty for this realm!");
+        LOG_INFO("server.loading", "");
         return;
     }
 
@@ -2298,6 +2313,7 @@ void World::LoadAutobroadcasts()
     } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u autobroadcast definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 /// Update the World !
@@ -3519,7 +3535,7 @@ void World::LoadWorldStates()
     while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u world states in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-
+    LOG_INFO("server.loading", "");
 }
 
 bool World::IsPvPRealm() const
