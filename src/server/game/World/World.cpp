@@ -1053,8 +1053,10 @@ void World::LoadConfigSettings(bool reload)
         m_timers[WUPDATE_CLEANDB].Reset();
     }
     m_int_configs[CONFIG_LOGDB_CLEARTIME] = sConfigMgr->GetIntDefault("LogDB.Opt.ClearTime", 1209600); // 14 days default
-    LOG_INFO("server.loading", "Will clear `logs` table of entries older than %i seconds every %u minutes.",
-        m_int_configs[CONFIG_LOGDB_CLEARTIME], m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]);
+
+    if (!reload)
+        LOG_INFO("server.loading", "Will clear `logs` table of entries older than %i seconds every %u minutes.",
+            m_int_configs[CONFIG_LOGDB_CLEARTIME], m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]);
 
     m_int_configs[CONFIG_SKILL_CHANCE_ORANGE] = sConfigMgr->GetIntDefault("SkillChance.Orange", 100);
     m_int_configs[CONFIG_SKILL_CHANCE_YELLOW] = sConfigMgr->GetIntDefault("SkillChance.Yellow", 75);
@@ -1227,8 +1229,9 @@ void World::LoadConfigSettings(bool reload)
         else
             LOG_ERROR("server.loading", "ClientCacheVersion can't be negative %d, ignored.", clientCacheId);
     }
-    
-    LOG_INFO("server.loading", "Client cache version set to: %u", m_int_configs[CONFIG_CLIENTCACHE_VERSION]);
+
+    if (!reload)
+        LOG_INFO("server.loading", "Client cache version set to: %u", m_int_configs[CONFIG_CLIENTCACHE_VERSION]);
 
     m_int_configs[CONFIG_GUILD_EVENT_LOG_COUNT] = sConfigMgr->GetIntDefault("Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS);
     if (m_int_configs[CONFIG_GUILD_EVENT_LOG_COUNT] > GUILD_EVENTLOG_MAX_RECORDS)
@@ -1369,15 +1372,11 @@ void World::LoadConfigSettings(bool reload)
             LOG_ERROR("server.loading", "DataDir option can't be changed at worldserver.conf reload, using current value (%s).", m_dataPath.c_str());
     }
     else
-    {
         m_dataPath = dataPath;
-        LOG_INFO("server.loading", "Using DataDir %s", m_dataPath.c_str());
-    }
 
     m_bool_configs[CONFIG_ENABLE_MMAPS] = sConfigMgr->GetBoolDefault("mmap.enablePathFinding", false);
-    LOG_INFO("server.loading", "WORLD: MMap data directory is: %smmaps", m_dataPath.c_str());
-
     m_bool_configs[CONFIG_VMAP_INDOOR_CHECK] = sConfigMgr->GetBoolDefault("vmap.enableIndoorCheck", 0);
+
     bool enableIndoor = sConfigMgr->GetBoolDefault("vmap.enableIndoorCheck", true);
     bool enableLOS = sConfigMgr->GetBoolDefault("vmap.enableLOS", true);
     bool enableHeight = sConfigMgr->GetBoolDefault("vmap.enableHeight", true);
@@ -1400,13 +1399,14 @@ void World::LoadConfigSettings(bool reload)
 
         LOG_INFO("server.loading", "");
         LOG_INFO("server.loading", "Loading data configurations...");
-        LOG_INFO("server.loading", "> Using DataDir:        %s", m_dataPath.c_str());
+        LOG_INFO("server.loading", "> Using DataDir:          %s", m_dataPath.c_str());
         LOG_INFO("server.loading", "> VMap data directory is: %svmaps", m_dataPath.c_str());
+        LOG_INFO("server.loading", "> MMap data directory is: %smmaps", m_dataPath.c_str());
         LOG_INFO("server.loading", "");
         LOG_INFO("server.loading", "Loading VMap configurations...");
-        LOG_INFO("server.loading", "> Line Of Sight:        %s", VMAPBoolToString(enableLOS).c_str());
-        LOG_INFO("server.loading", "> Get Height:           %s", VMAPBoolToString(enableHeight).c_str());
-        LOG_INFO("server.loading", "> Indoor Check:         %s", VMAPBoolToString(enableIndoor).c_str());
+        LOG_INFO("server.loading", "> Line Of Sight:          %s", VMAPBoolToString(enableLOS).c_str());
+        LOG_INFO("server.loading", "> Get Height:             %s", VMAPBoolToString(enableHeight).c_str());
+        LOG_INFO("server.loading", "> Indoor Check:           %s", VMAPBoolToString(enableIndoor).c_str());
         LOG_INFO("server.loading", "");
     }
 

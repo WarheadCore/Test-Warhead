@@ -1166,6 +1166,7 @@ void LoadLootTemplates_Reference()
     LootTemplates_Reference.ReportUnusedIds(lootIdSet);
 
     LOG_INFO("server.loading", ">> Loaded refence loot templates in %u ms", GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 void LoadLootTables()
