@@ -24,9 +24,8 @@ Examples:
 -->
 
 #### HASH/COMMIT:
-<!-- IF YOU DO NOT FILL THIS OUT, WE WILL CLOSE YOUR ISSUE! NEVER WRITE "LATEST", ALWAYS PUT THE ACTUAL VALUE INSTEAD.
-Find the commit hash (unique identifier) by running "git log" on your own clone of AzerothCore or by looking at here https://github.com/WarheadCore/Warhead/commits/master -->
-
+<!-- Copy the first line of the `worldserver`, `authserver` startup.
+For example: WarheadCore rev. 08a7a4639d18 2020-08-22 04:15:15 +0700 (logs branch) (Win64, RelWithDebInfo, Dynamic) (worldserver-daemon) -->
 
 #### OPERATING SYSTEM:
 <!-- Windows 7/10, Debian 8/9/10, Ubuntu 16/18 etc... -->
