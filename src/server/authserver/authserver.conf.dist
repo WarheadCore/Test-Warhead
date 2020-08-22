@@ -413,8 +413,8 @@ Updates.CleanDeadRefMaxCount = 3
 #                       false: Messages are not immediately flushed to the log file (default).
 #
 
-LogChannel.Console = 1,local,%t,lightRed lightRed red brown magenta cyan lightMagenta green
-LogChannel.Auth = 2,local,%Y-%m-%d %H:%M:%S %t,Auth.log,false,never,false
+LogChannel.Console = 1,local,"%t","lightRed lightRed red brown magenta cyan lightMagenta green"
+LogChannel.Auth = 2,local,"%Y-%m-%d %H:%M:%S %t",Auth.log,false,never,false
 
 #
 #  Logger config values: Given a logger "name"
