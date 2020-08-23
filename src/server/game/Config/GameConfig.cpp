@@ -108,7 +108,7 @@ void GameConfig::Load()
 
     uint32 oldMSTime = getMSTime();
 
-    QueryResult result = WorldDatabase.PQuery("SELECT `OptionName`, `Type`, `DefaultValue`, `CustomValue` FROM game_config");
+    QueryResult result = WorldDatabase.Query("SELECT `OptionName`, `Type`, `DefaultValue`, `CustomValue` FROM game_config");
     if (!result)
     {
         LOG_WARN("server.loading", ">> Loaded 0 game config options. DB table `game_config` is empty.");
