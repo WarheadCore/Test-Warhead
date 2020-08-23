@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GameConfig.h"
 #include "DatabaseEnv.h"
+#include "GameConfig.h"
 
 GameConfig* GameConfig::instance()
 {
@@ -108,7 +108,8 @@ void GameConfig::Load()
 
     uint32 oldMSTime = getMSTime();
 
-    QueryResult result = WorldDatabase.Query("SELECT `OptionName`, `Type`, `DefaultValue`, `CustomValue` FROM game_config");
+    WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_GAME_CONFIG);
+    PreparedQueryResult result = WorldDatabase.Query(stmt);
     if (!result)
     {
         LOG_WARN("server.loading", ">> Loaded 0 game config options. DB table `game_config` is empty.");
