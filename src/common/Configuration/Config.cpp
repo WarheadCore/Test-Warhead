@@ -218,7 +218,7 @@ std::string const ConfigMgr::GetConfigPath()
 #if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     return "configs/";
 #else
-    return std::string(_CONF_DIR) + "/";
+    return std::string(CONF_DIR) + "/";
 #endif
 }
 
