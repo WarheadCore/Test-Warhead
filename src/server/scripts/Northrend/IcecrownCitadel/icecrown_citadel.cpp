@@ -32,6 +32,7 @@
 #include "SpellScript.h"
 #include "TemporarySummon.h"
 #include "VehicleDefines.h"
+#include "Log.h"
 
 enum ICCTexts
 {
@@ -229,67 +230,67 @@ class npc_highlord_tirion_fordring_lh : public CreatureScript
             // of The Damned SAI
             void SetData(uint32 type, uint32 data) override
             {
-                if (type == DATA_DAMNED_KILLS && data == 1)
+                if (type != DATA_DAMNED_KILLS || data != 1 || ++_damnedKills != 2)
+                    return;
+
+                if (Creature* theLichKing = me->FindNearestCreature(NPC_THE_LICH_KING_LH, 150.0f))
                 {
-                    if (++_damnedKills == 2)
+                    if (Creature* bolvarFordragon = me->FindNearestCreature(NPC_HIGHLORD_BOLVAR_FORDRAGON_LH, 150.0f))
                     {
-                        if (Creature* theLichKing = me->FindNearestCreature(NPC_THE_LICH_KING_LH, 150.0f))
+                        if (Creature* factionNPC = me->FindNearestCreature(_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE ? NPC_SE_HIGH_OVERLORD_SAURFANG : NPC_SE_MURADIN_BRONZEBEARD, 50.0f))
                         {
-                            if (Creature* bolvarFordragon = me->FindNearestCreature(NPC_HIGHLORD_BOLVAR_FORDRAGON_LH, 150.0f))
-                            {
-                                if (Creature* factionNPC = me->FindNearestCreature(_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE ? NPC_SE_HIGH_OVERLORD_SAURFANG : NPC_SE_MURADIN_BRONZEBEARD, 50.0f))
-                                {
-                                    me->setActive(true);
-                                    me->SetFarVisible(true);
-                                    _theLichKing = theLichKing->GetGUID();
-                                    theLichKing->setActive(true);
-                                    theLichKing->SetFarVisible(true);
-                                    _bolvarFordragon = bolvarFordragon->GetGUID();
-                                    bolvarFordragon->setActive(true);
-                                    bolvarFordragon->SetFarVisible(true);
-                                    _factionNPC = factionNPC->GetGUID();
-                                    factionNPC->setActive(true);
-                                    factionNPC->SetFarVisible(true);
-                                }
-                            }
-                        }
+                            me->setActive(true);
+                            me->SetFarVisible(true);
 
-                        if (!_bolvarFordragon || !_theLichKing || !_factionNPC)
-                            return;
+                            _theLichKing = theLichKing->GetGUID();
+                            theLichKing->setActive(true);
+                            theLichKing->SetFarVisible(true);
 
-                        Talk(SAY_TIRION_INTRO_1);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_2, 4s);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_3, 14s);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_4, 18s);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_5, 31s);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_1, 35s);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_6, 51s);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_2, 58s);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_3, 74s);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_4, 86s);
-                        _events.ScheduleEvent(EVENT_BOLVAR_INTRO_1, 100s);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_5, 108s);
+                            _bolvarFordragon = bolvarFordragon->GetGUID();
+                            bolvarFordragon->setActive(true);
+                            bolvarFordragon->SetFarVisible(true);
 
-                        if (_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE)
-                        {
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_1, 120s);
-                            _events.ScheduleEvent(EVENT_TIRION_INTRO_H_7, 129s);
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_2, 139s);
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_3, 150s);
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_4, 162s);
-                            _events.ScheduleEvent(EVENT_SAURFANG_RUN, 170s);
-                        }
-                        else
-                        {
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_1, 120s);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_2, 124s);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_3, 127s);
-                            _events.ScheduleEvent(EVENT_TIRION_INTRO_A_7, 136s);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_4, 144s);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_5, 151s);
-                            _events.ScheduleEvent(EVENT_MURADIN_RUN, 157s);
+                            _factionNPC = factionNPC->GetGUID();
+                            factionNPC->setActive(true);
+                            factionNPC->SetFarVisible(true);
                         }
                     }
+                }
+
+                if (!_bolvarFordragon || !_theLichKing || !_factionNPC)
+                    return;
+
+                Talk(SAY_TIRION_INTRO_1);
+                _events.ScheduleEvent(EVENT_TIRION_INTRO_2, 4s);
+                _events.ScheduleEvent(EVENT_TIRION_INTRO_3, 14s);
+                _events.ScheduleEvent(EVENT_TIRION_INTRO_4, 18s);
+                _events.ScheduleEvent(EVENT_TIRION_INTRO_5, 31s);
+                _events.ScheduleEvent(EVENT_LK_INTRO_1, 35s);
+                _events.ScheduleEvent(EVENT_TIRION_INTRO_6, 51s);
+                _events.ScheduleEvent(EVENT_LK_INTRO_2, 58s);
+                _events.ScheduleEvent(EVENT_LK_INTRO_3, 74s);
+                _events.ScheduleEvent(EVENT_LK_INTRO_4, 86s);
+                _events.ScheduleEvent(EVENT_BOLVAR_INTRO_1, 105s);
+                _events.ScheduleEvent(EVENT_LK_INTRO_5, 113s);
+
+                if (_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE)
+                {
+                    _events.ScheduleEvent(EVENT_SAURFANG_INTRO_1, 125s);
+                    _events.ScheduleEvent(EVENT_TIRION_INTRO_H_7, 134s);
+                    _events.ScheduleEvent(EVENT_SAURFANG_INTRO_2, 144s);
+                    _events.ScheduleEvent(EVENT_SAURFANG_INTRO_3, 155s);
+                    _events.ScheduleEvent(EVENT_SAURFANG_INTRO_4, 167s);
+                    _events.ScheduleEvent(EVENT_SAURFANG_RUN, 175s);
+                }
+                else
+                {
+                    _events.ScheduleEvent(EVENT_MURADIN_INTRO_1, 125s);
+                    _events.ScheduleEvent(EVENT_MURADIN_INTRO_2, 129s);
+                    _events.ScheduleEvent(EVENT_MURADIN_INTRO_3, 132s);
+                    _events.ScheduleEvent(EVENT_TIRION_INTRO_A_7, 141s);
+                    _events.ScheduleEvent(EVENT_MURADIN_INTRO_4, 149s);
+                    _events.ScheduleEvent(EVENT_MURADIN_INTRO_5, 156s);
+                    _events.ScheduleEvent(EVENT_MURADIN_RUN, 162s);
                 }
             }
 
@@ -543,10 +544,20 @@ class npc_frost_freeze_trap : public CreatureScript
 
             void UpdateAI(uint32 diff) override
             {
+                if (me->IsInCombat())
+                    me->CombatStop(false);
+
                 _events.Update(diff);
 
                 if (_events.ExecuteEvent() == EVENT_ACTIVATE_TRAP)
                 {
+                    InstanceScript* instance = me->GetInstanceScript();
+                    if (!instance)
+                        return;
+
+                    if (instance->GetData(DATA_COLDFLAME_JETS) != IN_PROGRESS)
+                        return;
+
                     DoCast(me, SPELL_COLDFLAME_JETS);
                     _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, 22s);
                 }
@@ -576,6 +587,7 @@ class npc_alchemist_adrianna : public CreatureScript
                 if (!me->FindCurrentSpellBySpellId(sSpellMgr->GetSpellIdForDifficulty(SPELL_HARVEST_BLIGHT_SPECIMEN, me)))
                     if (player->HasAura(SPELL_ORANGE_BLIGHT_RESIDUE) && player->HasAura(SPELL_GREEN_BLIGHT_RESIDUE))
                         DoCastSelf(SPELL_HARVEST_BLIGHT_SPECIMEN, false);
+
                 return false;
             }
         };
@@ -920,11 +932,13 @@ struct npc_darkfallen_noble : public DarkFallenAI
     void ScheduleSpells() override
     {
         AttackSpellId = SPELL_SHADOW_BOLT;
+
         Scheduler.Schedule(500ms, [this](TaskContext /*context*/)
         {
             if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 0.0f, true, false, -SPELL_CHAINS_OF_SHADOW))
                 DoCast(target, SPELL_CHAINS_OF_SHADOW);
         })
+
         .Schedule(11s, [this](TaskContext summonVampiric)
         {
             // Vampiric should be summoned by 70647 but i have no idea what is miscB of summon effect
@@ -980,21 +994,26 @@ struct npc_darkfallen_archmage : public DarkFallenAI
     void ScheduleSpells() override
     {
         AttackSpellId = SPELL_FIREBALL;
+
         Scheduler.Schedule(1s, [this](TaskContext amplifyMagic)
         {
             if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0))
                 DoCast(target, SPELL_AMPLIFY_MAGIC);
+
             amplifyMagic.Repeat(15s, 24s);
         })
+
         .Schedule(10s, [this](TaskContext blastWave)
         {
             DoCastSelf(SPELL_BLAST_WAVE);
             blastWave.Repeat(25s, 30s);
         })
+
         .Schedule(17s, [this](TaskContext polymorph)
         {
             if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 0.0f, true, false, -SPELL_POLYMORPH))
                 DoCast(target, SPELL_POLYMORPH);
+
             polymorph.Repeat(25s, 35s);
         });
     }
@@ -1011,10 +1030,12 @@ struct npc_darkfallen_advisor : public DarkFallenAI
             DoCastVictim(SPELL_LICH_SLAP);
             lichSlap.Repeat(12s);
         })
+
         .Schedule(50s, [this](TaskContext immunity)
         {
             if (Unit* target = DoSelectLowestHpFriendly(40.0f))
                 DoCast(target, SPELL_SHROUD_OF_SPELL_WARDING);
+
             immunity.Repeat(20s, 25s);
         });
     }
@@ -1031,6 +1052,7 @@ struct npc_darkfallen_tactician : public DarkFallenAI
             DoCastVictim(SPELL_UNHOLY_STRIKE);
             unholyStrike.Repeat(8s, 11s);
         })
+
         .Schedule(10s, [this](TaskContext shadowStep)
         {
             if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 0.0f, true, false))
@@ -1510,24 +1532,33 @@ class at_icc_saurfang_portal : public AreaTriggerScript
             if (!instance || instance->GetBossState(DATA_DEATHBRINGER_SAURFANG) != DONE)
                 return true;
 
-            player->TeleportTo(631, 4126.35f, 2769.23f, 350.963f, 0.0f);
+            Position destPos = { 4126.35f, 2769.23f, 350.963f, 0.0f };
 
             if (instance->GetData(DATA_COLDFLAME_JETS) == NOT_STARTED)
             {
+                // save original player position
+                float x, y, z, o;
+                player->GetPosition(x, y, z, o);
+
                 // Process relocation now, to preload the grid and initialize traps
-                player->GetMap()->PlayerRelocation(player, 4126.35f, 2769.23f, 350.963f, 0.0f);
+                player->GetMap()->PlayerRelocation(player, destPos.GetPositionX(), destPos.GetPositionY(), destPos.GetPositionZ(), destPos.GetOrientation());
 
                 instance->SetData(DATA_COLDFLAME_JETS, IN_PROGRESS);
                 std::list<Creature*> traps;
                 GetCreatureListWithEntryInGrid(traps, player, NPC_FROST_FREEZE_TRAP, 120.0f);
                 traps.sort(Warhead::ObjectDistanceOrderPred(player));
                 bool instant = false;
-                for (std::list<Creature*>::iterator itr = traps.begin(); itr != traps.end(); ++itr)
+                for (auto const& itr : traps)
                 {
-                    (*itr)->AI()->DoAction(instant ? 1000 : 11000);
+                    itr->AI()->DoAction(instant ? 1000 : 11000);
                     instant = !instant;
                 }
+
+                // restore original position
+                player->GetMap()->PlayerRelocation(player, x, y, z, o);
             }
+
+            player->TeleportTo(631, destPos.GetPositionX(), destPos.GetPositionY(), destPos.GetPositionZ(), destPos.GetOrientation());
 
             return true;
         }
@@ -1561,6 +1592,135 @@ class at_icc_start_blood_quickening : public AreaTriggerScript
         }
 };
 
+// The start rework
+class npc_icc_nerubar_broodkeeper : public CreatureScript
+{
+public:
+    npc_icc_nerubar_broodkeeper() : CreatureScript("npc_icc_nerubar_broodkeeper") { }
+
+    struct npc_icc_nerubar_broodkeeperAI : public ScriptedAI
+    {
+        npc_icc_nerubar_broodkeeperAI(Creature* creature) : ScriptedAI(creature)
+        {
+            Initialize();
+        }
+
+        void Initialize()
+        {
+            SetGravity(true);
+            _didWebBeam = false;
+            me->m_SightDistance = 50.0f; // for MoveInLineOfSight distance
+        }
+
+        void SetGravity(bool enable = false)
+        {
+            //me->SetDisableGravity(enable);
+            //me->SetCanFly(enable);
+            me->SetHover(enable);
+            me->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_HOVER);
+        }
+
+        void Reset() override
+        {
+            events.Reset();
+            events.ScheduleEvent(1, 3s, 10s); // Crypt Scarabs
+            events.ScheduleEvent(2, 15s, 25s); // Dark Mending
+            events.ScheduleEvent(3, 8s, 15s); // Web Wrap
+            SetGravity();
+        }
+
+        void MoveInLineOfSight(Unit* who) override
+        {
+            if (!_didWebBeam && who->GetTypeId() == TYPEID_PLAYER && me->GetExactDist2d(who) < 70.0f)
+            {
+                _didWebBeam = true;
+                float nx = me->GetPositionX() + cos(me->GetOrientation()) * 2.0f;
+                float ny = me->GetPositionY() + sin(me->GetOrientation()) * 2.0f;
+                float nz = me->GetMap()->GetHeight(nx, ny, 50.0f);
+                me->SetHomePosition(nx, ny, nz, me->GetOrientation());
+                me->CastSpell(me, SPELL_WEB_BEAM, false);
+                me->GetMotionMaster()->MovePoint(1, nx, ny, nz, false);
+                return;
+            }
+
+            if (me->HasUnitMovementFlag(MOVEMENTFLAG_CAN_FLY))
+                return;
+
+            ScriptedAI::MoveInLineOfSight(who);
+        }
+
+        void JustEnteredCombat(Unit* /*who*/) override
+        {
+            me->CallForHelp(15.0f);
+        }
+
+        void JustReachedHome() override
+        {
+            if (!me->IsHovering())
+                return;
+
+            SetGravity();
+            me->NearTeleportTo(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());            
+        }
+
+        void MovementInform(uint32 type, uint32 id) override
+        {
+            if (type != POINT_MOTION_TYPE || id != 1 || !me->IsHovering())
+                return;
+
+            SetGravity();
+            me->NearTeleportTo(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
+        }
+
+        bool CanAIAttack(const Unit* /*target*/) const override
+        {
+            return !me->HasUnitMovementFlag(MOVEMENTFLAG_CAN_FLY);
+        }
+
+        void UpdateAI(uint32 diff) override
+        {
+            if (!UpdateVictim())
+                return;
+
+            events.Update(diff);
+
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            switch (events.ExecuteEvent())
+            {
+            case 0:
+                break;
+            case 1:
+                me->CastSpell(me->GetVictim(), 70965, false);
+                events.Repeat(20s, 30s);
+                break;
+            case 2:
+                me->CastSpell(me->GetVictim(), 71020, false);
+                events.Repeat(20s, 30s);
+                break;
+            case 3:
+                if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 40.0f, true))
+                    me->CastSpell(target, 70980, false);
+
+                events.Repeat(20s, 30s);
+                break;
+            }
+
+            DoMeleeAttackIfReady();
+        }
+
+        private:
+            EventMap events;
+            bool _didWebBeam;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const override
+    {
+        return GetIcecrownCitadelAI<npc_icc_nerubar_broodkeeperAI>(creature);
+    }
+};
+
 void AddSC_icecrown_citadel()
 {
     new npc_highlord_tirion_fordring_lh();
@@ -1590,4 +1750,6 @@ void AddSC_icecrown_citadel()
     new at_icc_saurfang_portal();
     new at_icc_shutdown_traps();
     new at_icc_start_blood_quickening();
+
+    new npc_icc_nerubar_broodkeeper();
 }

@@ -54,7 +54,13 @@ enum ICSharedSpells
 
     // ICC Buffs
     SPELL_HELLSCREAMS_WARSONG           = 73822,
-    SPELL_STRENGHT_OF_WRYNN             = 73828
+    SPELL_STRENGHT_OF_WRYNN             = 73828,
+
+    // Misc
+    SPELL_WEB_BEAM                      = 69887,
+    SPELL_WEB_BEAM2                     = 69986,
+    SPELL_GIANT_INSECT_SWARM            = 70475,
+    SPELL_LEAP_TO_A_RANDOM_LOCATION     = 70485
 };
 
 enum ICTeleporterSpells

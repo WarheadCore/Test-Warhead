@@ -151,7 +151,7 @@ class boss_lord_marrowgar : public CreatureScript
                 me->RemoveAurasDueToSpell(SPELL_BONE_STORM);
                 me->RemoveAurasDueToSpell(SPELL_BERSERK);
                 events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10s);
-                events.ScheduleEvent(EVENT_BONE_SPIKE_GRAVEYARD, 15s, EVENT_GROUP_SPECIAL);
+                events.ScheduleEvent(EVENT_BONE_SPIKE_GRAVEYARD, 10s, 15s, EVENT_GROUP_SPECIAL);
                 events.ScheduleEvent(EVENT_COLDFLAME, 5s, EVENT_GROUP_SPECIAL);
                 events.ScheduleEvent(EVENT_WARN_BONE_STORM, 45s, 50s);
                 events.ScheduleEvent(EVENT_ENRAGE, 10min);
@@ -219,6 +219,7 @@ class boss_lord_marrowgar : public CreatureScript
                         case EVENT_WARN_BONE_STORM:
                             _boneSlice = false;
                             Talk(EMOTE_BONE_STORM);
+                            Talk(SAY_BONE_STORM);                            
                             me->FinishSpell(CURRENT_MELEE_SPELL, false);
                             DoCast(me, SPELL_BONE_STORM);
                             events.DelayEvents(3s, EVENT_GROUP_SPECIAL);
@@ -229,7 +230,7 @@ class boss_lord_marrowgar : public CreatureScript
                             if (Aura* pStorm = me->GetAura(SPELL_BONE_STORM))
                                 pStorm->SetDuration(int32(_boneStormDuration.count()));
                             me->SetSpeedRate(MOVE_RUN, _baseSpeed*3.0f);
-                            Talk(SAY_BONE_STORM);
+                            
                             events.ScheduleEvent(EVENT_BONE_STORM_END, _boneStormDuration + 1ms);
                             [[fallthrough]];
                         case EVENT_BONE_STORM_MOVE:
@@ -252,13 +253,14 @@ class boss_lord_marrowgar : public CreatureScript
                                 }
                                 return false;
                             }))
-                                me->GetMotionMaster()->Remove(movement);
+
+                            me->GetMotionMaster()->Remove(movement);
                             me->GetMotionMaster()->MoveChase(me->GetVictim());
                             me->SetSpeedRate(MOVE_RUN, _baseSpeed);
                             events.CancelEvent(EVENT_BONE_STORM_MOVE);
                             events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10s);
                             if (!IsHeroic())
-                                events.RescheduleEvent(EVENT_BONE_SPIKE_GRAVEYARD, 15s, EVENT_GROUP_SPECIAL);
+                                events.RescheduleEvent(EVENT_BONE_SPIKE_GRAVEYARD, 15s, 20s, EVENT_GROUP_SPECIAL);
                             break;
                         case EVENT_ENABLE_BONE_SLICE:
                             _boneSlice = true;
@@ -700,7 +702,10 @@ class spell_marrowgar_bone_storm : public SpellScriptLoader
 
             void RecalculateDamage()
             {
-                SetHitDamage(int32(GetHitDamage() / std::max(std::sqrt(GetHitUnit()->GetExactDist2d(GetCaster())), 1.0f)));
+                float dist = GetHitUnit()->GetExactDist2d(GetCaster());
+                dist >= 9.0f ? dist -= 9.0f : dist = 0.0f;
+
+                SetHitDamage(int32(GetHitDamage() / std::max(std::sqrt(dist), 1.0f)));
             }
 
             void Register() override
