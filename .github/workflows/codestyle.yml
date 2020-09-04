@@ -1,0 +1,14 @@
+name: core-build
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-codestyle:
+    strategy:
+      fail-fast: false      
+    runs-on: ubuntu-20.04
+    name: Check core codestyle
+    steps:     
+      - name: Check core codestyle
+        run: source ./apps/ci/ci-codestyle.sh
