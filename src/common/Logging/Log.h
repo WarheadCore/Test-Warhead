@@ -21,8 +21,8 @@
 #include "Common.h"
 #include "Optional.h"
 #include "StringFormat.h"
-#include "Poco/SplitterChannel.h"
 #include "Poco/FormattingChannel.h"
+#include "Poco/Logger.h"
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -74,6 +74,7 @@ enum LoggerOptions
 };
 
 using Poco::FormattingChannel;
+using Poco::Logger;
 
 class WH_COMMON_API Log
 {
@@ -117,7 +118,7 @@ private:
     void AddFormattingChannel(std::string const& channelName, FormattingChannel*);
     FormattingChannel* const* GetFormattingChannel(std::string const& channelName);
 
-    std::string const GetLoggerByType(std::string const& type) const;
+    Logger* GetLoggerByType(std::string const& type) const;
 
     void _Write(std::string const& filter, LogLevel const level, std::string const& message);
     void _writeCommand(std::string const message, std::string const accountid);
@@ -137,6 +138,7 @@ private:
     std::string const GetChannelsFromLogger(std::string const& loggerName);
 
     std::string m_logsDir;
+    LogLevel highestLogLevel;
 
     // Const loggers name
     std::string const LOGGER_ROOT = "root";

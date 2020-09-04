@@ -22,7 +22,8 @@
 #include "StringConvert.h"
 #include "Poco/PatternFormatter.h"
 #include "Poco/FileChannel.h"
-#include "Poco/Logger.h"
+#include "Poco/SplitterChannel.h"
+//#include "Poco/Logger.h"
 #include "Poco/AutoPtr.h"
 #include <sstream>
 
@@ -67,6 +68,8 @@ void Log::Initialize()
 
 void Log::LoadFromConfig()
 {
+    highestLogLevel = LogLevel::LOG_LEVEL_FATAL;
+
     Clear();
     InitLogsDir();
     ReadChannelsFromConfig();
@@ -120,13 +123,13 @@ std::string Log::GetPositionOptions(std::string const& options, uint8 position, 
     return std::string(tokens[position]);
 }
 
-std::string const Log::GetLoggerByType(std::string const& type) const
+Logger* Log::GetLoggerByType(std::string const& type) const
 {
     if (Logger::has(type))
-        return type;
+        return &Logger::get(type);
 
     if (type == LOGGER_ROOT)
-        return LOGGER_ROOT;
+        return nullptr;
 
     std::string parentLogger = LOGGER_ROOT;
     size_t found = type.find_last_of('.');
@@ -139,10 +142,16 @@ std::string const Log::GetLoggerByType(std::string const& type) const
 
 bool Log::ShouldLog(std::string const& type, LogLevel level) const
 {
-    if (GetLoggerByType(type) == LOGGER_ROOT)
+    // Don't even look for a logger if the LogLevel is lower than lowest log levels across all loggers
+    if (level > highestLogLevel)
         return false;
-    
-    return Logger::get(type).getLevel() >= static_cast<uint8>(level);
+
+    Logger const* logger = GetLoggerByType(type);
+    if (!logger)
+        return false;
+
+    LogLevel logLevel = LogLevel(logger->getLevel());
+    return logLevel != LogLevel::LOG_LEVEL_DISABLED && logLevel >= level;
 }
 
 FormattingChannel* const* Log::GetFormattingChannel(std::string const& channelName)
@@ -209,6 +218,9 @@ void Log::CreateLoggerFromConfig(std::string const& configLoggerName)
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Wrong Log Level for logger %s", loggerName.c_str());
         return;
     }
+
+    if (level > highestLogLevel)
+        highestLogLevel = level;
 
     AutoPtr<SplitterChannel> splitterChannel(new SplitterChannel);
     auto const& channelsName = GetPositionOptions(options, LOGGER_OPTIONS_CHANNELS_NAME);
@@ -386,38 +398,37 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
 
 void Log::_Write(std::string const& filter, LogLevel const level, std::string const& message)
 {
-    if (!Logger::has(filter))
+    Logger* logger = GetLoggerByType(filter);
+    if (!logger)
         return;
-
-    Logger& logger = Logger::get(filter);
 
     try
     {
         switch (level)
         {
         case LogLevel::LOG_LEVEL_FATAL:
-            logger.fatal(message);
+            logger->fatal(message);
             break;
         case LogLevel::LOG_LEVEL_CRITICAL:
-            logger.critical(message);
+            logger->critical(message);
             break;
         case LogLevel::LOG_LEVEL_ERROR:
-            logger.error(message);
+            logger->error(message);
             break;
         case LogLevel::LOG_LEVEL_WARNING:
-            logger.warning(message);
+            logger->warning(message);
             break;
         case LogLevel::LOG_LEVEL_NOTICE:
-            logger.notice(message);
+            logger->notice(message);
             break;
         case LogLevel::LOG_LEVEL_INFO:
-            logger.information(message);
+            logger->information(message);
             break;
         case LogLevel::LOG_LEVEL_DEBUG:
-            logger.debug(message);
+            logger->debug(message);
             break;
         case LogLevel::LOG_LEVEL_TRACE:
-            logger.trace(message);
+            logger->trace(message);
             break;
         default:
             break;
