@@ -30,10 +30,10 @@ jobs:
         env:
           CONTINUOUS_INTEGRATION: true
       - name: Configure CMake static
-        run: source ./apps/ci/ci-config-cmake-static.sh
+        run: source ./apps/ci/ci-cmake-static.sh
         if: matrix.modules == 'static'
       - name: Configure CMake dynamic
-        run: source ./apps/ci/ci-config-cmake-dynamic.sh
+        run: source ./apps/ci/ci-cmake-dynamic.sh
         if: matrix.modules == 'dynamic'
       - name: Build core
         run: source ./apps/ci/ci-compile.sh
@@ -64,6 +64,6 @@ jobs:
         env:
           CONTINUOUS_INTEGRATION: true
       - name: Configure CMake dynamic ${{ matrix.modules }}
-        run: source ./apps/ci/ci-config-cmake-dynamic.sh
+        run: source ./apps/ci/ci-cmake-nopch.sh
       - name: Build core
         run: source ./apps/ci/ci-compile.sh
