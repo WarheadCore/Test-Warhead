@@ -19,7 +19,6 @@
 #define _LOG_H
 
 #include "Common.h"
-#include "Optional.h"
 #include "StringFormat.h"
 #include "Poco/FormattingChannel.h"
 #include "Poco/Logger.h"
@@ -118,10 +117,10 @@ private:
     void AddFormattingChannel(std::string const& channelName, FormattingChannel*);
     FormattingChannel* const* GetFormattingChannel(std::string const& channelName);
 
-    Logger* GetLoggerByType(std::string const& type) const;
+    Logger* GetLoggerByType(std::string_view type) const;
 
-    void _Write(std::string const& filter, LogLevel const level, std::string const& message);
-    void _writeCommand(std::string const message, [[maybe_unused]] std::string const accountid);
+    void _Write(std::string_view filter, LogLevel const level, std::string const&& message);
+    void _writeCommand(std::string&& message, [[maybe_unused]] std::string const&& accountid);
 
     void outMessage(std::string const& filter, LogLevel const level, std::string&& message);
     void outCommand(std::string&& accountID, std::string&& message);
@@ -134,20 +133,20 @@ private:
     void InitLogsDir();
     void Clear();
 
-    std::string GetPositionOptions(std::string const& options, uint8 position, std::string const& _default = "");
+    std::string_view GetPositionOptions(std::string_view options, uint8 position, std::string_view _default = "");
     std::string const GetChannelsFromLogger(std::string const& loggerName);
 
     std::string m_logsDir;
     LogLevel highestLogLevel;
 
     // Const loggers name
-    std::string const LOGGER_ROOT = "root";
-    std::string const LOGGER_GM = "commands.gm";
-    std::string const LOGGER_PLAYER_DUMP = "entities.player.dump";
+    std::string LOGGER_ROOT;
+    std::string LOGGER_GM;
+    std::string LOGGER_PLAYER_DUMP;
 
     // Prefix's
-    std::string const PREFIX_LOGGER = "Logger.";
-    std::string const PREFIX_CHANNEL = "LogChannel.";
+    std::string PREFIX_LOGGER;
+    std::string PREFIX_CHANNEL;
 };
 
 #define sLog Log::instance()
@@ -158,7 +157,7 @@ private:
         { \
             sLog->outMessage(filterType__, level__, __VA_ARGS__); \
         } \
-        catch (std::exception& e) \
+        catch (const std::exception& e) \
         { \
             sLog->outMessage("server", LogLevel::LOG_LEVEL_ERROR, "Wrong format occurred (%s) at %s:%u.", \
                 e.what(), __FILE__, __LINE__); \
@@ -182,13 +181,13 @@ void check_args(std::string const&, ...);
         } while (0)
 #else
 #define LOG_MSG_BODY(filterType__, level__, ...)                        \
-        __pragma(warning(push))                                         \
-        __pragma(warning(disable:4127))                                 \
+        /*__pragma(warning(push)) */                                      \
+        /*__pragma(warning(disable:4127))*/                                \
         do {                                                            \
             if (sLog->ShouldLog(filterType__, level__))                 \
                 LOG_EXCEPTION_FREE(filterType__, level__, __VA_ARGS__); \
         } while (0)                                                     \
-        __pragma(warning(pop))
+        /*__pragma(warning(pop))*/
 #endif
 
 // Fatal - 1
