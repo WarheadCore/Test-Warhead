@@ -23,7 +23,6 @@
 #include "Poco/PatternFormatter.h"
 #include "Poco/FileChannel.h"
 #include "Poco/SplitterChannel.h"
-//#include "Poco/Logger.h"
 #include "Poco/AutoPtr.h"
 #include <sstream>
 

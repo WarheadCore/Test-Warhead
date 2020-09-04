@@ -73,7 +73,7 @@ void _check_args(std::string const&, ...);
 // This will catch format errors on build time
 #define SYS_LOG_MSG_BODY(level__, ...)                    \
         do                                                              \
-        {                                                               \            
+        {                                                               \
             if (false)                                                  \
                 _check_args(__VA_ARGS__);                               \
                                                                         \
