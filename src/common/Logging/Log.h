@@ -19,13 +19,15 @@
 #define _LOG_H
 
 #include "Common.h"
+#include "Optional.h"
 #include "StringFormat.h"
+#include "Poco/SplitterChannel.h"
 #include "Poco/FormattingChannel.h"
 #include <memory>
 #include <unordered_map>
 #include <vector>
 
-enum LogLevel
+enum class LogLevel : uint8
 {
     LOG_LEVEL_DISABLED,
     LOG_LEVEL_FATAL,
@@ -50,20 +52,23 @@ enum ChannelOptions
     CHANNEL_OPTIONS_OPTION_2,
     CHANNEL_OPTIONS_OPTION_3,
     CHANNEL_OPTIONS_OPTION_4,
-    CHANNEL_OPTIONS_OPTION_5
+    CHANNEL_OPTIONS_OPTION_5,
+    CHANNEL_OPTIONS_OPTION_6,
+
+    CHANNEL_OPTIONS_MAX
 };
 
-enum ChannelOptionsType
+enum class FormattingChannelType : uint8
 {
-    CHANNEL_OPTIONS_TYPE_CONSOLE = 1,
-    CHANNEL_OPTIONS_TYPE_FILE
+    FORMATTING_CHANNEL_TYPE_CONSOLE = 1,
+    FORMATTING_CHANNEL_TYPE_FILE
 };
 
 // For create Logger
 enum LoggerOptions
 {
     LOGGER_OPTIONS_LOG_LEVEL,
-    LOGGER_OPTIONS_CHANNEL_NAME,
+    LOGGER_OPTIONS_CHANNELS_NAME,
 
     LOGGER_OPTIONS_UNKNOWN
 };
@@ -85,7 +90,6 @@ public:
 
     void Initialize();
     void LoadFromConfig();
-    void InitSystemLogger();
 
     bool ShouldLog(std::string const& type, LogLevel level) const;
     std::string const& GetLogsDir() const { return m_logsDir; }
@@ -101,71 +105,47 @@ public:
     template<typename Format, typename... Args>
     void outCommand(uint32 account, Format&& fmt, Args&& ... args)
     {
-        if (!ShouldLog(LOGGER_GM, LOG_LEVEL_INFO))
+        if (!ShouldLog(LOGGER_GM, LogLevel::LOG_LEVEL_INFO))
             return;
 
         outCommand(std::to_string(account), Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
-    template<typename Format, typename... Args>
-    void outSys(LogLevel const level, Format&& fmt, Args&& ... args)
-    {
-        outSys(level, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
 private:
-    typedef std::unordered_map<std::string, FormattingChannel*> ChannelMapFiles;
-    typedef std::unordered_map<std::string, FormattingChannel*> ChannelMapConsole;
+    std::unordered_map<std::string, FormattingChannel*> _channelStore;
 
-    void AddFileChannel(std::string ChannelName, FormattingChannel* channel);
-    void AddConsoleChannel(std::string ChannelName, FormattingChannel* channel);
+    void AddFormattingChannel(std::string const& channelName, FormattingChannel*);
+    FormattingChannel* const* GetFormattingChannel(std::string const& channelName);
 
-    FormattingChannel* GetFileChannel(std::string const& ChannelName);
-    FormattingChannel* GetConsoleChannel();
-
-    void ClearnAllChannels();
     std::string const GetLoggerByType(std::string const& type) const;
 
     void _Write(std::string const& filter, LogLevel const level, std::string const& message);
     void _writeCommand(std::string const message, std::string const accountid);
 
     void outMessage(std::string const& filter, LogLevel const level, std::string&& message);
-    void outCommand(std::string&& AccountID, std::string&& message);
-    void outSys(LogLevel level, std::string&& message);
-    std::string GetDynamicFileName(std::string ChannelName, std::string Arg);
+    void outCommand(std::string&& accountID, std::string&& message);
 
-    void CreateLogger(std::string Name, LogLevel const level, std::string FileChannelName);
-    void CreateLoggerFromConfig(std::string const& ConfigLoggerName);
-    void CreateChannelsFromConfig(std::string const& LogChannelName);
+    void CreateLoggerFromConfig(std::string const& configLoggerName);
+    void CreateChannelsFromConfig(std::string const& logChannelName);
     void ReadLoggersFromConfig();
     void ReadChannelsFromConfig();
 
     void InitLogsDir();
     void Clear();
 
-    std::string GetPositionOptions(std::string Options, uint8 Position, std::string const& Default = "");
-    std::string const GetChannelFromLogger(std::string LoggerName);
+    std::string GetPositionOptions(std::string const& options, uint8 position, std::string const& _default = "");
+    std::string const GetChannelsFromLogger(std::string const& loggerName);
 
-    ChannelMapFiles _ChannelMapFiles;
-    ChannelMapConsole _ChannelMapConsole;
-
-    std::string m_logsDir;    
+    std::string m_logsDir;
 
     // Const loggers name
     std::string const LOGGER_ROOT = "root";
     std::string const LOGGER_GM = "commands.gm";
-    std::string const LOGGER_GM_DYNAMIC = "commands.gm.dynamic";
     std::string const LOGGER_PLAYER_DUMP = "entities.player.dump";
-
-    // Const logger used in system only
-    std::string const LOGGER_SYSTEM = "system";
 
     // Prefix's
     std::string const PREFIX_LOGGER = "Logger.";
     std::string const PREFIX_CHANNEL = "LogChannel.";
-
-    // Console channel
-    std::string _CONSOLE_CHANNEL = "";
 };
 
 #define sLog Log::instance()
@@ -178,7 +158,7 @@ private:
         } \
         catch (std::exception& e) \
         { \
-            sLog->outMessage("server", LOG_LEVEL_ERROR, "Wrong format occurred (%s) at %s:%u.", \
+            sLog->outMessage("server", LogLevel::LOG_LEVEL_ERROR, "Wrong format occurred (%s) at %s:%u.", \
                 e.what(), __FILE__, __LINE__); \
         } \
     }
@@ -211,48 +191,40 @@ void check_args(std::string const&, ...);
 
 // Fatal - 1
 #define LOG_FATAL(filterType__, ...) \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_FATAL, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_FATAL, __VA_ARGS__)
 
 // Critical - 2
 #define LOG_CRIT(filterType__, ...) \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_CRITICAL, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_CRITICAL, __VA_ARGS__)
 
 // Error - 3
 #define LOG_ERROR(filterType__, ...) \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_ERROR, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_ERROR, __VA_ARGS__)
 
 // Warning - 4
 #define LOG_WARN(filterType__, ...)  \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_WARNING, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_WARNING, __VA_ARGS__)
 
 // Notice - 5
 #define LOG_NOTICE(filterType__, ...)  \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_NOTICE, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_NOTICE, __VA_ARGS__)
 
 // Info - 6
 #define LOG_INFO(filterType__, ...)  \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_INFO, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_INFO, __VA_ARGS__)
 
 // Debug - 7
 #define LOG_DEBUG(filterType__, ...) \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_DEBUG, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_DEBUG, __VA_ARGS__)
 
 // Trace - 8
 #define LOG_TRACE(filterType__, ...) \
-    LOG_MSG_BODY(filterType__, LOG_LEVEL_TRACE, __VA_ARGS__)
+    LOG_MSG_BODY(filterType__, LogLevel::LOG_LEVEL_TRACE, __VA_ARGS__)
 
 #define LOG_CHAR_DUMP(message__, accountId__, guid__, name__) \
     sLog->outCharDump(message__, accountId__, guid__, name__)
 
 #define LOG_GM(accountId__, ...) \
     sLog->outCommand(accountId__, __VA_ARGS__)
-
-// System Error level 3
-#define SYS_LOG_ERROR(...) \
-    sLog->outSys(LOG_LEVEL_ERROR, __VA_ARGS__)
-
-// System Info level 6
-#define SYS_LOG_INFO(...) \
-    sLog->outSys(LOG_LEVEL_INFO, __VA_ARGS__)
 
 #endif
