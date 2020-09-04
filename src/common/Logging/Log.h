@@ -121,7 +121,7 @@ private:
     Logger* GetLoggerByType(std::string const& type) const;
 
     void _Write(std::string const& filter, LogLevel const level, std::string const& message);
-    void _writeCommand(std::string const message, std::string const accountid);
+    void _writeCommand(std::string const message, [[maybe_unused]] std::string const accountid);
 
     void outMessage(std::string const& filter, LogLevel const level, std::string&& message);
     void outCommand(std::string&& accountID, std::string&& message);

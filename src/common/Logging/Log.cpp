@@ -439,7 +439,7 @@ void Log::_Write(std::string const& filter, LogLevel const level, std::string co
     }
 }
 
-void Log::_writeCommand(std::string const message, std::string const accountid)
+void Log::_writeCommand(std::string const message, [[maybe_unused]] std::string const accountid)
 {
     if (!Logger::has(LOGGER_GM))
         return;
