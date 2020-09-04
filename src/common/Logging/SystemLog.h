@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SYSTEM_LOG_H
-#define _SYSTEM_LOG_H
+#ifndef _SYSTEM_LOG_H_
+#define _SYSTEM_LOG_H_
 
 #include "Common.h"
 #include "StringFormat.h"
@@ -34,8 +34,6 @@ private:
 public:
     static SystemLog* instance();
 
-    void Initialize();
-    void LoadFromConfig();
     void InitSystemLogger();
 
     template<typename Format, typename... Args>
@@ -46,9 +44,6 @@ public:
 
 private:
     void outSys(uint8 logLevel, std::string&& message);
-    void InitLogsDir();
-
-    std::string m_logsDir;
 };
 
 #define sSysLog SystemLog::instance()
@@ -72,21 +67,21 @@ void _check_args(std::string const&, ...);
 
 // This will catch format errors on build time
 #define SYS_LOG_MSG_BODY(level__, ...)                    \
-        do                                                              \
-        {                                                               \
-            if (false)                                                  \
-                _check_args(__VA_ARGS__);                               \
-                                                                        \
+        do                                                \
+        {                                                 \
+            if (false)                                    \
+                _check_args(__VA_ARGS__);                 \
+                                                          \
             SYS_LOG_EXCEPTION_FREE(level__, __VA_ARGS__); \
         } while (0)
 #else
 #define SYS_LOG_MSG_BODY(level__, ...)                    \
-        __pragma(warning(push))                                         \
-        __pragma(warning(disable:4127))                                 \
-        do                                                              \
-        {                                                               \
+        __pragma(warning(push))                           \
+        __pragma(warning(disable:4127))                   \
+        do                                                \
+        {                                                 \
             SYS_LOG_EXCEPTION_FREE(level__, __VA_ARGS__); \
-        } while (0)                                                     \
+        } while (0)                                       \
         __pragma(warning(pop))
 #endif
 

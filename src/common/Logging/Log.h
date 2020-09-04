@@ -15,16 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LOG_H
-#define _LOG_H
+#ifndef _LOG_H_
+#define _LOG_H_
 
 #include "Common.h"
 #include "StringFormat.h"
-#include "Poco/FormattingChannel.h"
-#include "Poco/Logger.h"
-#include <memory>
-#include <unordered_map>
-#include <vector>
+#include "StringConvert.h"
 
 enum class LogLevel : uint8
 {
@@ -72,9 +68,6 @@ enum LoggerOptions
     LOGGER_OPTIONS_UNKNOWN
 };
 
-using Poco::FormattingChannel;
-using Poco::Logger;
-
 class WH_COMMON_API Log
 {
 private:
@@ -91,13 +84,12 @@ public:
     void Initialize();
     void LoadFromConfig();
 
-    bool ShouldLog(std::string const& type, LogLevel level) const;
-    std::string const& GetLogsDir() const { return m_logsDir; }
+    bool ShouldLog(std::string_view type, LogLevel level) const;
 
     void outCharDump(std::string const& str, uint32 accountId, uint64 guid, std::string const& name);    
 
     template<typename Format, typename... Args>
-    inline void outMessage(std::string const& filter, LogLevel const level, Format&& fmt, Args&& ... args)
+    inline void outMessage(std::string_view filter, LogLevel const level, Format&& fmt, Args&& ... args)
     {
         outMessage(filter, level, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
@@ -105,24 +97,17 @@ public:
     template<typename Format, typename... Args>
     void outCommand(uint32 account, Format&& fmt, Args&& ... args)
     {
-        if (!ShouldLog(LOGGER_GM, LogLevel::LOG_LEVEL_INFO))
+        if (!ShouldLog("commands.gm", LogLevel::LOG_LEVEL_INFO))
             return;
 
-        outCommand(std::to_string(account), Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        outCommand(Warhead::ToString(account), Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
 private:
-    std::unordered_map<std::string, FormattingChannel*> _channelStore;
-
-    void AddFormattingChannel(std::string const& channelName, FormattingChannel*);
-    FormattingChannel* const* GetFormattingChannel(std::string const& channelName);
-
-    Logger* GetLoggerByType(std::string_view type) const;
-
     void _Write(std::string_view filter, LogLevel const level, std::string const&& message);
     void _writeCommand(std::string&& message, [[maybe_unused]] std::string const&& accountid);
 
-    void outMessage(std::string const& filter, LogLevel const level, std::string&& message);
+    void outMessage(std::string_view filter, LogLevel const level, std::string&& message);
     void outCommand(std::string&& accountID, std::string&& message);
 
     void CreateLoggerFromConfig(std::string const& configLoggerName);
@@ -135,18 +120,6 @@ private:
 
     std::string_view GetPositionOptions(std::string_view options, uint8 position, std::string_view _default = "");
     std::string const GetChannelsFromLogger(std::string const& loggerName);
-
-    std::string m_logsDir;
-    LogLevel highestLogLevel;
-
-    // Const loggers name
-    std::string LOGGER_ROOT;
-    std::string LOGGER_GM;
-    std::string LOGGER_PLAYER_DUMP;
-
-    // Prefix's
-    std::string PREFIX_LOGGER;
-    std::string PREFIX_CHANNEL;
 };
 
 #define sLog Log::instance()
@@ -181,8 +154,8 @@ void check_args(std::string const&, ...);
         } while (0)
 #else
 #define LOG_MSG_BODY(filterType__, level__, ...)                        \
-        /*__pragma(warning(push)) */                                      \
-        /*__pragma(warning(disable:4127))*/                                \
+        /*__pragma(warning(push))*/                                     \
+        /*__pragma(warning(disable:4127))*/                             \
         do {                                                            \
             if (sLog->ShouldLog(filterType__, level__))                 \
                 LOG_EXCEPTION_FREE(filterType__, level__, __VA_ARGS__); \

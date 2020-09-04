@@ -15,22 +15,25 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SystemLog.h"
 #include "Log.h"
+#include "SystemLog.h"
 #include "Config.h"
 #include "Util.h"
 #include "StringConvert.h"
-#include "Poco/PatternFormatter.h"
-#include "Poco/FileChannel.h"
-#include "Poco/SplitterChannel.h"
-#include "Poco/AutoPtr.h"
+#include <Poco/Logger.h>
+#include <Poco/FormattingChannel.h>
+#include <Poco/PatternFormatter.h>
+#include <Poco/FileChannel.h>
+#include <Poco/SplitterChannel.h>
+#include <Poco/AutoPtr.h>
 #include <sstream>
+#include <unordered_map>
 
 #if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
-#include "Poco/WindowsConsoleChannel.h"
+#include <Poco/WindowsConsoleChannel.h>
 #define CONSOLE_CHANNEL WindowsColorConsoleChannel
 #else
-#include "Poco/ConsoleChannel.h"
+#include <Poco/ConsoleChannel.h>
 #define CONSOLE_CHANNEL ColorConsoleChannel
 #endif
 
@@ -38,21 +41,61 @@ using namespace Poco;
 
 namespace
 {
-    
+    // Const loggers name
+    std::string const& LOGGER_ROOT = "root";
+    std::string const& LOGGER_GM = "commands.gm";
+    std::string const& LOGGER_PLAYER_DUMP = "entities.player.dump";
+
+    // Prefix's
+    std::string const& PREFIX_LOGGER = "Logger.";
+    std::string const& PREFIX_CHANNEL = "LogChannel.";
+
+    std::string m_logsDir;
+    LogLevel highestLogLevel;
+
+    std::unordered_map<std::string, Poco::FormattingChannel*> _channelStore;
+
+    FormattingChannel* const* GetFormattingChannel(std::string const& channelName)
+    {
+        auto const& itr = _channelStore.find(channelName);
+        if (itr != _channelStore.end())
+            return &_channelStore.at(channelName);
+
+        return nullptr;
+    }
+
+    void AddFormattingChannel(std::string const& channelName, FormattingChannel* channel)
+    {
+        if (GetFormattingChannel(channelName))
+        {
+            SYS_LOG_ERROR("> Formatting channel (%s) is already exist!", channelName.c_str());
+            return;
+        }
+
+        _channelStore.insert(std::make_pair(channelName, channel));
+    }
+
+    Poco::Logger* GetLoggerByType(std::string_view type)
+    {
+        if (Logger::has(std::string(type)))
+            return &Logger::get(std::string(type));
+
+        if (type == LOGGER_ROOT)
+            return nullptr;
+
+        auto parentLogger = LOGGER_ROOT;
+        size_t found = type.find_last_of('.');
+
+        if (found != std::string::npos)
+            parentLogger = type.substr(0, found);
+
+        return GetLoggerByType(parentLogger);
+    }
 }
 
 Log::Log()
 {
     Clear();
-
-    // Loggers name
-    LOGGER_ROOT = "root";
-    LOGGER_GM = "commands.gm";
-    LOGGER_PLAYER_DUMP = "entities.player.dump";
-
-    // Prefix's
-    PREFIX_LOGGER = "Logger.";
-    PREFIX_CHANNEL = "LogChannel.";
 }
 
 Log::~Log()
@@ -136,26 +179,9 @@ std::string_view Log::GetPositionOptions(std::string_view options, uint8 positio
     return tokens.at(position);
 }
 
-Logger* Log::GetLoggerByType(std::string_view type) const
+bool Log::ShouldLog(std::string_view type, LogLevel level) const
 {
-    if (Logger::has(std::string(type)))
-        return &Logger::get(std::string(type));
-
-    if (type == LOGGER_ROOT)
-        return nullptr;
-
-    auto parentLogger = LOGGER_ROOT;
-    size_t found = type.find_last_of('.');
-
-    if (found != std::string::npos)
-        parentLogger = type.substr(0, found);
-
-    return GetLoggerByType(parentLogger);
-}
-
-bool Log::ShouldLog(std::string const& type, LogLevel level) const
-{
-    // Don't even look for a logger if the LogLevel is lower than lowest log levels across all loggers
+    // Don't even look for a logger if the LogLevel is higher than the highest log levels across all loggers
     if (level > highestLogLevel)
         return false;
 
@@ -165,26 +191,6 @@ bool Log::ShouldLog(std::string const& type, LogLevel level) const
 
     LogLevel logLevel = LogLevel(logger->getLevel());
     return logLevel != LogLevel::LOG_LEVEL_DISABLED && logLevel >= level;
-}
-
-FormattingChannel* const* Log::GetFormattingChannel(std::string const& channelName)
-{
-    auto const& itr = _channelStore.find(channelName);
-    if (itr != _channelStore.end())
-        return &_channelStore.at(channelName);
-
-    return nullptr;
-}
-
-void Log::AddFormattingChannel(std::string const& channelName, FormattingChannel* channel)
-{
-    if (GetFormattingChannel(channelName))
-    {
-        SYS_LOG_ERROR("> Formatting channel (%s) is already exist!", channelName.c_str());
-        return;
-    }
-
-    _channelStore.insert(std::make_pair(channelName, channel));
 }
 
 std::string const Log::GetChannelsFromLogger(std::string const& loggerName)
@@ -323,7 +329,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: %s\n", e.what());
     }
 
-    if (channelType.value() == (uint8)FormattingChannelType::FORMATTING_CHANNEL_TYPE_CONSOLE)
+    if (channelType.value() == static_cast<uint8>(FormattingChannelType::FORMATTING_CHANNEL_TYPE_CONSOLE))
     {
         // Configuration console channel
         AutoPtr<CONSOLE_CHANNEL> _channel(new CONSOLE_CHANNEL);
@@ -333,19 +339,19 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
 
         if (!colorOptions.empty())
         {
-            auto const& tokens = Warhead::Tokenize(colorOptions, ' ', true);
-            if (tokens.size() == 8)
+            auto const& tokensColor = Warhead::Tokenize(colorOptions, ' ', false);
+            if (tokensColor.size() == 8)
             {
                 try
                 {
-                    _channel->setProperty("fatalColor", std::string(tokens[0]));
-                    _channel->setProperty("criticalColor", std::string(tokens[1]));
-                    _channel->setProperty("errorColor", std::string(tokens[2]));
-                    _channel->setProperty("warningColor", std::string(tokens[3]));
-                    _channel->setProperty("noticeColor", std::string(tokens[4]));
-                    _channel->setProperty("informationColor", std::string(tokens[5]));
-                    _channel->setProperty("debugColor", std::string(tokens[6]));
-                    _channel->setProperty("traceColor", std::string(tokens[7]));
+                    _channel->setProperty("fatalColor", std::string(tokensColor[0]));
+                    _channel->setProperty("criticalColor", std::string(tokensColor[1]));
+                    _channel->setProperty("errorColor", std::string(tokensColor[2]));
+                    _channel->setProperty("warningColor", std::string(tokensColor[3]));
+                    _channel->setProperty("noticeColor", std::string(tokensColor[4]));
+                    _channel->setProperty("informationColor", std::string(tokensColor[5]));
+                    _channel->setProperty("debugColor", std::string(tokensColor[6]));
+                    _channel->setProperty("traceColor", std::string(tokensColor[7]));
                 }
                 catch (const std::exception& e)
                 {
@@ -358,7 +364,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
         else
             _channel->setProperty("enableColors", "false");
 
-        AddFormattingChannel(channelName, new FormattingChannel(_pattern, _channel));
+        ::AddFormattingChannel(channelName, new FormattingChannel(_pattern, _channel));
     }
     else if (channelType.value() == (uint8)FormattingChannelType::FORMATTING_CHANNEL_TYPE_FILE)
     {
@@ -403,7 +409,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
             SYS_LOG_ERROR("Log::CreateLoggerFromConfig: %s", e.what());
         }
 
-        AddFormattingChannel(channelName, new FormattingChannel(_pattern, _fileChannel));
+        ::AddFormattingChannel(channelName, new FormattingChannel(_pattern, _fileChannel));
     }
     else
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Invalid channel type (%u)", channelType.value());
@@ -420,28 +426,28 @@ void Log::_Write(std::string_view filter, LogLevel const level, std::string cons
         switch (level)
         {
         case LogLevel::LOG_LEVEL_FATAL:
-            logger->fatal(std::move(message));
+            logger->fatal(message);
             break;
         case LogLevel::LOG_LEVEL_CRITICAL:
-            logger->critical(std::move(message));
+            logger->critical(message);
             break;
         case LogLevel::LOG_LEVEL_ERROR:
-            logger->error(std::move(message));
+            logger->error(message);
             break;
         case LogLevel::LOG_LEVEL_WARNING:
-            logger->warning(std::move(message));
+            logger->warning(message);
             break;
         case LogLevel::LOG_LEVEL_NOTICE:
-            logger->notice(std::move(message));
+            logger->notice(message);
             break;
         case LogLevel::LOG_LEVEL_INFO:
-            logger->information(std::move(message));
+            logger->information(message);
             break;
         case LogLevel::LOG_LEVEL_DEBUG:
-            logger->debug(std::move(message));
+            logger->debug(message);
             break;
         case LogLevel::LOG_LEVEL_TRACE:
-            logger->trace(std::move(message));
+            logger->trace(message);
             break;
         default:
             break;
@@ -461,7 +467,7 @@ void Log::_writeCommand(std::string&& message, [[maybe_unused]] std::string cons
     _Write(LOGGER_GM, LogLevel::LOG_LEVEL_INFO, std::move(message));
 }
 
-void Log::outMessage(std::string const& filter, LogLevel const level, std::string&& message)
+void Log::outMessage(std::string_view filter, LogLevel const level, std::string&& message)
 {
     _Write(filter, level, std::move(message));
 }

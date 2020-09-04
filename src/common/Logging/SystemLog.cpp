@@ -16,19 +16,20 @@
  */
 
 #include "SystemLog.h"
+#include "Config.h"
 #include "StringConvert.h"
-#include "Poco/FormattingChannel.h"
-#include "Poco/PatternFormatter.h"
-#include "Poco/SplitterChannel.h"
-#include "Poco/FileChannel.h"
-#include "Poco/Logger.h"
-#include "Poco/AutoPtr.h"
+#include <Poco/FormattingChannel.h>
+#include <Poco/PatternFormatter.h>
+#include <Poco/SplitterChannel.h>
+#include <Poco/FileChannel.h>
+#include <Poco/Logger.h>
+#include <Poco/AutoPtr.h>
 
 #if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
-#include "Poco/WindowsConsoleChannel.h"
+#include <Poco/WindowsConsoleChannel.h>
 #define CONSOLE_CHANNEL WindowsColorConsoleChannel
 #else
-#include "Poco/ConsoleChannel.h"
+#include <Poco/ConsoleChannel.h>
 #define CONSOLE_CHANNEL ColorConsoleChannel
 #endif
 
@@ -48,17 +49,6 @@ SystemLog* SystemLog::instance()
 {
     static SystemLog instance;
     return &instance;
-}
-
-void SystemLog::Initialize()
-{
-    LoadFromConfig();
-}
-
-void SystemLog::LoadFromConfig()
-{
-    InitSystemLogger();
-    InitLogsDir();
 }
 
 void SystemLog::InitSystemLogger()
@@ -92,7 +82,7 @@ void SystemLog::InitSystemLogger()
 
     try
     {
-        _fileChannel->setProperty("path", m_logsDir + "System.log");
+        _fileChannel->setProperty("path", "System.log");
         _fileChannel->setProperty("times", "local");
         _fileChannel->setProperty("flush", "false");
     }
@@ -125,15 +115,6 @@ void SystemLog::InitSystemLogger()
 #undef LOG_CATCH
 }
 
-void SystemLog::InitLogsDir()
-{
-    m_logsDir = sConfigMgr->GetStringDefault("LogsDir", "");
-
-    if (!m_logsDir.empty())
-        if ((m_logsDir.at(m_logsDir.length() - 1) != '/') && (m_logsDir.at(m_logsDir.length() - 1) != '\\'))
-            m_logsDir.push_back('/');
-}
-
 void SystemLog::outSys(uint8 logLevel, std::string&& message)
 {
     Logger& logger = Logger::get(LOGGER_SYSTEM);
@@ -143,10 +124,10 @@ void SystemLog::outSys(uint8 logLevel, std::string&& message)
         switch (logLevel)
         {
         case 3:
-            logger.error("" + message);
+            logger.error(message);
             break;
         case 6:
-            logger.information("" + message);
+            logger.information(message);
             break;
         default:
             break;
