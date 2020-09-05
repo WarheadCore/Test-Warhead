@@ -13,3 +13,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check core codestyle
         run: source ./apps/ci/ci-codestyle.sh
+      - name: clang-format Check
+        uses: jidicula/clang-format-action@v1.1.1
+
