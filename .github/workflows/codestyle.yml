@@ -15,4 +15,7 @@ jobs:
         run: source ./apps/ci/ci-codestyle.sh
       - name: C++ Style Check
         uses: coleaeason/actions-uncrustify@v1
+      - name: ROS Style Guide C++ Format
+        uses: AutoModality/action-ros-clang-format@v1.0.1
+
 
