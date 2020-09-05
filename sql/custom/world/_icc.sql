@@ -9,14 +9,21 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 (36725, 0, 4, 0, 14, 0, 100, 30, 5000, 30, 8000, 13000, 0, 11, 36725, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Broodkeeper - Friendly At 5000 Health - Cast \'Spirit Particles (red)\''),
 (36725, 0, 5, 0, 4, 0, 100, 30, 0, 0, 0, 0, 0, 11, 69887, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Broodkeeper - On aggro - Cast Web Beam'),
 (36725, 0, 6, 0, 0, 0, 100, 543, 4000, 4000, 0, 0, 0, 91, 2, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Broodkeeper  - In combat no repeat - Remove Flag Hover');
-*/
+ */
+UPDATE
+    `creature_template`
+SET
+    `AIName` = '',
+    `ScriptName` = 'npc_icc_nerubar_broodkeeper'
+WHERE
+    `entry` = 36725;
 
-UPDATE `creature_template` SET `AIName` = '', `ScriptName` = 'npc_icc_nerubar_broodkeeper' WHERE `entry` = 36725;
-DELETE FROM `smart_scripts` WHERE `source_type` = 0 AND `entryorguid` = 36725;
+DELETE FROM `smart_scripts`
+WHERE `source_type` = 0
+    AND `entryorguid` = 36725;
 
 /*
  * Spells
  */
-
 /*DELETE FROM `spell_script_names` WHERE spell_id = 70980;
 INSERT INTO `spell_script_names`(`spell_id`, `ScriptName`) VALUES (70980, 'spell_icc_web_wrap');*/
