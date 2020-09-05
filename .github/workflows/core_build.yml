@@ -38,22 +38,6 @@ jobs:
       - name: Build core
         run: source ./apps/ci/ci-compile.sh
 
-  windows-build:
-    strategy:
-      fail-fast: false
-    runs-on: windows-2019
-    name: windows-2019-MSVC16
-    steps:
-      - uses: actions/checkout@v2
-      - name: Configure OS and install deps
-        run: choco install --no-progress openssl boost-msvc-14.1 mariadb
-      - name: Build core
-        shell: bash
-        run: |
-          mkdir -p build && cd build
-          cmake .. -DTOOLS=ON
-          cmake --build . --config RelWithDebInfo --parallel 4
-
   nopch-build:
     strategy:
       fail-fast: false
