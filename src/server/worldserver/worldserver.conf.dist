@@ -3824,7 +3824,7 @@ AuctionHouseBot.Buyer.Recheck.Interval = 20
 #  Log channel config values: Given an channel "name"
 #    Log.Channel.name
 #        Description: Defines 'where to log'
-#        Format:      Type,Times,Pattern,Optional1,Optional2,Optional3,Optional4,Optional5
+#        Format:      Type,Times,Pattern,Optional1,Optional2,Optional3,Optional4,Optional5,Optional5
 #
 #                     Type
 #                       1 - (Console)
@@ -3875,7 +3875,7 @@ AuctionHouseBot.Buyer.Recheck.Interval = 20
 #                       %v[width] - the message source (%s) but text length is padded/cropped to 'width'
 #                       %[name] - the value of the message parameter with the given name
 #                       %% - percent sign
-#                           Example for file "%Y-%m-%d %H:%M:%S %t" 
+#                           Example for file "%Y-%m-%d %H:%M:%S %t"
 #                           Example for console "%H:%M:%S %t"
 #
 #                    Optional1 - Colors (is type Console)
@@ -3936,12 +3936,13 @@ AuctionHouseBot.Buyer.Recheck.Interval = 20
 #                           Example: "30 days", "none"
 #
 #                     Optional6 - Archive (is type File)
-#                       number: A number, starting with 0, is appended to the name of archived log files. 
-#                               The newest archived log file always has the number 0. 
-#                               For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.0". 
+#                       number: A number, starting with 0, is appended to the name of archived log files.
+#                               The newest archived log file always has the number 0.
+#                               For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.0".
 #                               If a file named "access.log.0" already exists, it is renamed to "access.log.1", and so on. This is the default.
-#                       timestamp: A timestamp is appended to the log file name. 
+#                       timestamp: A timestamp is appended to the log file name.
 #                                  For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.20050802110300".
+#
 #
 
 LogChannel.Console = "1","local","%H:%M:%S %t","lightRed lightRed red brown magenta cyan lightMagenta green"
@@ -3953,7 +3954,7 @@ LogChannel.DBErrors = "2","local","%Y-%m-%d %H:%M:%S %t","DBErrors.log","true","
 #  Logger config values: Given a logger "name"
 #    Logger.name
 #        Description: Defines 'What to log'
-#        Format:      LogLevel,LogChannel
+#        Format:      LogLevel,LogChannels
 #
 #                     LogLevel
 #                         0 - (Disabled)

@@ -196,7 +196,7 @@ bool Log::ShouldLog(std::string_view type, LogLevel level) const
 std::string const Log::GetChannelsFromLogger(std::string const& loggerName)
 {
     std::string const& loggerOptions = sConfigMgr->GetStringDefault(PREFIX_LOGGER + loggerName, "6, Console Server");
-    
+
     auto const& tokensOptions = Warhead::Tokenize(loggerOptions, ',', true);
     if (tokensOptions.empty())
         return "";
@@ -308,7 +308,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Empty times for LogChannel.%s", channelName.c_str());
         return;
     }
-    
+
     auto pattern = GetPositionOptions(options, CHANNEL_OPTIONS_PATTERN);
     if (pattern.empty())
     {
