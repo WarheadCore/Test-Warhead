@@ -6,16 +6,10 @@ on:
 jobs:
   check-codestyle:
     strategy:
-      fail-fast: false      
+      fail-fast: false
     runs-on: ubuntu-20.04
     name: check codestyle
     steps:
       - uses: actions/checkout@v2
       - name: Check core codestyle
         run: source ./apps/ci/ci-codestyle.sh
-      - name: C++ Style Check
-        uses: coleaeason/actions-uncrustify@v1
-      - name: ROS Style Guide C++ Format
-        uses: AutoModality/action-ros-clang-format@v1.0.1
-
-
