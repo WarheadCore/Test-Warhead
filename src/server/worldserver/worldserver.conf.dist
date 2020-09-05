@@ -3825,14 +3825,14 @@ AuctionHouseBot.Buyer.Recheck.Interval = 20
 #    Log.Channel.name
 #        Description: Defines 'where to log'
 #        Format:      Type,Times,Pattern,Optional1,Optional2,Optional3,Optional4,Optional5
-#                       
+#
 #                     Type
 #                       1 - (Console)
 #                       2 - (File)
-#                              
+#
 #                    Times (all types)
 #                       utc: Rotation strategy is based on UTC time (default).
-#                       local: Rotation strategy is based on local time.   
+#                       local: Rotation strategy is based on local time.
 #
 #                    Pattern (all type)
 #                       %s - message source

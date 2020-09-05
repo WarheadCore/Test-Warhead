@@ -309,10 +309,10 @@ Updates.CleanDeadRefMaxCount = 3
 #                     Type
 #                       1 - (Console)
 #                       2 - (File)
-#                              
+#
 #                    Times (all types)
 #                       utc: Rotation strategy is based on UTC time (default).
-#                       local: Rotation strategy is based on local time.   
+#                       local: Rotation strategy is based on local time.
 #
 #                    Pattern (all type)
 #                       %s - message source

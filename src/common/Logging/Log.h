@@ -86,7 +86,7 @@ public:
 
     bool ShouldLog(std::string_view type, LogLevel level) const;
 
-    void outCharDump(std::string const& str, uint32 accountId, uint64 guid, std::string const& name);    
+    void outCharDump(std::string const& str, uint32 accountId, uint64 guid, std::string const& name);
 
     template<typename Format, typename... Args>
     inline void outMessage(std::string_view filter, LogLevel const level, Format&& fmt, Args&& ... args)
