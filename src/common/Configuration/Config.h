@@ -30,12 +30,12 @@ class WH_COMMON_API ConfigMgr
     ~ConfigMgr() = default;
 
 public:
-    /// Method used only for loading main configuration files (authserver.conf and worldserver.conf)
-    bool LoadInitial(std::string const& file, std::vector<std::string> args, std::string& error);
+    bool LoadAppConfigs();
+    void Configure(std::string const& fileName, std::vector<std::string> args);
 
     static ConfigMgr* instance();
 
-    bool Reload(std::string& error);
+    bool Reload(std::vector<std::string>& errors);
 
     std::string GetStringDefault(std::string const& name, const std::string& def, bool quiet = false) const;
     bool GetBoolDefault(std::string const& name, bool def, bool quiet = false) const;
@@ -43,10 +43,15 @@ public:
     float GetFloatDefault(std::string const& name, float def, bool quiet = false) const;
 
     std::string const& GetFilename();
+    std::string const GetConfigPath();
     std::vector<std::string> const& GetArguments() const;
     std::vector<std::string> GetKeysByString(std::string const& name);
 
 private:
+    /// Method used only for loading main configuration files (authserver.conf and worldserver.conf)
+    bool LoadInitial(std::string const& file, std::string& error);
+    bool LoadAdditionalFile(std::string file, bool keepOnReload, std::string& error);
+
     template<class T>
     T GetValueDefault(std::string const& name, T def, bool quiet) const;
 };

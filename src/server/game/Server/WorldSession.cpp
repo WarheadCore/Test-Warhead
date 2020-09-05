@@ -261,7 +261,7 @@ void WorldSession::LogUnexpectedOpcode(WorldPacket* packet, char const* status, 
 /// Logging helper for unexpected opcodes
 void WorldSession::LogUnprocessedTail(WorldPacket* packet)
 {
-    if (!sLog->ShouldLog("network.opcode", LOG_LEVEL_TRACE) || packet->rpos() >= packet->wpos())
+    if (!sLog->ShouldLog("network.opcode", LogLevel::LOG_LEVEL_TRACE) || packet->rpos() >= packet->wpos())
         return;
 
     LOG_TRACE("network.opcode", "Unprocessed tail data (read stop at %u from %u) Opcode %s from %s",
@@ -419,9 +419,6 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
     _recvQueue.readd(requeuePackets.begin(), requeuePackets.end());
 
-    if (m_Socket && m_Socket->IsOpen() && _warden)
-        _warden->Update(diff);
-
     if (!updater.ProcessUnsafe()) // <=> updater is of type MapSessionFilter
     {
         // Send time sync packet every 10s.
@@ -440,6 +437,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     //logout procedure should happen only in World::UpdateSessions() method!!!
     if (updater.ProcessUnsafe())
     {
+        if (m_Socket && m_Socket->IsOpen() && _warden)
+            _warden->Update(diff);
+
         ///- If necessary, log the player out
         if (ShouldLogOut(currentTime) && !m_playerLoading)
             LogoutPlayer(true);

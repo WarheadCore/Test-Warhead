@@ -48,6 +48,7 @@
 #include "ScriptMgr.h"
 #include "ServerMotd.h"
 #include "SocialMgr.h"
+#include "StringConvert.h"
 #include "SystemPackets.h"
 #include "QueryHolder.h"
 #include "World.h"
@@ -690,7 +691,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
     sScriptMgr->OnPlayerDelete(guid, initAccountId); // To prevent race conditioning, but as it also makes sense, we hand the accountId over for successful delete.
     // Shouldn't interfere with character deletion though
 
-    if (sLog->ShouldLog("entities.player.dump", LOG_LEVEL_INFO)) // optimize GetPlayerDump call
+    if (sLog->ShouldLog("entities.player.dump", LogLevel::LOG_LEVEL_INFO)) // optimize GetPlayerDump call
     {
         std::string dump;
         if (PlayerDumpWriter().GetDump(guid.GetCounter(), dump))
@@ -2068,18 +2069,24 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
             // Title conversion
             if (!knownTitlesStr.empty())
             {
-                uint32 const ktcount = KNOWN_TITLES_SIZE * 2;
-                uint32 knownTitles[ktcount];
-                Tokenizer tokens(knownTitlesStr, ' ', ktcount);
+                std::vector<std::string_view> tokens = Warhead::Tokenize(knownTitlesStr, ' ', false);
+                std::array<uint32, KNOWN_TITLES_SIZE * 2> knownTitles;
 
-                if (tokens.size() != ktcount)
+                for (uint32 index = 0; index < knownTitles.size(); ++index)
                 {
-                    SendCharFactionChange(CHAR_CREATE_ERROR, factionChangeInfo.get());
-                    return;
-                }
+                    Optional<uint32> thisMask;
+                    if (index < tokens.size())
+                        thisMask = Warhead::StringTo<uint32>(tokens[index]);
 
-                for (uint32 index = 0; index < ktcount; ++index)
-                    knownTitles[index] = atoul(tokens[index]);
+                    if (thisMask)
+                        knownTitles[index] = *thisMask;
+                    else
+                    {
+                        LOG_WARN("entities.player", "%s has invalid title data '%s' at index %u - skipped, this may result in titles being lost",
+                            GetPlayerInfo().c_str(), (index < tokens.size()) ? std::string(tokens[index]).c_str() : "<none>", index);
+                        knownTitles[index] = 0;
+                    }
+                }
 
                 for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->FactionChangeTitles.begin(); it != sObjectMgr->FactionChangeTitles.end(); ++it)
                 {
@@ -2117,8 +2124,8 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
                     }
 
                     std::ostringstream ss;
-                    for (uint32 index = 0; index < ktcount; ++index)
-                        ss << knownTitles[index] << ' ';
+                    for (uint32 mask : knownTitles)
+                        ss << mask << ' ';
 
                     stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_TITLES_FACTION_CHANGE);
                     stmt->setString(0, ss.str());

@@ -17,6 +17,8 @@
 
 #include "Config.h"
 #include "Log.h"
+#include "SystemLog.h"
+#include "StringConvert.h"
 #include "Util.h"
 #include <boost/property_tree/ini_parser.hpp>
 #include <algorithm>
@@ -28,41 +30,61 @@ namespace bpt = boost::property_tree;
 namespace
 {
     std::string _filename;
+    std::vector<std::string> _additonalFiles;
     std::vector<std::string> _args;
     bpt::ptree _config;
     std::mutex _configLock;
-}
 
-bool ConfigMgr::LoadInitial(std::string const& file, std::vector<std::string> args,
-                            std::string& error)
-{
-    std::lock_guard<std::mutex> lock(_configLock);
-
-    _filename = file;
-    _args = args;
-
-    try
+    bool LoadFile(std::string const& file, bpt::ptree& fullTree, std::string& error)
     {
-        bpt::ptree fullTree;
-        bpt::ini_parser::read_ini(file, fullTree);
-
-        if (fullTree.empty())
+        try
         {
-            error = "empty file (" + file + ")";
+            bpt::ini_parser::read_ini(file, fullTree);
+
+            if (fullTree.empty())
+            {
+                error = "empty file (" + file + ")";
+                return false;
+            }
+        }
+        catch (bpt::ini_parser::ini_parser_error const& e)
+        {
+            if (e.line() == 0)
+                error = e.message() + " (" + e.filename() + ")";
+            else
+                error = e.message() + " (" + e.filename() + ":" + std::to_string(e.line()) + ")";
             return false;
         }
 
-        // Since we're using only one section per config file, we skip the section and have direct property access
-        _config = fullTree.begin()->second;
+        return true;
     }
-    catch (bpt::ini_parser::ini_parser_error const& e)
-    {
-        if (e.line() == 0)
-            error = e.message() + " (" + e.filename() + ")";
-        else
-            error = e.message() + " (" + e.filename() + ":" + std::to_string(e.line()) + ")";
+}
+
+bool ConfigMgr::LoadInitial(std::string const& file, std::string& error)
+{
+    std::lock_guard<std::mutex> lock(_configLock);
+
+    bpt::ptree fullTree;
+    if (!LoadFile(file, fullTree, error))
         return false;
-    }
+
+    // Since we're using only one section per config file, we skip the section and have direct property access
+    _config = fullTree.begin()->second;
+
+    return true;
+}
+
+bool ConfigMgr::LoadAdditionalFile(std::string file, bool keepOnReload, std::string& error)
+{
+    bpt::ptree fullTree;
+    if (!LoadFile(file, fullTree, error))
+        return false;
+
+    for (bpt::ptree::value_type const& child : fullTree.begin()->second)
+        _config.put_child(bpt::ptree::path_type(child.first, '/'), child.second);
+
+    if (keepOnReload)
+        _additonalFiles.emplace_back(std::move(file));
 
     return true;
 }
@@ -73,9 +95,17 @@ ConfigMgr* ConfigMgr::instance()
     return &instance;
 }
 
-bool ConfigMgr::Reload(std::string& error)
+bool ConfigMgr::Reload(std::vector<std::string>& errors)
 {
-    return LoadInitial(_filename, std::move(_args), error);
+    std::string error;
+    if (!LoadInitial(_filename, error))
+        errors.push_back(std::move(error));
+
+    for (std::string const& additionalFile : _additonalFiles)
+        if (!LoadAdditionalFile(additionalFile, false, error))
+            errors.push_back(std::move(error));
+
+    return errors.empty();
 }
 
 template<class T>
@@ -137,7 +167,15 @@ bool ConfigMgr::GetBoolDefault(std::string const& name, bool def, bool quiet) co
 {
     std::string val = GetValueDefault(name, std::string(def ? "1" : "0"), quiet);
     val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
-    return StringToBool(val);
+    Optional<bool> boolVal = Warhead::StringTo<bool>(val);
+    if (boolVal)
+        return *boolVal;
+    else
+    {
+        LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use '%s' instead",
+            name.c_str(), _filename.c_str(), def ? "true" : "false");
+        return def;
+    }
 }
 
 int ConfigMgr::GetIntDefault(std::string const& name, int def, bool quiet) const
@@ -172,4 +210,42 @@ std::vector<std::string> ConfigMgr::GetKeysByString(std::string const& name)
             keys.push_back(child.first);
 
     return keys;
+}
+
+std::string const ConfigMgr::GetConfigPath()
+{
+    std::lock_guard<std::mutex> lock(_configLock);
+
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
+    return "configs/";
+#else
+    return std::string(CONF_DIR) + "/";
+#endif
+}
+
+void ConfigMgr::Configure(std::string const& fileName, std::vector<std::string> args)
+{
+    _filename = fileName;
+    _args = std::move(args);
+}
+
+bool ConfigMgr::LoadAppConfigs()
+{
+    std::string configError;
+
+    // #1 - Load init config file .conf.dist
+    if (!sConfigMgr->LoadInitial(_filename + ".dist", configError))
+    {
+        SYS_LOG_ERROR("Error in config file: %s\n", configError.c_str());
+        return false;
+    }
+
+    // #2 - Load .conf file
+    if (!sConfigMgr->LoadAdditionalFile(_filename, true, configError))
+    {
+        SYS_LOG_ERROR("Error in config file: %s\n", configError.c_str());
+        return false;
+    }
+
+    return true;
 }

@@ -1289,20 +1289,27 @@ class spell_icc_sprit_alarm : public SpellScriptLoader
             void HandleEvent(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
+
                 uint32 trapId = 0;
+                float range = 0.0f;
+
                 switch (GetSpellInfo()->Effects[effIndex].MiscValue)
                 {
                     case EVENT_AWAKEN_WARD_1:
                         trapId = GO_SPIRIT_ALARM_1;
+                        range = 100.0f;
                         break;
                     case EVENT_AWAKEN_WARD_2:
                         trapId = GO_SPIRIT_ALARM_2;
+                        range = 100.0f;
                         break;
                     case EVENT_AWAKEN_WARD_3:
                         trapId = GO_SPIRIT_ALARM_3;
+                        range = 50.0f;
                         break;
                     case EVENT_AWAKEN_WARD_4:
                         trapId = GO_SPIRIT_ALARM_4;
+                        range = 50.0f;
                         break;
                     default:
                         return;
@@ -1312,16 +1319,23 @@ class spell_icc_sprit_alarm : public SpellScriptLoader
                     trap->SetRespawnTime(trap->GetGOInfo()->GetAutoCloseTime() / IN_MILLISECONDS);
 
                 std::list<Creature*> wards;
-                GetGObjCaster()->GetCreatureListWithEntryInGrid(wards, NPC_DEATHBOUND_WARD, 150.0f);
+                GetGObjCaster()->GetCreatureListWithEntryInGrid(wards, NPC_DEATHBOUND_WARD, range);
                 wards.sort(Warhead::ObjectDistanceOrderPred(GetGObjCaster()));
-                for (std::list<Creature*>::iterator itr = wards.begin(); itr != wards.end(); ++itr)
+
+                for (auto const& itr : wards)
                 {
-                    if ((*itr)->IsAlive() && (*itr)->HasAura(SPELL_STONEFORM))
+                    Player* target = itr->SelectNearestPlayer(150.0f);
+                    if (!target)
+                        break;
+
+                    Creature* deathboundWard = itr;
+
+                    if (deathboundWard->IsAlive() && deathboundWard->HasAura(SPELL_STONEFORM))
                     {
-                        (*itr)->AI()->Talk(SAY_TRAP_ACTIVATE);
-                        (*itr)->RemoveAurasDueToSpell(SPELL_STONEFORM);
-                        if (Unit* target = (*itr)->SelectNearestTarget(150.0f))
-                            (*itr)->AI()->AttackStart(target);
+                        deathboundWard->AI()->Talk(SAY_TRAP_ACTIVATE);
+                        deathboundWard->RemoveAurasDueToSpell(SPELL_STONEFORM);
+                        deathboundWard->AI()->DoMeleeAttackIfReady();
+                        deathboundWard->AI()->SetData(1, 1);
                         break;
                     }
                 }
@@ -1465,47 +1479,24 @@ class spell_icc_soul_missile : public SpellScriptLoader
         }
 };
 
-class spell_trigger_spell_from_caster_SpellScript : public SpellScript
-{
-    PrepareSpellScript(spell_trigger_spell_from_caster_SpellScript);
-
-    public:
-        spell_trigger_spell_from_caster_SpellScript(uint32 triggerId, TriggerCastFlags triggerFlags)
-            : SpellScript(), _triggerId(triggerId), _triggerFlags(triggerFlags) { }
-
-    private:
-        bool Validate(SpellInfo const* /*spell*/) override
-        {
-            return ValidateSpellInfo({ _triggerId });
-        }
-
-        void HandleTrigger()
-        {
-            GetCaster()->CastSpell(GetHitUnit(), _triggerId, _triggerFlags);
-        }
-
-        void Register() override
-        {
-            AfterHit += SpellHitFn(spell_trigger_spell_from_caster_SpellScript::HandleTrigger);
-        }
-
-        uint32 _triggerId;
-        TriggerCastFlags _triggerFlags;
-};
-
-spell_trigger_spell_from_caster::spell_trigger_spell_from_caster(char const* scriptName, uint32 triggerId)
-    : SpellScriptLoader(scriptName), _triggerId(triggerId), _triggerFlags(TRIGGERED_FULL_MASK)
+spell_trigger_spell_from_caster::spell_trigger_spell_from_caster(uint32 triggerId, TriggerCastFlags triggerFlags /*= TRIGGERED_FULL_MASK*/)
+    : SpellScript(), _triggerId(triggerId), _triggerFlags(triggerFlags)
 {
 }
 
-spell_trigger_spell_from_caster::spell_trigger_spell_from_caster(char const* scriptName, uint32 triggerId, TriggerCastFlags triggerFlags)
-    : SpellScriptLoader(scriptName), _triggerId(triggerId), _triggerFlags(triggerFlags)
+bool spell_trigger_spell_from_caster::Validate(SpellInfo const* /*spell*/)
 {
+    return ValidateSpellInfo({ _triggerId });
 }
 
-SpellScript* spell_trigger_spell_from_caster::GetSpellScript() const
+void spell_trigger_spell_from_caster::HandleTrigger()
 {
-    return new spell_trigger_spell_from_caster_SpellScript(_triggerId, _triggerFlags);
+    GetCaster()->CastSpell(GetHitUnit(), _triggerId, _triggerFlags);
+}
+
+void spell_trigger_spell_from_caster::Register()
+{
+    AfterHit += SpellHitFn(spell_trigger_spell_from_caster::HandleTrigger);
 }
 
 class at_icc_saurfang_portal : public AreaTriggerScript
