@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Configure OS and install deps
-        run: choco install --no-progress openssl choco install boost-msvc-14.1 mariadb
+        run: choco install --no-progress openssl boost-msvc-14.1 mariadb
       - name: Build core
         shell: bash
         run: |
