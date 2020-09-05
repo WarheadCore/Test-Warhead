@@ -52,7 +52,7 @@ jobs:
         run: |
           mkdir -p build && cd build
           cmake .. -DTOOLS=ON
-          cmake --build . --config RelWithDebInfo --parallel 4      
+          cmake --build . --config RelWithDebInfo --parallel 4
 
   nopch-build:
     strategy:
