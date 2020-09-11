@@ -20,7 +20,7 @@
 #include "DatabaseEnv.h"
 #include "DBUpdater.h"
 #include "Log.h"
-
+#include "Duration.h"
 #include <mysqld_error.h>
 
 DatabaseLoader::DatabaseLoader(std::string const& logger, uint32 const defaultUpdateMask)
@@ -56,6 +56,38 @@ DatabaseLoader& DatabaseLoader::AddDatabase(DatabaseWorkerPool<T>& pool, std::st
         pool.SetConnectionInfo(dbString, asyncThreads, synchThreads);
         if (uint32 error = pool.Open())
         {
+            // Try reconnect
+            if (error == CR_CONNECTION_ERROR)
+            {
+                // Possible improvement for future: make ATTEMPTS and SECONDS configurable values
+                uint32 const ATTEMPTS = 5;
+                Seconds duration = 5s;
+                uint32 count = 0;
+
+                auto logMessage = [&]()
+                {
+                    LOG_ERROR(_logger, "> Retrying after %u seconds", duration.count());
+                    LOG_INFO(_logger, "");
+                    std::this_thread::sleep_for(duration);
+                };
+
+                logMessage();
+
+                do
+                {
+                    error = pool.Open();
+
+                    if (error == CR_CONNECTION_ERROR)
+                    {
+                        logMessage();
+                        count++;
+                    }
+                    else
+                        break;
+
+                } while (count < ATTEMPTS);
+            }
+
             // Database does not exist
             if ((error == ER_BAD_DB_ERROR) && updatesEnabledForThis && _autoSetup)
             {
