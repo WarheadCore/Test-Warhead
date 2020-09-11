@@ -82,7 +82,6 @@ DatabaseLoader& DatabaseLoader::AddDatabase(DatabaseWorkerPool<T>& pool, std::st
 
                     logMessage();
                     count++;
-
                 } while (count < ATTEMPTS);
             }
 
