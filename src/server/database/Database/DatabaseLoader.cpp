@@ -67,7 +67,7 @@ DatabaseLoader& DatabaseLoader::AddDatabase(DatabaseWorkerPool<T>& pool, std::st
                 auto logMessage = [&]()
                 {
                     LOG_ERROR(_logger, "> Retrying after %u seconds", duration.count());
-                    LOG_INFO(_logger, "");
+                    LOG_ERROR(_logger, "");
                     std::this_thread::sleep_for(duration);
                 };
 
@@ -77,13 +77,11 @@ DatabaseLoader& DatabaseLoader::AddDatabase(DatabaseWorkerPool<T>& pool, std::st
                 {
                     error = pool.Open();
 
-                    if (error == CR_CONNECTION_ERROR)
-                    {
-                        logMessage();
-                        count++;
-                    }
-                    else
+                    if (error != CR_CONNECTION_ERROR)
                         break;
+
+                    logMessage();
+                    count++;
 
                 } while (count < ATTEMPTS);
             }
