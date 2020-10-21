@@ -951,6 +951,7 @@ bool AuctionEntry::LoadFromDB(Field* fields)
 
     return true;
 }
+
 std::string AuctionEntry::BuildAuctionMailSubject(MailAuctionAnswers response) const
 {
     return Warhead::StringFormat("%u:0:%u:%u:%u", itemEntry, static_cast<uint8>(response), Id, itemCount);
