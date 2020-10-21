@@ -81,9 +81,12 @@ AuctionHouseObject* AuctionHouseMgr::GetAuctionsMapByHouseId(uint8 auctionHouseI
 
     switch(auctionHouseId)
     {
-        case AUCTIONHOUSE_ALLIANCE : return &mAllianceAuctions;
-        case AUCTIONHOUSE_HORDE : return &mHordeAuctions;
-        default : return &mNeutralAuctions;
+        case AUCTIONHOUSE_ALLIANCE :
+            return &mAllianceAuctions;
+        case AUCTIONHOUSE_HORDE :
+            return &mHordeAuctions;
+        default :
+            return &mNeutralAuctions;
     }
 }
 
@@ -157,7 +160,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry* auction, CharacterDatabas
         uint32 ownerAccId = sCharacterCache->GetCharacterAccountIdByGuid(ownerGuid);
 
         LOG_GM(bidderAccId, "GM %s (Account: %u) won item in auction: %s (Entry: %u Count: %u) and pay money: %u. Original owner %s (Account: %u)",
-            bidderName.c_str(), bidderAccId, pItem->GetTemplate()->Name1.c_str(), pItem->GetEntry(), pItem->GetCount(), auction->bid, ownerName.c_str(), ownerAccId);
+               bidderName.c_str(), bidderAccId, pItem->GetTemplate()->Name1.c_str(), pItem->GetEntry(), pItem->GetCount(), auction->bid, ownerName.c_str(), ownerAccId);
     }
 
     // receiver exist
@@ -336,8 +339,7 @@ void AuctionHouseMgr::LoadAuctionItems()
         AddAItem(item);
 
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u auction items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -369,8 +371,7 @@ void AuctionHouseMgr::LoadAuctions()
             Field* fields = resultBidders->Fetch();
             biddersByAuction[fields[0].GetUInt32()].insert(ObjectGuid::Create<HighGuid::Player>(fields[1].GetUInt32()));
             ++countBidders;
-        }
-        while (resultBidders->NextRow());
+        } while (resultBidders->NextRow());
     }
 
     // parse auctions from db
@@ -705,9 +706,9 @@ void AuctionHouseObject::BuildListOwnerItems(WorldPacket& data, Player* player, 
 }
 
 void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player,
-    std::wstring const& wsearchedname, uint32 listfrom, uint8 levelmin, uint8 levelmax, uint8 usable,
-    uint32 inventoryType, uint32 itemClass, uint32 itemSubClass, uint32 quality,
-    uint32& count, uint32& totalcount, bool getall)
+        std::wstring const& wsearchedname, uint32 listfrom, uint8 levelmin, uint8 levelmax, uint8 usable,
+        uint32 inventoryType, uint32 itemClass, uint32 itemSubClass, uint32 quality,
+        uint32& count, uint32& totalcount, bool getall)
 {
     LocaleConstant localeConstant = player->GetSession()->GetSessionDbLocaleIndex();
     int locdbc_idx = player->GetSession()->GetSessionDbcLocale();

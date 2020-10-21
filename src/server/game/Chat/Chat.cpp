@@ -125,7 +125,7 @@ void ChatHandler::SendSysMessage(std::string_view str, bool escapeCharacters)
     }
 }
 
-void ChatHandler::SendGlobalSysMessage(const char *str)
+void ChatHandler::SendGlobalSysMessage(const char* str)
 {
     WorldPacket data;
     for (std::string_view line : Warhead::Tokenize(str, '\n', true))
@@ -135,7 +135,7 @@ void ChatHandler::SendGlobalSysMessage(const char *str)
     }
 }
 
-void ChatHandler::SendGlobalGMSysMessage(const char *str)
+void ChatHandler::SendGlobalGMSysMessage(const char* str)
 {
     WorldPacket data;
     for (std::string_view line : Warhead::Tokenize(str, '\n', true))
@@ -189,8 +189,8 @@ bool ChatHandler::ParseCommands(std::string_view text)
 }
 
 size_t ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg chatType, Language language, ObjectGuid senderGUID, ObjectGuid receiverGUID, std::string_view message, uint8 chatTag,
-                                  std::string const& senderName /*= ""*/, std::string const& receiverName /*= ""*/,
-                                  uint32 achievementId /*= 0*/, bool gmMessage /*= false*/, std::string const& channelName /*= ""*/)
+                                    std::string const& senderName /*= ""*/, std::string const& receiverName /*= ""*/,
+                                    uint32 achievementId /*= 0*/, bool gmMessage /*= false*/, std::string const& channelName /*= ""*/)
 {
     size_t receiverGUIDPos = 0;
     data.Initialize(!gmMessage ? SMSG_MESSAGECHAT : SMSG_GM_MESSAGECHAT);
@@ -269,7 +269,7 @@ size_t ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg chatType, Languag
 }
 
 size_t ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg chatType, Language language, WorldObject const* sender, WorldObject const* receiver, std::string_view message,
-                                  uint32 achievementId /*= 0*/, std::string const& channelName /*= ""*/, LocaleConstant locale /*= DEFAULT_LOCALE*/)
+                                    uint32 achievementId /*= 0*/, std::string const& channelName /*= ""*/, LocaleConstant locale /*= DEFAULT_LOCALE*/)
 {
     ObjectGuid senderGUID;
     std::string senderName = "";
@@ -366,7 +366,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* linkType, char** s
         return nullptr;
 
     // skip spaces
-    while (*text == ' '||*text == '\t'||*text == '\b')
+    while (*text == ' ' || *text == '\t' || *text == '\b')
         ++text;
 
     if (!*text)
@@ -414,7 +414,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* const* linkTypes, 
         return nullptr;
 
     // skip spaces
-    while (*text == ' '||*text == '\t'||*text == '\b')
+    while (*text == ' ' || *text == '\t' || *text == '\b')
         ++text;
 
     if (!*text)
@@ -441,7 +441,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* const* linkTypes, 
         tail = strtok(nullptr, "");                            // tail
     }
     else
-        tail = text+1;                                      // skip first |
+        tail = text + 1;                                    // skip first |
 
     char* cLinkType = strtok(tail, ":");                    // linktype
     if (!cLinkType)
@@ -549,31 +549,31 @@ uint32 ChatHandler::extractSpellIdFromLink(char* text)
         case SPELL_LINK_SPELL:
             return id;
         case SPELL_LINK_TALENT:
-        {
-            // talent
-            TalentEntry const* talentEntry = sTalentStore.LookupEntry(id);
-            if (!talentEntry)
-                return 0;
+            {
+                // talent
+                TalentEntry const* talentEntry = sTalentStore.LookupEntry(id);
+                if (!talentEntry)
+                    return 0;
 
-            uint32 rank = param1_str ? atol(param1_str) : 0u;
-            if (rank >= MAX_TALENT_RANK)
-                return 0;
+                uint32 rank = param1_str ? atol(param1_str) : 0u;
+                if (rank >= MAX_TALENT_RANK)
+                    return 0;
 
-            return talentEntry->SpellRank[rank];
-        }
+                return talentEntry->SpellRank[rank];
+            }
         case SPELL_LINK_ENCHANT:
         case SPELL_LINK_TRADE:
             return id;
         case SPELL_LINK_GLYPH:
-        {
-            uint32 glyph_prop_id = param1_str ? atoul(param1_str) : 0;
+            {
+                uint32 glyph_prop_id = param1_str ? atoul(param1_str) : 0;
 
-            GlyphPropertiesEntry const* glyphPropEntry = sGlyphPropertiesStore.LookupEntry(glyph_prop_id);
-            if (!glyphPropEntry)
-                return 0;
+                GlyphPropertiesEntry const* glyphPropEntry = sGlyphPropertiesStore.LookupEntry(glyph_prop_id);
+                if (!glyphPropEntry)
+                    return 0;
 
-            return glyphPropEntry->SpellID;
-        }
+                return glyphPropEntry->SpellID;
+            }
     }
 
     // unknown type?
@@ -609,31 +609,31 @@ ObjectGuid::LowType ChatHandler::extractLowGuidFromLink(char* text, HighGuid& gu
     switch (type)
     {
         case GUID_LINK_PLAYER:
-        {
-            guidHigh = HighGuid::Player;
-            std::string name = idS;
-            if (!normalizePlayerName(name))
-                return 0;
+            {
+                guidHigh = HighGuid::Player;
+                std::string name = idS;
+                if (!normalizePlayerName(name))
+                    return 0;
 
-            if (Player* player = ObjectAccessor::FindPlayerByName(name))
-                return player->GetGUID().GetCounter();
+                if (Player* player = ObjectAccessor::FindPlayerByName(name))
+                    return player->GetGUID().GetCounter();
 
-            ObjectGuid guid = sCharacterCache->GetCharacterGuidByName(name);
-            return guid.GetCounter();
+                ObjectGuid guid = sCharacterCache->GetCharacterGuidByName(name);
+                return guid.GetCounter();
 
-        }
+            }
         case GUID_LINK_CREATURE:
-        {
-            guidHigh = HighGuid::Unit;
-            ObjectGuid::LowType lowguid = atoul(idS);
-            return lowguid;
-        }
+            {
+                guidHigh = HighGuid::Unit;
+                ObjectGuid::LowType lowguid = atoul(idS);
+                return lowguid;
+            }
         case GUID_LINK_GAMEOBJECT:
-        {
-            guidHigh = HighGuid::GameObject;
-            ObjectGuid::LowType lowguid = atoul(idS);
-            return lowguid;
-        }
+            {
+                guidHigh = HighGuid::GameObject;
+                ObjectGuid::LowType lowguid = atoul(idS);
+                return lowguid;
+            }
     }
 
     // unknown type?
@@ -713,7 +713,7 @@ char* ChatHandler::extractQuotedArg(char* args)
         return nullptr;
 
     if (*args == '"')
-        return strtok(args+1, "\"");
+        return strtok(args + 1, "\"");
     else
     {
         // skip spaces
@@ -869,27 +869,27 @@ bool AddonChannelCommandHandler::ParseCommands(std::string_view str)
             return true;
         case 'h': // h Issue human-readable command
         case 'i': // i Issue command
-        {
-            if (!str[17])
-                return false;
-            humanReadable = (opcode == 'h');
-            std::string_view cmd = str.substr(17);
-            if (_ParseCommands(cmd)) // actual command starts at str[17]
             {
-                if (!hadAck)
-                    SendAck();
-                if (HasSentErrorMessage())
-                    SendFailed();
+                if (!str[17])
+                    return false;
+                humanReadable = (opcode == 'h');
+                std::string_view cmd = str.substr(17);
+                if (_ParseCommands(cmd)) // actual command starts at str[17]
+                {
+                    if (!hadAck)
+                        SendAck();
+                    if (HasSentErrorMessage())
+                        SendFailed();
+                    else
+                        SendOK();
+                }
                 else
-                    SendOK();
+                {
+                    PSendSysMessage(LANG_CMD_INVALID, STRING_VIEW_FMT_ARG(cmd));
+                    SendFailed();
+                }
+                return true;
             }
-            else
-            {
-                PSendSysMessage(LANG_CMD_INVALID, STRING_VIEW_FMT_ARG(cmd));
-                SendFailed();
-            }
-            return true;
-        }
         default:
             return false;
     }
@@ -906,7 +906,7 @@ void AddonChannelCommandHandler::SendAck() // a Command acknowledged, no body
 {
     ASSERT(echo);
     char ack[18] = "WarheadCore\ta";
-    memcpy(ack+13, echo, 4);
+    memcpy(ack + 13, echo, 4);
     ack[17] = '\0';
     Send(ack);
     hadAck = true;
@@ -916,7 +916,7 @@ void AddonChannelCommandHandler::SendOK() // o Command OK, no body
 {
     ASSERT(echo);
     char ok[18] = "WarheadCore\to";
-    memcpy(ok+13, echo, 4);
+    memcpy(ok + 13, echo, 4);
     ok[17] = '\0';
     Send(ok);
 }

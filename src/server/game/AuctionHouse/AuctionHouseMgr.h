@@ -101,7 +101,7 @@ struct WH_GAME_API AuctionEntry
     uint8 GetHouseId() const { return houseId; }
     uint32 GetAuctionCut() const;
     uint32 GetAuctionOutBid() const;
-    bool BuildAuctionInfo(WorldPacket & data, Item* sourceItem = nullptr) const;
+    bool BuildAuctionInfo(WorldPacket& data, Item* sourceItem = nullptr) const;
     void DeleteFromDB(CharacterDatabaseTransaction trans) const;
     void SaveToDB(CharacterDatabaseTransaction trans) const;
     bool LoadFromDB(Field* fields);
@@ -143,9 +143,9 @@ public:
     void BuildListBidderItems(WorldPacket& data, Player* player, uint32& count, uint32& totalcount);
     void BuildListOwnerItems(WorldPacket& data, Player* player, uint32& count, uint32& totalcount);
     void BuildListAuctionItems(WorldPacket& data, Player* player,
-        std::wstring const& searchedname, uint32 listfrom, uint8 levelmin, uint8 levelmax, uint8 usable,
-        uint32 inventoryType, uint32 itemClass, uint32 itemSubClass, uint32 quality,
-        uint32& count, uint32& totalcount, bool getall = false);
+                               std::wstring const& searchedname, uint32 listfrom, uint8 levelmin, uint8 levelmax, uint8 usable,
+                               uint32 inventoryType, uint32 itemClass, uint32 itemSubClass, uint32 quality,
+                               uint32& count, uint32& totalcount, bool getall = false);
 
 private:
     AuctionEntryMap AuctionsMap;
@@ -158,63 +158,63 @@ private:
 
 class WH_GAME_API AuctionHouseMgr
 {
-    private:
-        AuctionHouseMgr();
-        ~AuctionHouseMgr();
+private:
+    AuctionHouseMgr();
+    ~AuctionHouseMgr();
 
-    public:
-        static AuctionHouseMgr* instance();
+public:
+    static AuctionHouseMgr* instance();
 
-        typedef std::unordered_map<ObjectGuid::LowType, Item*> ItemMap;
-        typedef std::vector<AuctionEntry*> PlayerAuctions;
-        typedef std::pair<PlayerAuctions*, uint32> AuctionPair;
+    typedef std::unordered_map<ObjectGuid::LowType, Item*> ItemMap;
+    typedef std::vector<AuctionEntry*> PlayerAuctions;
+    typedef std::pair<PlayerAuctions*, uint32> AuctionPair;
 
-        AuctionHouseObject* GetAuctionsMap(uint32 factionTemplateId);
-        AuctionHouseObject* GetAuctionsMapByHouseId(uint8 auctionHouseId);
+    AuctionHouseObject* GetAuctionsMap(uint32 factionTemplateId);
+    AuctionHouseObject* GetAuctionsMapByHouseId(uint8 auctionHouseId);
 
-        Item* GetAItem(ObjectGuid::LowType id)
-        {
-            ItemMap::const_iterator itr = mAitems.find(id);
-            if (itr != mAitems.end())
-                return itr->second;
+    Item* GetAItem(ObjectGuid::LowType id)
+    {
+        ItemMap::const_iterator itr = mAitems.find(id);
+        if (itr != mAitems.end())
+            return itr->second;
 
-            return nullptr;
-        }
+        return nullptr;
+    }
 
-        //auction messages
-        void SendAuctionWonMail(AuctionEntry* auction, CharacterDatabaseTransaction trans);
-        void SendAuctionSalePendingMail(AuctionEntry* auction);
-        void SendAuctionSuccessfulMail(AuctionEntry* auction);
-        void SendAuctionExpiredMail(AuctionEntry* auction, CharacterDatabaseTransaction trans);
-        void SendAuctionOutbiddedMail(AuctionEntry* auction, uint32 newPrice, Player* newBidder);
-        void SendAuctionCancelledToBidderMail(AuctionEntry* auction);
+    //auction messages
+    void SendAuctionWonMail(AuctionEntry* auction, CharacterDatabaseTransaction trans);
+    void SendAuctionSalePendingMail(AuctionEntry* auction);
+    void SendAuctionSuccessfulMail(AuctionEntry* auction);
+    void SendAuctionExpiredMail(AuctionEntry* auction, CharacterDatabaseTransaction trans);
+    void SendAuctionOutbiddedMail(AuctionEntry* auction, uint32 newPrice, Player* newBidder);
+    void SendAuctionCancelledToBidderMail(AuctionEntry* auction);
 
-        static uint32 GetAuctionDeposit(AuctionHouseEntry const* entry, uint32 time, Item* pItem, uint32 count);
-        static AuctionHouseEntry const* GetAuctionHouseEntry(uint32 factionTemplateId);
-        static AuctionHouseEntry const* GetAuctionHouseEntryFromHouse(uint8 houseId);
-    public:
+    static uint32 GetAuctionDeposit(AuctionHouseEntry const* entry, uint32 time, Item* pItem, uint32 count);
+    static AuctionHouseEntry const* GetAuctionHouseEntry(uint32 factionTemplateId);
+    static AuctionHouseEntry const* GetAuctionHouseEntryFromHouse(uint8 houseId);
+public:
 
-        //load first auction items, because of check if item exists, when loading
-        void LoadAuctionItems();
-        void LoadAuctions();
+    //load first auction items, because of check if item exists, when loading
+    void LoadAuctionItems();
+    void LoadAuctions();
 
-        void AddAItem(Item* it);
-        bool RemoveAItem(ObjectGuid::LowType id, bool deleteItem = false, CharacterDatabaseTransaction* trans = nullptr);
-        bool PendingAuctionAdd(Player* player, AuctionEntry* aEntry);
-        uint32 PendingAuctionCount(Player const* player) const;
-        void PendingAuctionProcess(Player* player);
-        void UpdatePendingAuctions();
-        void Update();
+    void AddAItem(Item* it);
+    bool RemoveAItem(ObjectGuid::LowType id, bool deleteItem = false, CharacterDatabaseTransaction* trans = nullptr);
+    bool PendingAuctionAdd(Player* player, AuctionEntry* aEntry);
+    uint32 PendingAuctionCount(Player const* player) const;
+    void PendingAuctionProcess(Player* player);
+    void UpdatePendingAuctions();
+    void Update();
 
-    private:
+private:
 
-        AuctionHouseObject mHordeAuctions;
-        AuctionHouseObject mAllianceAuctions;
-        AuctionHouseObject mNeutralAuctions;
+    AuctionHouseObject mHordeAuctions;
+    AuctionHouseObject mAllianceAuctions;
+    AuctionHouseObject mNeutralAuctions;
 
-        std::map<ObjectGuid, AuctionPair> pendingAuctionMap;
+    std::map<ObjectGuid, AuctionPair> pendingAuctionMap;
 
-        ItemMap mAitems;
+    ItemMap mAitems;
 };
 
 #define sAuctionMgr AuctionHouseMgr::instance()

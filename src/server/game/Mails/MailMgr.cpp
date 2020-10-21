@@ -39,9 +39,9 @@
 #include "WorldSession.h"
 #include "WorldPacket.h"
 
-constexpr uint32 MAX_NETCLIENT_PACKET_SIZE = 32767 - 1 // Client hardcap: int16 with trailing zero space otherwise crash on memory free          
+constexpr uint32 MAX_NETCLIENT_PACKET_SIZE = 32767 - 1 // Client hardcap: int16 with trailing zero space otherwise crash on memory free
 
-MailMgr* MailMgr::instance()
+        MailMgr * MailMgr::instance()
 {
     static MailMgr instance;
     return &instance;
@@ -77,7 +77,7 @@ void MailMgr::Update(uint32 diff)
     m_updateTimer += diff;
     if (m_updateTimer >= MAIL_UPDATE_INTERVAL) // upd only each 1 sec
     {
-        _ExpTimer.Update(m_updateTimer/1000);
+        _ExpTimer.Update(m_updateTimer / 1000);
         if (_ExpTimer.Passed())
             _DeleteExpiryMails();
 
@@ -526,10 +526,10 @@ bool MailMgr::PrepareMessageAttributeBy(Object* sender, ObjectGuid::LowType /*re
             m_messageType = MAIL_GAMEOBJECT;
             m_senderId = sender->GetEntry();
             break;
-            /*case TYPEID_ITEM:
-                m_messageType = MAIL_ITEM;
-                m_senderId = sender->GetEntry();
-                break;*/
+        /*case TYPEID_ITEM:
+            m_messageType = MAIL_ITEM;
+            m_senderId = sender->GetEntry();
+            break;*/
         case TYPEID_PLAYER:
             m_messageType = MAIL_NORMAL;
             m_senderId = sender->GetGUID().GetCounter();
@@ -614,8 +614,8 @@ bool MailMgr::PrepareMessageAttributeForAuctionAndCalendar(uint32 deliver_delay,
 }
 
 uint32 MailMgr::AddNewMail(uint8 messageType, uint8 stationery, uint16 mailTemplateId, ObjectGuid::LowType sender, ObjectGuid::LowType receiver,
-    std::string const& subject, std::string const& body, bool item_exists, uint32 money, time_t expire_time, time_t deliver_time,
-    uint32 COD, uint8 checked, uint8 state)
+                           std::string const& subject, std::string const& body, bool item_exists, uint32 money, time_t expire_time, time_t deliver_time,
+                           uint32 COD, uint8 checked, uint8 state)
 {
     // find max id
     uint32 new_id = 0;
@@ -831,7 +831,7 @@ uint32 MailMgr::GetMailBoxSize(ObjectGuid::LowType playerId)
     for (MailMap::const_iterator itr = m_mails.begin(); itr != m_mails.end(); ++itr)
     {
         if (itr->second.receiver == playerId)
-                ++mails;
+            ++mails;
     }
 
     return mails;
@@ -1055,9 +1055,9 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
                             if (!sCharacterCache->GetCharacterNameByGuid(sender_guid, sender_name))
                                 sender_name = sObjectMgr->GetTrinityStringForDBCLocale(LANG_UNKNOWN);
                         }
-                        
+
                         LOG_GM(player->GetSession()->GetAccountId(), "GM %s (Account: %u) receiver mail item: %s (Entry: %u Count: %u) and send COD money: %u to player: %s (Account: %u)",
-                            player->GetName().c_str(), player->GetSession()->GetAccountId(), it->GetTemplate()->Name1.c_str(), it->GetEntry(), it->GetCount(), itr->second.COD, sender_name.c_str(), sender_accId);
+                               player->GetName().c_str(), player->GetSession()->GetAccountId(), it->GetTemplate()->Name1.c_str(), it->GetEntry(), it->GetCount(), itr->second.COD, sender_name.c_str(), sender_accId);
                     }
                     else if (!receiver)
                         sender_accId = sCharacterCache->GetCharacterAccountIdByGuid(sender_guid);
@@ -1115,7 +1115,7 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
             }
             else
                 result = 3;
-                //player->SendMailResult(mailID, MAIL_ITEM_TAKEN, MAIL_ERR_EQUIP_ERROR, msg_result);
+            //player->SendMailResult(mailID, MAIL_ITEM_TAKEN, MAIL_ERR_EQUIP_ERROR, msg_result);
         }
     }
 
