@@ -69,6 +69,9 @@ enum ICCTexts
 
     // Rotting Frost Giant
     EMOTE_DEATH_PLAGUE_WARNING = 0,
+
+    // Sindragosa Gauntlet
+    SAY_INIT                   = 0
 };
 
 enum ICCSpells
@@ -134,7 +137,12 @@ enum ICCSpells
     SPELL_WEB_BEAM                  = 69887,
     SPELL_CRYPT_SCARABS             = 70965,
     SPELL_WEB_WRAP                  = 70980,
-    SPELL_DARK_MENDING              = 71020
+    SPELL_DARK_MENDING              = 71020,
+
+    // Sindragosa Gauntlet
+    SPELL_WEB_BEAM2                 = 69986,
+    SPELL_WEB                       = 71327,
+    SPELL_RUSH                      = 71801
 };
 
 enum ICCTimedEventIds
@@ -180,6 +188,13 @@ enum ICCTimedEventIds
 
     // Invisible Stalker (Float, Uninteractible, LargeAOI)
     EVENT_SOUL_MISSILE,
+
+    // Sindragosa Gauntlet
+    EVENT_CHECK_FIGHT,
+    EVENT_GAUNTLET_PHASE_1,
+    EVENT_GAUNTLET_PHASE_2,
+    EVENT_GAUNTLET_PHASE_3,
+    EVENT_SUMMON_BROODLING
 };
 
 enum ICCDataTypes
@@ -1602,32 +1617,6 @@ class at_icc_nerubar_broodkeeper : public OnlyOnceAreaTriggerScript
 };
 
 // GauntletEvent
-enum ICCGauntletEventSay
-{
-    SAY_INIT
-};
-
-enum ICCGauntletEventPointEnter
-{
-    POINT_ENTER_COMBAT = 1
-};
-
-enum ICCGauntletEventEvents
-{
-    EVENT_CHECK_FIGHT = 1,
-    EVENT_GAUNTLET_PHASE1,
-    EVENT_GAUNTLET_PHASE2,
-    EVENT_GAUNTLET_PHASE3,
-    EVENT_SUMMON_BROODLING
-};
-
-enum ICCGauntletEventSpells
-{
-    SPELL_WEB_BEAM2     = 69986,
-    SPELL_WEB           = 71327,
-    SPELL_RUSH          = 71801
-};
-
 struct npc_icc_gauntlet_controller : public NullCreatureAI
 {
     npc_icc_gauntlet_controller(Creature* creature) : NullCreatureAI(creature), summons(me)
@@ -1657,7 +1646,7 @@ struct npc_icc_gauntlet_controller : public NullCreatureAI
         events.Reset();
         events.SetPhase(0);
         events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
-        events.ScheduleEvent(EVENT_GAUNTLET_PHASE1, 0s);
+        events.ScheduleEvent(EVENT_GAUNTLET_PHASE_1, 0s);
         instance->SetBossState(DATA_SINDRAGOSA_GAUNTLET, IN_PROGRESS);
     }
 
@@ -1702,12 +1691,12 @@ struct npc_icc_gauntlet_controller : public NullCreatureAI
             if (events.GetPhaseMask() == 0)
             {
                 events.SetPhase(1);
-                events.ScheduleEvent(EVENT_GAUNTLET_PHASE2, 0s);
+                events.ScheduleEvent(EVENT_GAUNTLET_PHASE_2, 0s);
             }
             else if (events.GetPhaseMask() == 1)
             {
                 events.SetPhase(2);
-                events.ScheduleEvent(EVENT_GAUNTLET_PHASE3, 0s);
+                events.ScheduleEvent(EVENT_GAUNTLET_PHASE_3, 0s);
             }
             else
                 Unit::Kill(me, me);
@@ -1738,15 +1727,15 @@ struct npc_icc_gauntlet_controller : public NullCreatureAI
                 CreatureAI::EnterEvadeMode();
                 return;
             }
-            case EVENT_GAUNTLET_PHASE1:
+            case EVENT_GAUNTLET_PHASE_1:
                 ScheduleBroodlings();
                 SpidersMoveDown();
                 break;
-            case EVENT_GAUNTLET_PHASE2:
+            case EVENT_GAUNTLET_PHASE_2:
                 ScheduleBroodlings();
                 SummonFrostwardens();
                 break;
-            case EVENT_GAUNTLET_PHASE3:
+            case EVENT_GAUNTLET_PHASE_3:
                 ScheduleBroodlings();
                 SummonSpiders();
                 SpidersMoveDown();
