@@ -1703,7 +1703,7 @@ struct npc_icc_gauntlet_controller : public NullCreatureAI
         }
     }
 
-    void UpdateAI(uint32 diff)
+    void UpdateAI(uint32 diff) override
     {
         events.Update(diff);
 
