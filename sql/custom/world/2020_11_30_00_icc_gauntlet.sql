@@ -42,6 +42,13 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 (37229, 0, 2, 0, 0, 0, 100, 20, 9000, 15000, 22000, 35000, 0, 11, 71330, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Sorceress - In Combat - Cast \'Ice Tomb\' (Heroic Dungeon) (Heroic Raid)'),
 (37229, 0, 3, 0, 25, 0, 100, 0, 1, 0, 0, 0, 0, 38, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Sorceress - On Reset - Set In Combat With Zone');
 
+-- Frostblade
+UPDATE `creature_template` SET `AIName` = 'SmartAI' WHERE `entry` = 38199;
+
+DELETE FROM `smart_scripts` WHERE (`source_type` = 0 AND `entryorguid` = 38199);
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_param4`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(38199, 0, 0, 0, 60, 0, 100, 0, 0, 0, 9000, 9000, 0, 11, 71323, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 'Frostblade - On Update - Cast \'Frostblade\'');
+
 -- Arena Trigger
 DELETE FROM `areatrigger_scripts` WHERE `entry` = 5623;
 INSERT INTO `areatrigger_scripts`(`entry`, `ScriptName`) VALUES 
