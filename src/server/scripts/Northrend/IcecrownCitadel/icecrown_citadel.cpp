@@ -574,52 +574,52 @@ struct npc_alchemist_adrianna : public ScriptedAI
 
 class npc_arthas_teleport_visual : public CreatureScript
 {
-    public:
-        npc_arthas_teleport_visual() : CreatureScript("npc_arthas_teleport_visual") { }
+public:
+    npc_arthas_teleport_visual() : CreatureScript("npc_arthas_teleport_visual") { }
 
-        struct npc_arthas_teleport_visualAI : public NullCreatureAI
+    struct npc_arthas_teleport_visualAI : public NullCreatureAI
+    {
+        npc_arthas_teleport_visualAI(Creature* creature) : NullCreatureAI(creature), _instance(creature->GetInstanceScript())
         {
-            npc_arthas_teleport_visualAI(Creature* creature) : NullCreatureAI(creature), _instance(creature->GetInstanceScript())
-            {
-            }
+        }
 
-            void Reset() override
-            {
-                _events.Reset();
-                if (_instance->GetBossState(DATA_PROFESSOR_PUTRICIDE) == DONE &&
+        void Reset() override
+        {
+            _events.Reset();
+            if (_instance->GetBossState(DATA_PROFESSOR_PUTRICIDE) == DONE &&
                     _instance->GetBossState(DATA_BLOOD_QUEEN_LANA_THEL) == DONE &&
                     _instance->GetBossState(DATA_SINDRAGOSA) == DONE)
-                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, 1s, 6s);
-            }
-
-            void UpdateAI(uint32 diff) override
-            {
-                if (_events.Empty())
-                    return;
-
-                _events.Update(diff);
-
-                if (_events.ExecuteEvent() == EVENT_SOUL_MISSILE)
-                {
-                    DoCastAOE(SPELL_SOUL_MISSILE);
-                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, 5s, 7s);
-                }
-            }
-
-        private:
-            InstanceScript* _instance;
-            EventMap _events;
-        };
-
-        CreatureAI* GetAI(Creature* creature) const override
-        {
-            // Distance from the center of the spire
-            if (creature->GetExactDist2d(4357.052f, 2769.421f) < 100.0f && creature->GetHomePosition().GetPositionZ() < 315.0f)
-                return GetIcecrownCitadelAI<npc_arthas_teleport_visualAI>(creature);
-
-            // Default to no script
-            return nullptr;
+                _events.ScheduleEvent(EVENT_SOUL_MISSILE, 1s, 6s);
         }
+
+        void UpdateAI(uint32 diff) override
+        {
+            if (_events.Empty())
+                return;
+
+            _events.Update(diff);
+
+            if (_events.ExecuteEvent() == EVENT_SOUL_MISSILE)
+            {
+                DoCastAOE(SPELL_SOUL_MISSILE);
+                _events.ScheduleEvent(EVENT_SOUL_MISSILE, 5s, 7s);
+            }
+        }
+
+    private:
+        InstanceScript* _instance;
+        EventMap _events;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const override
+    {
+        // Distance from the center of the spire
+        if (creature->GetExactDist2d(4357.052f, 2769.421f) < 100.0f && creature->GetHomePosition().GetPositionZ() < 315.0f)
+            return GetIcecrownCitadelAI<npc_arthas_teleport_visualAI>(creature);
+
+        // Default to no script
+        return nullptr;
+    }
 };
 
 struct npc_entrance_faction_leader : public ScriptedAI
@@ -664,7 +664,7 @@ private:
     bool _checkCasting;
 };
 
-static Emote const DarkFallensEmotes[]=
+static Emote const DarkFallensEmotes[] =
 {
     EMOTE_ONESHOT_TALK,
     EMOTE_ONESHOT_EXCLAMATION,
@@ -1261,7 +1261,7 @@ class spell_darkfallen_blood_mirror : public SpellScript
 
     void FilterTargets(std::list<WorldObject*>& targets)
     {
-        targets.remove_if([](WorldObject* target)
+        targets.remove_if([](WorldObject * target)
         {
             return target->GetTypeId() != TYPEID_PLAYER;
         });
@@ -1433,7 +1433,7 @@ class spell_frost_giant_death_plague : public SpellScript
     void FilterTargets(std::list<WorldObject*>& targets)
     {
         targets = _sharedList;
-        targets.remove_if([](WorldObject* obj) -> bool
+        targets.remove_if([](WorldObject * obj) -> bool
         {
             Unit* object = obj->ToUnit();
 
@@ -1538,82 +1538,82 @@ void spell_trigger_spell_from_caster::Register()
 
 class at_icc_saurfang_portal : public AreaTriggerScript
 {
-    public:
-        at_icc_saurfang_portal() : AreaTriggerScript("at_icc_saurfang_portal") { }
+public:
+    at_icc_saurfang_portal() : AreaTriggerScript("at_icc_saurfang_portal") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
-        {
-            InstanceScript* instance = player->GetInstanceScript();
-            if (!instance || instance->GetBossState(DATA_DEATHBRINGER_SAURFANG) != DONE)
-                return true;
-
-            player->TeleportTo(631, 4126.35f, 2769.23f, 350.963f, 0.0f);
-
-            if (instance->GetData(DATA_COLDFLAME_JETS) == NOT_STARTED)
-            {
-                // Process relocation now, to preload the grid and initialize traps
-                player->GetMap()->PlayerRelocation(player, 4126.35f, 2769.23f, 350.963f, 0.0f);
-
-                instance->SetData(DATA_COLDFLAME_JETS, IN_PROGRESS);
-                std::list<Creature*> traps;
-                GetCreatureListWithEntryInGrid(traps, player, NPC_FROST_FREEZE_TRAP, 120.0f);
-                traps.sort(Warhead::ObjectDistanceOrderPred(player));
-                bool instant = false;
-                for (std::list<Creature*>::iterator itr = traps.begin(); itr != traps.end(); ++itr)
-                {
-                    (*itr)->AI()->DoAction(instant ? 1000 : 11000);
-                    instant = !instant;
-                }
-            }
-
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
+    {
+        InstanceScript* instance = player->GetInstanceScript();
+        if (!instance || instance->GetBossState(DATA_DEATHBRINGER_SAURFANG) != DONE)
             return true;
+
+        player->TeleportTo(631, 4126.35f, 2769.23f, 350.963f, 0.0f);
+
+        if (instance->GetData(DATA_COLDFLAME_JETS) == NOT_STARTED)
+        {
+            // Process relocation now, to preload the grid and initialize traps
+            player->GetMap()->PlayerRelocation(player, 4126.35f, 2769.23f, 350.963f, 0.0f);
+
+            instance->SetData(DATA_COLDFLAME_JETS, IN_PROGRESS);
+            std::list<Creature*> traps;
+            GetCreatureListWithEntryInGrid(traps, player, NPC_FROST_FREEZE_TRAP, 120.0f);
+            traps.sort(Warhead::ObjectDistanceOrderPred(player));
+            bool instant = false;
+            for (std::list<Creature*>::iterator itr = traps.begin(); itr != traps.end(); ++itr)
+            {
+                (*itr)->AI()->DoAction(instant ? 1000 : 11000);
+                instant = !instant;
+            }
         }
+
+        return true;
+    }
 };
 
 class at_icc_shutdown_traps : public AreaTriggerScript
 {
-    public:
-        at_icc_shutdown_traps() : AreaTriggerScript("at_icc_shutdown_traps") { }
+public:
+    at_icc_shutdown_traps() : AreaTriggerScript("at_icc_shutdown_traps") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
-        {
-            if (InstanceScript* instance = player->GetInstanceScript())
-                instance->SetData(DATA_UPPERSPIRE_TELE_ACT, DONE);
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
+    {
+        if (InstanceScript* instance = player->GetInstanceScript())
+            instance->SetData(DATA_UPPERSPIRE_TELE_ACT, DONE);
 
-            return true;
-        }
+        return true;
+    }
 };
 
 class at_icc_start_blood_quickening : public AreaTriggerScript
 {
-    public:
-        at_icc_start_blood_quickening() : AreaTriggerScript("at_icc_start_blood_quickening") { }
+public:
+    at_icc_start_blood_quickening() : AreaTriggerScript("at_icc_start_blood_quickening") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
-        {
-            if (InstanceScript* instance = player->GetInstanceScript())
-                if (instance->GetData(DATA_BLOOD_QUICKENING_STATE) == NOT_STARTED)
-                    instance->SetData(DATA_BLOOD_QUICKENING_STATE, IN_PROGRESS);
-            return true;
-        }
+    bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
+    {
+        if (InstanceScript* instance = player->GetInstanceScript())
+            if (instance->GetData(DATA_BLOOD_QUICKENING_STATE) == NOT_STARTED)
+                instance->SetData(DATA_BLOOD_QUICKENING_STATE, IN_PROGRESS);
+        return true;
+    }
 };
 
 class at_icc_nerubar_broodkeeper : public OnlyOnceAreaTriggerScript
 {
-    public:
-        at_icc_nerubar_broodkeeper() : OnlyOnceAreaTriggerScript("at_icc_nerubar_broodkeeper") { }
+public:
+    at_icc_nerubar_broodkeeper() : OnlyOnceAreaTriggerScript("at_icc_nerubar_broodkeeper") { }
 
-        bool TryHandleOnce(Player* player, AreaTriggerEntry const* areaTrigger) override
+    bool TryHandleOnce(Player* player, AreaTriggerEntry const* areaTrigger) override
+    {
+        if (InstanceScript* instance = player->GetInstanceScript())
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
-            {
-                if (player->IsGameMaster())
-                    return false;
+            if (player->IsGameMaster())
+                return false;
 
-                instance->SetData(DATA_NERUBAR_BROODKEEPER_EVENT, areaTrigger->ID);
-            }
-            return true;
+            instance->SetData(DATA_NERUBAR_BROODKEEPER_EVENT, areaTrigger->ID);
         }
+        return true;
+    }
 };
 
 // GauntletEvent
@@ -1917,16 +1917,16 @@ struct npc_icc_nerubar_webweaver : public ScriptedAI
                 {
                     if (on)
                     {
-                        if (!me->HasReactState(REACT_PASSIVE) && me->GetVictim() && !me->GetMotionMaster()->HasMovementGenerator([](MovementGenerator const* movement) -> bool
-                            {
-                                return movement->GetMovementGeneratorType() == CHASE_MOTION_TYPE && movement->Mode == MOTION_MODE_DEFAULT && movement->Priority == MOTION_PRIORITY_NORMAL;
-                            }))
-                            me->GetMotionMaster()->MoveChase(me->GetVictim());
-                    }
-                    else if (MovementGenerator* movement = me->GetMotionMaster()->GetMovementGenerator([](MovementGenerator const* a) -> bool
-                        {
-                            return a->GetMovementGeneratorType() == CHASE_MOTION_TYPE && a->Mode == MOTION_MODE_DEFAULT && a->Priority == MOTION_PRIORITY_NORMAL;
+                        if (!me->HasReactState(REACT_PASSIVE) && me->GetVictim() && !me->GetMotionMaster()->HasMovementGenerator([](MovementGenerator const * movement) -> bool
+                    {
+                        return movement->GetMovementGeneratorType() == CHASE_MOTION_TYPE && movement->Mode == MOTION_MODE_DEFAULT && movement->Priority == MOTION_PRIORITY_NORMAL;
                         }))
+                        me->GetMotionMaster()->MoveChase(me->GetVictim());
+                    }
+                    else if (MovementGenerator* movement = me->GetMotionMaster()->GetMovementGenerator([](MovementGenerator const * a) -> bool
+                {
+                    return a->GetMovementGeneratorType() == CHASE_MOTION_TYPE && a->Mode == MOTION_MODE_DEFAULT && a->Priority == MOTION_PRIORITY_NORMAL;
+                    }))
                     {
                         me->GetMotionMaster()->Remove(movement);
 
