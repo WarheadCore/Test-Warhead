@@ -23,7 +23,7 @@
 #include "GameConfig.h"
 #include "Log.h"
 #include "SpellMgr.h"
-#include "Timer.h"
+#include "World.h"
 
 void CharacterDatabaseCleaner::CleanDatabase()
 {

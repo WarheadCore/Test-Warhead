@@ -26,6 +26,7 @@
 #include "DisableMgr.h"
 #include "GameObject.h"
 #include "GameObjectAIFactory.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "GossipDef.h"
 #include "GroupMgr.h"
@@ -54,7 +55,7 @@
 #include "UpdateMask.h"
 #include "Util.h"
 #include "Vehicle.h"
-#include "GameConfig.h"
+#include "World.h"
 
 ScriptMapMap sSpellScripts;
 ScriptMapMap sEventScripts;
