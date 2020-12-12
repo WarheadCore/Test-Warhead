@@ -32,6 +32,7 @@
 #include "DBCStores.h"
 #include "GameObject.h"
 #include "GameObjectAI.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "GossipDef.h"
 #include "Group.h"
@@ -50,7 +51,7 @@
 #include "Spell.h"
 #include "SpellInfo.h"
 #include "WhoListStorage.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldPacket.h"
 #include <cstdarg>
 #include <zlib.h>

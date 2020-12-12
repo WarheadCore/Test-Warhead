@@ -101,7 +101,7 @@
 #include "Util.h"
 #include "Weather.h"
 #include "WeatherMgr.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "WorldStatePackets.h"

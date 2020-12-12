@@ -16,9 +16,10 @@
  */
 
 #include "ObjectGuid.h"
+#include "GameConfig.h"
 #include "Hash.h"
 #include "Log.h"
-#include "GameConfig.h"
+#include "World.h"
 #include <sstream>
 #include <iomanip>
 

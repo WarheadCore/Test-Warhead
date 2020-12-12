@@ -24,6 +24,7 @@
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
 #include "GameObject.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "GitRevision.h"
 #include "Group.h"
@@ -51,7 +52,7 @@
 #include "StringConvert.h"
 #include "SystemPackets.h"
 #include "QueryHolder.h"
-#include "GameConfig.h"
+#include "World.h"
 
 class LoginQueryHolder : public CharacterDatabaseQueryHolder
 {

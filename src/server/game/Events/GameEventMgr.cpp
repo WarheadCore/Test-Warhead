@@ -21,6 +21,7 @@
 #include "DBCStores.h"
 #include "DatabaseEnv.h"
 #include "GameObjectAI.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "Language.h"
 #include "Log.h"
@@ -28,7 +29,7 @@
 #include "ObjectMgr.h"
 #include "PoolMgr.h"
 #include "Player.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldStatePackets.h"
 
 GameEventMgr* GameEventMgr::instance()

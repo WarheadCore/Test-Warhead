@@ -18,6 +18,7 @@
 #include "WorldSession.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "Language.h"
 #include "Log.h"
@@ -27,7 +28,7 @@
 #include "Random.h"
 #include "TicketMgr.h"
 #include "Util.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldPacket.h"
 #include <zlib.h>
 

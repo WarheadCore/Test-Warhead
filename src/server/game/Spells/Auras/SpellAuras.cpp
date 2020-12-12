@@ -19,6 +19,7 @@
 #include "CellImpl.h"
 #include "Config.h"
 #include "DynamicObject.h"
+#include "GameConfig.h"
 #include "GridNotifiersImpl.h"
 #include "Item.h"
 #include "Log.h"
@@ -35,7 +36,7 @@
 #include "Unit.h"
 #include "Util.h"
 #include "Vehicle.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldPacket.h"
 
 AuraCreateInfo::AuraCreateInfo(SpellInfo const* spellInfo, uint8 auraEffMask, WorldObject* owner) :

@@ -22,6 +22,7 @@
 #include "DatabaseEnv.h"
 #include "GameObjectAI.h"
 #include "GameObjectModel.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "GossipDef.h"
 #include "GridNotifiersImpl.h"
@@ -40,7 +41,7 @@
 #include "SpellMgr.h"
 #include "Transport.h"
 #include "UpdateFieldFlags.h"
-#include "GameConfig.h"
+#include "World.h"
 #include <G3D/Box.h>
 #include <G3D/CoordinateFrame.h>
 #include <G3D/Quat.h>

@@ -22,6 +22,7 @@
 #include "DisableMgr.h"
 #include "DynamicTree.h"
 #include "GameObjectModel.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
@@ -47,7 +48,7 @@
 #include "VMapManager2.h"
 #include "Weather.h"
 #include "WeatherMgr.h"
-#include "GameConfig.h"
+#include "World.h"
 #include <unordered_set>
 #include <vector>
 

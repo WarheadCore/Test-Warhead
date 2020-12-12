@@ -18,6 +18,7 @@
 #include "WorldSocket.h"
 #include "BigNumber.h"
 #include "DatabaseEnv.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "CryptoHash.h"
 #include "CryptoRandom.h"
@@ -28,7 +29,7 @@
 #include "RBAC.h"
 #include "Realm.h"
 #include "ScriptMgr.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldSession.h"
 #include <memory>
 

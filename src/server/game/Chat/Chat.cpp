@@ -21,6 +21,7 @@
 #include "CharacterCache.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
+#include "GameConfig.h"
 #include "GridNotifiersImpl.h"
 #include "Language.h"
 #include "Log.h"
@@ -30,7 +31,7 @@
 #include "Player.h"
 #include "Realm.h"
 #include "ScriptMgr.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldSession.h"
 #include <boost/algorithm/string/replace.hpp>
 

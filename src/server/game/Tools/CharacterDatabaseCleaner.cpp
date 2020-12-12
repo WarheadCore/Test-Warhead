@@ -20,9 +20,10 @@
 #include "CharacterDatabaseCleaner.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
+#include "GameConfig.h"
 #include "Log.h"
 #include "SpellMgr.h"
-#include "GameConfig.h"
+#include "Timer.h"
 
 void CharacterDatabaseCleaner::CleanDatabase()
 {

@@ -17,11 +17,12 @@
 
 #include "GuildMgr.h"
 #include "DatabaseEnv.h"
+#include "GameConfig.h"
 #include "Guild.h"
 #include "Log.h"
 #include "ObjectMgr.h"
 #include "Util.h"
-#include "GameConfig.h"
+#include "World.h"
 
 GuildMgr::GuildMgr() : NextGuildId(1)
 { }

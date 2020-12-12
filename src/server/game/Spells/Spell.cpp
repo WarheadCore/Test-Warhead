@@ -30,6 +30,7 @@
 #include "GameObjectAI.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "InstanceScript.h"
 #include "Item.h"
@@ -58,7 +59,7 @@
 #include "Vehicle.h"
 #include "VMapFactory.h"
 #include "VMapManager2.h"
-#include "GameConfig.h"
+#include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
 

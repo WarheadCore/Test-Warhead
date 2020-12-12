@@ -20,6 +20,7 @@
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "Log.h"
 #include "MapManager.h"
@@ -29,7 +30,7 @@
 #include "Player.h"
 #include "QueryPackets.h"
 #include "UpdateMask.h"
-#include "GameConfig.h"
+#include "World.h"
 
 void WorldSession::SendNameQueryOpcode(ObjectGuid guid)
 {

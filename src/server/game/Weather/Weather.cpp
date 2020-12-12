@@ -20,6 +20,7 @@
 */
 
 #include "Weather.h"
+#include "GameConfig.h"
 #include "GameTime.h"
 #include "Log.h"
 #include "MiscPackets.h"
@@ -27,7 +28,7 @@
 #include "Random.h"
 #include "ScriptMgr.h"
 #include "Util.h"
-#include "GameConfig.h"
+#include "World.h"
 
 /// Create the Weather object
 Weather::Weather(uint32 zoneId, WeatherData const* weatherChances)

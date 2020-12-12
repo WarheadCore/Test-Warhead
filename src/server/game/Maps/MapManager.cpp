@@ -30,6 +30,7 @@
 #include "WorldPacket.h"
 #include "Group.h"
 #include "Player.h"
+#include "World.h"
 #include "WorldSession.h"
 #include "Opcodes.h"
 

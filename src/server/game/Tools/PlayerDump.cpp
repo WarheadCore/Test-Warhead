@@ -20,10 +20,11 @@
 #include "CharacterCache.h"
 #include "Common.h"
 #include "DatabaseEnv.h"
+#include "GameConfig.h"
 #include "Log.h"
 #include "ObjectMgr.h"
 #include "Player.h"
-#include "GameConfig.h"
+#include "World.h"
 #include <fstream>
 #include <sstream>
 
