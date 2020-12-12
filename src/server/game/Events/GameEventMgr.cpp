@@ -28,7 +28,7 @@
 #include "ObjectMgr.h"
 #include "PoolMgr.h"
 #include "Player.h"
-#include "World.h"
+#include "GameConfig.h"
 #include "WorldStatePackets.h"
 
 GameEventMgr* GameEventMgr::instance()
@@ -1103,7 +1103,7 @@ uint32 GameEventMgr::StartSystem()                           // return the next 
 
 void GameEventMgr::StartArenaSeason()
 {
-    uint8 season = sWorld->getIntConfig(CONFIG_ARENA_SEASON_ID);
+    uint8 season = CONF_GET_INT("Arena.ArenaSeason.ID");
     QueryResult result = WorldDatabase.PQuery("SELECT eventEntry FROM game_event_arena_seasons WHERE season = '%i'", season);
 
     if (!result)
@@ -1225,7 +1225,7 @@ void GameEventMgr::UnApplyEvent(uint16 event_id)
 void GameEventMgr::ApplyNewEvent(uint16 event_id)
 {
     uint8 announce = mGameEvent[event_id].announce;
-    if (announce == 1 || (announce == 2 && sWorld->getBoolConfig(CONFIG_EVENT_ANNOUNCE)))
+    if (announce == 1 || (announce == 2 && CONF_GET_BOOL("Event.Announce")))
         sWorld->SendWorldText(LANG_EVENTMESSAGE, mGameEvent[event_id].description.c_str());
 
     LOG_INFO("gameevent", "GameEvent %u \"%s\" started.", event_id, mGameEvent[event_id].description.c_str());

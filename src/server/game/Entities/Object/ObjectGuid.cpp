@@ -18,7 +18,7 @@
 #include "ObjectGuid.h"
 #include "Hash.h"
 #include "Log.h"
-#include "World.h"
+#include "GameConfig.h"
 #include <sstream>
 #include <iomanip>
 
@@ -99,9 +99,9 @@ void ObjectGuidGeneratorBase::HandleCounterOverflow(HighGuid high)
 
 void ObjectGuidGeneratorBase::CheckGuidTrigger(ObjectGuid::LowType guidlow)
 {
-    if (!sWorld->IsGuidAlert() && guidlow > sWorld->getIntConfig(CONFIG_RESPAWN_GUIDALERTLEVEL))
+    if (!sWorld->IsGuidAlert() && guidlow > CONF_GET_INT("Respawn.GuidAlertLevel"))
         sWorld->TriggerGuidAlert();
-    else if (!sWorld->IsGuidWarning() && guidlow > sWorld->getIntConfig(CONFIG_RESPAWN_GUIDWARNLEVEL))
+    else if (!sWorld->IsGuidWarning() && guidlow > CONF_GET_INT("Respawn.GuidWarnLevel"))
         sWorld->TriggerGuidWarning();
 }
 

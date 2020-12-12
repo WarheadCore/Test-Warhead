@@ -29,7 +29,7 @@
 #include "Player.h"
 #include "QueryPackets.h"
 #include "UpdateMask.h"
-#include "World.h"
+#include "GameConfig.h"
 
 void WorldSession::SendNameQueryOpcode(ObjectGuid guid)
 {
@@ -94,7 +94,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPackets::Query::QueryCreature&
     if (CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate(query.CreatureID))
     {
         LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name.c_str(), query.CreatureID);
-        if (sWorld->getBoolConfig(CONFIG_CACHE_DATA_QUERIES))
+        if (CONF_GET_BOOL("CacheDataQueries"))
             SendPacket(&ci->QueryData[static_cast<uint32>(GetSessionDbLocaleIndex())]);
         else
         {
@@ -120,7 +120,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPackets::Query::QueryGameObj
 {
     if (GameObjectTemplate const* info = sObjectMgr->GetGameObjectTemplate(query.GameObjectID))
     {
-        if (sWorld->getBoolConfig(CONFIG_CACHE_DATA_QUERIES))
+        if (CONF_GET_BOOL("CacheDataQueries"))
             SendPacket(&info->QueryData[static_cast<uint32>(GetSessionDbLocaleIndex())]);
         else
         {
@@ -349,7 +349,7 @@ void WorldSession::HandleQuestPOIQuery(WorldPackets::Query::QuestPOIQuery& query
         {
             if (QuestPOIWrapper const* poiWrapper = sObjectMgr->GetQuestPOIWrapper(questId))
             {
-                if (sWorld->getBoolConfig(CONFIG_CACHE_DATA_QUERIES))
+                if (CONF_GET_BOOL("CacheDataQueries"))
                     data.append(poiWrapper->QueryDataBuffer);
                 else
                 {

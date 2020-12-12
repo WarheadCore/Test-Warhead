@@ -50,7 +50,7 @@
 #include "Spell.h"
 #include "SpellInfo.h"
 #include "WhoListStorage.h"
-#include "World.h"
+#include "GameConfig.h"
 #include "WorldPacket.h"
 #include <cstdarg>
 #include <zlib.h>
@@ -243,7 +243,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
     uint32 team = _player->GetTeam();
 
-    uint32 gmLevelInWhoList  = sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_WHO_LIST);
+    uint32 gmLevelInWhoList  = CONF_GET_INT("GM.InWhoList.Level");
     uint32 displayCount = 0;
 
     WorldPacket data(SMSG_WHO, 500);                      // guess size
@@ -330,7 +330,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
         // 49 is maximum player count sent to client - can be overridden
         // through config, but is unstable
-        if ((matchCount++) >= sWorld->getIntConfig(CONFIG_MAX_WHO))
+        if ((matchCount++) >= CONF_GET_INT("MaxWhoListReturns"))
             continue;
 
         data << target.GetPlayerName();                   // player name
@@ -971,7 +971,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recvData)
     WorldPacket data(SMSG_INSPECT_TALENT, guid_size+4+talent_points);
     data << player->GetPackGUID();
 
-    if (GetPlayer()->CanBeGameMaster() || sWorld->getIntConfig(CONFIG_TALENTS_INSPECTING) + (GetPlayer()->GetTeamId() == player->GetTeamId()) > 1)
+    if (GetPlayer()->CanBeGameMaster() || CONF_GET_INT("TalentsInspecting") + (GetPlayer()->GetTeamId() == player->GetTeamId()) > 1)
         player->BuildPlayerTalentsInfoData(&data);
     else
     {

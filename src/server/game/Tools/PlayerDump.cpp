@@ -23,7 +23,7 @@
 #include "Log.h"
 #include "ObjectMgr.h"
 #include "Player.h"
-#include "World.h"
+#include "GameConfig.h"
 #include <fstream>
 #include <sstream>
 
@@ -688,11 +688,11 @@ bool PlayerDumpWriter::GetDump(ObjectGuid::LowType guid, std::string& dump)
 
 DumpReturn PlayerDumpWriter::WriteDumpToFile(std::string const& file, ObjectGuid::LowType guid)
 {
-    if (sWorld->getBoolConfig(CONFIG_PDUMP_NO_PATHS))
+    if (CONF_GET_BOOL("PlayerDump.DisallowPaths"))
         if (strchr(file.c_str(), '\\') || strchr(file.c_str(), '/'))
             return DUMP_FILE_OPEN_ERROR;
 
-    if (sWorld->getBoolConfig(CONFIG_PDUMP_NO_OVERWRITE))
+    if (CONF_GET_BOOL("PlayerDump.DisallowOverwrite"))
     {
         // check if file exists already
         if (GetFileHandle(file.c_str(), "r"))

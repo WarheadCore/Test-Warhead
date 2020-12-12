@@ -27,13 +27,13 @@
 #include "Random.h"
 #include "ScriptMgr.h"
 #include "Util.h"
-#include "World.h"
+#include "GameConfig.h"
 
 /// Create the Weather object
 Weather::Weather(uint32 zoneId, WeatherData const* weatherChances)
     : m_zone(zoneId), m_weatherChances(weatherChances)
 {
-    m_timer.SetInterval(sWorld->getIntConfig(CONFIG_INTERVAL_CHANGEWEATHER));
+    m_timer.SetInterval(CONF_GET_INT("ChangeWeatherInterval"));
     m_type = WEATHER_TYPE_FINE;
     m_intensity = 0;
 

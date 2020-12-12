@@ -27,7 +27,7 @@
 #include "Random.h"
 #include "TicketMgr.h"
 #include "Util.h"
-#include "World.h"
+#include "GameConfig.h"
 #include "WorldPacket.h"
 #include <zlib.h>
 
@@ -37,9 +37,9 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
     if (sTicketMgr->GetStatus() == GMTICKET_QUEUE_STATUS_DISABLED)
         return;
 
-    if (GetPlayer()->GetLevel() < sWorld->getIntConfig(CONFIG_TICKET_LEVEL_REQ))
+    if (GetPlayer()->GetLevel() < CONF_GET_INT("LevelReq.Ticket"))
     {
-        SendNotification(GetTrinityString(LANG_TICKET_REQ), sWorld->getIntConfig(CONFIG_TICKET_LEVEL_REQ));
+        SendNotification(GetTrinityString(LANG_TICKET_REQ), CONF_GET_INT("LevelReq.Ticket"));
         return;
     }
 
@@ -275,7 +275,7 @@ void WorldSession::HandleGMResponseResolve(WorldPacket& /*recvPacket*/)
     if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
     {
         uint8 getSurvey = 0;
-        if (roll_chance_f(sWorld->getFloatConfig(CONFIG_CHANCE_OF_GM_SURVEY)))
+        if (roll_chance_f(CONF_GET_FLOAT("GM.TicketSystem.ChanceOfGMSurvey")))
             getSurvey = 1;
 
         WorldPacket data(SMSG_GMRESPONSE_STATUS_UPDATE, 4);

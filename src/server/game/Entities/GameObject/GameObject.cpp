@@ -40,7 +40,7 @@
 #include "SpellMgr.h"
 #include "Transport.h"
 #include "UpdateFieldFlags.h"
-#include "World.h"
+#include "GameConfig.h"
 #include <G3D/Box.h>
 #include <G3D/CoordinateFrame.h>
 #include <G3D/Quat.h>
@@ -842,7 +842,7 @@ void GameObject::Update(uint32 diff)
             }
 
             uint32 respawnDelay = m_respawnDelayTime;
-            if (uint32 scalingMode = sWorld->getIntConfig(CONFIG_RESPAWN_DYNAMICMODE))
+            if (uint32 scalingMode = CONF_GET_INT("Respawn.DynamicMode"))
                 GetMap()->ApplyDynamicModeRespawnScaling(this, this->m_spawnId, respawnDelay, scalingMode);
             m_respawnTime = GameTime::GetGameTime() + respawnDelay;
 

@@ -24,8 +24,7 @@
 #include "GridDefines.h"
 #include "MapInstanced.h"
 #include "InstanceScript.h"
-#include "Config.h"
-#include "World.h"
+#include "GameConfig.h"
 #include "Corpse.h"
 #include "ObjectMgr.h"
 #include "WorldPacket.h"
@@ -37,8 +36,8 @@
 MapManager::MapManager()
     : _nextInstanceId(0), _scheduledScripts(0)
 {
-    i_gridCleanUpDelay = sWorld->getIntConfig(CONFIG_INTERVAL_GRIDCLEAN);
-    i_timer.SetInterval(sWorld->getIntConfig(CONFIG_INTERVAL_MAPUPDATE));
+    i_gridCleanUpDelay = CONF_GET_INT("GridCleanUpDelay");
+    i_timer.SetInterval(CONF_GET_INT("MapUpdateInterval"));
 }
 
 MapManager::~MapManager() { }
@@ -47,7 +46,7 @@ void MapManager::Initialize()
 {
     Map::InitStateMachine();
 
-    int num_threads(sWorld->getIntConfig(CONFIG_NUMTHREADS));
+    int num_threads(CONF_GET_INT("MapUpdate.Threads"));
     // Start mtmaps if needed.
     if (num_threads > 0)
         m_updater.activate(num_threads);
@@ -154,7 +153,7 @@ Map::EnterState MapManager::PlayerCannotEnter(uint32 mapid, Player* player, bool
 
     Group* group = player->GetGroup();
     if (entry->IsRaid()) // can only enter in a raid group
-        if ((!group || !group->isRaidGroup()) && !sWorld->getBoolConfig(CONFIG_INSTANCE_IGNORE_RAID))
+        if ((!group || !group->isRaidGroup()) && !CONF_GET_BOOL("Instance.IgnoreRaid"))
             return Map::CANNOT_ENTER_NOT_IN_RAID;
 
     if (!player->IsAlive())
