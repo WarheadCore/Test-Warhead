@@ -197,7 +197,7 @@ void GameObject::RemoveFromOwner()
 
     // This happens when a mage portal is despawned after the caster changes map (for example using the portal)
     LOG_DEBUG("misc", "Removed GameObject (%s Entry: %u SpellId: %u LinkedGO: %u) that just lost any reference to the owner (%s) GO list",
-        GetGUID().ToString().c_str(), GetGOInfo()->entry, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), ownerGUID.ToString().c_str());
+              GetGUID().ToString().c_str(), GetGOInfo()->entry, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), ownerGUID.ToString().c_str());
     SetOwnerGUID(ObjectGuid::Empty);
 }
 
@@ -1116,17 +1116,17 @@ bool GameObject::LoadFromDB(ObjectGuid::LowType spawnId, Map* map, bool addToMap
     CharacterDatabaseTransaction charTrans = CharacterDatabase.BeginTransaction();
 
     sMapMgr->DoForAllMapsWithMapId(data->mapId,
-        [spawnId, charTrans](Map* map) -> void
-        {
-            // despawn all active objects, and remove their respawns
-            std::vector<GameObject*> toUnload;
-            for (auto const& pair : Warhead::Containers::MapEqualRange(map->GetGameObjectBySpawnIdStore(), spawnId))
-                toUnload.push_back(pair.second);
-            for (GameObject* obj : toUnload)
-                map->AddObjectToRemoveList(obj);
-            map->RemoveRespawnTime(SPAWN_TYPE_GAMEOBJECT, spawnId, charTrans);
-        }
-    );
+                                   [spawnId, charTrans](Map * map) -> void
+    {
+        // despawn all active objects, and remove their respawns
+        std::vector<GameObject*> toUnload;
+        for (auto const& pair : Warhead::Containers::MapEqualRange(map->GetGameObjectBySpawnIdStore(), spawnId))
+            toUnload.push_back(pair.second);
+        for (GameObject* obj : toUnload)
+            map->AddObjectToRemoveList(obj);
+        map->RemoveRespawnTime(SPAWN_TYPE_GAMEOBJECT, spawnId, charTrans);
+    }
+                                  );
 
     // delete data from memory
     sObjectMgr->DeleteGameObjectData(spawnId);
@@ -1565,7 +1565,7 @@ void GameObject::Use(Unit* user)
             for (ChairSlotAndUser::iterator itr = ChairListSlots.begin(); itr != ChairListSlots.end(); ++itr)
             {
                 // the distance between this slot and the center of the go - imagine a 1D space
-                float relativeDistance = (info->size*itr->first)-(info->size*(info->chair.slots-1)/2.0f);
+                float relativeDistance = (info->size * itr->first) - (info->size * (info->chair.slots - 1) / 2.0f);
 
                 float x_i = GetPositionX() + relativeDistance * std::cos(orthogonalOrientation);
                 float y_i = GetPositionY() + relativeDistance * std::sin(orthogonalOrientation);
@@ -1604,7 +1604,7 @@ void GameObject::Use(Unit* user)
                 {
                     itr->second = player->GetGUID(); //this slot in now used by player
                     player->TeleportTo(GetMapId(), x_lowest, y_lowest, GetPositionZ(), GetOrientation(), TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
-                    player->SetStandState(UNIT_STAND_STATE_SIT_LOW_CHAIR+info->chair.height);
+                    player->SetStandState(UNIT_STAND_STATE_SIT_LOW_CHAIR + info->chair.height);
                     return;
                 }
             }
@@ -1728,7 +1728,7 @@ void GameObject::Use(Unit* user)
                     int32 chance;
                     if (skill < zone_skill)
                     {
-                        chance = int32(pow((double)skill/zone_skill, 2) * 100);
+                        chance = int32(pow((double)skill / zone_skill, 2) * 100);
                         if (chance < 1)
                             chance = 1;
                     }
@@ -2045,13 +2045,13 @@ void GameObject::Use(Unit* user)
             WorldPacket data(SMSG_ENABLE_BARBER_SHOP, 0);
             player->SendDirectMessage(&data);
 
-            player->SetStandState(UNIT_STAND_STATE_SIT_LOW_CHAIR+info->barberChair.chairheight);
+            player->SetStandState(UNIT_STAND_STATE_SIT_LOW_CHAIR + info->barberChair.chairheight);
             return;
         }
         default:
             if (GetGoType() >= MAX_GAMEOBJECT_TYPE)
                 LOG_ERROR("misc", "GameObject::Use(): unit (%s, name: %s) tries to use object (%s, name: %s) of unknown type (%u)",
-                    user->GetGUID().ToString().c_str(), user->GetName().c_str(), GetGUID().ToString().c_str(), GetGOInfo()->name.c_str(), GetGoType());
+                          user->GetGUID().ToString().c_str(), user->GetName().c_str(), GetGUID().ToString().c_str(), GetGOInfo()->name.c_str(), GetGoType());
             break;
     }
 
@@ -2078,7 +2078,7 @@ void GameObject::Use(Unit* user)
 
 void GameObject::SendCustomAnim(uint32 anim)
 {
-    WorldPacket data(SMSG_GAMEOBJECT_CUSTOM_ANIM, 8+4);
+    WorldPacket data(SMSG_GAMEOBJECT_CUSTOM_ANIM, 8 + 4);
     data << GetGUID();
     data << uint32(anim);
     SendMessageToSet(&data, true);
@@ -2095,7 +2095,7 @@ bool GameObject::IsInRange(float x, float y, float z, float radius) const
     float dx = x - GetPositionX();
     float dy = y - GetPositionY();
     float dz = z - GetPositionZ();
-    float dist = std::sqrt(dx*dx + dy*dy);
+    float dist = std::sqrt(dx * dx + dy * dy);
     //! Check if the distance between the 2 objects is 0, can happen if both objects are on the same position.
     //! The code below this check wont crash if dist is 0 because 0/0 in float operations is valid, and returns infinite
     if (G3D::fuzzyEq(dist, 0.0f))
@@ -2106,8 +2106,8 @@ bool GameObject::IsInRange(float x, float y, float z, float radius) const
     dx = dist * (cosA * cosB + sinA * sinB);
     dy = dist * (cosA * sinB - sinA * cosB);
     return dx < info->GeoBoxMax.X + radius && dx > info->GeoBoxMin.X - radius
-        && dy < info->GeoBoxMax.Y + radius && dy > info->GeoBoxMin.Y - radius
-        && dz < info->GeoBoxMax.Z + radius && dz > info->GeoBoxMin.Z - radius;
+           && dy < info->GeoBoxMax.Y + radius && dy > info->GeoBoxMin.Y - radius
+           && dz < info->GeoBoxMax.Z + radius && dz > info->GeoBoxMin.Z - radius;
 }
 
 void GameObject::EventInform(uint32 eventId, WorldObject* invoker /*= nullptr*/)
@@ -2136,7 +2136,7 @@ uint32 GameObject::GetScriptId() const
 }
 
 // overwrite WorldObject function for proper name localization
-std::string const & GameObject::GetNameForLocaleIdx(LocaleConstant loc_idx) const
+std::string const& GameObject::GetNameForLocaleIdx(LocaleConstant loc_idx) const
 {
     if (loc_idx != DEFAULT_LOCALE)
     {
@@ -2233,7 +2233,7 @@ void GameObject::ModifyHealth(int32 change, WorldObject* attackerOrHealer /*= nu
         data << attackerOrHealer->GetPackGUID();
         data << player->GetPackGUID();
         data << uint32(-change);                    // change  < 0 triggers SPELL_BUILDING_HEAL combat log event
-                                                    // change >= 0 triggers SPELL_BUILDING_DAMAGE event
+        // change >= 0 triggers SPELL_BUILDING_DAMAGE event
         data << uint32(spellId);
         player->SendDirectMessage(&data);
     }
@@ -2526,8 +2526,8 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* t
     for (uint16 index = 0; index < m_valuesCount; ++index)
     {
         if (_fieldNotifyFlags & flags[index] ||
-            ((updateType == UPDATETYPE_VALUES ? _changesMask.GetBit(index) : m_uint32Values[index]) && (flags[index] & visibleFlag)) ||
-            (index == GAMEOBJECT_FLAGS && forcedFlags))
+                ((updateType == UPDATETYPE_VALUES ? _changesMask.GetBit(index) : m_uint32Values[index]) && (flags[index] & visibleFlag)) ||
+                (index == GAMEOBJECT_FLAGS && forcedFlags))
         {
             updateMask.SetBit(index);
 
@@ -2588,7 +2588,7 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* t
     data->append(fieldBuffer);
 }
 
-void GameObject::GetRespawnPosition(float &x, float &y, float &z, float* ori /* = nullptr*/) const
+void GameObject::GetRespawnPosition(float& x, float& y, float& z, float* ori /* = nullptr*/) const
 {
     if (m_goData)
     {
@@ -2683,7 +2683,7 @@ std::string GameObject::GetDebugInfo() const
 {
     std::stringstream sstr;
     sstr << WorldObject::GetDebugInfo() << "\n"
-        << "SpawnId: " << GetSpawnId() << " GoState: " << std::to_string(GetGoState()) << " ScriptId: " << GetScriptId() << " AIName: " << GetAIName();
+         << "SpawnId: " << GetSpawnId() << " GoState: " << std::to_string(GetGoState()) << " ScriptId: " << GetScriptId() << " AIName: " << GetAIName();
     return sstr.str();
 }
 
@@ -2720,8 +2720,8 @@ bool GameObject::IsAtInteractDistance(Position const& pos, float radius) const
         G3D::Quat worldRotationQuat(worldRotation.x, worldRotation.y, worldRotation.z, worldRotation.w);
 
         return G3D::CoordinateFrame { { worldRotationQuat }, { GetPositionX(), GetPositionY(), GetPositionZ() } }
-                .toWorldSpace(G3D::Box { { minX, minY, minZ }, { maxX, maxY, maxZ } })
-                .contains({ pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ() });
+        .toWorldSpace(G3D::Box { { minX, minY, minZ }, { maxX, maxY, maxZ } })
+        .contains({ pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ() });
     }
 
     return GetExactDist(&pos) <= radius;

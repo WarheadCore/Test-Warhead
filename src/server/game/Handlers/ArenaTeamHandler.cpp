@@ -159,7 +159,7 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket& recvData)
 
     player->SetArenaTeamIdInvited(arenaTeam->GetId());
 
-    WorldPacket data(SMSG_ARENA_TEAM_INVITE, (8+10));
+    WorldPacket data(SMSG_ARENA_TEAM_INVITE, (8 + 10));
     data << GetPlayer()->GetName();
     data << arenaTeam->GetName();
     player->SendDirectMessage(&data);
@@ -167,7 +167,7 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket& recvData)
     LOG_DEBUG("network", "WORLD: Sent SMSG_ARENA_TEAM_INVITE");
 }
 
-void WorldSession::HandleArenaTeamAcceptOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleArenaTeamAcceptOpcode(WorldPacket& /*recvData*/)
 {
     LOG_DEBUG("network", "CMSG_ARENA_TEAM_ACCEPT");                // empty opcode
 
@@ -200,7 +200,7 @@ void WorldSession::HandleArenaTeamAcceptOpcode(WorldPacket & /*recvData*/)
     arenaTeam->BroadcastEvent(ERR_ARENA_TEAM_JOIN_SS, _player->GetGUID(), 2, _player->GetName(), arenaTeam->GetName(), "");
 }
 
-void WorldSession::HandleArenaTeamDeclineOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleArenaTeamDeclineOpcode(WorldPacket& /*recvData*/)
 {
     LOG_DEBUG("network", "CMSG_ARENA_TEAM_DECLINE");               // empty opcode
 
@@ -403,7 +403,7 @@ void WorldSession::HandleArenaTeamLeaderOpcode(WorldPacket& recvData)
 
 void WorldSession::SendArenaTeamCommandResult(uint32 teamAction, const std::string& team, const std::string& player, uint32 errorId)
 {
-    WorldPacket data(SMSG_ARENA_TEAM_COMMAND_RESULT, 4+team.length()+1+player.length()+1+4);
+    WorldPacket data(SMSG_ARENA_TEAM_COMMAND_RESULT, 4 + team.length() + 1 + player.length() + 1 + 4);
     data << uint32(teamAction);
     data << team;
     data << player;
@@ -413,7 +413,7 @@ void WorldSession::SendArenaTeamCommandResult(uint32 teamAction, const std::stri
 
 void WorldSession::SendNotInArenaTeamPacket(uint8 type)
 {
-    WorldPacket data(SMSG_ARENA_ERROR, 4+1);                // 886 - You are not in a %uv%u arena team
+    WorldPacket data(SMSG_ARENA_ERROR, 4 + 1);              // 886 - You are not in a %uv%u arena team
     uint32 unk = 0;
     data << uint32(unk);                                    // unk(0)
     if (!unk)

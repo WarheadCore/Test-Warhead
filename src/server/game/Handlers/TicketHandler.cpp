@@ -91,9 +91,7 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
 
             uLongf realSize = decompressedSize;
             if (uncompress(dest.contents(), &realSize, recvData.contents() + pos, recvData.size() - pos) == Z_OK)
-            {
                 dest >> chatLog;
-            }
             else
             {
                 LOG_ERROR("network", "CMSG_GMTICKET_CREATE possibly corrupt. Uncompression failed.");
@@ -152,7 +150,7 @@ void WorldSession::HandleGMTicketUpdateOpcode(WorldPacket& recvData)
     SendPacket(&data);
 }
 
-void WorldSession::HandleGMTicketDeleteOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleGMTicketDeleteOpcode(WorldPacket& /*recvData*/)
 {
     if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
     {
@@ -167,7 +165,7 @@ void WorldSession::HandleGMTicketDeleteOpcode(WorldPacket & /*recvData*/)
     }
 }
 
-void WorldSession::HandleGMTicketGetTicketOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleGMTicketGetTicketOpcode(WorldPacket& /*recvData*/)
 {
     SendQueryTimeResponse();
 
@@ -182,7 +180,7 @@ void WorldSession::HandleGMTicketGetTicketOpcode(WorldPacket & /*recvData*/)
         sTicketMgr->SendTicket(this, nullptr);
 }
 
-void WorldSession::HandleGMTicketSystemStatusOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleGMTicketSystemStatusOpcode(WorldPacket& /*recvData*/)
 {
     // Note: This only disables the ticket UI at client side and is not fully reliable
     // are we sure this is a uint32? Should ask Zor

@@ -32,7 +32,7 @@
 MapInstanced::MapInstanced(uint32 id, time_t expiry) : Map(id, expiry, 0, DUNGEON_DIFFICULTY_NORMAL)
 {
     // fill with zero
-    memset(&GridMapReference, 0, MAX_NUMBER_OF_GRIDS*MAX_NUMBER_OF_GRIDS*sizeof(uint16));
+    memset(&GridMapReference, 0, MAX_NUMBER_OF_GRIDS * MAX_NUMBER_OF_GRIDS * sizeof(uint16));
 }
 
 void MapInstanced::InitVisibilityDistance()
@@ -41,9 +41,7 @@ void MapInstanced::InitVisibilityDistance()
         return;
     //initialize visibility distances for all instance copies
     for (InstancedMaps::iterator i = m_InstancedMaps.begin(); i != m_InstancedMaps.end(); ++i)
-    {
         (*i).second->InitVisibilityDistance();
-    }
 }
 
 void MapInstanced::Update(uint32 t)
@@ -223,7 +221,7 @@ InstanceMap* MapInstanced::CreateInstance(uint32 InstanceId, InstanceSave* save,
     // some instances only have one difficulty
     GetDownscaledMapDifficultyData(GetId(), difficulty);
 
-    LOG_DEBUG("maps", "MapInstanced::CreateInstance: %s map instance %d for %d created with difficulty %s", save?"":"new ", InstanceId, GetId(), difficulty?"heroic":"normal");
+    LOG_DEBUG("maps", "MapInstanced::CreateInstance: %s map instance %d for %d created with difficulty %s", save ? "" : "new ", InstanceId, GetId(), difficulty ? "heroic" : "normal");
 
     InstanceMap* map = new InstanceMap(GetId(), GetGridExpiry(), InstanceId, difficulty, this, InstanceTeam);
     ASSERT(map->IsDungeon());
@@ -267,7 +265,7 @@ BattlegroundMap* MapInstanced::CreateBattleground(uint32 InstanceId, Battlegroun
 }
 
 // increments the iterator after erase
-bool MapInstanced::DestroyInstance(InstancedMaps::iterator &itr)
+bool MapInstanced::DestroyInstance(InstancedMaps::iterator& itr)
 {
     itr->second->RemoveAllPlayers();
     if (itr->second->HavePlayers())

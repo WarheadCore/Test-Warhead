@@ -28,18 +28,30 @@ char const* ObjectGuid::GetTypeName(HighGuid high)
 {
     switch (high)
     {
-        case HighGuid::Item:         return "Item";
-        case HighGuid::Player:       return "Player";
-        case HighGuid::GameObject:   return "Gameobject";
-        case HighGuid::Transport:    return "Transport";
-        case HighGuid::Unit:         return "Creature";
-        case HighGuid::Pet:          return "Pet";
-        case HighGuid::Vehicle:      return "Vehicle";
-        case HighGuid::DynamicObject: return "DynObject";
-        case HighGuid::Corpse:       return "Corpse";
-        case HighGuid::Mo_Transport: return "MoTransport";
-        case HighGuid::Instance:     return "InstanceID";
-        case HighGuid::Group:        return "Group";
+        case HighGuid::Item:
+            return "Item";
+        case HighGuid::Player:
+            return "Player";
+        case HighGuid::GameObject:
+            return "Gameobject";
+        case HighGuid::Transport:
+            return "Transport";
+        case HighGuid::Unit:
+            return "Creature";
+        case HighGuid::Pet:
+            return "Pet";
+        case HighGuid::Vehicle:
+            return "Vehicle";
+        case HighGuid::DynamicObject:
+            return "DynObject";
+        case HighGuid::Corpse:
+            return "Corpse";
+        case HighGuid::Mo_Transport:
+            return "MoTransport";
+        case HighGuid::Instance:
+            return "InstanceID";
+        case HighGuid::Group:
+            return "Group";
         default:
             return "<unknown>";
     }

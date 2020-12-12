@@ -31,7 +31,7 @@
 #include "GameConfig.h"
 
 CalendarInvite::CalendarInvite() : _inviteId(1), _eventId(0), _invitee(), _senderGUID(), _statusTime(GameTime::GetGameTime()),
-_status(CALENDAR_STATUS_INVITED), _rank(CALENDAR_RANK_PLAYER), _text("") { }
+    _status(CALENDAR_STATUS_INVITED), _rank(CALENDAR_RANK_PLAYER), _text("") { }
 
 CalendarInvite::~CalendarInvite()
 {
@@ -97,8 +97,7 @@ void CalendarMgr::LoadFromDB()
             _maxEventId = std::max(_maxEventId, eventId);
 
             ++count;
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u calendar events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 
@@ -126,8 +125,7 @@ void CalendarMgr::LoadFromDB()
             _maxInviteId = std::max(_maxInviteId, inviteId);
 
             ++count;
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u calendar invites in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -524,7 +522,7 @@ void CalendarMgr::SendCalendarEventInvite(CalendarInvite const& invite)
 void CalendarMgr::SendCalendarEventUpdateAlert(CalendarEvent const& calendarEvent, time_t oldEventTime)
 {
     WorldPacket data(SMSG_CALENDAR_EVENT_UPDATED_ALERT, 1 + 8 + 4 + 4 + 4 + 1 + 4 +
-        calendarEvent.GetTitle().size() + calendarEvent.GetDescription().size() + 1 + 4 + 4);
+                     calendarEvent.GetTitle().size() + calendarEvent.GetDescription().size() + 1 + 4 + 4);
     data << uint8(1);       // unk
     data << uint64(calendarEvent.GetEventId());
     data.AppendPackedTime(oldEventTime);
@@ -607,9 +605,8 @@ void CalendarMgr::SendCalendarEventInviteAlert(CalendarEvent const& calendarEven
         if (Guild* guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId()))
             guild->BroadcastPacket(&data);
     }
-    else
-        if (Player* player = ObjectAccessor::FindConnectedPlayer(invite.GetInviteeGUID()))
-            player->SendDirectMessage(&data);
+    else if (Player* player = ObjectAccessor::FindConnectedPlayer(invite.GetInviteeGUID()))
+        player->SendDirectMessage(&data);
 }
 
 void CalendarMgr::SendCalendarEvent(ObjectGuid guid, CalendarEvent const& calendarEvent, CalendarSendEventType sendType)

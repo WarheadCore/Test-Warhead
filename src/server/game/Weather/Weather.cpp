@@ -37,7 +37,7 @@ Weather::Weather(uint32 zoneId, WeatherData const* weatherChances)
     m_type = WEATHER_TYPE_FINE;
     m_intensity = 0;
 
-    LOG_INFO("misc", "WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32)(m_timer.GetInterval() / (MINUTE*IN_MILLISECONDS)));
+    LOG_INFO("misc", "WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32)(m_timer.GetInterval() / (MINUTE * IN_MILLISECONDS)));
 }
 
 /// Launch a weather update
@@ -94,7 +94,7 @@ bool Weather::ReGenerate()
     time_t gtime = GameTime::GetGameTime();
     struct tm ltime;
     localtime_r(&gtime, &ltime);
-    uint32 season = ((ltime.tm_yday - 78 + 365)/91)%4;
+    uint32 season = ((ltime.tm_yday - 78 + 365) / 91) % 4;
 
     static char const* seasonName[WEATHER_SEASONS] = { "spring", "summer", "fall", "winter" };
 
@@ -134,7 +134,7 @@ bool Weather::ReGenerate()
         {
             if (m_intensity > 0.6666667f)
             {
-                                                            // Severe change, but how severe?
+                // Severe change, but how severe?
                 uint32 rnd = urand(0, 99);
                 if (rnd < 50)
                 {
@@ -149,8 +149,8 @@ bool Weather::ReGenerate()
 
     // At this point, only weather that isn't doing anything remains but that have weather data
     uint32 chance1 = m_weatherChances->data[season].rainChance;
-    uint32 chance2 = chance1+ m_weatherChances->data[season].snowChance;
-    uint32 chance3 = chance2+ m_weatherChances->data[season].stormChance;
+    uint32 chance2 = chance1 + m_weatherChances->data[season].snowChance;
+    uint32 chance3 = chance2 + m_weatherChances->data[season].stormChance;
 
     uint32 rnd = urand(1, 100);
     if (rnd <= chance1)
@@ -169,13 +169,9 @@ bool Weather::ReGenerate()
     /// If fine 100% sun (no fog)
 
     if (m_type == WEATHER_TYPE_FINE)
-    {
         m_intensity = 0.0f;
-    }
     else if (u < 90)
-    {
         m_intensity = (float)rand_norm() * 0.3333f;
-    }
     else
     {
         // Severe change, but how severe?

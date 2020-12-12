@@ -61,16 +61,26 @@ constexpr WardenCheckCategory GetWardenCheckCategory(WardenCheckType type)
 {
     switch (type)
     {
-        case TIMING_CHECK:   return NUM_CHECK_CATEGORIES;
-        case DRIVER_CHECK:   return INJECT_CHECK_CATEGORY;
-        case PROC_CHECK:     return NUM_CHECK_CATEGORIES;
-        case LUA_EVAL_CHECK: return LUA_CHECK_CATEGORY;
-        case MPQ_CHECK:      return MODDED_CHECK_CATEGORY;
-        case PAGE_CHECK_A:   return INJECT_CHECK_CATEGORY;
-        case PAGE_CHECK_B:   return INJECT_CHECK_CATEGORY;
-        case MODULE_CHECK:   return INJECT_CHECK_CATEGORY;
-        case MEM_CHECK:      return MODDED_CHECK_CATEGORY;
-        default:             return NUM_CHECK_CATEGORIES;
+        case TIMING_CHECK:
+            return NUM_CHECK_CATEGORIES;
+        case DRIVER_CHECK:
+            return INJECT_CHECK_CATEGORY;
+        case PROC_CHECK:
+            return NUM_CHECK_CATEGORIES;
+        case LUA_EVAL_CHECK:
+            return LUA_CHECK_CATEGORY;
+        case MPQ_CHECK:
+            return MODDED_CHECK_CATEGORY;
+        case PAGE_CHECK_A:
+            return INJECT_CHECK_CATEGORY;
+        case PAGE_CHECK_B:
+            return INJECT_CHECK_CATEGORY;
+        case MODULE_CHECK:
+            return INJECT_CHECK_CATEGORY;
+        case MEM_CHECK:
+            return MODDED_CHECK_CATEGORY;
+        default:
+            return NUM_CHECK_CATEGORIES;
     }
 }
 
@@ -93,25 +103,25 @@ using WardenCheckResult = std::vector<uint8>;
 
 class WH_GAME_API WardenCheckMgr
 {
-    private:
-        WardenCheckMgr();
+private:
+    WardenCheckMgr();
 
-    public:
-        static WardenCheckMgr* instance();
+public:
+    static WardenCheckMgr* instance();
 
-        uint16 GetMaxValidCheckId() const { return static_cast<uint16>(_checks.size()); }
-        WardenCheck const& GetCheckData(uint16 Id) const;
-        WardenCheckResult const& GetCheckResult(uint16 Id) const;
+    uint16 GetMaxValidCheckId() const { return static_cast<uint16>(_checks.size()); }
+    WardenCheck const& GetCheckData(uint16 Id) const;
+    WardenCheckResult const& GetCheckResult(uint16 Id) const;
 
-        std::vector<uint16> const& GetAvailableChecks(WardenCheckCategory category) { return _pools[category]; }
+    std::vector<uint16> const& GetAvailableChecks(WardenCheckCategory category) { return _pools[category]; }
 
-        void LoadWardenChecks();
-        void LoadWardenOverrides();
+    void LoadWardenChecks();
+    void LoadWardenOverrides();
 
-    private:
-        std::vector<WardenCheck> _checks;
-        std::unordered_map<uint16, WardenCheckResult> _checkResults;
-        std::array<std::vector<uint16>, NUM_CHECK_CATEGORIES> _pools;
+private:
+    std::vector<WardenCheck> _checks;
+    std::unordered_map<uint16, WardenCheckResult> _checkResults;
+    std::array<std::vector<uint16>, NUM_CHECK_CATEGORIES> _pools;
 };
 
 #define sWardenCheckMgr WardenCheckMgr::instance()

@@ -73,7 +73,7 @@ void WorldSession::HandleRepopRequest(WorldPackets::Misc::RepopRequest& /*packet
     if (GetPlayer()->getDeathState() == JUST_DIED)
     {
         LOG_DEBUG("network", "HandleRepopRequestOpcode: got request after player %s %s was killed and before he was updated",
-            GetPlayer()->GetName().c_str(), GetPlayer()->GetGUID().ToString().c_str());
+                  GetPlayer()->GetName().c_str(), GetPlayer()->GetGUID().ToString().c_str());
         GetPlayer()->KillPlayer();
     }
 
@@ -316,8 +316,8 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
             if (!str[i].empty())
             {
                 if (wideguildname.find(str[i]) != std::wstring::npos ||
-                    wideplayername.find(str[i]) != std::wstring::npos ||
-                    Utf8FitTo(aname, str[i]))
+                        wideplayername.find(str[i]) != std::wstring::npos ||
+                        Utf8FitTo(aname, str[i]))
                 {
                     s_show = true;
                     break;
@@ -581,8 +581,8 @@ void WorldSession::SendAreaTriggerMessage(char const* Text, ...)
     vsnprintf(szStr, 1024, Text, ap);
     va_end(ap);
 
-    uint32 length = strlen(szStr)+1;
-    WorldPacket data(SMSG_AREA_TRIGGER_MESSAGE, 4+length);
+    uint32 length = strlen(szStr) + 1;
+    WorldPacket data(SMSG_AREA_TRIGGER_MESSAGE, 4 + length);
     data << length;
     data << szStr;
     SendPacket(&data);
@@ -599,7 +599,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recvData)
     if (player->IsInFlight())
     {
         LOG_DEBUG("network", "HandleAreaTriggerOpcode: Player '%s' %s in flight, ignore Area Trigger ID:%u",
-            player->GetName().c_str(), player->GetGUID().ToString().c_str(), triggerId);
+                  player->GetName().c_str(), player->GetGUID().ToString().c_str(), triggerId);
         return;
     }
 
@@ -607,14 +607,14 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recvData)
     if (!atEntry)
     {
         LOG_DEBUG("network", "HandleAreaTriggerOpcode: Player '%s' %s send unknown (by DBC) Area Trigger ID:%u",
-            player->GetName().c_str(), player->GetGUID().ToString().c_str(), triggerId);
+                  player->GetName().c_str(), player->GetGUID().ToString().c_str(), triggerId);
         return;
     }
 
     if (!player->IsInAreaTriggerRadius(atEntry))
     {
         LOG_DEBUG("network", "HandleAreaTriggerOpcode: Player '%s' %s too far, ignore Area Trigger ID: %u",
-            player->GetName().c_str(), player->GetGUID().ToString().c_str(), triggerId);
+                  player->GetName().c_str(), player->GetGUID().ToString().c_str(), triggerId);
         return;
     }
 
@@ -752,7 +752,7 @@ void WorldSession::HandleUpdateAccountData(WorldPacket& recvData)
     {
         SetAccountData(AccountDataType(type), 0, "");
 
-        WorldPacket data(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE, 4+4);
+        WorldPacket data(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE, 4 + 4);
         data << uint32(type);
         data << uint32(0);
         SendPacket(&data);
@@ -785,7 +785,7 @@ void WorldSession::HandleUpdateAccountData(WorldPacket& recvData)
 
     SetAccountData(AccountDataType(type), timestamp, adata);
 
-    WorldPacket data(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE, 4+4);
+    WorldPacket data(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE, 4 + 4);
     data << uint32(type);
     data << uint32(0);
     SendPacket(&data);
@@ -820,7 +820,7 @@ void WorldSession::HandleRequestAccountData(WorldPacket& recvData)
 
     dest.resize(destSize);
 
-    WorldPacket data(SMSG_UPDATE_ACCOUNT_DATA, 8+4+4+4+destSize);
+    WorldPacket data(SMSG_UPDATE_ACCOUNT_DATA, 8 + 4 + 4 + 4 + destSize);
     data << uint64(_player ? _player->GetGUID() : ObjectGuid::Empty);
     data << uint32(type);                                   // type (0-7)
     data << uint32(adata->Time);                            // unix time
@@ -866,50 +866,50 @@ void WorldSession::HandleMoveUnRootAck(WorldPacket& recvData)
 {
     // no used
     recvData.rfinish();                       // prevent warnings spam
-/*
-    uint64 guid;
-    recvData >> guid;
+    /*
+        uint64 guid;
+        recvData >> guid;
 
-    // now can skip not our packet
-    if (_player->GetGUID() != guid)
-    {
-        recvData.rfinish();                   // prevent warnings spam
-        return;
-    }
+        // now can skip not our packet
+        if (_player->GetGUID() != guid)
+        {
+            recvData.rfinish();                   // prevent warnings spam
+            return;
+        }
 
-    LOG_DEBUG("network", "WORLD: CMSG_FORCE_MOVE_UNROOT_ACK");
+        LOG_DEBUG("network", "WORLD: CMSG_FORCE_MOVE_UNROOT_ACK");
 
-    recvData.read_skip<uint32>();                          // unk
+        recvData.read_skip<uint32>();                          // unk
 
-    MovementInfo movementInfo;
-    movementInfo.guid = guid;
-    ReadMovementInfo(recvData, &movementInfo);
-    recvData.read_skip<float>();                           // unk2
-*/
+        MovementInfo movementInfo;
+        movementInfo.guid = guid;
+        ReadMovementInfo(recvData, &movementInfo);
+        recvData.read_skip<float>();                           // unk2
+    */
 }
 
 void WorldSession::HandleMoveRootAck(WorldPacket& recvData)
 {
     // no used
     recvData.rfinish();                       // prevent warnings spam
-/*
-    uint64 guid;
-    recvData >> guid;
+    /*
+        uint64 guid;
+        recvData >> guid;
 
-    // now can skip not our packet
-    if (_player->GetGUID() != guid)
-    {
-        recvData.rfinish();                   // prevent warnings spam
-        return;
-    }
+        // now can skip not our packet
+        if (_player->GetGUID() != guid)
+        {
+            recvData.rfinish();                   // prevent warnings spam
+            return;
+        }
 
-    LOG_DEBUG("network", "WORLD: CMSG_FORCE_MOVE_ROOT_ACK");
+        LOG_DEBUG("network", "WORLD: CMSG_FORCE_MOVE_ROOT_ACK");
 
-    recvData.read_skip<uint32>();                          // unk
+        recvData.read_skip<uint32>();                          // unk
 
-    MovementInfo movementInfo;
-    ReadMovementInfo(recvData, &movementInfo);
-*/
+        MovementInfo movementInfo;
+        ReadMovementInfo(recvData, &movementInfo);
+    */
 }
 
 void WorldSession::HandleCompleteMovie(WorldPackets::Misc::CompleteMovie& /*packet*/)
@@ -968,7 +968,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recvData)
 
     uint32 talent_points = 0x47;
     uint32 guid_size = player->GetPackGUID().size();
-    WorldPacket data(SMSG_INSPECT_TALENT, guid_size+4+talent_points);
+    WorldPacket data(SMSG_INSPECT_TALENT, guid_size + 4 + talent_points);
     data << player->GetPackGUID();
 
     if (GetPlayer()->CanBeGameMaster() || CONF_GET_INT("TalentsInspecting") + (GetPlayer()->GetTeamId() == player->GetTeamId()) > 1)
@@ -1003,7 +1003,7 @@ void WorldSession::HandleInspectHonorStatsOpcode(WorldPacket& recvData)
     if (GetPlayer()->IsValidAttackTarget(player))
         return;
 
-    WorldPacket data(MSG_INSPECT_HONOR_STATS, 8+1+4*4);
+    WorldPacket data(MSG_INSPECT_HONOR_STATS, 8 + 1 + 4 * 4);
     data << uint64(player->GetGUID());
     data << uint8(player->GetHonorPoints());
     data << uint32(player->GetUInt32Value(PLAYER_FIELD_KILLS));
@@ -1018,14 +1018,14 @@ void WorldSession::HandleWorldTeleportOpcode(WorldPackets::Misc::WorldTeleport& 
     if (_player->IsInFlight())
     {
         LOG_DEBUG("network", "Player '%s' (%s) in flight, ignore worldport command.",
-            _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
+                  _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
         return;
     }
 
     WorldLocation loc(worldTeleport.MapID, worldTeleport.Pos);
     loc.SetOrientation(worldTeleport.Facing);
     LOG_DEBUG("network", "CMSG_WORLD_TELEPORT: Player = %s, time = %u, map = %u, pos = %s",
-        _player->GetName().c_str(), worldTeleport.Time, worldTeleport.MapID, loc.ToString().c_str());
+              _player->GetName().c_str(), worldTeleport.Time, worldTeleport.MapID, loc.ToString().c_str());
 
     if (HasPermission(rbac::RBAC_PERM_OPCODE_WORLD_TELEPORT))
         _player->TeleportTo(loc);
@@ -1086,12 +1086,12 @@ void WorldSession::HandleWhoIsOpcode(WorldPacket& recvData)
 
     std::string msg = charname + "'s " + "account is " + acc + ", e-mail: " + email + ", last ip: " + lastip;
 
-    WorldPacket data(SMSG_WHOIS, msg.size()+1);
+    WorldPacket data(SMSG_WHOIS, msg.size() + 1);
     data << msg;
     SendPacket(&data);
 
     LOG_DEBUG("network", "Received whois command from player %s for character %s",
-        GetPlayer()->GetName().c_str(), charname.c_str());
+              GetPlayer()->GetName().c_str(), charname.c_str());
 }
 
 void WorldSession::HandleComplainOpcode(WorldPacket& recvData)
@@ -1132,7 +1132,7 @@ void WorldSession::HandleComplainOpcode(WorldPacket& recvData)
     SendPacket(&data);
 
     LOG_DEBUG("network", "REPORT SPAM: type %u, %s, unk1 %u, unk2 %u, unk3 %u, unk4 %u, message %s",
-        spam_type, spammer_guid.ToString().c_str(), unk1, unk2, unk3, unk4, description.c_str());
+              spam_type, spammer_guid.ToString().c_str(), unk1, unk2, unk3, unk4, description.c_str());
 }
 
 void WorldSession::HandleRealmSplitOpcode(WorldPacket& recvData)
@@ -1143,7 +1143,7 @@ void WorldSession::HandleRealmSplitOpcode(WorldPacket& recvData)
     std::string split_date = "01/01/01";
     recvData >> unk;
 
-    WorldPacket data(SMSG_REALM_SPLIT, 4+4+split_date.size()+1);
+    WorldPacket data(SMSG_REALM_SPLIT, 4 + 4 + split_date.size() + 1);
     data << unk;
     data << uint32(0x00000000);                             // realm split state
     // split states:
@@ -1189,7 +1189,7 @@ void WorldSession::HandleSetTitleOpcode(WorldPacket& recvData)
     // -1 at none
     if (title > 0 && title < MAX_TITLE_INDEX)
     {
-       if (!GetPlayer()->HasTitle(title))
+        if (!GetPlayer()->HasTitle(title))
             return;
     }
     else
@@ -1232,7 +1232,7 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPacket& recvData)
     if (map && map->IsDungeon())
     {
         LOG_DEBUG("network", "WorldSession::HandleSetDungeonDifficultyOpcode: player (Name: %s, %s) tried to reset the instance while player is inside!",
-            _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
+                  _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
         return;
     }
 
@@ -1253,7 +1253,7 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPacket& recvData)
                 if (groupGuy->GetMap()->IsNonRaidDungeon())
                 {
                     LOG_DEBUG("network", "WorldSession::HandleSetDungeonDifficultyOpcode: player %s tried to reset the instance while group member (Name: %s, %s) is inside!",
-                        _player->GetGUID().ToString().c_str(), groupGuy->GetName().c_str(), groupGuy->GetGUID().ToString().c_str());
+                              _player->GetGUID().ToString().c_str(), groupGuy->GetName().c_str(), groupGuy->GetGUID().ToString().c_str());
                     return;
                 }
             }
@@ -1476,7 +1476,7 @@ void WorldSession::HandleInstanceLockResponse(WorldPacket& recvPacket)
     if (!_player->HasPendingBind())
     {
         LOG_INFO("network", "InstanceLockResponse: Player %s %s tried to bind himself/teleport to graveyard without a pending bind!",
-            _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
+                 _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
         return;
     }
 

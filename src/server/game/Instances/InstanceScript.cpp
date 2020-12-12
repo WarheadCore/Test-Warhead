@@ -51,8 +51,8 @@ InstanceScript::InstanceScript(InstanceMap* map) : instance(map), completedEncou
     uint32 scriptId = sObjectMgr->GetInstanceTemplate(map->GetId())->ScriptId;
     auto const scriptname = sObjectMgr->GetScriptName(scriptId);
     ASSERT(!scriptname.empty());
-   // Acquire a strong reference from the script module
-   // to keep it loaded until this object is destroyed.
+    // Acquire a strong reference from the script module
+    // to keep it loaded until this object is destroyed.
     module_reference = sScriptMgr->AcquireModuleReferenceOfScriptName(scriptname);
 #endif // #ifndef WARHEAD_API_USE_DYNAMIC_LINKING
 }
@@ -250,7 +250,7 @@ void InstanceScript::UpdateSpawnGroups()
         if (!((1 << GetBossState(info.BossStateId)) & info.BossStates))
             continue;
         if (((instance->GetTeamIdInInstance() == TEAM_ALLIANCE) && (info.Flags & InstanceSpawnGroupInfo::FLAG_HORDE_ONLY))
-            || ((instance->GetTeamIdInInstance() == TEAM_HORDE) && (info.Flags & InstanceSpawnGroupInfo::FLAG_ALLIANCE_ONLY)))
+                || ((instance->GetTeamIdInInstance() == TEAM_HORDE) && (info.Flags & InstanceSpawnGroupInfo::FLAG_ALLIANCE_ONLY)))
             continue;
         if (info.Flags & InstanceSpawnGroupInfo::FLAG_BLOCK_SPAWN)
             curValue = FORCEBLOCK;
@@ -314,9 +314,7 @@ void InstanceScript::AddDoor(GameObject* door, bool add)
         DoorInfo const& data = range.first->second;
 
         if (add)
-        {
             data.bossInfo->door[data.type].insert(door->GetGUID());
-        }
         else
             data.bossInfo->door[data.type].erase(door->GetGUID());
     }
@@ -696,7 +694,7 @@ bool InstanceScript::ServerAllowsTwoSideGroups()
 bool InstanceScript::CheckAchievementCriteriaMeet(uint32 criteria_id, Player const* /*source*/, Unit const* /*target*/ /*= nullptr*/, uint32 /*miscvalue1*/ /*= 0*/)
 {
     LOG_ERROR("misc", "Achievement system call InstanceScript::CheckAchievementCriteriaMeet but instance script for map %u not have implementation for achievement criteria %u",
-        instance->GetId(), criteria_id);
+              instance->GetId(), criteria_id);
     return false;
 }
 

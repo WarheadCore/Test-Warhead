@@ -83,7 +83,7 @@ void WorldSession::HandleQuestgiverHelloOpcode(WorldPacket& recvData)
     if (!creature)
     {
         LOG_DEBUG("network", "WORLD: HandleQuestgiverHelloOpcode - %s not found or you can't interact with him.",
-            guid.ToString().c_str());
+                  guid.ToString().c_str());
         return;
     }
 
@@ -288,10 +288,10 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket& recvData)
     if (Quest const* quest = sObjectMgr->GetQuestTemplate(questId))
     {
         if ((!_player->CanSeeStartQuest(quest) &&  _player->GetQuestStatus(questId) == QUEST_STATUS_NONE) ||
-            (_player->GetQuestStatus(questId) != QUEST_STATUS_COMPLETE && !quest->IsAutoComplete()))
+                (_player->GetQuestStatus(questId) != QUEST_STATUS_COMPLETE && !quest->IsAutoComplete()))
         {
             LOG_ERROR("entities.player.cheat", "Error in QUEST_STATUS_COMPLETE: player %s %s tried to complete quest %u, but is not allowed to do so (possible packet-hacking or high latency)",
-                           _player->GetName().c_str(), _player->GetGUID().ToString().c_str(), questId);
+                      _player->GetName().c_str(), _player->GetGUID().ToString().c_str(), questId);
             return;
         }
         if (_player->CanRewardQuest(quest, true)) // First, check if player is allowed to turn the quest in (all objectives completed). If not, we send players to the offer reward screen
@@ -512,7 +512,7 @@ void WorldSession::HandleQuestgiverCompleteQuest(WorldPacket& recvData)
     if (!_player->CanSeeStartQuest(quest) && _player->GetQuestStatus(questId) == QUEST_STATUS_NONE)
     {
         LOG_ERROR("entities.player.cheat", "Possible hacking attempt: Player %s %s tried to complete quest [entry: %u] without being in possession of the quest!",
-                      _player->GetName().c_str(), _player->GetGUID().ToString().c_str(), questId);
+                  _player->GetName().c_str(), _player->GetGUID().ToString().c_str(), questId);
         return;
     }
 
@@ -554,7 +554,7 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
     if (!quest)
         return;
 
-    Player * const sender = GetPlayer();
+    Player* const sender = GetPlayer();
 
     Group* group = sender->GetGroup();
     if (!group)
@@ -653,7 +653,7 @@ void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket
     _player->SendQuestGiverStatusMultiple();
 }
 
-void WorldSession::HandleQueryQuestsCompleted(WorldPacket & /*recvData*/)
+void WorldSession::HandleQueryQuestsCompleted(WorldPacket& /*recvData*/)
 {
     size_t rew_count = _player->GetRewardedQuestCount();
 

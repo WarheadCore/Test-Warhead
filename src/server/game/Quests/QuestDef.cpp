@@ -93,9 +93,9 @@ Quest::Quest(Field* questRecord)
 
     for (uint32 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
     {
-        RequiredNpcOrGo[i] = questRecord[71+i].GetInt32();
-        RequiredNpcOrGoCount[i] = questRecord[75+i].GetUInt16();
-        ObjectiveText[i] = questRecord[100+i].GetString();
+        RequiredNpcOrGo[i] = questRecord[71 + i].GetInt32();
+        RequiredNpcOrGoCount[i] = questRecord[75 + i].GetUInt16();
+        ObjectiveText[i] = questRecord[100 + i].GetString();
 
         if (RequiredNpcOrGo[i])
             ++_reqCreatureOrGOcount;
@@ -103,14 +103,14 @@ Quest::Quest(Field* questRecord)
 
     for (uint32 i = 0; i < QUEST_SOURCE_ITEM_IDS_COUNT; ++i)
     {
-        ItemDrop[i] = questRecord[79+i].GetUInt32();
-        ItemDropQuantity[i] = questRecord[83+i].GetUInt16();
+        ItemDrop[i] = questRecord[79 + i].GetUInt32();
+        ItemDropQuantity[i] = questRecord[83 + i].GetUInt16();
     }
 
     for (uint32 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
     {
-        RequiredItemId[i] = questRecord[87+i].GetUInt32();
-        RequiredItemCount[i] = questRecord[93+i].GetUInt16();
+        RequiredItemId[i] = questRecord[87 + i].GetUInt32();
+        RequiredItemCount[i] = questRecord[93 + i].GetUInt16();
 
         if (RequiredItemId[i])
             ++_reqItemsCount;
@@ -124,17 +124,17 @@ void Quest::LoadQuestDetails(Field* fields)
 {
     for (int i = 0; i < QUEST_EMOTE_COUNT; ++i)
     {
-        if (!sEmotesStore.LookupEntry(fields[1+i].GetUInt16()))
+        if (!sEmotesStore.LookupEntry(fields[1 + i].GetUInt16()))
         {
-            LOG_ERROR("sql.sql", "Table `quest_details` has non-existing Emote%i (%u) set for quest %u. Skipped.", 1+i, fields[1+i].GetUInt16(), fields[0].GetUInt32());
+            LOG_ERROR("sql.sql", "Table `quest_details` has non-existing Emote%i (%u) set for quest %u. Skipped.", 1 + i, fields[1 + i].GetUInt16(), fields[0].GetUInt32());
             continue;
         }
 
-        DetailsEmote[i] = fields[1+i].GetUInt16();
+        DetailsEmote[i] = fields[1 + i].GetUInt16();
     }
 
     for (int i = 0; i < QUEST_EMOTE_COUNT; ++i)
-        DetailsEmoteDelay[i] = fields[5+i].GetUInt32();
+        DetailsEmoteDelay[i] = fields[5 + i].GetUInt32();
 }
 
 void Quest::LoadQuestRequestItems(Field* fields)
@@ -491,7 +491,7 @@ WorldPacket Quest::BuildQueryData(LocaleConstant loc) const
     return response.Move();
 }
 
-void Quest::AddQuestLevelToTitle(std::string &title, int32 level)
+void Quest::AddQuestLevelToTitle(std::string& title, int32 level)
 {
     // Adds the quest level to the front of the quest title
     // example: [13] Westfall Stew

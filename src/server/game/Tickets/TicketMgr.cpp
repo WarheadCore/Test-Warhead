@@ -35,12 +35,12 @@ inline float GetAge(uint64 t) { return float(GameTime::GetGameTime() - t) / DAY;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // GM ticket
 GmTicket::GmTicket() : _id(0), _type(TICKET_TYPE_OPEN), _posX(0), _posY(0), _posZ(0), _mapId(0), _createTime(0), _lastModifiedTime(0),
-                       _completed(false), _escalatedStatus(TICKET_UNASSIGNED), _viewed(false),
-                       _needResponse(false), _needMoreHelp(false) { }
+    _completed(false), _escalatedStatus(TICKET_UNASSIGNED), _viewed(false),
+    _needResponse(false), _needMoreHelp(false) { }
 
 GmTicket::GmTicket(Player* player) : _type(TICKET_TYPE_OPEN), _posX(0), _posY(0), _posZ(0), _mapId(0), _createTime(GameTime::GetGameTime()), _lastModifiedTime(GameTime::GetGameTime()),
-                       _completed(false), _escalatedStatus(TICKET_UNASSIGNED), _viewed(false),
-                       _needResponse(false), _needMoreHelp(false)
+    _completed(false), _escalatedStatus(TICKET_UNASSIGNED), _viewed(false),
+    _needResponse(false), _needMoreHelp(false)
 {
     _id = sTicketMgr->GenerateTicketId();
     _playerName = player->GetName();
@@ -225,8 +225,12 @@ void GmTicket::SetUnassigned()
     _assignedTo.Clear();
     switch (_escalatedStatus)
     {
-        case TICKET_ASSIGNED: _escalatedStatus = TICKET_UNASSIGNED; break;
-        case TICKET_ESCALATED_ASSIGNED: _escalatedStatus = TICKET_IN_ESCALATION_QUEUE; break;
+        case TICKET_ASSIGNED:
+            _escalatedStatus = TICKET_UNASSIGNED;
+            break;
+        case TICKET_ESCALATED_ASSIGNED:
+            _escalatedStatus = TICKET_IN_ESCALATION_QUEUE;
+            break;
         case TICKET_UNASSIGNED:
         case TICKET_IN_ESCALATION_QUEUE:
         default:

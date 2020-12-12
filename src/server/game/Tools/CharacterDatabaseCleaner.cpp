@@ -101,8 +101,7 @@ void CharacterDatabaseCleaner::CheckUnique(char const* column, char const* table
 
             ss << id;
         }
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     if (found)
     {

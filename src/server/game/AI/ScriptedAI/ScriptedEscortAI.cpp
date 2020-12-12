@@ -227,9 +227,9 @@ void EscortAI::UpdateAI(uint32 diff)
                 if (_instantRespawn)
                 {
                     if (!isEscort)
-                      me->DespawnOrUnsummon(0s, 1s);
+                        me->DespawnOrUnsummon(0s, 1s);
                     else
-                      me->GetMap()->Respawn(SPAWN_TYPE_CREATURE, me->GetSpawnId());
+                        me->GetMap()->Respawn(SPAWN_TYPE_CREATURE, me->GetSpawnId());
                 }
                 else
                     me->DespawnOrUnsummon();
@@ -329,7 +329,7 @@ void EscortAI::Start(bool isActiveAttacker /* = true*/, bool run /* = false */, 
     }
 
     LOG_DEBUG("scripts.ai.escortai", "EscortAI::Start: (script: %s) started with %u waypoints. ActiveAttacker = %d, Run = %d, Player = %s (%s)",
-        me->GetScriptName().c_str(), uint32(_path.nodes.size()), _activeAttacker, _running, _playerGUID.ToString().c_str(), me->GetGUID().ToString().c_str());
+              me->GetScriptName().c_str(), uint32(_path.nodes.size()), _activeAttacker, _running, _playerGUID.ToString().c_str(), me->GetGUID().ToString().c_str());
 
     // set initial speed
     me->SetWalk(!_running);

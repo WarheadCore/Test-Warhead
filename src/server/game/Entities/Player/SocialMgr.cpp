@@ -220,7 +220,7 @@ void SocialMgr::GetFriendInfo(Player* player, ObjectGuid const& friendGUID, Frie
     // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
 
     if (!player->GetSession()->HasPermission(rbac::RBAC_PERM_WHO_SEE_ALL_SEC_LEVELS) &&
-        target->GetSession()->GetSecurity() > AccountTypes(CONF_GET_INT("GM.InWhoList.Level")))
+            target->GetSession()->GetSecurity() > AccountTypes(CONF_GET_INT("GM.InWhoList.Level")))
         return;
 
     // player can see member of other team only if CONFIG_ALLOW_TWO_SIDE_WHO_LIST
@@ -326,8 +326,7 @@ PlayerSocial* SocialMgr::LoadFromDB(PreparedQueryResult result, ObjectGuid const
 
             uint8 flag = fields[1].GetUInt8();
             social->_playerSocialMap[friendGuid] = FriendInfo(flag, fields[2].GetString());
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
     }
 
     return social;

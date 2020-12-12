@@ -64,7 +64,7 @@ using namespace boost::program_options;
 namespace fs = boost::filesystem;
 
 #ifndef _WARHEAD_CORE_CONFIG
-    #define _WARHEAD_CORE_CONFIG  "worldserver.conf"
+#define _WARHEAD_CORE_CONFIG  "worldserver.conf"
 #endif
 
 #define WORLD_SLEEP_CONST 50
@@ -85,23 +85,23 @@ int m_ServiceStatus = -1;
 
 class FreezeDetector
 {
-    public:
+public:
     FreezeDetector(Warhead::Asio::IoContext& ioContext, uint32 maxCoreStuckTime)
         : _timer(ioContext), _worldLoopCounter(0), _lastChangeMsTime(getMSTime()), _maxCoreStuckTimeInMs(maxCoreStuckTime) { }
 
-        static void Start(std::shared_ptr<FreezeDetector> const& freezeDetector)
-        {
-            freezeDetector->_timer.expires_from_now(boost::posix_time::seconds(5));
-            freezeDetector->_timer.async_wait(std::bind(&FreezeDetector::Handler, std::weak_ptr<FreezeDetector>(freezeDetector), std::placeholders::_1));
-        }
+    static void Start(std::shared_ptr<FreezeDetector> const& freezeDetector)
+    {
+        freezeDetector->_timer.expires_from_now(boost::posix_time::seconds(5));
+        freezeDetector->_timer.async_wait(std::bind(&FreezeDetector::Handler, std::weak_ptr<FreezeDetector>(freezeDetector), std::placeholders::_1));
+    }
 
-        static void Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, boost::system::error_code const& error);
+    static void Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, boost::system::error_code const& error);
 
-    private:
-        Warhead::Asio::DeadlineTimer _timer;
-        uint32 _worldLoopCounter;
-        uint32 _lastChangeMsTime;
-        uint32 _maxCoreStuckTimeInMs;
+private:
+    Warhead::Asio::DeadlineTimer _timer;
+    uint32 _worldLoopCounter;
+    uint32 _lastChangeMsTime;
+    uint32 _maxCoreStuckTimeInMs;
 };
 
 void SignalHandler(boost::system::error_code const& error, int signalNumber);
@@ -149,17 +149,17 @@ extern int main(int argc, char** argv)
     sLog->Initialize();
 
     Warhead::Banner::Show("worldserver-daemon",
-        [](char const* text)
-        {
-            LOG_INFO("server.worldserver", "%s", text);
-        },
-        []()
-        {
-            LOG_INFO("server.worldserver", "> Using configuration file:       %s", sConfigMgr->GetFilename().c_str());
-            LOG_INFO("server.worldserver", "> Using SSL version:              %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
-            LOG_INFO("server.worldserver", "> Using Boost version:            %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
-        }
-    );
+                          [](char const * text)
+    {
+        LOG_INFO("server.worldserver", "%s", text);
+    },
+    []()
+    {
+        LOG_INFO("server.worldserver", "> Using configuration file:       %s", sConfigMgr->GetFilename().c_str());
+        LOG_INFO("server.worldserver", "> Using SSL version:              %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+        LOG_INFO("server.worldserver", "> Using Boost version:            %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
+    }
+                         );
 
     OpenSSLCrypto::threadsSetup();
 
@@ -268,7 +268,7 @@ extern int main(int argc, char** argv)
     if (sConfigMgr->GetBoolDefault("SOAP.Enabled", false))
     {
         soapThread.reset(new std::thread(TCSoapThread, sConfigMgr->GetStringDefault("SOAP.IP", "127.0.0.1"), uint16(sConfigMgr->GetIntDefault("SOAP.Port", 7878))),
-            [](std::thread* thr)
+                         [](std::thread * thr)
         {
             thr->join();
             delete thr;
@@ -560,9 +560,9 @@ bool StartDB()
     // Load databases
     DatabaseLoader loader("server.worldserver", DatabaseLoader::DATABASE_NONE);
     loader
-        .AddDatabase(LoginDatabase, "Login")
-        .AddDatabase(CharacterDatabase, "Character")
-        .AddDatabase(WorldDatabase, "World");
+    .AddDatabase(LoginDatabase, "Login")
+    .AddDatabase(CharacterDatabase, "Character")
+    .AddDatabase(WorldDatabase, "World");
 
     if (!loader.Load())
         return false;
@@ -622,17 +622,17 @@ variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, s
 
     options_description all("Allowed options");
     all.add_options()
-        ("help,h", "print usage message")
-        ("version,v", "print version build info")
-        ("config,c", value<fs::path>(&configFile)->default_value(fs::path(sConfigMgr->GetConfigPath() + std::string(_WARHEAD_CORE_CONFIG))),
-                     "use <arg> as configuration file")
-        ("update-databases-only,u", "updates databases only")
-        ;
+    ("help,h", "print usage message")
+    ("version,v", "print version build info")
+    ("config,c", value<fs::path>(&configFile)->default_value(fs::path(sConfigMgr->GetConfigPath() + std::string(_WARHEAD_CORE_CONFIG))),
+     "use <arg> as configuration file")
+    ("update-databases-only,u", "updates databases only")
+    ;
 #ifdef _WIN32
     options_description win("Windows platform specific options");
     win.add_options()
-        ("service,s", value<std::string>(&configService)->default_value(""), "Windows service options: [install | uninstall]")
-        ;
+    ("service,s", value<std::string>(&configService)->default_value(""), "Windows service options: [install | uninstall]")
+    ;
 
     all.add(win);
 #endif
@@ -642,17 +642,15 @@ variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, s
         store(command_line_parser(argc, argv).options(all).allow_unregistered().run(), vm);
         notify(vm);
     }
-    catch (std::exception& e) {
+    catch (std::exception& e)
+    {
         std::cerr << e.what() << "\n";
     }
 
-    if (vm.count("help")) {
+    if (vm.count("help"))
         std::cout << all << "\n";
-    }
     else if (vm.count("version"))
-    {
         std::cout << GitRevision::GetFullVersion() << "\n";
-    }
 
     return vm;
 }

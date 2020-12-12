@@ -51,7 +51,7 @@ void WardenCheckMgr::LoadWardenChecks()
 
     uint16 maxCheckId = fields[0].GetUInt16();
 
-    _checks.resize(maxCheckId+1);
+    _checks.resize(maxCheckId + 1);
 
     //                                    0    1     2     3        4       5      6      7
     result = WorldDatabase.Query("SELECT id, type, data, result, address, length, str, comment FROM warden_checks ORDER BY id ASC");
@@ -119,8 +119,7 @@ void WardenCheckMgr::LoadWardenChecks()
 
         _pools[category].push_back(id);
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u warden checks in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -167,8 +166,7 @@ void WardenCheckMgr::LoadWardenOverrides()
             _checks[checkId].Action = WardenActions(action);
             ++count;
         }
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u warden action overrides in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");

@@ -140,8 +140,8 @@ public:
 
         // set starting level
         uint32 startLevel = target->GetClass() != CLASS_DEATH_KNIGHT
-            ? CONF_GET_INT("StartPlayerLevel")
-            : CONF_GET_INT("StartDeathKnightPlayerLevel");
+                            ? CONF_GET_INT("StartPlayerLevel")
+                            : CONF_GET_INT("StartDeathKnightPlayerLevel");
 
         target->_ApplyAllLevelScaleItemMods(false);
         target->SetLevel(startLevel);
@@ -292,7 +292,7 @@ public:
             atLogin = AtLoginFlags(AT_LOGIN_RESET_TALENTS | AT_LOGIN_RESET_PET_TALENTS);
             sWorld->SendWorldText(LANG_RESETALL_TALENTS);
             if (!handler->GetSession())
-               handler->SendSysMessage(LANG_RESETALL_TALENTS);
+                handler->SendSysMessage(LANG_RESETALL_TALENTS);
         }
         else
         {

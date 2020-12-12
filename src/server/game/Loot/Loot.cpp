@@ -27,11 +27,11 @@
 #include "Random.h"
 #include "GameConfig.h"
 
- //
- // --------- LootItem ---------
- //
+//
+// --------- LootItem ---------
+//
 
- // Constructor, copies most fields from LootStoreItem and generates random count
+// Constructor, copies most fields from LootStoreItem and generates random count
 LootItem::LootItem(LootStoreItem const& li)
 {
     itemid = li.itemid;
@@ -207,7 +207,7 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
 
     tab->Process(*this, store.IsRatesAllowed(), lootMode);          // Processing is done there, callback via Loot::AddItem()
 
-                                                                    // Setting access rights for group loot case
+    // Setting access rights for group loot case
     Group* group = lootOwner->GetGroup();
     if (!personal && group)
     {
@@ -276,7 +276,7 @@ NotNormalLootItemList* Loot::FillFFALoot(Player* player)
 
     for (uint8 i = 0; i < items.size(); ++i)
     {
-        LootItem &item = items[i];
+        LootItem& item = items[i];
         if (!item.is_looted && item.freeforall && item.AllowedForPlayer(player))
         {
             ql->push_back(NotNormalLootItem(i));
@@ -302,7 +302,7 @@ NotNormalLootItemList* Loot::FillQuestLoot(Player* player)
 
     for (uint8 i = 0; i < quest_items.size(); ++i)
     {
-        LootItem &item = quest_items[i];
+        LootItem& item = quest_items[i];
 
         if (!item.is_looted && (item.AllowedForPlayer(player) || (item.follow_loot_rules && player->GetGroup() && ((player->GetGroup()->GetLootMethod() == MASTER_LOOT && player->GetGroup()->GetMasterLooterGuid() == player->GetGUID()) || player->GetGroup()->GetLootMethod() != MASTER_LOOT))))
         {
@@ -337,7 +337,7 @@ NotNormalLootItemList* Loot::FillNonQuestNonFFAConditionalLoot(Player* player, b
 
     for (uint8 i = 0; i < items.size(); ++i)
     {
-        LootItem &item = items[i];
+        LootItem& item = items[i];
         if (!item.is_looted && !item.freeforall && (item.AllowedForPlayer(player)))
         {
             if (presentAtLooting)
@@ -443,7 +443,7 @@ void Loot::generateMoneyLoot(uint32 minAmount, uint32 maxAmount)
     }
 }
 
-LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player, NotNormalLootItem* *qitem, NotNormalLootItem* *ffaitem, NotNormalLootItem* *conditem)
+LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player, NotNormalLootItem * *qitem, NotNormalLootItem * *ffaitem, NotNormalLootItem * *conditem)
 {
     LootItem* item = nullptr;
     bool is_looted = true;
@@ -472,7 +472,7 @@ LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player, NotNormalLootIte
                 for (NotNormalLootItemList::const_iterator iter = itr->second->begin(); iter != itr->second->end(); ++iter)
                     if (iter->index == lootSlot)
                     {
-                        NotNormalLootItem* ffaitem2 = (NotNormalLootItem*)&(*iter);
+                        NotNormalLootItem* ffaitem2 = (NotNormalLootItem*) & (*iter);
                         if (ffaitem)
                             *ffaitem = ffaitem2;
                         is_looted = ffaitem2->is_looted;
@@ -489,7 +489,7 @@ LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player, NotNormalLootIte
                 {
                     if (iter->index == lootSlot)
                     {
-                        NotNormalLootItem* conditem2 = (NotNormalLootItem*)&(*iter);
+                        NotNormalLootItem* conditem2 = (NotNormalLootItem*) & (*iter);
                         if (conditem)
                             *conditem = conditem2;
                         is_looted = conditem2->is_looted;
@@ -602,7 +602,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
         return b;
     }
 
-    Loot &l = lv.loot;
+    Loot& l = lv.loot;
 
     uint8 itemsShown = 0;
 
@@ -716,7 +716,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
         NotNormalLootItemList* q_list = q_itr->second;
         for (NotNormalLootItemList::const_iterator qi = q_list->begin(); qi != q_list->end(); ++qi)
         {
-            LootItem &item = l.quest_items[qi->index];
+            LootItem& item = l.quest_items[qi->index];
             if (!qi->is_looted && !item.is_looted)
             {
                 b << uint8(l.items.size() + (qi - q_list->begin()));
@@ -757,7 +757,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
         NotNormalLootItemList* ffa_list = ffa_itr->second;
         for (NotNormalLootItemList::const_iterator fi = ffa_list->begin(); fi != ffa_list->end(); ++fi)
         {
-            LootItem &item = l.items[fi->index];
+            LootItem& item = l.items[fi->index];
             if (!fi->is_looted && !item.is_looted)
             {
                 b << uint8(fi->index);
@@ -775,7 +775,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
         NotNormalLootItemList* conditional_list = nn_itr->second;
         for (NotNormalLootItemList::const_iterator ci = conditional_list->begin(); ci != conditional_list->end(); ++ci)
         {
-            LootItem &item = l.items[ci->index];
+            LootItem& item = l.items[ci->index];
             if (!ci->is_looted && !item.is_looted)
             {
                 b << uint8(ci->index);

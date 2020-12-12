@@ -360,13 +360,9 @@ public:
                 data << val6;
             }
             else if (type == "appitsguid")
-            {
                 data << unit->GetPackGUID();
-            }
             else if (type == "appmyguid")
-            {
                 data << player->GetPackGUID();
-            }
             else if (type == "appgoguid")
             {
                 GameObject* obj = handler->GetNearbyGameObject();
@@ -392,13 +388,9 @@ public:
                 data << uint64(obj->GetGUID());
             }
             else if (type == "myguid")
-            {
                 data << uint64(player->GetGUID());
-            }
             else if (type == "itsguid")
-            {
                 data << uint64(unit->GetGUID());
-            }
             else if (type == "itspos")
             {
                 data << unit->GetPositionX();
@@ -448,7 +440,7 @@ public:
 
     static bool HandleDebugSendChannelNotifyCommand(ChatHandler* handler, ChatNotify type)
     {
-        WorldPacket data(SMSG_CHANNEL_NOTIFY, (1+10));
+        WorldPacket data(SMSG_CHANNEL_NOTIFY, (1 + 10));
         data << uint8(type);
         data << "test";
         data << uint32(0);
@@ -478,8 +470,8 @@ public:
             return false;
 
         handler->PSendSysMessage("Loot recipient for creature %s (GUID %u, SpawnID %u) is %s",
-            target->GetName().c_str(), target->GetGUID().GetCounter(), target->GetSpawnId(),
-            target->hasLootRecipient() ? (target->GetLootRecipient() ? target->GetLootRecipient()->GetName().c_str() : "offline") : "no loot recipient");
+                                 target->GetName().c_str(), target->GetGUID().GetCounter(), target->GetSpawnId(),
+                                 target->hasLootRecipient() ? (target->GetLootRecipient() ? target->GetLootRecipient()->GetName().c_str() : "offline") : "no loot recipient");
         return true;
     }
 
@@ -870,13 +862,13 @@ public:
         {
             auto& mods = mgr._singleSchoolModifiers;
             handler->SendSysMessage(" - Single-school threat modifiers:");
-            handler->PSendSysMessage(" |-- Physical: %.2f%%", mods[SPELL_SCHOOL_NORMAL]*100.0f);
-            handler->PSendSysMessage(" |-- Holy    : %.2f%%", mods[SPELL_SCHOOL_HOLY]*100.0f);
-            handler->PSendSysMessage(" |-- Fire    : %.2f%%", mods[SPELL_SCHOOL_FIRE]*100.0f);
-            handler->PSendSysMessage(" |-- Nature  : %.2f%%", mods[SPELL_SCHOOL_NATURE]*100.0f);
-            handler->PSendSysMessage(" |-- Frost   : %.2f%%", mods[SPELL_SCHOOL_FROST]*100.0f);
-            handler->PSendSysMessage(" |-- Shadow  : %.2f%%", mods[SPELL_SCHOOL_SHADOW]*100.0f);
-            handler->PSendSysMessage(" |-- Arcane  : %.2f%%", mods[SPELL_SCHOOL_ARCANE]*100.0f);
+            handler->PSendSysMessage(" |-- Physical: %.2f%%", mods[SPELL_SCHOOL_NORMAL] * 100.0f);
+            handler->PSendSysMessage(" |-- Holy    : %.2f%%", mods[SPELL_SCHOOL_HOLY] * 100.0f);
+            handler->PSendSysMessage(" |-- Fire    : %.2f%%", mods[SPELL_SCHOOL_FIRE] * 100.0f);
+            handler->PSendSysMessage(" |-- Nature  : %.2f%%", mods[SPELL_SCHOOL_NATURE] * 100.0f);
+            handler->PSendSysMessage(" |-- Frost   : %.2f%%", mods[SPELL_SCHOOL_FROST] * 100.0f);
+            handler->PSendSysMessage(" |-- Shadow  : %.2f%%", mods[SPELL_SCHOOL_SHADOW] * 100.0f);
+            handler->PSendSysMessage(" |-- Arcane  : %.2f%%", mods[SPELL_SCHOOL_ARCANE] * 100.0f);
         }
 
         // _multiSchoolModifiers
@@ -1292,9 +1284,7 @@ public:
                 target->SetUnitMovementFlags(*moveFlags);
 
             if (moveFlagsExtra)
-            {
                 target->SetExtraUnitMovementFlags(*moveFlagsExtra);
-            }
 
             if (moveFlagsExtra || unhandledFlag)
                 target->SendMovementFlagUpdate();
@@ -1345,9 +1335,7 @@ public:
     {
         Map* map = nullptr;
         if (mapId)
-        {
             map = sMapMgr->FindBaseNonInstanceMap(*mapId);
-        }
         else if (Player* player = handler->GetPlayer())
         {
             // Fallback to player's map if no map has been specified
@@ -1361,7 +1349,7 @@ public:
         if (tileX && tileY)
         {
             handler->PSendSysMessage("Loading cell (mapId: %u tile: %u, %u). Current GameObjects " SZFMTD ", Creatures " SZFMTD,
-                map->GetId(), *tileX, *tileY, map->GetObjectsStore().Size<GameObject>(), map->GetObjectsStore().Size<Creature>());
+                                     map->GetId(), *tileX, *tileY, map->GetObjectsStore().Size<GameObject>(), map->GetObjectsStore().Size<Creature>());
 
             // Some unit convertions to go from TileXY to GridXY to WorldXY
             float x = ((float(64 - 1 - *tileX) - 0.5f - CENTER_GRID_ID) * SIZE_OF_GRIDS) + (CENTER_GRID_OFFSET * 2);
@@ -1369,7 +1357,7 @@ public:
             map->LoadGrid(x, y);
 
             handler->PSendSysMessage("Cell loaded (mapId: %u tile: %u, %u) After load - GameObject " SZFMTD ", Creatures " SZFMTD,
-                map->GetId(), *tileX, *tileY, map->GetObjectsStore().Size<GameObject>(), map->GetObjectsStore().Size<Creature>());
+                                     map->GetId(), *tileX, *tileY, map->GetObjectsStore().Size<GameObject>(), map->GetObjectsStore().Size<Creature>());
         }
         else
         {
@@ -1441,9 +1429,7 @@ public:
             }
         }
         else if (mEntry->IsNonRaidDungeon() && *difficulty == DUNGEON_DIFFICULTY_NORMAL)
-        {
             handler->PSendSysMessage("'%s' does not have any permanent saves for difficulty %d.", mEntry->MapName[handler->GetSessionDbcLocale()], *difficulty);
-        }
         else
         {
             handler->PSendSysMessage("Resetting difficulty %d for '%s'.", *difficulty, mEntry->MapName[handler->GetSessionDbcLocale()]);
@@ -1629,7 +1615,7 @@ public:
                     }
                     else
                         handler->PSendSysMessage(" | |-- '%s' could've been %s if boss state %u matched mask 0x%02x; but it is %s -> 0x%02x, which does not match.",
-                            groupData->name, isSpawn ? "allowed to spawn" : "blocked from spawning", bossStateId, std::get<2>(tuple), InstanceScript::GetBossStateName(actualState), (1 << actualState));
+                                                 groupData->name, isSpawn ? "allowed to spawn" : "blocked from spawning", bossStateId, std::get<2>(tuple), InstanceScript::GetBossStateName(actualState), (1 << actualState));
                 }
                 if (isBlocked)
                     handler->PSendSysMessage(" | |=> '%s' is not active due to a blocking rule being matched", groupData->name);
@@ -1686,19 +1672,19 @@ public:
         if (mapId)
         {
             sMapMgr->DoForAllMapsWithMapId(mapId.value(),
-                [handler](Map* map) -> void
-                {
-                    HandleDebugGuidLimitsMap(handler, map);
-                }
-            );
+                                           [handler](Map * map) -> void
+            {
+                HandleDebugGuidLimitsMap(handler, map);
+            }
+                                          );
         }
         else
         {
             sMapMgr->DoForAllMaps(
-                [handler](Map* map) -> void
-                {
-                    HandleDebugGuidLimitsMap(handler, map);
-                }
+                [handler](Map * map) -> void
+            {
+                HandleDebugGuidLimitsMap(handler, map);
+            }
             );
         }
 
@@ -1710,7 +1696,7 @@ public:
     static void HandleDebugGuidLimitsMap(ChatHandler* handler, Map* map)
     {
         handler->PSendSysMessage("Map Id: %u Name: '%s' Instance Id: %u Highest Guid Creature: " UI64FMTD " GameObject: " UI64FMTD,
-            map->GetId(), map->GetMapName(), map->GetInstanceId(), uint64(map->GetMaxLowGuid<HighGuid::Unit>()), uint64(map->GetMaxLowGuid<HighGuid::GameObject>()));
+                                 map->GetId(), map->GetMapName(), map->GetInstanceId(), uint64(map->GetMaxLowGuid<HighGuid::Unit>()), uint64(map->GetMaxLowGuid<HighGuid::GameObject>()));
     }
 
     static bool HandleDebugObjectCountCommand(ChatHandler* handler, Optional<uint32> mapId)
@@ -1718,19 +1704,19 @@ public:
         if (mapId)
         {
             sMapMgr->DoForAllMapsWithMapId(mapId.value(),
-                [handler](Map* map) -> void
-                {
-                    HandleDebugObjectCountMap(handler, map);
-                }
-            );
+                                           [handler](Map * map) -> void
+            {
+                HandleDebugObjectCountMap(handler, map);
+            }
+                                          );
         }
         else
         {
             sMapMgr->DoForAllMaps(
-                [handler](Map* map) -> void
-                {
-                    HandleDebugObjectCountMap(handler, map);
-                }
+                [handler](Map * map) -> void
+            {
+                HandleDebugObjectCountMap(handler, map);
+            }
             );
         }
 
@@ -1756,7 +1742,7 @@ public:
 
         std::vector<std::pair<uint32, uint32>> GetTopCreatureCount(uint32 count)
         {
-            auto comp = [](std::pair<uint32, uint32> const& a, std::pair<uint32, uint32> const& b)
+            auto comp = [](std::pair<uint32, uint32> const & a, std::pair<uint32, uint32> const & b)
             {
                 return a.second > b.second;
             };
@@ -1776,9 +1762,9 @@ public:
     static void HandleDebugObjectCountMap(ChatHandler* handler, Map* map)
     {
         handler->PSendSysMessage("Map Id: %u Name: '%s' Instance Id: %u Creatures: " UI64FMTD " GameObjects: " UI64FMTD,
-            map->GetId(), map->GetMapName(), map->GetInstanceId(),
-            uint64(map->GetObjectsStore().Size<Creature>()),
-            uint64(map->GetObjectsStore().Size<GameObject>()));
+                                 map->GetId(), map->GetMapName(), map->GetInstanceId(),
+                                 uint64(map->GetObjectsStore().Size<Creature>()),
+                                 uint64(map->GetObjectsStore().Size<GameObject>()));
 
         CreatureCountWorker worker;
         TypeContainerVisitor<CreatureCountWorker, MapStoredObjectTypesContainer> visitor(worker);

@@ -178,7 +178,8 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket& recvData)
     }
 
     if (!_player->HasEnoughMoney(cost))
-    {                                                       //player hasn't got enough money
+    {
+        //player hasn't got enough money
         _player->SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, creature, charterid, 0);
         return;
     }
@@ -280,7 +281,7 @@ void WorldSession::SendPetitionQueryOpcode(ObjectGuid petitionguid)
         return;
     }
 
-    WorldPacket data(SMSG_PETITION_QUERY_RESPONSE, (4+8+petition->PetitionName.size()+1+1+4*12+2+10));
+    WorldPacket data(SMSG_PETITION_QUERY_RESPONSE, (4 + 8 + petition->PetitionName.size() + 1 + 1 + 4 * 12 + 2 + 10));
     data << uint32(petitionguid.GetCounter());              // guild/team guid (in Warhead always same as GUID_LOPART(petition guid)
     data << uint64(petition->OwnerGuid);                    // charter owner guid
     data << petition->PetitionName;                         // name (guild/arena team)
@@ -296,8 +297,8 @@ void WorldSession::SendPetitionQueryOpcode(ObjectGuid petitionguid)
     }
     else
     {
-        data << uint32(type-1);
-        data << uint32(type-1);
+        data << uint32(type - 1);
+        data << uint32(type - 1);
         data << uint32(type);                               // bypass client - side limitation, a different value is needed here for each petition
     }
     data << uint32(0);                                      // 5
@@ -374,7 +375,7 @@ void WorldSession::HandlePetitionRenameGuild(WorldPacket& recvData)
     petition->UpdateName(newName);
 
     LOG_DEBUG("network", "Petition %s renamed to '%s'", petitionGuid.ToString().c_str(), newName.c_str());
-    WorldPacket data(MSG_PETITION_RENAME, (8+newName.size()+1));
+    WorldPacket data(MSG_PETITION_RENAME, (8 + newName.size() + 1));
     data << uint64(petitionGuid);
     data << newName;
     SendPacket(&data);
@@ -460,7 +461,7 @@ void WorldSession::HandleSignPetition(WorldPacket& recvData)
     bool isSigned = petition->IsPetitionSignedByAccount(GetAccountId());
     if (isSigned)
     {
-        WorldPacket data(SMSG_PETITION_SIGN_RESULTS, (8+8+4));
+        WorldPacket data(SMSG_PETITION_SIGN_RESULTS, (8 + 8 + 4));
         data << uint64(petitionGuid);
         data << uint64(_player->GetGUID());
         data << (uint32)PETITION_SIGN_ALREADY_SIGNED;
@@ -479,7 +480,7 @@ void WorldSession::HandleSignPetition(WorldPacket& recvData)
 
     LOG_DEBUG("network", "PETITION SIGN: %s by player: %s (%s Account: %u)", petitionGuid.ToString().c_str(), _player->GetName().c_str(), playerGuid.ToString().c_str(), GetAccountId());
 
-    WorldPacket data(SMSG_PETITION_SIGN_RESULTS, (8+8+4));
+    WorldPacket data(SMSG_PETITION_SIGN_RESULTS, (8 + 8 + 4));
     data << uint64(petitionGuid);
     data << uint64(_player->GetGUID());
     data << uint32(PETITION_SIGN_OK);
@@ -759,7 +760,7 @@ void WorldSession::SendPetitionShowList(ObjectGuid guid)
         return;
     }
 
-    WorldPacket data(SMSG_PETITION_SHOWLIST, 8+1+4*6);
+    WorldPacket data(SMSG_PETITION_SHOWLIST, 8 + 1 + 4 * 6);
     data << guid;                                           // npc guid
 
     if (creature->IsTabardDesigner())

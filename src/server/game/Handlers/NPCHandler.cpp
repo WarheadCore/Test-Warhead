@@ -183,7 +183,7 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket& recvData)
     _player->PlayerTalkClass->ClearMenus();
     if (!unit->AI()->OnGossipHello(_player))
     {
-//        _player->TalkedToCreature(unit->GetEntry(), unit->GetGUID());
+        //        _player->TalkedToCreature(unit->GetEntry(), unit->GetGUID());
         _player->PrepareGossipMenu(unit, unit->GetCreatureTemplate()->GossipMenuId, true);
         _player->SendPreparedGossip(unit);
     }
@@ -221,7 +221,7 @@ void WorldSession::SendSpiritResurrect()
     if (_player->HasCorpse())
     {
         corpseGrave = sObjectMgr->GetClosestGraveyard(corpseLocation.GetPositionX(), corpseLocation.GetPositionY(),
-            corpseLocation.GetPositionZ(), corpseLocation.GetMapId(), _player->GetTeam());
+                      corpseLocation.GetPositionZ(), corpseLocation.GetMapId(), _player->GetTeam());
     }
 
     // now can spawn bones
@@ -231,7 +231,7 @@ void WorldSession::SendSpiritResurrect()
     if (corpseGrave)
     {
         WorldSafeLocsEntry const* ghostGrave = sObjectMgr->GetClosestGraveyard(
-            _player->GetPositionX(), _player->GetPositionY(), _player->GetPositionZ(), _player->GetMapId(), _player->GetTeam());
+                _player->GetPositionX(), _player->GetPositionY(), _player->GetPositionZ(), _player->GetMapId(), _player->GetTeam());
 
         if (corpseGrave != ghostGrave)
             _player->TeleportTo(corpseGrave->Continent, corpseGrave->Loc.X, corpseGrave->Loc.Y, corpseGrave->Loc.Z, _player->GetOrientation());
@@ -271,7 +271,7 @@ void WorldSession::SendBindPoint(Creature* npc)
     // send spell for homebinding (3286)
     npc->CastSpell(_player, bindspell, true);
 
-    WorldPacket data(SMSG_TRAINER_BUY_SUCCEEDED, (8+4));
+    WorldPacket data(SMSG_TRAINER_BUY_SUCCEEDED, (8 + 4));
     data << uint64(npc->GetGUID());
     data << uint32(bindspell);
     SendPacket(&data);
@@ -402,7 +402,7 @@ void WorldSession::HandleStablePet(WorldPacket& recvData)
 
     // can't place in stable dead pet
     if ((pet && (!pet->IsAlive() || pet->getPetType() != HUNTER_PET))
-        || (!pet && (petStable->UnslottedPets.size() != 1 || !petStable->UnslottedPets[0].Health || petStable->UnslottedPets[0].Type != HUNTER_PET)))
+            || (!pet && (petStable->UnslottedPets.size() != 1 || !petStable->UnslottedPets[0].Health || petStable->UnslottedPets[0].Type != HUNTER_PET)))
     {
         SendPetStableResult(STABLE_ERR_STABLE);
         return;
@@ -464,7 +464,7 @@ void WorldSession::HandleUnstablePet(WorldPacket& recvData)
         return;
     }
 
-    auto stabledPet = std::find_if(petStable->StabledPets.begin(), petStable->StabledPets.end(), [petnumber](Optional<PetStable::PetInfo> const& pet)
+    auto stabledPet = std::find_if(petStable->StabledPets.begin(), petStable->StabledPets.end(), [petnumber](Optional<PetStable::PetInfo> const & pet)
     {
         return pet && pet->PetNumber == petnumber;
     });
@@ -588,7 +588,7 @@ void WorldSession::HandleBuyStableSlot(WorldPacket& recvData)
         SendPetStableResult(STABLE_ERR_STABLE);
 }
 
-void WorldSession::HandleStableRevivePet(WorldPacket &/* recvData */)
+void WorldSession::HandleStableRevivePet(WorldPacket& /* recvData */)
 {
     LOG_DEBUG("network", "HandleStableRevivePet: Not implemented");
 }
@@ -619,7 +619,7 @@ void WorldSession::HandleStableSwapPet(WorldPacket& recvData)
     }
 
     // Find swapped pet slot in stable
-    auto stabledPet = std::find_if(petStable->StabledPets.begin(), petStable->StabledPets.end(), [petId](Optional<PetStable::PetInfo> const& pet)
+    auto stabledPet = std::find_if(petStable->StabledPets.begin(), petStable->StabledPets.end(), [petId](Optional<PetStable::PetInfo> const & pet)
     {
         return pet && pet->PetNumber == petId;
     });

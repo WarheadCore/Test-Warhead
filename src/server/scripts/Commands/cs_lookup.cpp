@@ -145,7 +145,7 @@ public:
                     // send area in "id - [name]" format
                     std::ostringstream ss;
                     if (handler->GetSession())
-                        ss << areaEntry->ID << " - |cffffffff|Harea:" << areaEntry->ID << "|h[" << name << ' ' << localeNames[locale]<< "]|h|r";
+                        ss << areaEntry->ID << " - |cffffffff|Harea:" << areaEntry->ID << "|h[" << name << ' ' << localeNames[locale] << "]|h|r";
                     else
                         ss << areaEntry->ID << " - " << name << ' ' << localeNames[locale];
 
@@ -1091,7 +1091,7 @@ public:
         return true;
     }
 
-    static bool HandleLookupTaxiNodeCommand(ChatHandler* handler, const char * args)
+    static bool HandleLookupTaxiNodeCommand(ChatHandler* handler, const char* args)
     {
         if (!*args)
             return false;
@@ -1148,10 +1148,10 @@ public:
                     // send taxinode in "id - [name] (Map:m X:x Y:y Z:z)" format
                     if (handler->GetSession())
                         handler->PSendSysMessage(LANG_TAXINODE_ENTRY_LIST_CHAT, id, id, name.c_str(), localeNames[locale],
-                            nodeEntry->ContinentID, nodeEntry->Pos.X, nodeEntry->Pos.Y, nodeEntry->Pos.Z);
+                                                 nodeEntry->ContinentID, nodeEntry->Pos.X, nodeEntry->Pos.Y, nodeEntry->Pos.Z);
                     else
                         handler->PSendSysMessage(LANG_TAXINODE_ENTRY_LIST_CONSOLE, id, name.c_str(), localeNames[locale],
-                            nodeEntry->ContinentID, nodeEntry->Pos.X, nodeEntry->Pos.Y, nodeEntry->Pos.Z);
+                                                 nodeEntry->ContinentID, nodeEntry->Pos.X, nodeEntry->Pos.Y, nodeEntry->Pos.Z);
 
                     if (!found)
                         found = true;
@@ -1192,7 +1192,7 @@ public:
         uint32 maxResults = CONF_GET_INT("Command.LookupMaxResults");
         bool limitReached = false;
 
-        GameTeleContainer const & teleMap = sObjectMgr->GetGameTeleMap();
+        GameTeleContainer const& teleMap = sObjectMgr->GetGameTeleMap();
         for (GameTeleContainer::const_iterator itr = teleMap.begin(); itr != teleMap.end(); ++itr)
         {
             GameTele const* tele = &itr->second;
@@ -1286,8 +1286,8 @@ public:
                     char const* knownStr = target && target->HasTitle(titleInfo) ? handler->GetTrinityString(LANG_KNOWN) : "";
 
                     char const* activeStr = target && target->GetUInt32Value(PLAYER_CHOSEN_TITLE) == titleInfo->MaskID
-                        ? handler->GetTrinityString(LANG_ACTIVE)
-                        : "";
+                                            ? handler->GetTrinityString(LANG_ACTIVE)
+                                            : "";
 
                     char titleNameStr[80];
                     snprintf(titleNameStr, 80, name.c_str(), targetName);
@@ -1402,18 +1402,18 @@ public:
 
             switch (mapInfo->InstanceType)
             {
-            case MAP_INSTANCE:
-                ss << handler->GetTrinityString(LANG_INSTANCE);
-                break;
-            case MAP_RAID:
-                ss << handler->GetTrinityString(LANG_RAID);
-                break;
-            case MAP_BATTLEGROUND:
-                ss << handler->GetTrinityString(LANG_BATTLEGROUND);
-                break;
-            case MAP_ARENA:
-                ss << handler->GetTrinityString(LANG_ARENA);
-                break;
+                case MAP_INSTANCE:
+                    ss << handler->GetTrinityString(LANG_INSTANCE);
+                    break;
+                case MAP_RAID:
+                    ss << handler->GetTrinityString(LANG_RAID);
+                    break;
+                case MAP_BATTLEGROUND:
+                    ss << handler->GetTrinityString(LANG_BATTLEGROUND);
+                    break;
+                case MAP_ARENA:
+                    ss << handler->GetTrinityString(LANG_ARENA);
+                    break;
             }
 
             handler->SendSysMessage(ss.str().c_str());
@@ -1464,7 +1464,7 @@ public:
         int32 limit = limitStr ? atoi(limitStr) : -1;
 
         if (!Utf8ToUpperOnlyLatin
-            (account))
+                (account))
             return false;
 
         LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_LIST_BY_NAME);
@@ -1532,11 +1532,9 @@ public:
 
                     handler->PSendSysMessage(LANG_LOOKUP_PLAYER_CHARACTER, name.c_str(), guid, online ? handler->GetTrinityString(LANG_ONLINE) : "");
                     ++counter;
-                }
-                while (result2->NextRow() && (limit == -1 || counter < limit));
+                } while (result2->NextRow() && (limit == -1 || counter < limit));
             }
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
 
         if (counter == 0) // empty accounts only
         {

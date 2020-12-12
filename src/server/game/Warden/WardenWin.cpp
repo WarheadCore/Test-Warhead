@@ -36,21 +36,25 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 
- // GUILD is the shortest string that has no client validation (RAID only sends if in a raid group)
+// GUILD is the shortest string that has no client validation (RAID only sends if in a raid group)
 static constexpr char _luaEvalPrefix[] = "local S,T,R=SendAddonMessage,function()";
 static constexpr char _luaEvalMidfix[] = " end R=S and T()if R then S('_TW',";
 static constexpr char _luaEvalPostfix[] = ",'GUILD')end";
 
-static_assert((sizeof(_luaEvalPrefix)-1 + sizeof(_luaEvalMidfix)-1 + sizeof(_luaEvalPostfix)-1 + WARDEN_MAX_LUA_CHECK_LENGTH) == 255);
+static_assert((sizeof(_luaEvalPrefix) - 1 + sizeof(_luaEvalMidfix) - 1 + sizeof(_luaEvalPostfix) - 1 + WARDEN_MAX_LUA_CHECK_LENGTH) == 255);
 
 std::string const GetWardenCategoryCountConfig(WardenCheckCategory category)
 {
     switch (category)
     {
-        case INJECT_CHECK_CATEGORY: return "Warden.NumInjectionChecks";
-        case LUA_CHECK_CATEGORY:    return "Warden.NumLuaSandboxChecks";
-        case MODDED_CHECK_CATEGORY: return "Warden.NumClientModChecks";
-        default:                    return "";
+        case INJECT_CHECK_CATEGORY:
+            return "Warden.NumInjectionChecks";
+        case LUA_CHECK_CATEGORY:
+            return "Warden.NumLuaSandboxChecks";
+        case MODDED_CHECK_CATEGORY:
+            return "Warden.NumClientModChecks";
+        default:
+            return "";
     }
 }
 
@@ -172,7 +176,7 @@ void WardenWin::RequestHash()
     _session->SendPacket(&pkt);
 }
 
-void WardenWin::HandleHashResult(ByteBuffer &buff)
+void WardenWin::HandleHashResult(ByteBuffer& buff)
 {
     // Verify key
     Warhead::Crypto::SHA1::Digest response;
@@ -200,14 +204,22 @@ static constexpr uint8 GetCheckPacketBaseSize(WardenCheckType type)
 {
     switch (type)
     {
-        case DRIVER_CHECK: return 1;
-        case LUA_EVAL_CHECK: return 1 + sizeof(_luaEvalPrefix)-1 + sizeof(_luaEvalMidfix)-1 + 4 + sizeof(_luaEvalPostfix)-1;
-        case MPQ_CHECK: return 1;
-        case PAGE_CHECK_A: return (4 + 1);
-        case PAGE_CHECK_B: return (4 + 1);
-        case MODULE_CHECK: return (4 + Warhead::Crypto::HMAC_SHA1::DIGEST_LENGTH);
-        case MEM_CHECK: return (1 + 4 + 1);
-        default: return 0;
+        case DRIVER_CHECK:
+            return 1;
+        case LUA_EVAL_CHECK:
+            return 1 + sizeof(_luaEvalPrefix) - 1 + sizeof(_luaEvalMidfix) - 1 + 4 + sizeof(_luaEvalPostfix) - 1;
+        case MPQ_CHECK:
+            return 1;
+        case PAGE_CHECK_A:
+            return (4 + 1);
+        case PAGE_CHECK_B:
+            return (4 + 1);
+        case MODULE_CHECK:
+            return (4 + Warhead::Crypto::HMAC_SHA1::DIGEST_LENGTH);
+        case MEM_CHECK:
+            return (1 + 4 + 1);
+        default:
+            return 0;
     }
 }
 
@@ -259,15 +271,15 @@ void WardenWin::RequestChecks()
 
     uint16 expectedSize = 4;
     Warhead::Containers::EraseIf(_currentChecks,
-        [&expectedSize](uint16 id)
-        {
-            uint8 const thisSize = GetCheckPacketSize(sWardenCheckMgr->GetCheckData(id));
-            if ((expectedSize + thisSize) > 500) // warden packets are truncated to 512 bytes clientside
-                return true;
-            expectedSize += thisSize;
-            return false;
-        }
-    );
+                                 [&expectedSize](uint16 id)
+    {
+        uint8 const thisSize = GetCheckPacketSize(sWardenCheckMgr->GetCheckData(id));
+        if ((expectedSize + thisSize) > 500) // warden packets are truncated to 512 bytes clientside
+            return true;
+        expectedSize += thisSize;
+        return false;
+    }
+                                );
 
     for (uint16 const id : _currentChecks)
     {
@@ -383,7 +395,7 @@ void WardenWin::RequestChecks()
     _dataSent = true;
 }
 
-void WardenWin::HandleCheckResult(ByteBuffer &buff)
+void WardenWin::HandleCheckResult(ByteBuffer& buff)
 {
     LOG_DEBUG("warden", "Handle data");
 

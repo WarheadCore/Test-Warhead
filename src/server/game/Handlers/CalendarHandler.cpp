@@ -288,7 +288,7 @@ void WorldSession::HandleCalendarAddEvent(WorldPacket& recvData)
     SetCalendarEventCreationCooldown(GameTime::GetGameTime() + CALENDAR_CREATE_EVENT_COOLDOWN);
 
     CalendarEvent* calendarEvent = new CalendarEvent(sCalendarMgr->GetFreeEventId(), guid, 0, CalendarEventType(type), dungeonId,
-        time_t(eventPackedTime), flags, time_t(unkPackedTime), title, description);
+            time_t(eventPackedTime), flags, time_t(unkPackedTime), title, description);
 
     if (calendarEvent->IsGuildEvent() || calendarEvent->IsGuildAnnouncement())
         calendarEvent->SetGuildId(_player->GetGuildId());
@@ -381,11 +381,11 @@ void WorldSession::HandleCalendarUpdateEvent(WorldPacket& recvData)
     }
 
     LOG_DEBUG("network", "CMSG_CALENDAR_UPDATE_EVENT [%s] EventId [" UI64FMTD
-        "], InviteId [" UI64FMTD "] Title %s, Description %s, type %u "
-        "Repeatable %u, MaxInvites %u, Dungeon ID %d, Time %u "
-        "Time2 %u, Flags %u", guid.ToString().c_str(), eventId, inviteId, title.c_str(),
-        description.c_str(), type, repetitionType, maxInvites, dungeonId,
-        eventPackedTime, timeZoneTime, flags);
+              "], InviteId [" UI64FMTD "] Title %s, Description %s, type %u "
+              "Repeatable %u, MaxInvites %u, Dungeon ID %d, Time %u "
+              "Time2 %u, Flags %u", guid.ToString().c_str(), eventId, inviteId, title.c_str(),
+              description.c_str(), type, repetitionType, maxInvites, dungeonId,
+              eventPackedTime, timeZoneTime, flags);
 
     if (CalendarEvent* calendarEvent = sCalendarMgr->GetEvent(eventId))
     {
@@ -427,7 +427,7 @@ void WorldSession::HandleCalendarCopyEvent(WorldPacket& recvData)
     recvData >> eventId >> inviteId;
     recvData.ReadPackedTime(eventTime);
     LOG_DEBUG("network", "CMSG_CALENDAR_COPY_EVENT [%s], EventId [" UI64FMTD
-        "] inviteId [" UI64FMTD "] Time: %u", guid.ToString().c_str(), eventId, inviteId, eventTime);
+              "] inviteId [" UI64FMTD "] Time: %u", guid.ToString().c_str(), eventId, inviteId, eventTime);
 
     eventTime = uint32(LocalTimeToUTCTime(eventTime));
 
@@ -636,8 +636,8 @@ void WorldSession::HandleCalendarEventRsvp(WorldPacket& recvData)
 
     recvData >> eventId >> inviteId >> status;
     LOG_DEBUG("network", "CMSG_CALENDAR_EVENT_RSVP [%s] EventId ["
-        UI64FMTD "], InviteId [" UI64FMTD "], status %u", guid.ToString().c_str(), eventId,
-        inviteId, status);
+              UI64FMTD "], InviteId [" UI64FMTD "], status %u", guid.ToString().c_str(), eventId,
+              inviteId, status);
 
     if (CalendarEvent* calendarEvent = sCalendarMgr->GetEvent(eventId))
     {
@@ -676,8 +676,8 @@ void WorldSession::HandleCalendarEventRemoveInvite(WorldPacket& recvData)
     recvData >> inviteId >> ownerInviteId >> eventId;
 
     LOG_DEBUG("network", "CMSG_CALENDAR_EVENT_REMOVE_INVITE [%s] EventId [" UI64FMTD
-        "], ownerInviteId [" UI64FMTD "], Invitee ([%s] id: [" UI64FMTD "])",
-        guid.ToString().c_str(), eventId, ownerInviteId, invitee.ToString().c_str(), inviteId);
+              "], ownerInviteId [" UI64FMTD "], Invitee ([%s] id: [" UI64FMTD "])",
+              guid.ToString().c_str(), eventId, ownerInviteId, invitee.ToString().c_str(), inviteId);
 
     if (CalendarEvent* calendarEvent = sCalendarMgr->GetEvent(eventId))
     {
@@ -705,8 +705,8 @@ void WorldSession::HandleCalendarEventStatus(WorldPacket& recvData)
     recvData >> invitee.ReadAsPacked();
     recvData >> eventId >> inviteId >> ownerInviteId >> status;
     LOG_DEBUG("network", "CMSG_CALENDAR_EVENT_STATUS [%s] EventId ["
-        UI64FMTD "] ownerInviteId [" UI64FMTD "], Invitee ([%s] id: ["
-        UI64FMTD "], status %u", guid.ToString().c_str(), eventId, ownerInviteId, invitee.ToString().c_str(), inviteId, status);
+              UI64FMTD "] ownerInviteId [" UI64FMTD "], Invitee ([%s] id: ["
+              UI64FMTD "], status %u", guid.ToString().c_str(), eventId, ownerInviteId, invitee.ToString().c_str(), inviteId, status);
 
     if (CalendarEvent* calendarEvent = sCalendarMgr->GetEvent(eventId))
     {
@@ -739,8 +739,8 @@ void WorldSession::HandleCalendarEventModeratorStatus(WorldPacket& recvData)
     recvData >> invitee.ReadAsPacked();
     recvData >> eventId >> inviteId >> ownerInviteId >> rank;
     LOG_DEBUG("network", "CMSG_CALENDAR_EVENT_MODERATOR_STATUS [%s] EventId ["
-        UI64FMTD "] ownerInviteId [" UI64FMTD "], Invitee ([%s] id: ["
-        UI64FMTD "], rank %u", guid.ToString().c_str(), eventId, ownerInviteId, invitee.ToString().c_str(), inviteId, rank);
+              UI64FMTD "] ownerInviteId [" UI64FMTD "], Invitee ([%s] id: ["
+              UI64FMTD "], rank %u", guid.ToString().c_str(), eventId, ownerInviteId, invitee.ToString().c_str(), inviteId, rank);
 
     if (CalendarEvent* calendarEvent = sCalendarMgr->GetEvent(eventId))
     {
@@ -765,7 +765,7 @@ void WorldSession::HandleCalendarComplain(WorldPacket& recvData)
 
     recvData >> eventId >> complainGUID;
     LOG_DEBUG("network", "CMSG_CALENDAR_COMPLAIN [%s] EventId ["
-        UI64FMTD "] guid [%s]", guid.ToString().c_str(), eventId, complainGUID.ToString().c_str());
+              UI64FMTD "] guid [%s]", guid.ToString().c_str(), eventId, complainGUID.ToString().c_str());
 
     // what to do with complains?
 }
@@ -786,7 +786,7 @@ void WorldSession::HandleSetSavedInstanceExtend(WorldPacket& recvData)
 {
     uint32 mapId, difficulty;
     uint8 toggleExtend;
-    recvData >> mapId >> difficulty>> toggleExtend;
+    recvData >> mapId >> difficulty >> toggleExtend;
     LOG_DEBUG("network", "CMSG_SET_SAVED_INSTANCE_EXTEND - MapId: %u, Difficulty: %u, ToggleExtend: %s", mapId, difficulty, toggleExtend ? "On" : "Off");
 
     if (Player* player = GetPlayer())
@@ -843,7 +843,7 @@ void WorldSession::SendCalendarRaidLockoutUpdated(InstanceSave const* save)
 
     ObjectGuid guid = _player->GetGUID();
     LOG_DEBUG("network", "SMSG_CALENDAR_RAID_LOCKOUT_UPDATED [%s] Map: %u, Difficulty %u",
-        guid.ToString().c_str(), save->GetMapId(), save->GetDifficulty());
+              guid.ToString().c_str(), save->GetMapId(), save->GetDifficulty());
 
     time_t currTime = GameTime::GetGameTime();
 

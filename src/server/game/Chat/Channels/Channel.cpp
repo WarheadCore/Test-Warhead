@@ -179,9 +179,9 @@ void Channel::JoinChannel(Player* player, std::string const& pass)
     }
 
     if (HasFlag(CHANNEL_FLAG_LFG) &&
-        CONF_GET_BOOL("Channel.RestrictedLfg") &&
-        AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity()) && //FIXME: Move to RBAC
-        player->GetGroup())
+            CONF_GET_BOOL("Channel.RestrictedLfg") &&
+            AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity()) && //FIXME: Move to RBAC
+            player->GetGroup())
     {
         NotInLFGAppend appender;
         ChannelNameBuilder<NotInLFGAppend> builder(this, appender);
@@ -463,9 +463,9 @@ void Channel::SetMode(Player const* player, std::string const& p2n, bool mod, bo
     ObjectGuid victim = newp ? newp->GetGUID() : ObjectGuid::Empty;
 
     if (!newp || !victim || !IsOn(victim) ||
-        (player->GetTeam() != newp->GetTeam() &&
-        (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
-        !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL))))
+            (player->GetTeam() != newp->GetTeam() &&
+             (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
+              !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL))))
     {
         PlayerNotFoundAppend appender(p2n);
         ChannelNameBuilder<PlayerNotFoundAppend> builder(this, appender);
@@ -558,9 +558,9 @@ void Channel::SetOwner(Player const* player, std::string const& newname)
     ObjectGuid victim = newp ? newp->GetGUID() : ObjectGuid::Empty;
 
     if (!newp || !victim || !IsOn(victim) ||
-        (player->GetTeam() != newp->GetTeam() &&
-        (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
-        !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL))))
+            (player->GetTeam() != newp->GetTeam() &&
+             (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
+              !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL))))
     {
         PlayerNotFoundAppend appender(newname);
         ChannelNameBuilder<PlayerNotFoundAppend> builder(this, appender);
@@ -603,7 +603,7 @@ void Channel::List(Player const* player) const
 
     std::string channelName = GetName(player->GetSession()->GetSessionDbcLocale());
     LOG_DEBUG("chat.system", "SMSG_CHANNEL_LIST %s Channel: %s",
-        player->GetSession()->GetPlayerInfo().c_str(), channelName.c_str());
+              player->GetSession()->GetPlayerInfo().c_str(), channelName.c_str());
 
     WorldPacket data(SMSG_CHANNEL_LIST, 1 + (channelName.size() + 1) + 1 + 4 + _playersStore.size() * (8 + 1));
     data << uint8(1);                                   // channel type?
@@ -623,9 +623,9 @@ void Channel::List(Player const* player) const
         // PLAYER can't see MODERATOR, GAME MASTER, ADMINISTRATOR characters
         // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
         if (member &&
-            (player->GetSession()->HasPermission(rbac::RBAC_PERM_WHO_SEE_ALL_SEC_LEVELS) ||
-             member->GetSession()->GetSecurity() <= AccountTypes(gmLevelInWhoList)) &&
-            member->IsVisibleGloballyFor(player))
+                (player->GetSession()->HasPermission(rbac::RBAC_PERM_WHO_SEE_ALL_SEC_LEVELS) ||
+                 member->GetSession()->GetSecurity() <= AccountTypes(gmLevelInWhoList)) &&
+                member->IsVisibleGloballyFor(player))
         {
             data << uint64(i->first);
             data << uint8(i->second.flags);             // flags seems to be changed...
@@ -702,7 +702,7 @@ void Channel::Say(ObjectGuid guid, std::string const& what, uint32 lang) const
         return;
     }
 
-    auto builder = [&](WorldPacket& data, LocaleConstant locale)
+    auto builder = [&](WorldPacket & data, LocaleConstant locale)
     {
         LocaleConstant localeIdx = sWorld->GetAvailableDbcLocale(locale);
 
@@ -745,8 +745,8 @@ void Channel::Invite(Player const* player, std::string const& newname)
     }
 
     if (newp->GetTeam() != player->GetTeam() &&
-        (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
-        !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL)))
+            (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
+             !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL)))
     {
         InviteWrongFactionAppend appender;
         ChannelNameBuilder<InviteWrongFactionAppend> builder(this, appender);
@@ -821,7 +821,7 @@ void Channel::DeVoice(ObjectGuid /*guid1*/, ObjectGuid /*guid2*/) const
 
 void Channel::JoinNotify(ObjectGuid guid) const
 {
-    auto builder = [&](WorldPacket& data, LocaleConstant locale)
+    auto builder = [&](WorldPacket & data, LocaleConstant locale)
     {
         LocaleConstant localeIdx = sWorld->GetAvailableDbcLocale(locale);
 
@@ -841,7 +841,7 @@ void Channel::JoinNotify(ObjectGuid guid) const
 
 void Channel::LeaveNotify(ObjectGuid guid) const
 {
-    auto builder = [&](WorldPacket& data, LocaleConstant locale)
+    auto builder = [&](WorldPacket & data, LocaleConstant locale)
     {
         LocaleConstant localeIdx = sWorld->GetAvailableDbcLocale(locale);
 

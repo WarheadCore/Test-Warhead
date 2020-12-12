@@ -45,7 +45,7 @@ bool AuctionBotConfig::Initialize()
     }
 
     if (GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO) == 0 && GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO) == 0 && GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO) == 0 &&
-        !GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_NEUTRAL_ENABLED))
+            !GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_NEUTRAL_ENABLED))
     {
         LOG_INFO("ahbot", "All feature of AuctionHouseBot are disabled!");
         return false;
@@ -61,7 +61,7 @@ bool AuctionBotConfig::Initialize()
     {
         LOG_INFO("ahbot", "AllowTwoSide.Interaction.Auction is enabled, AuctionHouseBot faction-specific settings might not work as expected!");
         if (GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO) != 0 || GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO) != 0
-            || GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) || GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED))
+                || GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) || GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED))
             LOG_WARN("ahbot", "AllowTwoSide.Interaction.Auction is enabled, AuctionHouseBot should be enabled only for Neutral faction!");
     }
 

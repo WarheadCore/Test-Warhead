@@ -779,7 +779,7 @@ void WorldSession::HandleSetAmmoOpcode(WorldPacket& recvData)
 
 void WorldSession::SendEnchantmentLog(ObjectGuid target, ObjectGuid caster, uint32 itemId, uint32 enchantId)
 {
-    WorldPacket data(SMSG_ENCHANTMENTLOG, (8+8+4+4));     // last check 2.0.10
+    WorldPacket data(SMSG_ENCHANTMENTLOG, (8 + 8 + 4 + 4)); // last check 2.0.10
     data << target.WriteAsPacked();
     data << caster.WriteAsPacked();
     data << uint32(itemId);
@@ -789,8 +789,8 @@ void WorldSession::SendEnchantmentLog(ObjectGuid target, ObjectGuid caster, uint
 
 void WorldSession::SendItemEnchantTimeUpdate(ObjectGuid Playerguid, ObjectGuid Itemguid, uint32 slot, uint32 Duration)
 {
-                                                            // last check 2.0.10
-    WorldPacket data(SMSG_ITEM_ENCHANT_TIME_UPDATE, (8+4+4+8));
+    // last check 2.0.10
+    WorldPacket data(SMSG_ITEM_ENCHANT_TIME_UPDATE, (8 + 4 + 4 + 8));
     data << uint64(Itemguid);
     data << uint32(slot);
     data << uint32(Duration);
@@ -814,7 +814,7 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket& recvData)
             if (ItemSetNameLocale const* isnl = sObjectMgr->GetItemSetNameLocale(itemid))
                 ObjectMgr::GetLocaleString(isnl->Name, localeConstant, Name);
 
-        WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4+Name.size()+1+4));
+        WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4 + Name.size() + 1 + 4));
         data << uint32(itemid);
         data << Name;
         data << uint32(pName->InventoryType);
@@ -891,7 +891,7 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recvData)
     }
 
     // maybe not correct check  (it is better than nothing)
-    if (item->GetTemplate()->MaxCount>0)
+    if (item->GetTemplate()->MaxCount > 0)
     {
         _player->SendEquipError(EQUIP_ERR_UNIQUE_CANT_BE_WRAPPED, item, nullptr);
         return;
@@ -910,12 +910,24 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recvData)
 
     switch (item->GetEntry())
     {
-        case 5042:  item->SetEntry(5043); break;
-        case 5048:  item->SetEntry(5044); break;
-        case 17303: item->SetEntry(17302); break;
-        case 17304: item->SetEntry(17305); break;
-        case 17307: item->SetEntry(17308); break;
-        case 21830: item->SetEntry(21831); break;
+        case 5042:
+            item->SetEntry(5043);
+            break;
+        case 5048:
+            item->SetEntry(5044);
+            break;
+        case 17303:
+            item->SetEntry(17302);
+            break;
+        case 17304:
+            item->SetEntry(17305);
+            break;
+        case 17307:
+            item->SetEntry(17308);
+            break;
+        case 21830:
+            item->SetEntry(21831);
+            break;
     }
     item->SetGuidValue(ITEM_FIELD_GIFTCREATOR, _player->GetGUID());
     item->SetUInt32Value(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED);
@@ -949,7 +961,7 @@ void WorldSession::HandleSocketOpcode(WorldPacket& recvData)
 
     //cheat -> tried to socket same gem multiple times
     if ((gem_guids[0] && (gem_guids[0] == gem_guids[1] || gem_guids[0] == gem_guids[2])) ||
-        (gem_guids[1] && (gem_guids[1] == gem_guids[2])))
+            (gem_guids[1] && (gem_guids[1] == gem_guids[2])))
         return;
 
     Item* itemTarget = _player->GetItemByGuid(item_guid);
@@ -1006,7 +1018,7 @@ void WorldSession::HandleSocketOpcode(WorldPacket& recvData)
     for (int i = 0; i < MAX_GEM_SOCKETS; ++i)                //get new and old enchantments
     {
         GemEnchants[i] = (GemProps[i]) ? GemProps[i]->EnchantID : 0;
-        OldEnchants[i] = itemTarget->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT+i));
+        OldEnchants[i] = itemTarget->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT + i));
     }
 
     // check unique-equipped conditions
@@ -1105,13 +1117,13 @@ void WorldSession::HandleSocketOpcode(WorldPacket& recvData)
     {
         if (GemEnchants[i])
         {
-            itemTarget->SetEnchantment(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT+i), GemEnchants[i], 0, 0, _player->GetGUID());
+            itemTarget->SetEnchantment(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT + i), GemEnchants[i], 0, 0, _player->GetGUID());
             if (Item* guidItem = _player->GetItemByGuid(gem_guids[i]))
                 _player->DestroyItem(guidItem->GetBagSlot(), guidItem->GetSlot(), true);
         }
     }
 
-    for (uint32 enchant_slot = SOCK_ENCHANTMENT_SLOT; enchant_slot < SOCK_ENCHANTMENT_SLOT+MAX_GEM_SOCKETS; ++enchant_slot)
+    for (uint32 enchant_slot = SOCK_ENCHANTMENT_SLOT; enchant_slot < SOCK_ENCHANTMENT_SLOT + MAX_GEM_SOCKETS; ++enchant_slot)
         _player->ApplyEnchantment(itemTarget, EnchantmentSlot(enchant_slot), true);
 
     bool SocketBonusToBeActivated = itemTarget->GemsFitSockets();//current socketbonus state
@@ -1172,7 +1184,7 @@ void WorldSession::HandleItemRefundInfoRequest(WorldPacket& recvData)
     GetPlayer()->SendRefundInfo(item);
 }
 
-void WorldSession::HandleItemRefund(WorldPacket &recvData)
+void WorldSession::HandleItemRefund(WorldPacket& recvData)
 {
     LOG_DEBUG("network", "WORLD: CMSG_ITEM_REFUND");
     ObjectGuid guid;
@@ -1204,7 +1216,7 @@ void WorldSession::HandleItemTextQuery(WorldPacket& recvData )
 
     LOG_DEBUG("network", "CMSG_ITEM_TEXT_QUERY %s", itemGuid.ToString().c_str());
 
-    WorldPacket data(SMSG_ITEM_TEXT_QUERY_RESPONSE, (4+10));    // guess size
+    WorldPacket data(SMSG_ITEM_TEXT_QUERY_RESPONSE, (4 + 10));  // guess size
 
     if (Item* item = _player->GetItemByGuid(itemGuid))
     {

@@ -80,32 +80,32 @@ private:
 
 class LootTemplate::LootGroup                               // A set of loot definitions for items (refs are not allowed)
 {
-    public:
-        LootGroup() { }
-        ~LootGroup();
+public:
+    LootGroup() { }
+    ~LootGroup();
 
-        void AddEntry(LootStoreItem* item);                 // Adds an entry to the group (at loading stage)
-        bool HasQuestDrop() const;                          // True if group includes at least 1 quest drop entry
-        bool HasQuestDropForPlayer(Player const* player) const;
-                                                            // The same for active quests of the player
-        void Process(Loot& loot, uint16 lootMode) const;    // Rolls an item from the group (if any) and adds the item to the loot
-        float RawTotalChance() const;                       // Overall chance for the group (without equal chanced items)
-        float TotalChance() const;                          // Overall chance for the group
+    void AddEntry(LootStoreItem* item);                 // Adds an entry to the group (at loading stage)
+    bool HasQuestDrop() const;                          // True if group includes at least 1 quest drop entry
+    bool HasQuestDropForPlayer(Player const* player) const;
+    // The same for active quests of the player
+    void Process(Loot& loot, uint16 lootMode) const;    // Rolls an item from the group (if any) and adds the item to the loot
+    float RawTotalChance() const;                       // Overall chance for the group (without equal chanced items)
+    float TotalChance() const;                          // Overall chance for the group
 
-        void Verify(LootStore const& lootstore, uint32 id, uint8 group_id) const;
-        void CheckLootRefs(LootTemplateMap const& store, LootIdSet* ref_set) const;
-        LootStoreItemList* GetExplicitlyChancedItemList() { return &ExplicitlyChanced; }
-        LootStoreItemList* GetEqualChancedItemList() { return &EqualChanced; }
-        void CopyConditions(ConditionContainer conditions);
-    private:
-        LootStoreItemList ExplicitlyChanced;                // Entries with chances defined in DB
-        LootStoreItemList EqualChanced;                     // Zero chances - every entry takes the same chance
+    void Verify(LootStore const& lootstore, uint32 id, uint8 group_id) const;
+    void CheckLootRefs(LootTemplateMap const& store, LootIdSet* ref_set) const;
+    LootStoreItemList* GetExplicitlyChancedItemList() { return &ExplicitlyChanced; }
+    LootStoreItemList* GetEqualChancedItemList() { return &EqualChanced; }
+    void CopyConditions(ConditionContainer conditions);
+private:
+    LootStoreItemList ExplicitlyChanced;                // Entries with chances defined in DB
+    LootStoreItemList EqualChanced;                     // Zero chances - every entry takes the same chance
 
-        LootStoreItem const* Roll(Loot& loot, uint16 lootMode) const;   // Rolls an item from the group, returns NULL if all miss their chances
+    LootStoreItem const* Roll(Loot& loot, uint16 lootMode) const;   // Rolls an item from the group, returns NULL if all miss their chances
 
-        // This class must never be copied - storing pointers
-        LootGroup(LootGroup const&) = delete;
-        LootGroup& operator=(LootGroup const&) = delete;
+    // This class must never be copied - storing pointers
+    LootGroup(LootGroup const&) = delete;
+    LootGroup& operator=(LootGroup const&) = delete;
 };
 
 //Remove all data and free all memory
@@ -170,7 +170,7 @@ uint32 LootStore::LoadLootTable()
         }
 
         // Looking for the template of the entry
-                                                         // often entries are put together
+        // often entries are put together
         if (m_LootTemplates.empty() || tab->first != entry)
         {
             // Searching the template (in case template Id changed)
@@ -187,8 +187,7 @@ uint32 LootStore::LoadLootTable()
         // Adds current row to the template
         tab->second->AddEntry(storeitem);
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     Verify();                                           // Checks validity of the loot store
 
@@ -284,13 +283,13 @@ bool LootStoreItem::Roll(bool rate) const
         return true;
 
     if (reference > 0)                                   // reference case
-        return roll_chance_f(chance* (rate ? CONF_GET_FLOAT("Rate.Drop.Item.Referenced") : 1.0f));
+        return roll_chance_f(chance * (rate ? CONF_GET_FLOAT("Rate.Drop.Item.Referenced") : 1.0f));
 
     ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(itemid);
 
     float qualityModifier = pProto && rate ? CONF_GET_FLOAT(qualityToRate[pProto->Quality]) : 1.0f;
 
-    return roll_chance_f(chance*qualityModifier);
+    return roll_chance_f(chance * qualityModifier);
 }
 
 // Checks correctness of values
@@ -320,7 +319,7 @@ bool LootStoreItem::IsValid(LootStore const& store, uint32 entry) const
         if (chance != 0 && chance < 0.000001f)             // loot with low chance
         {
             LOG_ERROR("sql.sql", "Table '%s' Entry %d Item %d: low chance (%f) - skipped",
-                store.GetName(), entry, itemid, chance);
+                      store.GetName(), entry, itemid, chance);
             return false;
         }
 
@@ -450,7 +449,7 @@ float LootTemplate::LootGroup::RawTotalChance() const
 {
     float result = 0;
 
-    for (LootStoreItemList::const_iterator i=ExplicitlyChanced.begin(); i != ExplicitlyChanced.end(); ++i)
+    for (LootStoreItemList::const_iterator i = ExplicitlyChanced.begin(); i != ExplicitlyChanced.end(); ++i)
         if (!(*i)->needs_quest)
             result += (*i)->chance;
 
@@ -614,7 +613,7 @@ bool LootTemplate::HasQuestDrop(LootTemplateMap const& store, uint8 groupId) con
         if (!Groups[groupId - 1])
             return false;
 
-        return Groups[groupId-1]->HasQuestDrop();
+        return Groups[groupId - 1]->HasQuestDrop();
     }
 
     for (LootStoreItemList::const_iterator i = Entries.begin(); i != Entries.end(); ++i)

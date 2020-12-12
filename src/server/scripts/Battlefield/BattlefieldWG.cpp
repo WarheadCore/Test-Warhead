@@ -659,9 +659,7 @@ void BattlefieldWG::OnBattleEnd(bool endByTimer)
 
     // change collision wall state closed
     for (BfWGGameObjectBuilding* building : BuildingsInZone)
-    {
         building->RebuildGate();
-    }
 
     // successful defense
     if (endByTimer)
@@ -893,35 +891,35 @@ void BattlefieldWG::OnCreatureCreate(Creature* creature)
 
 void BattlefieldWG::OnCreatureRemove(Creature* /*creature*/)
 {
-/* possibly can be used later
-    if (IsWarTime())
-    {
-        switch (creature->GetEntry())
+    /* possibly can be used later
+        if (IsWarTime())
         {
-            case NPC_WINTERGRASP_SIEGE_ENGINE_ALLIANCE:
-            case NPC_WINTERGRASP_SIEGE_ENGINE_HORDE:
-            case NPC_WINTERGRASP_CATAPULT:
-            case NPC_WINTERGRASP_DEMOLISHER:
+            switch (creature->GetEntry())
             {
-                uint8 team;
-                if (creature->GetFaction() == WintergraspFaction[TEAM_ALLIANCE])
-                    team = TEAM_ALLIANCE;
-                else if (creature->GetFaction() == WintergraspFaction[TEAM_HORDE])
-                    team = TEAM_HORDE;
-                else
-                    return;
+                case NPC_WINTERGRASP_SIEGE_ENGINE_ALLIANCE:
+                case NPC_WINTERGRASP_SIEGE_ENGINE_HORDE:
+                case NPC_WINTERGRASP_CATAPULT:
+                case NPC_WINTERGRASP_DEMOLISHER:
+                {
+                    uint8 team;
+                    if (creature->GetFaction() == WintergraspFaction[TEAM_ALLIANCE])
+                        team = TEAM_ALLIANCE;
+                    else if (creature->GetFaction() == WintergraspFaction[TEAM_HORDE])
+                        team = TEAM_HORDE;
+                    else
+                        return;
 
-                m_vehicles[team].erase(creature->GetGUID());
-                if (team == TEAM_HORDE)
-                    UpdateData(BATTLEFIELD_WG_DATA_VEHICLE_H, -1);
-                else
-                    UpdateData(BATTLEFIELD_WG_DATA_VEHICLE_A, -1);
-                UpdateVehicleCountWG();
+                    m_vehicles[team].erase(creature->GetGUID());
+                    if (team == TEAM_HORDE)
+                        UpdateData(BATTLEFIELD_WG_DATA_VEHICLE_H, -1);
+                    else
+                        UpdateData(BATTLEFIELD_WG_DATA_VEHICLE_A, -1);
+                    UpdateVehicleCountWG();
 
-                break;
+                    break;
+                }
             }
-        }
-    }*/
+        }*/
 }
 
 void BattlefieldWG::OnGameObjectCreate(GameObject* go)
@@ -1088,7 +1086,7 @@ void BattlefieldWG::OnPlayerJoinWar(Player* player)
     else
     {
         if (GetData(BATTLEFIELD_WG_DATA_BROKEN_TOWER_ATT) > 0)
-           player->SetAuraStack(SPELL_TOWER_CONTROL, player, GetData(BATTLEFIELD_WG_DATA_BROKEN_TOWER_ATT));
+            player->SetAuraStack(SPELL_TOWER_CONTROL, player, GetData(BATTLEFIELD_WG_DATA_BROKEN_TOWER_ATT));
     }
     SendInitWorldStatesTo(player);
 }
@@ -1885,7 +1883,8 @@ public:
     }
 };
 
-void AddSC_BF_wintergrasp() {
+void AddSC_BF_wintergrasp()
+{
     new Battlefield_wintergrasp();
     new npc_wg_give_promotion_credit();
 }

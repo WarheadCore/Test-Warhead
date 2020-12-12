@@ -55,15 +55,15 @@
 
 class LoginQueryHolder : public CharacterDatabaseQueryHolder
 {
-    private:
-        uint32 m_accountId;
-        ObjectGuid m_guid;
-    public:
-        LoginQueryHolder(uint32 accountId, ObjectGuid guid)
-            : m_accountId(accountId), m_guid(guid) { }
-        ObjectGuid GetGuid() const { return m_guid; }
-        uint32 GetAccountId() const { return m_accountId; }
-        bool Initialize();
+private:
+    uint32 m_accountId;
+    ObjectGuid m_guid;
+public:
+    LoginQueryHolder(uint32 accountId, ObjectGuid guid)
+        : m_accountId(accountId), m_guid(guid) { }
+    ObjectGuid GetGuid() const { return m_guid; }
+    uint32 GetAccountId() const { return m_accountId; }
+    bool Initialize();
 };
 
 bool LoginQueryHolder::Initialize()
@@ -236,8 +236,7 @@ void WorldSession::HandleCharEnum(PreparedQueryResult result)
                     sCharacterCache->AddCharacterCacheEntry(guid, GetAccountId(), (*result)[1].GetString(), (*result)[4].GetUInt8(), (*result)[2].GetUInt8(), (*result)[3].GetUInt8(), (*result)[10].GetUInt8());
                 ++num;
             }
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
     }
 
     data.put<uint8>(0, num);
@@ -405,7 +404,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     stmt->setString(0, createInfo->Name);
 
     _queryProcessor.AddCallback(CharacterDatabase.AsyncQuery(stmt)
-        .WithChainingPreparedCallback([this](QueryCallback& queryCallback, PreparedQueryResult result)
+                                .WithChainingPreparedCallback([this](QueryCallback & queryCallback, PreparedQueryResult result)
     {
         if (result)
         {
@@ -417,7 +416,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
         stmt->setUInt32(0, GetAccountId());
         queryCallback.SetNextQuery(LoginDatabase.AsyncQuery(stmt));
     })
-        .WithChainingPreparedCallback([this](QueryCallback& queryCallback, PreparedQueryResult result)
+    .WithChainingPreparedCallback([this](QueryCallback & queryCallback, PreparedQueryResult result)
     {
         uint64 acctCharCount = 0;
         if (result)
@@ -436,7 +435,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
         stmt->setUInt32(0, GetAccountId());
         queryCallback.SetNextQuery(CharacterDatabase.AsyncQuery(stmt));
     })
-        .WithChainingPreparedCallback([this, createInfo](QueryCallback& queryCallback, PreparedQueryResult result)
+    .WithChainingPreparedCallback([this, createInfo](QueryCallback & queryCallback, PreparedQueryResult result)
     {
         if (result)
         {
@@ -559,7 +558,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
                 return;
             }
 
-            std::shared_ptr<Player> newChar(new Player(this), [](Player* ptr)
+            std::shared_ptr<Player> newChar(new Player(this), [](Player * ptr)
             {
                 ptr->CleanupsBeforeDelete();
                 delete ptr;
@@ -580,7 +579,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
             CharacterDatabaseTransaction characterTransaction = CharacterDatabase.BeginTransaction();
             LoginDatabaseTransaction trans = LoginDatabase.BeginTransaction();
 
-                                                                  // Player created, save it now
+            // Player created, save it now
             newChar->SaveToDB(characterTransaction, true);
             createInfo->CharCount += 1;
 
@@ -719,7 +718,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
         return;
     }
 
-    AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(holder)).AfterComplete([this](SQLQueryHolderBase const& holder)
+    AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(holder)).AfterComplete([this](SQLQueryHolderBase const & holder)
     {
         HandlePlayerLogin(static_cast<LoginQueryHolder const&>(holder));
     });
@@ -730,7 +729,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder const& holder)
     ObjectGuid playerGuid = holder.GetGuid();
 
     Player* pCurrChar = new Player(this);
-     // for send server info and strings (config)
+    // for send server info and strings (config)
     ChatHandler chH = ChatHandler(pCurrChar->GetSession());
 
     // "GetAccountId() == db stored account id" checked in LoadFromDB (prevent login not own character using cheating tools)
@@ -791,7 +790,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder const& holder)
         }
     }
 
-    WorldPacket data(SMSG_LEARNED_DANCE_MOVES, 4+4);
+    WorldPacket data(SMSG_LEARNED_DANCE_MOVES, 4 + 4);
     data << uint32(0);
     data << uint32(0);
     SendPacket(&data);
@@ -985,7 +984,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder const& holder)
 
     std::string IP_str = GetRemoteAddress();
     LOG_INFO("entities.player.character", "Account: %d (IP: %s) Login Character:[%s] %s Level: %d",
-        GetAccountId(), IP_str.c_str(), pCurrChar->GetName().c_str(), pCurrChar->GetGUID().ToString().c_str(), pCurrChar->GetLevel());
+             GetAccountId(), IP_str.c_str(), pCurrChar->GetName().c_str(), pCurrChar->GetGUID().ToString().c_str(), pCurrChar->GetLevel());
 
     if (!pCurrChar->IsStandState() && !pCurrChar->HasUnitState(UNIT_STATE_STUNNED))
         pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
@@ -1134,7 +1133,7 @@ void WorldSession::HandleCharRenameOpcode(WorldPacket& recvData)
     stmt->setString(2, renameInfo->Name);
 
     _queryProcessor.AddCallback(CharacterDatabase.AsyncQuery(stmt)
-        .WithPreparedCallback(std::bind(&WorldSession::HandleCharRenameCallBack, this, renameInfo, std::placeholders::_1)));
+                                .WithPreparedCallback(std::bind(&WorldSession::HandleCharRenameCallBack, this, renameInfo, std::placeholders::_1)));
 }
 
 void WorldSession::HandleCharRenameCallBack(std::shared_ptr<CharacterRenameInfo> renameInfo, PreparedQueryResult result)
@@ -1251,7 +1250,7 @@ void WorldSession::HandleSetPlayerDeclinedNames(WorldPacket& recvData)
     stmt->setUInt32(0, guid.GetCounter());
 
     for (uint8 i = 0; i < 5; i++)
-        stmt->setString(i+1, declinedname.name[i]);
+        stmt->setString(i + 1, declinedname.name[i]);
 
     trans->Append(stmt);
 
@@ -1283,8 +1282,8 @@ void WorldSession::HandleAlterAppearance(WorldPacket& recvData)
         return;
 
     if (!Player::ValidateAppearance(_player->GetRace(), _player->GetClass(), _player->GetNativeGender(),
-        bs_hair->Data, Color, _player->GetFaceId(), bs_facialHair->Data,
-        bs_skinColor ? bs_skinColor->Data : _player->GetSkinId()))
+                                    bs_hair->Data, Color, _player->GetFaceId(), bs_facialHair->Data,
+                                    bs_skinColor ? bs_skinColor->Data : _player->GetSkinId()))
         return;
 
     GameObject* go = _player->FindNearestGameObjectOfType(GAMEOBJECT_TYPE_BARBER_CHAIR, 5.0f);
@@ -1357,7 +1356,7 @@ void WorldSession::HandleCharCustomize(WorldPacket& recvData)
     if (!IsLegitCharacterForAccount(customizeInfo->Guid))
     {
         LOG_ERROR("entities.player.cheat", "Account %u, IP: %s tried to customise %s, but it does not belong to their account!",
-            GetAccountId(), GetRemoteAddress().c_str(), customizeInfo->Guid.ToString().c_str());
+                  GetAccountId(), GetRemoteAddress().c_str(), customizeInfo->Guid.ToString().c_str());
         recvData.rfinish();
         KickPlayer("WorldSession::HandleCharCustomize Trying to customise character of another account");
         return;
@@ -1375,7 +1374,7 @@ void WorldSession::HandleCharCustomize(WorldPacket& recvData)
     stmt->setUInt32(0, customizeInfo->Guid.GetCounter());
 
     _queryProcessor.AddCallback(CharacterDatabase.AsyncQuery(stmt)
-        .WithPreparedCallback(std::bind(&WorldSession::HandleCharCustomizeCallback, this, customizeInfo, std::placeholders::_1)));
+                                .WithPreparedCallback(std::bind(&WorldSession::HandleCharCustomizeCallback, this, customizeInfo, std::placeholders::_1)));
 }
 
 void WorldSession::HandleCharCustomizeCallback(std::shared_ptr<CharacterCustomizeInfo> customizeInfo, PreparedQueryResult result)
@@ -1475,7 +1474,7 @@ void WorldSession::HandleCharCustomizeCallback(std::shared_ptr<CharacterCustomiz
     SendCharCustomize(RESPONSE_SUCCESS, customizeInfo.get());
 
     LOG_INFO("entities.player.character", "Account: %d (IP: %s), Character[%s] (%s) Customized to: %s",
-        GetAccountId(), GetRemoteAddress().c_str(), oldName.c_str(), customizeInfo->Guid.ToString().c_str(), customizeInfo->Name.c_str());
+             GetAccountId(), GetRemoteAddress().c_str(), oldName.c_str(), customizeInfo->Guid.ToString().c_str(), customizeInfo->Name.c_str());
 }
 
 void WorldSession::HandleEquipmentSetSave(WorldPacket& recvData)
@@ -1610,7 +1609,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
     if (!IsLegitCharacterForAccount(factionChangeInfo->Guid))
     {
         LOG_ERROR("entities.player.cheat", "Account %u, IP: %s tried to factionchange character %s, but it does not belong to their account!",
-            GetAccountId(), GetRemoteAddress().c_str(), factionChangeInfo->Guid.ToString().c_str());
+                  GetAccountId(), GetRemoteAddress().c_str(), factionChangeInfo->Guid.ToString().c_str());
         recvData.rfinish();
         KickPlayer("WorldSession::HandleCharFactionOrRaceChange Trying to change faction of character of another account");
         return;
@@ -1631,7 +1630,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
     stmt->setUInt32(0, factionChangeInfo->Guid.GetCounter());
 
     _queryProcessor.AddCallback(CharacterDatabase.AsyncQuery(stmt)
-        .WithPreparedCallback(std::bind(&WorldSession::HandleCharFactionOrRaceChangeCallback, this, factionChangeInfo, std::placeholders::_1)));
+                                .WithPreparedCallback(std::bind(&WorldSession::HandleCharFactionOrRaceChangeCallback, this, factionChangeInfo, std::placeholders::_1)));
 }
 
 void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<CharacterFactionChangeInfo> factionChangeInfo, PreparedQueryResult result)
@@ -2066,7 +2065,7 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
                     else
                     {
                         LOG_WARN("entities.player", "%s has invalid title data '%s' at index %u - skipped, this may result in titles being lost",
-                            GetPlayerInfo().c_str(), (index < tokens.size()) ? std::string(tokens[index]).c_str() : "<none>", index);
+                                 GetPlayerInfo().c_str(), (index < tokens.size()) ? std::string(tokens[index]).c_str() : "<none>", index);
                         knownTitles[index] = 0;
                     }
                 }

@@ -120,23 +120,23 @@ uint32 const DUMP_TABLE_COUNT = std::extent<decltype(DumpTables)>::value;
 // helper class to dump sql queries to a printable string
 class StringTransaction
 {
-    public:
-        StringTransaction() : _buf() { }
+public:
+    StringTransaction() : _buf() { }
 
-        void Append(char const* sql)
-        {
-            std::ostringstream oss;
-            oss << sql << '\n';
-            _buf += oss.str();
-        }
+    void Append(char const* sql)
+    {
+        std::ostringstream oss;
+        oss << sql << '\n';
+        _buf += oss.str();
+    }
 
-        char const* GetBuffer() const
-        {
-            return _buf.c_str();
-        }
+    char const* GetBuffer() const
+    {
+        return _buf.c_str();
+    }
 
-    private:
-        std::string _buf;
+private:
+    std::string _buf;
 };
 
 // dynamic data, loaded at startup
@@ -175,7 +175,7 @@ inline bool StringsEqualCaseInsensitive(std::string const& left, std::string con
 
 inline auto FindColumnByName(TableStruct& tableStruct, std::string const& columnName) -> decltype(tableStruct.TableFields.begin())
 {
-    return std::find_if(tableStruct.TableFields.begin(), tableStruct.TableFields.end(), [columnName](TableField const& tableField) -> bool
+    return std::find_if(tableStruct.TableFields.begin(), tableStruct.TableFields.end(), [columnName](TableField const & tableField) -> bool
     {
         return StringsEqualCaseInsensitive(tableField.FieldName, columnName);
     });
@@ -196,7 +196,7 @@ inline void MarkDependentColumn(TableStruct& tableStruct, std::string const& col
     if (itr == tableStruct.TableFields.end())
     {
         LOG_FATAL("server.loading", "Column `%s` declared in table `%s` marked as dependent but doesn't exist, PlayerDump will not work properly, please update table definitions",
-            columnName.c_str(), tableStruct.TableName.c_str());
+                  columnName.c_str(), tableStruct.TableName.c_str());
         ABORT();
         return;
     }
@@ -204,7 +204,7 @@ inline void MarkDependentColumn(TableStruct& tableStruct, std::string const& col
     if (itr->IsDependentField)
     {
         LOG_FATAL("server.loading", "Attempt to mark column `%s` in table `%s` as dependent column but already marked! please check your code.",
-            columnName.c_str(), tableStruct.TableName.c_str());
+                  columnName.c_str(), tableStruct.TableName.c_str());
         ABORT();
         return;
     }
@@ -221,7 +221,7 @@ inline void MarkWhereField(TableStruct& tableStruct, std::string const& whereFie
     if (whereFieldItr == tableStruct.TableFields.end())
     {
         LOG_FATAL("server.loading", "Column name `%s` set as 'WHERE' column for table `%s` doesn't exist. PlayerDump won't work properly",
-            whereField.c_str(), tableStruct.TableName.c_str());
+                  whereField.c_str(), tableStruct.TableName.c_str());
         ABORT();
         return;
     }
@@ -231,7 +231,7 @@ inline void MarkWhereField(TableStruct& tableStruct, std::string const& whereFie
 
 inline void AssertBaseTable(BaseTable const& baseTable)
 {
-    auto itr = std::find_if(CharacterTables.begin(), CharacterTables.end(), [baseTable](TableStruct const& tableStruct) -> bool
+    auto itr = std::find_if(CharacterTables.begin(), CharacterTables.end(), [baseTable](TableStruct const & tableStruct) -> bool
     {
         return StringsEqualCaseInsensitive(tableStruct.TableName, baseTable.TableName);
     });

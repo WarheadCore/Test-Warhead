@@ -87,7 +87,7 @@ public:
 
         // check item starting quest (it can work incorrectly if added without item in inventory)
         ItemTemplateContainer const& itc = sObjectMgr->GetItemTemplateStore();
-        auto itr = std::find_if(std::begin(itc), std::end(itc), [quest](ItemTemplateContainer::value_type const& value)
+        auto itr = std::find_if(std::begin(itc), std::end(itc), [quest](ItemTemplateContainer::value_type const & value)
         {
             return value.second.StartQuest == quest->GetQuestId();
         });
@@ -194,7 +194,7 @@ public:
 
         // If player doesn't have the quest
         if (!quest || player->GetQuestStatus(entry) == QUEST_STATUS_NONE
-            || DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, entry, nullptr))
+                || DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, entry, nullptr))
         {
             handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);
@@ -212,11 +212,11 @@ public:
             uint32 curItemCount = player->GetItemCount(id, true);
 
             ItemPosCountVec dest;
-            uint8 msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, id, count-curItemCount);
+            uint8 msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, id, count - curItemCount);
             if (msg == EQUIP_ERR_OK)
             {
                 Item* item = player->StoreNewItem(dest, id, true);
-                player->SendNewItem(item, count-curItemCount, true, false);
+                player->SendNewItem(item, count - curItemCount, true, false);
             }
         }
 
@@ -304,7 +304,7 @@ public:
 
         // If player doesn't have the quest
         if (!quest || player->GetQuestStatus(entry) != QUEST_STATUS_COMPLETE
-            || DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, entry, nullptr))
+                || DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, entry, nullptr))
         {
             handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);

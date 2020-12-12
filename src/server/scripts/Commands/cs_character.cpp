@@ -149,8 +149,7 @@ public:
                 AccountMgr::GetName(info.accountId, info.accountName);
                 info.deleteDate = time_t(fields[3].GetUInt32());
                 foundList.push_back(info);
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
 
         return true;
@@ -181,12 +180,12 @@ public:
 
             if (!handler->GetSession())
                 handler->PSendSysMessage(LANG_CHARACTER_DELETED_LIST_LINE_CONSOLE,
-                    itr->guid.GetCounter(), itr->name.c_str(), itr->accountName.empty() ? "<Not existing>" : itr->accountName.c_str(),
-                    itr->accountId, dateStr.c_str());
+                                         itr->guid.GetCounter(), itr->name.c_str(), itr->accountName.empty() ? "<Not existing>" : itr->accountName.c_str(),
+                                         itr->accountId, dateStr.c_str());
             else
                 handler->PSendSysMessage(LANG_CHARACTER_DELETED_LIST_LINE_CHAT,
-                    itr->guid.GetCounter(), itr->name.c_str(), itr->accountName.empty() ? "<Not existing>" : itr->accountName.c_str(),
-                    itr->accountId, dateStr.c_str());
+                                         itr->guid.GetCounter(), itr->name.c_str(), itr->accountName.empty() ? "<Not existing>" : itr->accountName.c_str(),
+                                         itr->accountId, dateStr.c_str());
         }
 
         if (!handler->GetSession())
@@ -569,16 +568,16 @@ public:
         return true;
     }
 
-   /**
-    * Handles the '.character deleted list' command, which shows all deleted characters which matches the given search string
-    *
-    * @see HandleCharacterDeletedListHelper
-    * @see HandleCharacterDeletedRestoreCommand
-    * @see HandleCharacterDeletedDeleteCommand
-    * @see DeletedInfoList
-    *
-    * @param args the search string which either contains a player GUID or a part fo the character-name
-    */
+    /**
+     * Handles the '.character deleted list' command, which shows all deleted characters which matches the given search string
+     *
+     * @see HandleCharacterDeletedListHelper
+     * @see HandleCharacterDeletedRestoreCommand
+     * @see HandleCharacterDeletedDeleteCommand
+     * @see DeletedInfoList
+     *
+     * @param args the search string which either contains a player GUID or a part fo the character-name
+     */
     static bool HandleCharacterDeletedListCommand(ChatHandler* handler, Optional<std::string_view> needleStr)
     {
         std::string needle;
