@@ -2063,7 +2063,7 @@ void World::Update(uint32 diff)
         _warnDiff += diff;
         if (GameTime::GetGameTime() >= _warnShutdownTime)
             DoGuidWarningRestart();
-        else if (_warnDiff > CONF_GET_INT("Respawn.WarningFrequency") * IN_MILLISECONDS)
+        else if (_warnDiff > (uint32)CONF_GET_INT("Respawn.WarningFrequency") * IN_MILLISECONDS)
             SendGuidWarning();
     }
 
