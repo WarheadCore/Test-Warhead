@@ -529,7 +529,7 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     AddOption<int32>("Warden.BanDuration");
     AddOption<int32>("Warden.ClientCheckHoldOff");
     AddOption<int32>("Warden.ClientCheckFailAction");
-    AddOption<int32>("Warden.ClientResponseDelay");    
+    AddOption<int32>("Warden.ClientResponseDelay");
     AddOption<int32>("DungeonFinder.OptionsMask");
     AddOption<int32>("Account.PasswordChangeSecurity");
     AddOption<int32>("Battleground.RewardWinnerHonorFirst");
@@ -555,9 +555,9 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     AddOption<int32>("AuctionHouseBot.Update.Interval");
     AddOption<int32>("DBC.Locale");
     AddOption<int32>("RealmID");
-    
+
     if (reload)
-        AddOption<int32>("ClientCacheVersion");    
+        AddOption<int32>("ClientCacheVersion");
 
     // Custom
     AddOption<int32>("Antispam.Mail.Controller");

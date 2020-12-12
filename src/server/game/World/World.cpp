@@ -476,7 +476,7 @@ void World::LoadConfigSettings(bool reload)
 
             return;
         }
-        
+
         sMetric->LoadFromConfigs();
     }
 
@@ -517,7 +517,7 @@ void World::LoadConfigSettings(bool reload)
     int32 tempIntOption = 0;
     float tempFloatOption = 1.0f;
 
-    for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i) 
+    for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
         playerBaseMoveSpeed[i] = baseMoveSpeed[i] * CONF_GET_FLOAT("Rate.MoveSpeed");
 
     tempFloatOption = CONF_GET_FLOAT("DurabilityLoss.OnDeath");
@@ -531,7 +531,7 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("config", "DurabilityLoss.OnDeath (%f) must be <= 100. Using 100.0 instead", tempFloatOption);
         sGameConfig->SetOption<float>("DurabilityLoss.OnDeath", 0.0f);
     }
-    
+
     sGameConfig->SetOption<float>("DurabilityLoss.OnDeath", tempFloatOption / 100.0f);
 
     auto CheckDurabilityLossChance = [&tempFloatOption](std::string const& optionName)
@@ -548,7 +548,7 @@ void World::LoadConfigSettings(bool reload)
     CheckDurabilityLossChance("DurabilityLossChance.Absorb");
     CheckDurabilityLossChance("DurabilityLossChance.Parry");
     CheckDurabilityLossChance("DurabilityLossChance.Block");
-    
+
     ///- Read other configuration items from the config file
     tempIntOption = CONF_GET_INT("Compression");
     if (tempIntOption < 1 || tempIntOption > 9)
@@ -556,26 +556,26 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("server.loading", "Compression level (%i) must be in range 1..9. Using default compression level (1).", tempIntOption);
         sGameConfig->SetOption<int32>("Compression", 1);
     }
-    
+
     tempIntOption = CONF_GET_INT("Auction.SearchDelay");
     if (tempIntOption < 100 || tempIntOption > 10000)
     {
         LOG_ERROR("server.loading", "Auction.SearchDelay (%i) must be between 100 and 10000. Using default of 300ms", tempIntOption);
         sGameConfig->SetOption<int32>("Auction.SearchDelay", 300);
     }
-    
+
     if (CONF_GET_BOOL("BaseMapLoadAllGrids") && CONF_GET_BOOL("GridUnload"))
     {
         LOG_ERROR("server.loading", "BaseMapLoadAllGrids enabled, but GridUnload also enabled. GridUnload must be disabled to enable base map pre-loading. Base map pre-loading disabled");
         sGameConfig->SetOption<bool>("BaseMapLoadAllGrids", false);
     }
-    
+
     if (CONF_GET_BOOL("InstanceMapLoadAllGrids") && CONF_GET_BOOL("GridUnload"))
     {
         LOG_ERROR("server.loading", "InstanceMapLoadAllGrids enabled, but GridUnload also enabled. GridUnload must be disabled to enable instance map pre-loading. Instance map pre-loading disabled");
         sGameConfig->SetOption<bool>("InstanceMapLoadAllGrids", false);
     }
-    
+
     tempIntOption = CONF_GET_INT("PlayerSave.Stats.MinLevel");
     if (tempIntOption > MAX_LEVEL)
     {
@@ -589,17 +589,17 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("server.loading", "GridCleanUpDelay (%i) must be greater %u. Use this minimal value.", tempIntOption, MIN_GRID_DELAY);
         sGameConfig->SetOption<int32>("GridCleanUpDelay", MIN_GRID_DELAY);
     }
-    
+
     if (reload)
         sMapMgr->SetGridCleanUpDelay(CONF_GET_INT("GridCleanUpDelay"));
-    
+
     tempIntOption = CONF_GET_INT("MapUpdateInterval");
     if (tempIntOption < MIN_MAP_UPDATE_DELAY)
     {
         LOG_ERROR("server.loading", "MapUpdateInterval (%i) must be greater %u. Use this minimal value.", tempIntOption, MIN_MAP_UPDATE_DELAY);
         sGameConfig->SetOption<int32>("MapUpdateInterval", MIN_MAP_UPDATE_DELAY);
     }
-    
+
     if (reload)
         sMapMgr->SetMapUpdateInterval(CONF_GET_INT("MapUpdateInterval"));
 
@@ -630,7 +630,7 @@ void World::LoadConfigSettings(bool reload)
     CheckMinName("MinPlayerName", MAX_PLAYER_NAME);
     CheckMinName("MinCharterName", MAX_CHARTER_NAME);
     CheckMinName("MinPetName", MAX_PET_NAME);
-   
+
     int32 charactersPerRealm = CONF_GET_INT("CharactersPerRealm");
     if (charactersPerRealm < 1 || charactersPerRealm > 10)
     {
@@ -666,7 +666,7 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("config", "MaxPlayerLevel (%i) must be in range 1..%u. Set to %u.", maxPlayerLevel, MAX_LEVEL, MAX_LEVEL);
         sGameConfig->SetOption<int32>("MaxPlayerLevel", MAX_LEVEL);
     }
-    
+
     int32 startPlayerLevel = CONF_GET_INT("StartPlayerLevel");
     if (startPlayerLevel < 1)
     {
@@ -736,7 +736,7 @@ void World::LoadConfigSettings(bool reload)
 
         sGameConfig->SetOption<int32>("RecruitAFriend.MaxLevel", 60);
     }
-    
+
     tempIntOption = CONF_GET_INT("Quests.DailyResetTime");
     if (tempIntOption > 23)
     {
@@ -783,7 +783,7 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("config", "UpdateUptimeInterval (%i) must be > 0, set to default 10.", tempIntOption);
         sGameConfig->SetOption<int32>("UpdateUptimeInterval", 10);
     }
-    
+
     if (reload)
     {
         m_timers[WUPDATE_UPTIME].SetInterval(tempIntOption * MINUTE * IN_MILLISECONDS);
@@ -796,7 +796,7 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("server.loading", "LogDB.Opt.ClearInterval (%i) must be > 0, set to default 10.", tempIntOption);
         sGameConfig->SetOption<int32>("LogDB.Opt.ClearInterval", 10);
     }
-    
+
     if (reload)
     {
         m_timers[WUPDATE_CLEANDB].SetInterval(tempIntOption * MINUTE * IN_MILLISECONDS);
@@ -837,7 +837,7 @@ void World::LoadConfigSettings(bool reload)
 
     CheckResetTime("Battleground.Random.ResetHour");
     CheckResetTime("Calendar.DeleteOldEventsHour");
-    CheckResetTime("Guild.ResetHour");    
+    CheckResetTime("Guild.ResetHour");
 
     // always use declined names in the russian client
     sGameConfig->SetOption<bool>("DeclinedNames", CONF_GET_INT("RealmZone") == REALM_ZONE_RUSSIAN ? true : CONF_GET_BOOL("DeclinedNames"));
@@ -922,19 +922,19 @@ void World::LoadConfigSettings(bool reload)
     // No aggro from gray mobs
     auto noGrayAggroAbove = CONF_GET_INT("NoGrayAggro.Above");
     auto noGrayAggroBelow = CONF_GET_INT("NoGrayAggro.Below");
-    
+
     if (noGrayAggroAbove > maxPlayerLevel)
     {
        LOG_ERROR("server.loading", "NoGrayAggro.Above (%i) must be in range 0..%u. Set to %u.", noGrayAggroAbove, maxPlayerLevel, maxPlayerLevel);
        sGameConfig->SetOption<int32>("NoGrayAggro.Above", maxPlayerLevel);
     }
-    
+
     if (noGrayAggroBelow > maxPlayerLevel)
     {
        LOG_ERROR("server.loading", "NoGrayAggro.Below (%i) must be in range 0..%u. Set to %u.", noGrayAggroBelow, maxPlayerLevel, maxPlayerLevel);
        sGameConfig->SetOption<int32>("NoGrayAggro.Below", maxPlayerLevel);
     }
-    
+
     if (noGrayAggroAbove > 0 && noGrayAggroAbove < noGrayAggroBelow)
     {
        LOG_ERROR("server.loading", "NoGrayAggro.Below (%i) cannot be greater than NoGrayAggro.Above (%i). Set to %i.", noGrayAggroBelow, noGrayAggroAbove, noGrayAggroAbove);
@@ -955,7 +955,7 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("server.loading", "Respawn.GuidWarnLevel (%u) cannot be greater than maximum GUID (16777215). Set to 12000000.", tempIntOption);
         sGameConfig->SetOption<int32>("Respawn.GuidWarnLevel", 12000000);
     }
-    
+
     tempIntOption = CONF_GET_INT("Respawn.GuidAlertLevel");
     if (tempIntOption > 16777215)
     {
@@ -977,10 +977,10 @@ void World::LoadConfigSettings(bool reload)
 
     CheckDynamicRate("Respawn.DynamicRateCreature");
     CheckDynamicRate("Respawn.DynamicRateGameObject");
-    
+
     _guidWarningMsg = CONF_GET_STR("Respawn.WarningMessage");
     _alertRestartReason = CONF_GET_STR("Respawn.AlertRestartReason");
-    
+
     ///- Read the "Data" directory from the config file
     std::string dataPath = CONF_GET_STR("DataDir");
     if (dataPath.empty() || (dataPath.at(dataPath.length()-1) != '/' && dataPath.at(dataPath.length()-1) != '\\'))
@@ -1002,7 +1002,7 @@ void World::LoadConfigSettings(bool reload)
     }
     else
         m_dataPath = dataPath;
-    
+
     bool enableIndoor = sConfigMgr->GetBoolDefault("vmap.enableIndoorCheck", true);
     bool enableLOS = sConfigMgr->GetBoolDefault("vmap.enableLOS", true);
     bool enableHeight = sConfigMgr->GetBoolDefault("vmap.enableHeight", true);
