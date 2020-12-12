@@ -3613,7 +3613,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
     if (spellInfo && spellInfo->IsPrimaryProfessionFirstRank())
     {
         uint32 freeProfs = GetFreePrimaryProfessionPoints()+1;
-        if (freeProfs <= CONF_GET_INT("MaxPrimaryTradeSkill"))
+        if (freeProfs <= (uint32)CONF_GET_INT("MaxPrimaryTradeSkill"))
             SetFreePrimaryProfessions(freeProfs);
     }
 

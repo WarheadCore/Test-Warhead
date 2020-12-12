@@ -426,7 +426,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
             acctCharCount = uint64(fields[0].GetDouble());
         }
 
-        if (acctCharCount >= CONF_GET_INT("CharactersPerAccount"))
+        if (acctCharCount >= static_cast<uint64>(CONF_GET_INT("CharactersPerAccount")))
         {
             SendCharCreate(CHAR_CREATE_ACCOUNT_LIMIT);
             return;

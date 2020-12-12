@@ -3725,7 +3725,7 @@ void ObjectMgr::LoadPetLevelInfo()
         }
 
         uint32 current_level = fields[1].GetUInt8();
-        if (current_level > CONF_GET_INT("MaxPlayerLevel"))
+        if (current_level > (uint32)CONF_GET_INT("MaxPlayerLevel"))
         {
             if (current_level > STRONG_MAX_LEVEL)        // hardcoded level maximum
                 LOG_ERROR("sql.sql", "Wrong (> %u) level %u in `pet_levelstats` table, ignoring.", STRONG_MAX_LEVEL, current_level);
@@ -4262,7 +4262,7 @@ void ObjectMgr::LoadPlayerInfo()
             }
 
             uint8 current_level = fields[1].GetUInt8();      // Can't be > than STRONG_MAX_LEVEL (hardcoded level maximum) due to var type
-            if (current_level > CONF_GET_INT("MaxPlayerLevel"))
+            if (current_level > (uint8)CONF_GET_INT("MaxPlayerLevel"))
             {
                 LOG_INFO("misc", "Unused (> MaxPlayerLevel in worldserver.conf) level %u in `player_classlevelstats` table, ignoring.", current_level);
                 ++count;                                    // make result loading percent "expected" correct in case disabled detail mode for example.
@@ -4350,7 +4350,7 @@ void ObjectMgr::LoadPlayerInfo()
             }
 
             uint32 current_level = fields[2].GetUInt8();
-            if (current_level > CONF_GET_INT("MaxPlayerLevel"))
+            if (current_level > (uint32)CONF_GET_INT("MaxPlayerLevel"))
             {
                 if (current_level > STRONG_MAX_LEVEL)        // hardcoded level maximum
                     LOG_ERROR("sql.sql", "Wrong (> %u) level %u in `player_levelstats` table, ignoring.", STRONG_MAX_LEVEL, current_level);

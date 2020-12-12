@@ -697,7 +697,7 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("config", "StartPlayerMoney (%i) must be in range 0..%u. Set to %u.", tempIntOption, MAX_MONEY_AMOUNT, 0);
         sGameConfig->SetOption<int32>("StartPlayerMoney", 0);
     }
-    else if (tempIntOption > MAX_MONEY_AMOUNT)
+    else if (static_cast<uint32>(tempIntOption) > MAX_MONEY_AMOUNT)
     {
         LOG_ERROR("config", "StartPlayerMoney (%i) must be in range 0..%u. Set to %u.", tempIntOption, MAX_MONEY_AMOUNT, MAX_MONEY_AMOUNT);
         sGameConfig->SetOption<int32>("StartPlayerMoney", MAX_MONEY_AMOUNT);

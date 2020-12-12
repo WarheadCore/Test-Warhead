@@ -486,7 +486,7 @@ public:
 
         if (uint32 charCount = AccountMgr::GetCharactersCount(newAccount.GetID()))
         {
-            if (charCount >= CONF_GET_INT("CharactersPerRealm"))
+            if (charCount >= (uint32)CONF_GET_INT("CharactersPerRealm"))
             {
                 handler->PSendSysMessage(LANG_ACCOUNT_CHARACTER_LIST_FULL, newAccount.GetName().c_str(), newAccount.GetID());
                 handler->SetSentErrorMessage(true);
