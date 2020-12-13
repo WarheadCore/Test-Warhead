@@ -18984,7 +18984,7 @@ bool Player::CheckInstanceValidity(bool /*isLogin*/)
 
 bool Player::CheckInstanceCount(uint32 instanceId) const
 {
-    if (_instanceResetTimes.size() < CONF_GET_INT("AccountInstancesPerHour"))
+    if (_instanceResetTimes.size() < (uint32)CONF_GET_INT("AccountInstancesPerHour"))
         return true;
     return _instanceResetTimes.find(instanceId) != _instanceResetTimes.end();
 }
