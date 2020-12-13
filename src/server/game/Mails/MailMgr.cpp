@@ -924,7 +924,7 @@ uint8 MailMgr::HandleMailReturnToSender(uint32 mailID)
             {
                 if (Player* receiver = ObjectAccessor::FindPlayerByLowGUID(itr->second.sender))
                 {
-                    if (GetMailBoxSize(itr->second.sender) + receiver->GetAuctionLotsCount() > (uint32)CONF_GET_INT("Antispam.Mail.Controller"))
+                    if (GetMailBoxSize(itr->second.sender) + receiver->GetAuctionLotsCount() > CONF_GET_UINT("Antispam.Mail.Controller"))
                     {
                         result = 1;
                         continue; // return 1

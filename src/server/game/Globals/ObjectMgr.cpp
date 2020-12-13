@@ -3726,7 +3726,7 @@ void ObjectMgr::LoadPetLevelInfo()
         }
 
         uint32 current_level = fields[1].GetUInt8();
-        if (current_level > (uint32)CONF_GET_INT("MaxPlayerLevel"))
+        if (current_level > CONF_GET_UINT("MaxPlayerLevel"))
         {
             if (current_level > STRONG_MAX_LEVEL)        // hardcoded level maximum
                 LOG_ERROR("sql.sql", "Wrong (> %u) level %u in `pet_levelstats` table, ignoring.", STRONG_MAX_LEVEL, current_level);
@@ -4351,7 +4351,7 @@ void ObjectMgr::LoadPlayerInfo()
             }
 
             uint32 current_level = fields[2].GetUInt8();
-            if (current_level > (uint32)CONF_GET_INT("MaxPlayerLevel"))
+            if (current_level > CONF_GET_UINT("MaxPlayerLevel"))
             {
                 if (current_level > STRONG_MAX_LEVEL)        // hardcoded level maximum
                     LOG_ERROR("sql.sql", "Wrong (> %u) level %u in `player_levelstats` table, ignoring.", STRONG_MAX_LEVEL, current_level);
@@ -4452,7 +4452,7 @@ void ObjectMgr::LoadPlayerInfo()
             uint32 current_level = fields[0].GetUInt8();
             uint32 current_xp    = fields[1].GetUInt32();
 
-            if (current_level >= (uint32)CONF_GET_INT("MaxPlayerLevel"))
+            if (current_level >= CONF_GET_UINT("MaxPlayerLevel"))
             {
                 if (current_level > STRONG_MAX_LEVEL)        // hardcoded level maximum
                     LOG_ERROR("sql.sql", "Wrong (> %u) level %u in `player_xp_for_level` table, ignoring.", STRONG_MAX_LEVEL, current_level);

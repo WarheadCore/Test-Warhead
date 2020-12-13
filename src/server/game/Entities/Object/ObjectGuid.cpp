@@ -100,9 +100,9 @@ void ObjectGuidGeneratorBase::HandleCounterOverflow(HighGuid high)
 
 void ObjectGuidGeneratorBase::CheckGuidTrigger(ObjectGuid::LowType guidlow)
 {
-    if (!sWorld->IsGuidAlert() && guidlow > (uint32)CONF_GET_INT("Respawn.GuidAlertLevel"))
+    if (!sWorld->IsGuidAlert() && guidlow > CONF_GET_UINT("Respawn.GuidAlertLevel"))
         sWorld->TriggerGuidAlert();
-    else if (!sWorld->IsGuidWarning() && guidlow > (uint32)CONF_GET_INT("Respawn.GuidWarnLevel"))
+    else if (!sWorld->IsGuidWarning() && guidlow > CONF_GET_UINT("Respawn.GuidWarnLevel"))
         sWorld->TriggerGuidWarning();
 }
 

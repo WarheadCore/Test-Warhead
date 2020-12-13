@@ -95,6 +95,12 @@ void GameConfig::AddOption<int32>(std::string const& optionName, std::optional<i
 }
 
 template<>
+void GameConfig::AddOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
+{
+    AddOption<int32>(optionName, def);
+}
+
+template<>
 void GameConfig::AddOption<float>(std::string const& optionName, std::optional<float> const& def /*= std::nulloptf*/) const
 {
     // Check exist option
@@ -152,6 +158,12 @@ int32 GameConfig::GetOption<int32>(std::string const& optionName, std::optional<
     }
 
     return _intConfigs.at(optionName);
+}
+
+template<>
+uint32 GameConfig::GetOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
+{
+    return static_cast<uint32>(GetOption<int32>(optionName, def));
 }
 
 template<>
@@ -213,6 +225,12 @@ void GameConfig::SetOption<int32>(std::string const& optionName, int32 const& va
 
     _intConfigs.erase(optionName);
     _intConfigs.emplace(optionName, value);
+}
+
+template<>
+void GameConfig::SetOption<uint32>(std::string const& optionName, uint32 const& value) const
+{
+    SetOption<int32>(optionName, value);
 }
 
 template<>
@@ -676,13 +694,3 @@ void GameConfig::LoadFloatConfigs(bool reload /*= false*/)
 
     LOG_INFO("config", "> Loaded %u float configs", static_cast<uint32>(_floatConfigs.size()));
 }
-
-//#define TEMPLATE_GAME_CONFIG(_TYPE) \
-//    template WH_GAME_API void GameConfig::AddOption(std::string const& optionName, std::optional<_TYPE> const& def /*= std::nullopt*/) const; \
-//    template WH_GAME_API _TYPE GameConfig::GetOption(std::string const& optionName, std::optional<_TYPE> const& def /*= std::nullopt*/) const; \
-//    template WH_GAME_API void GameConfig::SetOption(std::string const& optionName, std::optional<_TYPE> const& def /*= std::nullopt*/) const;
-//
-//TEMPLATE_GAME_CONFIG(bool)
-//TEMPLATE_GAME_CONFIG(std::string)
-//TEMPLATE_GAME_CONFIG(int32)
-//TEMPLATE_GAME_CONFIG(float)

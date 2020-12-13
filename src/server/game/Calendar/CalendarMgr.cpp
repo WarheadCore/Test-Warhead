@@ -203,7 +203,7 @@ void CalendarMgr::RemoveEvent(CalendarEvent* calendarEvent, ObjectGuid remover)
         {
             if (Player* premover = ObjectAccessor::FindConnectedPlayer(invite->GetInviteeGUID()))
             {
-                if (sMailMgr->GetMailBoxSize(invite->GetInviteeGUID()) + premover->GetAuctionLotsCount() < (uint32)CONF_GET_INT("Antispam.Mail.Controller"))
+                if (sMailMgr->GetMailBoxSize(invite->GetInviteeGUID()) + premover->GetAuctionLotsCount() < CONF_GET_UINT("Antispam.Mail.Controller"))
                     sMailMgr->SendMailByCalendarEvent(calendarEvent, invite->GetInviteeGUID().GetCounter(), calendarEvent->BuildCalendarMailSubject(remover), calendarEvent->BuildCalendarMailBody(), 0, MAIL_CHECK_MASK_COPIED);
             }
         }

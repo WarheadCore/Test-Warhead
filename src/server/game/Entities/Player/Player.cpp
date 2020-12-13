@@ -3613,7 +3613,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
     if (spellInfo && spellInfo->IsPrimaryProfessionFirstRank())
     {
         uint32 freeProfs = GetFreePrimaryProfessionPoints()+1;
-        if (freeProfs <= (uint32)CONF_GET_INT("MaxPrimaryTradeSkill"))
+        if (freeProfs <= CONF_GET_UINT("MaxPrimaryTradeSkill"))
             SetFreePrimaryProfessions(freeProfs);
     }
 
@@ -14610,7 +14610,7 @@ bool Player::CanSeeStartQuest(Quest const* quest) const
         SatisfyQuestDay(quest, false) && SatisfyQuestWeek(quest, false) &&
         SatisfyQuestMonth(quest, false) && SatisfyQuestSeasonal(quest, false))
     {
-        return GetLevel() + (uint32)CONF_GET_INT("Quests.HighLevelHideDiff") >= quest->GetMinLevel();
+        return GetLevel() + CONF_GET_UINT("Quests.HighLevelHideDiff") >= quest->GetMinLevel();
     }
 
     return false;
@@ -18984,7 +18984,7 @@ bool Player::CheckInstanceValidity(bool /*isLogin*/)
 
 bool Player::CheckInstanceCount(uint32 instanceId) const
 {
-    if (_instanceResetTimes.size() < (uint32)CONF_GET_INT("AccountInstancesPerHour"))
+    if (_instanceResetTimes.size() < CONF_GET_UINT("AccountInstancesPerHour"))
         return true;
     return _instanceResetTimes.find(instanceId) != _instanceResetTimes.end();
 }

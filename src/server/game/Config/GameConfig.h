@@ -52,6 +52,7 @@ private:
 #define CONF_GET_BOOL(__optionName) sGameConfig->GetOption<bool>(__optionName)
 #define CONF_GET_STR(__optionName) sGameConfig->GetOption<std::string>(__optionName)
 #define CONF_GET_INT(__optionName) sGameConfig->GetOption<int32>(__optionName)
+#define CONF_GET_UINT(__optionName) sGameConfig->GetOption<uint32>(__optionName)
 #define CONF_GET_FLOAT(__optionName) sGameConfig->GetOption<float>(__optionName)
 
 #endif // __GAME_CONFIG

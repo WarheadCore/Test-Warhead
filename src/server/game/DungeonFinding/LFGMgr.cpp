@@ -150,7 +150,7 @@ void LFGMgr::LoadRewards()
             continue;
         }
 
-        if (!maxLevel || maxLevel > (uint32)CONF_GET_INT("MaxPlayerLevel"))
+        if (!maxLevel || maxLevel > CONF_GET_UINT("MaxPlayerLevel"))
         {
             LOG_ERROR("sql.sql", "Level %u specified for dungeon %u in table `lfg_dungeon_rewards` can never be reached!", maxLevel, dungeonId);
             maxLevel = CONF_GET_INT("MaxPlayerLevel");
