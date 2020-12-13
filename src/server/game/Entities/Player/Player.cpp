@@ -21990,7 +21990,7 @@ void Player::ReportedAfkBy(Player* reporter)
     {
         m_bgData.bgAfkReporter.insert(reporter->GetGUID().GetCounter());
         // by default 3 players have to complain to apply debuff
-        if (m_bgData.bgAfkReporter.size() >= CONF_GET_INT("Battleground.ReportAFK"))
+        if (static_cast<uint32>(m_bgData.bgAfkReporter.size()) >= CONF_GET_UINT("Battleground.ReportAFK"))
         {
             // cast 'Idle' spell
             CastSpell(this, 43680, true);
