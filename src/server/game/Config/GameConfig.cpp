@@ -53,7 +53,7 @@ void GameConfig::Load(bool reload)
 
 // Add option
 template<>
-void GameConfig::AddOption<bool>(std::string const& optionName, std::optional<bool> const& def /*= std::nullopt*/) const
+WH_GAME_API void GameConfig::AddOption<bool>(std::string const& optionName, std::optional<bool> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _boolConfigs.find(optionName);
@@ -67,7 +67,7 @@ void GameConfig::AddOption<bool>(std::string const& optionName, std::optional<bo
 }
 
 template<>
-void GameConfig::AddOption<std::string>(std::string const& optionName, std::optional<std::string> const& def /*= std::nullopt*/) const
+WH_GAME_API void GameConfig::AddOption<std::string>(std::string const& optionName, std::optional<std::string> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _stringConfigs.find(optionName);
@@ -81,7 +81,7 @@ void GameConfig::AddOption<std::string>(std::string const& optionName, std::opti
 }
 
 template<>
-void GameConfig::AddOption<int32>(std::string const& optionName, std::optional<int32> const& def /*= std::nullopt*/) const
+WH_GAME_API void GameConfig::AddOption<int32>(std::string const& optionName, std::optional<int32> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _intConfigs.find(optionName);
@@ -95,13 +95,13 @@ void GameConfig::AddOption<int32>(std::string const& optionName, std::optional<i
 }
 
 template<>
-void GameConfig::AddOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
+WH_GAME_API void GameConfig::AddOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
 {
     AddOption<int32>(optionName, def);
 }
 
 template<>
-void GameConfig::AddOption<float>(std::string const& optionName, std::optional<float> const& def /*= std::nulloptf*/) const
+WH_GAME_API void GameConfig::AddOption<float>(std::string const& optionName, std::optional<float> const& def /*= std::nulloptf*/) const
 {
     // Check exist option
     auto itr = _floatConfigs.find(optionName);
@@ -116,7 +116,7 @@ void GameConfig::AddOption<float>(std::string const& optionName, std::optional<f
 
 // Get option
 template<>
-bool GameConfig::GetOption<bool>(std::string const& optionName, std::optional<bool> const& def /*= std::nullopt*/) const
+WH_GAME_API bool GameConfig::GetOption<bool>(std::string const& optionName, std::optional<bool> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _boolConfigs.find(optionName);
@@ -131,7 +131,7 @@ bool GameConfig::GetOption<bool>(std::string const& optionName, std::optional<bo
 }
 
 template<>
-std::string GameConfig::GetOption<std::string>(std::string const& optionName, std::optional<std::string> const& def /*= std::nullopt*/) const
+WH_GAME_API std::string GameConfig::GetOption<std::string>(std::string const& optionName, std::optional<std::string> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _stringConfigs.find(optionName);
@@ -146,7 +146,7 @@ std::string GameConfig::GetOption<std::string>(std::string const& optionName, st
 }
 
 template<>
-int32 GameConfig::GetOption<int32>(std::string const& optionName, std::optional<int32> const& def /*= std::nullopt*/) const
+WH_GAME_API int32 GameConfig::GetOption<int32>(std::string const& optionName, std::optional<int32> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _intConfigs.find(optionName);
@@ -161,13 +161,13 @@ int32 GameConfig::GetOption<int32>(std::string const& optionName, std::optional<
 }
 
 template<>
-uint32 GameConfig::GetOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
+WH_GAME_API uint32 GameConfig::GetOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
 {
     return static_cast<uint32>(GetOption<int32>(optionName, def));
 }
 
 template<>
-float GameConfig::GetOption<float>(std::string const& optionName, std::optional<float> const& def /*= std::nulloptf*/) const
+WH_GAME_API float GameConfig::GetOption<float>(std::string const& optionName, std::optional<float> const& def /*= std::nulloptf*/) const
 {
     // Check exist option
     auto itr = _floatConfigs.find(optionName);
@@ -183,7 +183,7 @@ float GameConfig::GetOption<float>(std::string const& optionName, std::optional<
 
 // Set option
 template<>
-void GameConfig::SetOption<bool>(std::string const& optionName, bool const& value) const
+WH_GAME_API void GameConfig::SetOption<bool>(std::string const& optionName, bool const& value) const
 {
     // Check exist option
     auto itr = _boolConfigs.find(optionName);
@@ -198,7 +198,7 @@ void GameConfig::SetOption<bool>(std::string const& optionName, bool const& valu
 }
 
 template<>
-void GameConfig::SetOption<std::string>(std::string const& optionName, std::string const& value) const
+WH_GAME_API void GameConfig::SetOption<std::string>(std::string const& optionName, std::string const& value) const
 {
     // Check exist option
     auto itr = _stringConfigs.find(optionName);
@@ -213,7 +213,7 @@ void GameConfig::SetOption<std::string>(std::string const& optionName, std::stri
 }
 
 template<>
-void GameConfig::SetOption<int32>(std::string const& optionName, int32 const& value) const
+WH_GAME_API void GameConfig::SetOption<int32>(std::string const& optionName, int32 const& value) const
 {
     // Check exist option
     auto itr = _intConfigs.find(optionName);
@@ -228,13 +228,13 @@ void GameConfig::SetOption<int32>(std::string const& optionName, int32 const& va
 }
 
 template<>
-void GameConfig::SetOption<uint32>(std::string const& optionName, uint32 const& value) const
+WH_GAME_API void GameConfig::SetOption<uint32>(std::string const& optionName, uint32 const& value) const
 {
     SetOption<int32>(optionName, value);
 }
 
 template<>
-void GameConfig::SetOption<float>(std::string const& optionName, float const& value) const
+WH_GAME_API void GameConfig::SetOption<float>(std::string const& optionName, float const& value) const
 {
     // Check exist option
     auto itr = _floatConfigs.find(optionName);
