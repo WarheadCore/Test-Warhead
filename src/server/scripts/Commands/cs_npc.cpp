@@ -1108,7 +1108,7 @@ public:
     static void _ShowLootEntry(ChatHandler* handler, uint32 itemId, uint8 itemCount, bool alternateString = false)
     {
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemId);
-        ItemLocale const* itemLocale = sObjectMgr->GetItemLocale(itemId);
+        ItemLocale const* itemLocale = sGameLocale->GetItemLocale(itemId);
         char const* name = nullptr;
         if (itemLocale)
             name = itemLocale->Name[handler->GetSessionDbcLocale()].c_str();

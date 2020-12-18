@@ -440,8 +440,8 @@ public:
             return false;
         }
 
-        char const* talentStr = handler->GetTrinityString(LANG_TALENT);
-        char const* passiveStr = handler->GetTrinityString(LANG_PASSIVE);
+        char const* talentStr = handler->GetWarheadString(LANG_TALENT);
+        char const* passiveStr = handler->GetWarheadString(LANG_PASSIVE);
 
         Unit::AuraApplicationMap const& auras = unit->GetAppliedAuras();
         handler->PSendSysMessage(LANG_COMMAND_TARGET_LISTAURAS, auras.size());
@@ -621,7 +621,7 @@ public:
         Map const* map = player->GetMap();
 
         LocaleConstant locale = handler->GetSession()->GetSessionDbcLocale();
-        char const* stringOverdue = sObjectMgr->GetTrinityString(LANG_LIST_RESPAWNS_OVERDUE, locale);
+        char const* stringOverdue = sObjectMgr->GetWarheadString(LANG_LIST_RESPAWNS_OVERDUE, locale);
 
         uint32 zoneId = player->GetZoneId();
         char const* zoneName = GetZoneName(zoneId, locale);

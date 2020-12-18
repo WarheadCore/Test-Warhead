@@ -160,7 +160,7 @@ public:
             { "spell_threats",                 rbac::RBAC_PERM_COMMAND_RELOAD_SPELL_THREATS,                    true,  &HandleReloadSpellThreatsCommand,               "" },
             { "spell_group_stack_rules",       rbac::RBAC_PERM_COMMAND_RELOAD_SPELL_GROUP_STACK_RULES,          true,  &HandleReloadSpellGroupStackRulesCommand,       "" },
             { "trainer",                       rbac::RBAC_PERM_COMMAND_RELOAD_TRAINER,                          true,  &HandleReloadTrainerCommand,                    "" },
-            { "trinity_string",                rbac::RBAC_PERM_COMMAND_RELOAD_WARHEAD_STRING,                   true,  &HandleReloadTrinityStringCommand,              "" },
+            { "trinity_string",                rbac::RBAC_PERM_COMMAND_RELOAD_WARHEAD_STRING,                   true,  &HandleReloadWarheadStringCommand,              "" },
             { "waypoint_scripts",              rbac::RBAC_PERM_COMMAND_RELOAD_WAYPOINT_SCRIPTS,                 true,  &HandleReloadWpScriptsCommand,                  "" },
             { "waypoint_data",                 rbac::RBAC_PERM_COMMAND_RELOAD_WAYPOINT_DATA,                    true,  &HandleReloadWpCommand,                         "" },
             { "vehicle_accessory",             rbac::RBAC_PERM_COMMAND_RELOAD_VEHICLE_ACCESORY,                 true,  &HandleReloadVehicleAccessoryCommand,           "" },
@@ -197,7 +197,7 @@ public:
         HandleReloadAccessRequirementCommand(handler, "");
         HandleReloadMailLevelRewardCommand(handler, "");
         HandleReloadReservedNameCommand(handler, "");
-        HandleReloadTrinityStringCommand(handler, "");
+        HandleReloadWarheadStringCommand(handler, "");
         HandleReloadGameTeleCommand(handler, "");
 
         HandleReloadCreatureMovementOverrideCommand(handler, "");
@@ -680,10 +680,10 @@ public:
         return true;
     }
 
-    static bool HandleReloadTrinityStringCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleReloadWarheadStringCommand(ChatHandler* handler, char const* /*args*/)
     {
         LOG_INFO("misc", "Re-Loading trinity_string Table!");
-        sObjectMgr->LoadTrinityStrings();
+        sObjectMgr->LoadWarheadStrings();
         handler->SendGlobalGMSysMessage("DB table `trinity_string` reloaded.");
         return true;
     }
