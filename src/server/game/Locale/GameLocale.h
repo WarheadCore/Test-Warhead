@@ -249,7 +249,7 @@ public:
     LocaleConstant GetDBCLocaleIndex() const { return DBCLocaleIndex; }
     void SetDBCLocaleIndex(LocaleConstant locale) { DBCLocaleIndex = locale; }
 
-    void LoadRewardLocales();
+    void LoadAchievementRewardLocales();
     void LoadBroadcastTexts();
     void LoadBroadcastTextLocales();
     void LoadCreatureLocales();

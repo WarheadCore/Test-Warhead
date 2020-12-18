@@ -44,6 +44,7 @@ void GameLocale::LoadAllLocales()
 
     LoadBroadcastTexts();
     LoadBroadcastTextLocales();
+    LoadAchievementRewardLocales();
     LoadCreatureLocales();
     LoadGameObjectLocales();
     LoadItemLocales();
@@ -125,7 +126,7 @@ WarheadString const* GameLocale::GetWarheadString(uint32 entry) const
     return &itr->second;
 }
 
-void GameLocale::LoadRewardLocales()
+void GameLocale::LoadAchievementRewardLocales()
 {
     uint32 oldMSTime = getMSTime();
 
