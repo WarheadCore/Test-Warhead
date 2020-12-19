@@ -27,7 +27,7 @@
 #include "Language.h"
 #include "Log.h"
 #include "ObjectAccessor.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Optional.h"
 #include "Player.h"
 #include "Realm.h"

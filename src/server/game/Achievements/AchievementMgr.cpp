@@ -38,7 +38,7 @@
 #include "MailMgr.h"
 #include "Map.h"
 #include "MapManager.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "RBAC.h"
 #include "ReputationMgr.h"

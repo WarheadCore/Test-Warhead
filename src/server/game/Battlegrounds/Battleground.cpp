@@ -31,7 +31,7 @@
 #include "MiscPackets.h"
 #include "Object.h"
 #include "ObjectAccessor.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "ReputationMgr.h"
 #include "SpellAuras.h"

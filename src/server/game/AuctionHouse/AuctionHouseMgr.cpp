@@ -31,7 +31,7 @@
 #include "Mail.h"
 #include "MailMgr.h"
 #include "ObjectAccessor.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "Realm.h"
 #include "ScriptMgr.h"

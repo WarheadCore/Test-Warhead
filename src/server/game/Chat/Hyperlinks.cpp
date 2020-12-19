@@ -22,7 +22,7 @@
 #include "Errors.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "SharedDefines.h"
 #include "SpellInfo.h"
 #include "SpellMgr.h"
