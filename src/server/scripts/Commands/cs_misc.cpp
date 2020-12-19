@@ -24,6 +24,7 @@
 #include "DatabaseEnv.h"
 #include "DisableMgr.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 #include "GridNotifiers.h"
 #include "Group.h"
 #include "GroupMgr.h"
@@ -1726,8 +1727,8 @@ public:
             handler->PSendSysMessage(LANG_PINFO_CHR_LEVEL_HIGH, level);
 
         // Output XI. LANG_PINFO_CHR_RACE
-        raceStr  = GetRaceName(raceid, locale);
-        classStr = GetClassName(classid, locale);
+        raceStr  = sGameLocale->GetRaseString(raceid)->GetText(handler->GetSessionDbcLocale(), gender);
+        classStr = sGameLocale->GetClassString(classid)->GetText(handler->GetSessionDbcLocale(), gender);
         handler->PSendSysMessage(LANG_PINFO_CHR_RACE, (gender == 0 ? handler->GetWarheadString(LANG_CHARACTER_GENDER_MALE) : handler->GetWarheadString(LANG_CHARACTER_GENDER_FEMALE)), raceStr.c_str(), classStr.c_str());
 
         // Output XII. LANG_PINFO_CHR_ALIVE
