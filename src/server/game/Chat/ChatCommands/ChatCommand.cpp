@@ -488,4 +488,3 @@ void Warhead::ChatCommands::InvalidateCommandMap() { Warhead::Impl::ChatCommands
 bool Warhead::ChatCommands::TryExecuteCommand(ChatHandler& handler, std::string_view cmd) { return Warhead::Impl::ChatCommands::ChatCommandNode::TryExecuteCommand(handler, cmd); }
 void Warhead::ChatCommands::SendCommandHelpFor(ChatHandler& handler, std::string_view cmd) { Warhead::Impl::ChatCommands::ChatCommandNode::SendCommandHelpFor(handler, cmd); }
 std::vector<std::string> Warhead::ChatCommands::GetAutoCompletionsFor(ChatHandler const& handler, std::string_view cmd) { return Warhead::Impl::ChatCommands::ChatCommandNode::GetAutoCompletionsFor(handler, cmd); }
-
