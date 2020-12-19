@@ -23,7 +23,7 @@
 #include "Group.h"
 #include "InstanceScript.h"
 #include "Log.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "PetPackets.h"
 #include "Player.h"
 #include "QueryHolder.h"

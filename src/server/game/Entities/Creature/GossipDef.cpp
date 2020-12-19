@@ -19,7 +19,7 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "Log.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "QuestDef.h"
 #include "QuestPackets.h"

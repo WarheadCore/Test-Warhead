@@ -27,7 +27,7 @@
 #include "MapManager.h"
 #include "NPCHandler.h"
 #include "ObjectAccessor.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "QueryPackets.h"
 #include "UpdateMask.h"

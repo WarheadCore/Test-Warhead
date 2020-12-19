@@ -38,7 +38,7 @@
 #include "MotionMaster.h"
 #include "MoveSpline.h"
 #include "ObjectAccessor.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "PoolMgr.h"
 #include "QueryPackets.h"

@@ -19,8 +19,9 @@
 #define _LOCALE_COMMON_H_
 
 #include "Common.h"
-#include "WorldPacket.h"
 #include "Player.h"
+#include "WorldPacket.h"
+#include "WorldSession.h"
 #include <vector>
 
 namespace Warhead::Game::Locale

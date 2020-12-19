@@ -34,7 +34,7 @@
 #include "Map.h"
 #include "MapManager.h"
 #include "ObjectAccessor.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "OutdoorPvPMgr.h"
 #include "PoolMgr.h"
 #include "QueryPackets.h"

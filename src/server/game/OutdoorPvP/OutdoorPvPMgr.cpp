@@ -20,7 +20,7 @@
 #include "DisableMgr.h"
 #include "GameLocale.h"
 #include "Log.h"
-//#include "ObjectMgr.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "ScriptMgr.h"
 
