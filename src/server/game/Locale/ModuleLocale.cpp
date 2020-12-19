@@ -33,8 +33,6 @@ ModuleLocale* ModuleLocale::instance()
 
 void ModuleLocale::Init()
 {
-    uint32 oldMSTime = getMSTime();
-
     LOG_INFO("server.loading", ">> Loading modules strings");
     LoadModuleString();
 }
