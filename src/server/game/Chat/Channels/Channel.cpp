@@ -22,7 +22,7 @@
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
 #include "GameConfig.h"
-#include "GameLOcale.h"
+#include "GameLocale.h"
 #include "GameTime.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"

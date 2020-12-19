@@ -31,7 +31,7 @@ namespace Warhead::Game::Locale
     {
     public:
         typedef std::vector<WorldPacket*> WorldPacketList;
-        explicit ModulesLocaleTextBuilder(uint32 textId, std::string const& moduleName, va_list* args = nullptr) : i_textId(textId), i_args(args), _moduleName(moduleName) { }
+        explicit ModulesLocaleTextBuilder(uint32 textId, std::string const& moduleName, va_list* args = nullptr) : i_textId(textId), _moduleName(moduleName), i_args(args) { }
 
         void operator()(WorldPacketList& data_list, LocaleConstant loc_idx);
     private:
