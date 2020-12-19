@@ -23,6 +23,8 @@
 #include "CharacterCache.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
+#include "GameConfig.h"
+#include "GameLocale.h"
 #include "GameTime.h"
 #include "Guild.h"
 #include "ObjectAccessor.h"
@@ -35,7 +37,6 @@
 #include "Language.h"
 #include "Log.h"
 #include "LootMgr.h"
-#include "GameConfig.h"
 #include "WorldSession.h"
 #include "WorldPacket.h"
 

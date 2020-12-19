@@ -27,6 +27,7 @@
 #include "Creature.h"
 #include "CreatureAIImpl.h"
 #include "DBCStores.h"
+#include "GameLocale.h"
 #include "LootMgr.h"
 #include "Map.h"
 #include "ObjectMgr.h"

@@ -66,21 +66,21 @@ std::optional<std::string> ModuleLocale::GetModuleString(std::string const& modu
     if (moduleName.empty())
     {
         LOG_ERROR("locale.module", "> ModulesLocales: moduleName is empty!");
-        return nullopt;
+        return std::nullopt;
     }
 
     auto const& itr = _modulesStringStore.find(moduleName);
     if (itr == _modulesStringStore.end())
     {
         LOG_FATAL("locale.module", "> ModulesLocales: Not found strings for module (%s)", moduleName.c_str());
-        return nullopt;
+        return std::nullopt;
     }
 
     auto const& itr2 = itr->second.find(id);
     if (itr2 == itr->second.end())
     {
         LOG_FATAL("locale.module", "> ModulesLocales: Not found string (%u) for module (%s)", id, moduleName.c_str());
-        return nullopt;
+        return std::nullopt;
     }
 
     return itr2->second.GetText(_locale);

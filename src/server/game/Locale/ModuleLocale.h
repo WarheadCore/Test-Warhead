@@ -40,7 +40,7 @@ struct ModuleString
         if (!Content[0].empty())
             return Content[0];
 
-        return nullopt;
+        return std::nullopt;
     }
 };
 

@@ -18,13 +18,14 @@
 #include "QuestDef.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
+#include "GameConfig.h"
+#include "GameLocale.h"
 #include "Log.h"
-#include "ObjectMgr.h"
+//#include "ObjectMgr.h"
 #include "Opcodes.h"
 #include "Player.h"
 #include "QuestPackets.h"
 #include "QuestPools.h"
-#include "GameConfig.h"
 
 Quest::Quest(Field* questRecord)
 {
