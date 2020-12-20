@@ -23,6 +23,7 @@
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
 #include "Player.h"
+#include "Log.h"
 #include "World.h"
 
 ModuleLocale* ModuleLocale::instance()

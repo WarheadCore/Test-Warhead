@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,6 +23,7 @@
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
 #include "Player.h"
+#include "Log.h"
 #include "SpellMgr.h"
 #include "SpellInfo.h"
 #include "World.h"
@@ -315,7 +316,7 @@ void GameLocale::LoadCreatureLocales()
         Warhead::Game::Locale::AddLocaleString(fields[3].GetString(), locale, data.Title);
     } while (result->NextRow());
 
-    LOG_INFO("server.loading", ">> Loaded %u Сreature Locale strings in %u ms", static_cast<uint32>(_creatureLocaleStore.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded %u ?reature Locale strings in %u ms", static_cast<uint32>(_creatureLocaleStore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void GameLocale::LoadGossipMenuItemsLocales()
