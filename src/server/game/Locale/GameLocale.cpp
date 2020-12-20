@@ -22,6 +22,7 @@
 #include "Chat.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "Log.h"
 #include "SpellMgr.h"
