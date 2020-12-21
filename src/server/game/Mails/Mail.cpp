@@ -382,6 +382,7 @@ void MailMgr::ClearDependInstanceItemsBeforeDeletePlayer(ObjectGuid::LowType pla
     if (resultItems)
     {
         CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
+
         do
         {
             Field* itemFields = resultItems->Fetch();
@@ -404,7 +405,6 @@ void MailMgr::ClearDependInstanceItemsBeforeDeletePlayer(ObjectGuid::LowType pla
                 pItem->SaveToDB(trans);              // it also deletes item object!
                 continue;
             }
-
         } while (resultItems->NextRow());
 
         CharacterDatabase.CommitTransaction(trans);
@@ -1003,9 +1003,12 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
                 // check on others items in this mail, and set "has_items" = 0 if no
                 bool need_to_upd_has_items = true;
 
+                // TODO
+                /*
                 for (auto const& [mailItemID, mailItem] : _mailItems)
                     if (mailItem.messageID == mailID)
                         need_to_upd_has_items = false;
+                */
 
                 if (need_to_upd_has_items)
                 {
@@ -1064,11 +1067,11 @@ void MailMgr::HandleMailTakeMoney(Player* player, uint32 mailID)
 
 void MailMgr::HandleGetMailList(Player* player, WorldPacket& data)
 {
-    uint32 mailsCount = 0;                                // real send to client mails amount
-    uint32 realCount = 0;                                 // real mails amount
+    uint32 mailsCount = 0;      // real send to client mails amount
+    uint32 realCount = 0;       // real mails amount
 
-    data << uint32(0);                                      // real mail's count
-    data << uint8(0);                                       // mail's count
+    data << uint32(0);          // real mail's count
+    data << uint8(0);           // mail's count
     time_t cur_time = GameTime::GetGameTime();
 
     for (auto const& [_mailID, mail] : _mails)
