@@ -24,13 +24,13 @@
 void Player::CalculateAuctionLotsCounter()
 {
     uint32 count = 0;
-    if (AuctionHouseObject * AllianceauctionHouse = sAuctionMgr->GetAuctionsMapByHouseId(AUCTIONHOUSE_ALLIANCE))
+    if (AuctionHouseObject* AllianceauctionHouse = sAuctionMgr->GetAuctionsMapByHouseId(AUCTIONHOUSE_ALLIANCE))
         AllianceauctionHouse->BuildListAllLots(this, count);
 
-    if (AuctionHouseObject * AllianceauctionHouse = sAuctionMgr->GetAuctionsMapByHouseId(AUCTIONHOUSE_HORDE))
+    if (AuctionHouseObject* AllianceauctionHouse = sAuctionMgr->GetAuctionsMapByHouseId(AUCTIONHOUSE_HORDE))
         AllianceauctionHouse->BuildListAllLots(this, count);
 
-    if (AuctionHouseObject * AllianceauctionHouse = sAuctionMgr->GetAuctionsMapByHouseId(AUCTIONHOUSE_NEUTRAL))
+    if (AuctionHouseObject* AllianceauctionHouse = sAuctionMgr->GetAuctionsMapByHouseId(AUCTIONHOUSE_NEUTRAL))
         AllianceauctionHouse->BuildListAllLots(this, count);
 
     LOG_DEBUG("chatmessage", "Player: CalculateAuctionLotsCounter - Player (%s) has %u lots in all auctions", GetName().c_str(), count);
