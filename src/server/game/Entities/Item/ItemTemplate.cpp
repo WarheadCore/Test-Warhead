@@ -17,7 +17,6 @@
 
 #include "ItemTemplate.h"
 #include "GameLocale.h"
-//#include "ObjectMgr.h"
 #include "Opcodes.h"
 #include "SpellInfo.h"
 #include "SpellMgr.h"

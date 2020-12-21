@@ -18,7 +18,6 @@
 #include "ChatTextBuilder.h"
 #include "Chat.h"
 #include "GameLocale.h"
-//#include "ObjectMgr.h"
 #include <cstdarg>
 
 void Warhead::BroadcastTextBuilder::operator()(WorldPacket& data, LocaleConstant locale) const

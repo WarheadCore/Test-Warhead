@@ -21,7 +21,6 @@
 #include "GameLocale.h"
 #include "Language.h"
 #include "Map.h"
-//#include "ObjectMgr.h"
 #include "OutdoorPvPMgr.h"
 #include "Player.h"
 #include "ReputationMgr.h"
