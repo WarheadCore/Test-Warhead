@@ -74,6 +74,7 @@ void MailMgr::Initialize()
     _DeleteExpiryMails(true);
 
     LOG_INFO("server.loading", ">> Done");
+    LOG_INFO("server.loading", "");
 }
 
 void MailMgr::Update(uint32 diff)
@@ -279,8 +280,10 @@ void MailMgr::PrepareItems(uint32 mailId, uint16 mailTemplateId, Player* receive
     mailLoot.FillLoot(mailTemplateId, LootTemplates_Mail, receiver, true, true);
 
     uint32 max_slot = mailLoot.GetMaxSlotInLootFor(receiver);
+
     CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
-    for (uint32 i = 0; /*m_items.size() < MAX_MAIL_ITEMS &&*/ i < max_slot; ++i)
+
+    for (uint32 i = 0; i < max_slot; ++i)
     {
         if (LootItem* lootitem = mailLoot.LootItemInSlot(i, receiver))
         {
@@ -291,6 +294,7 @@ void MailMgr::PrepareItems(uint32 mailId, uint16 mailTemplateId, Player* receive
             }
         }
     }
+
     CharacterDatabase.CommitTransaction(trans);
 }
 

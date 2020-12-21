@@ -94,6 +94,7 @@ void MailExternalMgr::Initialize()
     });
 
     LOG_INFO("server.loading", ">> Done");
+    LOG_INFO("server.loading", "");
 }
 
 void MailExternalMgr::Update(uint32 diff)

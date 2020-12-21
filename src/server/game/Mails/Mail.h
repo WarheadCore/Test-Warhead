@@ -159,8 +159,7 @@ class WH_GAME_API MailMgr
 
         time_t GetMailMgrExpiryTimer() { return _ExpTimer.GetExpiry().count(); }
 
-    protected:
-
+    private:
         // Mail section
         uint32 AddNewMail(
             uint8 messageType, uint8 stationery, uint16 mailTemplateId, ObjectGuid::LowType sender, ObjectGuid::LowType receiver,
@@ -211,7 +210,6 @@ class WH_GAME_API MailMgr
         void SendMailTemplate(uint8 messageType, uint8 stationery, uint16 mailTemplateId, ObjectGuid::LowType senderID,
                               ObjectGuid::LowType receiver, uint32 money, time_t expireTime, time_t deliverTime, MailCheckMask checkMask);
 
-    private:
         std::unordered_map<uint32 /*mailId*/, Mail> _mails;
         std::unordered_map<uint32 /*mailItemId*/, MailItem> _mailItems;
         std::unordered_map<uint32, Item*> _MItems; // template defined in objectmgr.cpp
