@@ -46,7 +46,8 @@ namespace Warhead::Impl::ChatCommands
     template <typename T>
     using tag_base_t = typename tag_base<T>::type;
 
-    struct TokenizeResult {
+    struct TokenizeResult
+    {
         explicit operator bool() { return !token.empty(); }
         std::string_view token;
         std::string_view tail;
@@ -70,7 +71,7 @@ namespace Warhead::Impl::ChatCommands
     template <typename T, typename... Ts>
     struct are_all_assignable
     {
-        static constexpr bool value = (std::is_assignable_v<T&, Ts> && ...);
+        static constexpr bool value = (std::is_assignable_v<T&, Ts>&& ...);
     };
 
     template <typename... Ts>
@@ -80,7 +81,7 @@ namespace Warhead::Impl::ChatCommands
     };
 
     template <std::size_t index, typename T1, typename... Ts>
-    struct get_nth : get_nth<index-1, Ts...> { };
+    struct get_nth : get_nth < index - 1, Ts... > { };
 
     template <typename T1, typename... Ts>
     struct get_nth<0, T1, Ts...>
@@ -116,14 +117,14 @@ namespace Warhead::Impl::ChatCommands
         bool HasErrorMessage() const { return std::holds_alternative<std::string>(_storage); }
         std::string const& GetErrorMessage() const { return std::get<std::string>(_storage); }
 
-        private:
-            std::variant<std::monostate, std::string_view, std::string> _storage;
+    private:
+        std::variant<std::monostate, std::string_view, std::string> _storage;
     };
 
     WH_GAME_API void SendErrorMessageToHandler(ChatHandler* handler, std::string_view str);
     WH_GAME_API char const* GetWarheadString(ChatHandler const* handler, WarheadStrings which);
     template <typename... Ts>
-    std::string FormatWarheadString(ChatHandler const* handler, WarheadStrings which, Ts&&... args)
+    std::string FormatWarheadString(ChatHandler const* handler, WarheadStrings which, Ts&& ... args)
     {
         return Warhead::StringFormat(GetWarheadString(handler, which), std::forward<Ts>(args)...);
     }

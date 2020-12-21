@@ -68,7 +68,7 @@ public:
             { "item",           HandleNpcAddVendorItemCommand,     rbac::RBAC_PERM_COMMAND_NPC_ADD_ITEM,       Console::No },
             { "move",           HandleNpcAddMoveCommand,           rbac::RBAC_PERM_COMMAND_NPC_ADD_MOVE,       Console::No },
             { "temp",           HandleNpcAddTempSpawnCommand,      rbac::RBAC_PERM_COMMAND_NPC_ADD_TEMP,       Console::No },
-//          { "weapon",         HandleNpcAddWeaponCommand,         rbac::RBAC_PERM_COMMAND_NPC_ADD_WEAPON,     Console::No },
+            //          { "weapon",         HandleNpcAddWeaponCommand,         rbac::RBAC_PERM_COMMAND_NPC_ADD_WEAPON,     Console::No },
             { "",               HandleNpcAddCommand,               rbac::RBAC_PERM_COMMAND_NPC_ADD,            Console::No },
         };
         static ChatCommandTable npcSetCommandTable =
@@ -283,8 +283,8 @@ public:
             return false;
         }
 
-        creature->SetMaxHealth(100 + 30*lvl);
-        creature->SetHealth(100 + 30*lvl);
+        creature->SetMaxHealth(100 + 30 * lvl);
+        creature->SetHealth(100 + 30 * lvl);
         creature->SetLevel(lvl);
         creature->SaveToDB();
 
@@ -527,7 +527,7 @@ public:
 
         handler->PSendSysMessage(LANG_NPCINFO_MECHANIC_IMMUNE, mechanicImmuneMask);
         for (Mechanics m : EnumUtils::Iterate<Mechanics>())
-            if (m && (mechanicImmuneMask & (1 << (m-1))))
+            if (m && (mechanicImmuneMask & (1 << (m - 1))))
                 handler->PSendSysMessage("* %s (0x%X)", EnumUtils::ToTitle(m), m);
 
         return true;
@@ -570,8 +570,7 @@ public:
                 handler->PSendSysMessage(LANG_CREATURE_LIST_CHAT, guid, guid, creatureTemplate->Name.c_str(), x, y, z, mapId, "", "");
 
                 ++count;
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
 
         handler->PSendSysMessage(LANG_COMMAND_NEAR_NPC_MESSAGE, distance, count);
@@ -725,9 +724,7 @@ public:
                 }
             }
             else
-            {
                 lowguid = creature->GetSpawnId();
-            }
         }
 
         // now lowguid is low guid really existed creature
@@ -769,13 +766,9 @@ public:
             creature->SaveToDB();
         }
         if (doNotDelete == false)
-        {
             handler->PSendSysMessage(LANG_MOVE_TYPE_SET, EnumUtils::ToTitle(move_type));
-        }
         else
-        {
             handler->PSendSysMessage(LANG_MOVE_TYPE_SET_NODEL, EnumUtils::ToTitle(move_type));
-        }
 
         return true;
     }
@@ -885,9 +878,15 @@ public:
         // make some emotes
         switch (text.back())
         {
-            case '?':   creature->HandleEmoteCommand(EMOTE_ONESHOT_QUESTION);      break;
-            case '!':   creature->HandleEmoteCommand(EMOTE_ONESHOT_EXCLAMATION);   break;
-            default:    creature->HandleEmoteCommand(EMOTE_ONESHOT_TALK);          break;
+            case '?':
+                creature->HandleEmoteCommand(EMOTE_ONESHOT_QUESTION);
+                break;
+            case '!':
+                creature->HandleEmoteCommand(EMOTE_ONESHOT_EXCLAMATION);
+                break;
+            default:
+                creature->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
+                break;
         }
 
         return true;
@@ -926,7 +925,7 @@ public:
             return false;
         }
 
-        MovementGenerator* movement = creature->GetMotionMaster()->GetMovementGenerator([player](MovementGenerator const* a) -> bool
+        MovementGenerator* movement = creature->GetMotionMaster()->GetMovementGenerator([player](MovementGenerator const * a) -> bool
         {
             if (a->GetMovementGeneratorType() == FOLLOW_MOTION_TYPE)
             {
@@ -1062,7 +1061,7 @@ public:
         pet->SetReactState(REACT_DEFENSIVE);
 
         // calculate proper level
-        uint8 level = std::max<uint8>(player->GetLevel()-5, creatureTarget->GetLevel());
+        uint8 level = std::max<uint8>(player->GetLevel() - 5, creatureTarget->GetLevel());
 
         // prepare visual effect for levelup
         pet->SetUInt32Value(UNIT_FIELD_LEVEL, level - 1);
@@ -1112,7 +1111,7 @@ public:
         std::string const& itemNameLocale = sGameLocale->GetItemNameLocale(itemId, handler->GetSessionDbLocaleIndex());
 
         handler->PSendSysMessage(alternateString ? LANG_COMMAND_NPC_SHOWLOOT_ENTRY_2 : LANG_COMMAND_NPC_SHOWLOOT_ENTRY,
-            itemCount, ItemQualityColors[itemTemplate ? itemTemplate->Quality : uint32(ITEM_QUALITY_POOR)], itemId, itemNameLocale.c_str(), itemId);
+                                 itemCount, ItemQualityColors[itemTemplate ? itemTemplate->Quality : uint32(ITEM_QUALITY_POOR)], itemId, itemNameLocale.c_str(), itemId);
     }
     static void _IterateNotNormalLootMap(ChatHandler* handler, NotNormalLootItemMap const& map, std::vector<LootItem> const& items)
     {
@@ -1151,7 +1150,7 @@ public:
         }
 
         handler->PSendSysMessage(LANG_COMMAND_NPC_SHOWLOOT_HEADER, creatureTarget->GetName(), creatureTarget->GetEntry());
-        handler->PSendSysMessage(LANG_COMMAND_NPC_SHOWLOOT_MONEY, loot.gold / GOLD, (loot.gold%GOLD) / SILVER, loot.gold%SILVER);
+        handler->PSendSysMessage(LANG_COMMAND_NPC_SHOWLOOT_MONEY, loot.gold / GOLD, (loot.gold % GOLD) / SILVER, loot.gold % SILVER);
 
         if (!all)
         {

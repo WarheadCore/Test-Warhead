@@ -88,7 +88,7 @@ public:
     }
 
     template<typename... Args>
-    static void NotifyModification(ChatHandler* handler, Unit* target, WarheadStrings resourceMessage, WarheadStrings resourceReportMessage, Args&&... args)
+    static void NotifyModification(ChatHandler* handler, Unit* target, WarheadStrings resourceMessage, WarheadStrings resourceReportMessage, Args&& ... args)
     {
         if (Player* player = target->ToPlayer())
         {
@@ -235,7 +235,7 @@ public:
         uint32 factionid = atoi(pfactionid);
         uint32 flag;
 
-        char *pflag = strtok(nullptr, " ");
+        char* pflag = strtok(nullptr, " ");
         if (!pflag)
             flag = target->GetUInt32Value(UNIT_FIELD_FLAGS);
         else
@@ -320,7 +320,7 @@ public:
         if (handler->needReportToTarget(target))
             ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOURS_SPELLFLATID_CHANGED, handler->GetNameLink().c_str(), spellflatid, val, mark);
 
-        WorldPacket data(SMSG_SET_FLAT_SPELL_MODIFIER, (1+1+2+2));
+        WorldPacket data(SMSG_SET_FLAT_SPELL_MODIFIER, (1 + 1 + 2 + 2));
         data << uint8(spellflatid);
         data << uint8(op);
         data << uint16(val);
@@ -654,14 +654,14 @@ public:
             return false;
         }
 
-        if (target->HasFlag(field, (1<<(bit-1))))
+        if (target->HasFlag(field, (1 << (bit - 1))))
         {
-            target->RemoveFlag(field, (1<<(bit-1)));
+            target->RemoveFlag(field, (1 << (bit - 1)));
             handler->PSendSysMessage(LANG_REMOVE_BIT, bit, field);
         }
         else
         {
-            target->SetFlag(field, (1<<(bit-1)));
+            target->SetFlag(field, (1 << (bit - 1)));
             handler->PSendSysMessage(LANG_SET_BIT, bit, field);
         }
         return true;
@@ -732,7 +732,7 @@ public:
         uint32 factionId = atoi(factionTxt);
 
         int32 amount = 0;
-        char *rankTxt = strtok(nullptr, " ");
+        char* rankTxt = strtok(nullptr, " ");
         if (!factionId || !rankTxt)
             return false;
 
@@ -761,13 +761,13 @@ public:
 
                 if (wrank.substr(0, wrankStr.size()) == wrankStr)
                 {
-                    char *deltaTxt = strtok(nullptr, " ");
+                    char* deltaTxt = strtok(nullptr, " ");
                     if (deltaTxt)
                     {
                         int32 delta = atoi(deltaTxt);
-                        if ((delta < 0) || (delta > ReputationMgr::PointsInRank[r] -1))
+                        if ((delta < 0) || (delta > ReputationMgr::PointsInRank[r] - 1))
                         {
-                            handler->PSendSysMessage(LANG_COMMAND_FACTION_DELTA, (ReputationMgr::PointsInRank[r]-1));
+                            handler->PSendSysMessage(LANG_COMMAND_FACTION_DELTA, (ReputationMgr::PointsInRank[r] - 1));
                             handler->SetSentErrorMessage(true);
                             return false;
                         }
@@ -804,7 +804,7 @@ public:
         target->GetReputationMgr().SetOneFactionReputation(factionEntry, amount, false);
         target->GetReputationMgr().SendState(target->GetReputationMgr().GetState(factionEntry));
         handler->PSendSysMessage(LANG_COMMAND_MODIFY_REP, factionEntry->Name[handler->GetSessionDbcLocale()], factionId,
-            handler->GetNameLink(target).c_str(), target->GetReputationMgr().GetReputation(factionEntry));
+                                 handler->GetNameLink(target).c_str(), target->GetReputationMgr().GetReputation(factionEntry));
         return true;
     }
 
@@ -944,7 +944,7 @@ public:
 
         return true;
     }
-//demorph player or unit
+    //demorph player or unit
     static bool HandleDeMorphCommand(ChatHandler* handler, char const* /*args*/)
     {
         Unit* target = handler->getSelectedUnit();
@@ -961,7 +961,7 @@ public:
     }
 
     // mod xp command
-    static bool HandleModifyXPCommand(ChatHandler *handler, char const* args)
+    static bool HandleModifyXPCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
             return false;

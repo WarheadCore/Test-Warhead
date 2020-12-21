@@ -129,7 +129,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 break;
             default:
                 LOG_ERROR("network", "Player %s%s sent a chatmessage with an invalid language/message type combination",
-                                                     GetPlayer()->GetName().c_str(), GetPlayer()->GetGUID().ToString().c_str());
+                          GetPlayer()->GetName().c_str(), GetPlayer()->GetGUID().ToString().c_str());
 
                 recvData.rfinish();
                 return;
@@ -261,7 +261,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             if (isNasty(c))
             {
                 LOG_ERROR("network", "Player %s %s sent a message containing invalid character %u - blocked", GetPlayer()->GetName().c_str(),
-                    GetPlayer()->GetGUID().ToString().c_str(), uint8(c));
+                          GetPlayer()->GetGUID().ToString().c_str(), uint8(c));
                 return;
             }
 
@@ -364,7 +364,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             // If player is a Gamemaster and doesn't accept whisper, we auto-whitelist every player that the Gamemaster is talking to
             // We also do that if a player is under the required level for whispers.
             if (receiver->GetLevel() < CONF_GET_INT("ChatLevelReq.Whisper") ||
-                (HasPermission(rbac::RBAC_PERM_CAN_FILTER_WHISPERS) && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID())))
+                    (HasPermission(rbac::RBAC_PERM_CAN_FILTER_WHISPERS) && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID())))
                 sender->AddWhisperWhiteList(receiver->GetGUID());
 
             GetPlayer()->Whisper(msg, Language(lang), receiver);
@@ -586,31 +586,31 @@ namespace Warhead
 {
     class EmoteChatBuilder
     {
-        public:
-            EmoteChatBuilder(Player const& player, uint32 text_emote, uint32 emote_num, Unit const* target)
-                : i_player(player), i_text_emote(text_emote), i_emote_num(emote_num), i_target(target) { }
+    public:
+        EmoteChatBuilder(Player const& player, uint32 text_emote, uint32 emote_num, Unit const* target)
+            : i_player(player), i_text_emote(text_emote), i_emote_num(emote_num), i_target(target) { }
 
-            void operator()(WorldPacket& data, LocaleConstant loc_idx)
-            {
-                std::string const name(i_target ? i_target->GetNameForLocaleIdx(loc_idx) : "");
-                uint32 namlen = name.size();
+        void operator()(WorldPacket& data, LocaleConstant loc_idx)
+        {
+            std::string const name(i_target ? i_target->GetNameForLocaleIdx(loc_idx) : "");
+            uint32 namlen = name.size();
 
-                data.Initialize(SMSG_TEXT_EMOTE, 20 + namlen);
-                data << i_player.GetGUID();
-                data << uint32(i_text_emote);
-                data << uint32(i_emote_num);
-                data << uint32(namlen);
-                if (namlen > 1)
-                    data << name;
-                else
-                    data << uint8(0x00);
-            }
+            data.Initialize(SMSG_TEXT_EMOTE, 20 + namlen);
+            data << i_player.GetGUID();
+            data << uint32(i_text_emote);
+            data << uint32(i_emote_num);
+            data << uint32(namlen);
+            if (namlen > 1)
+                data << name;
+            else
+                data << uint8(0x00);
+        }
 
-        private:
-            Player const& i_player;
-            uint32        i_text_emote;
-            uint32        i_emote_num;
-            Unit const*   i_target;
+    private:
+        Player const& i_player;
+        uint32        i_text_emote;
+        uint32        i_emote_num;
+        Unit const*   i_target;
     };
 }                                                           // namespace Warhead
 
@@ -665,8 +665,8 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket& recvData)
 
     Warhead::EmoteChatBuilder emote_builder(*GetPlayer(), text_emote, emoteNum, unit);
     Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > emote_do(emote_builder);
-    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > > emote_worker(GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"), emote_do);
-    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder >> emote_worker(GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"), emote_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder>>, WorldTypeMapContainer> message(emote_worker);
     cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"));
 
     GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_DO_EMOTE, text_emote, 0, unit);
@@ -694,21 +694,21 @@ void WorldSession::HandleChatIgnoredOpcode(WorldPacket& recvData)
     player->SendDirectMessage(&data);
 }
 
-void WorldSession::HandleChannelDeclineInvite(WorldPacket &recvPacket)
+void WorldSession::HandleChannelDeclineInvite(WorldPacket& recvPacket)
 {
     LOG_DEBUG("network", "Opcode %u", recvPacket.GetOpcode());
 }
 
 void WorldSession::SendPlayerNotFoundNotice(std::string const& name)
 {
-    WorldPacket data(SMSG_CHAT_PLAYER_NOT_FOUND, name.size()+1);
+    WorldPacket data(SMSG_CHAT_PLAYER_NOT_FOUND, name.size() + 1);
     data << name;
     SendPacket(&data);
 }
 
 void WorldSession::SendPlayerAmbiguousNotice(std::string const& name)
 {
-    WorldPacket data(SMSG_CHAT_PLAYER_AMBIGUOUS, name.size()+1);
+    WorldPacket data(SMSG_CHAT_PLAYER_AMBIGUOUS, name.size() + 1);
     data << name;
     SendPacket(&data);
 }

@@ -51,7 +51,7 @@ namespace Warhead::Impl::ChatCommands
 
     // catch-all for number types
     template <typename T>
-    struct ArgInfo<T, std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>>>
+    struct ArgInfo < T, std::enable_if_t < std::is_integral_v<T> || std::is_floating_point_v<T >>>
     {
         static ChatCommandResult TryConsume(T& val, ChatHandler const* handler, std::string_view args)
         {
@@ -267,7 +267,7 @@ namespace Warhead::Impl::ChatCommands
                     return thisResult;
                 else
                 {
-                    ChatCommandResult nestedResult = TryAtIndex<I + 1>(val, handler, args);
+                    ChatCommandResult nestedResult = TryAtIndex < I + 1 > (val, handler, args);
                     if (nestedResult || !thisResult.HasErrorMessage())
                         return nestedResult;
                     if (!nestedResult.HasErrorMessage())

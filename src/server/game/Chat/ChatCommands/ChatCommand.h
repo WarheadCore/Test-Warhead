@@ -67,7 +67,7 @@ namespace Warhead::Impl::ChatCommands
         {
             ChatCommandResult next = ArgInfo<NextType>::TryConsume(std::get<offset>(tuple), handler, args);
             if (next)
-                return ConsumeFromOffset<Tuple, offset + 1>(tuple, handler, *next);
+                return ConsumeFromOffset < Tuple, offset + 1 > (tuple, handler, *next);
             else
                 return next;
         }
@@ -84,18 +84,18 @@ namespace Warhead::Impl::ChatCommands
 
             ChatCommandResult result1 = ArgInfo<NestedNextType>::TryConsume(myArg.value(), handler, args);
             if (result1)
-                if ((result1 = ConsumeFromOffset<Tuple, offset + 1>(tuple, handler, *result1)))
+                if ((result1 = ConsumeFromOffset < Tuple, offset + 1 > (tuple, handler, *result1)))
                     return result1;
             // try again omitting the argument
             myArg = std::nullopt;
-            ChatCommandResult result2 = ConsumeFromOffset<Tuple, offset + 1>(tuple, handler, args);
+            ChatCommandResult result2 = ConsumeFromOffset < Tuple, offset + 1 > (tuple, handler, args);
             if (result2)
                 return result2;
             if (result1.HasErrorMessage() && result2.HasErrorMessage())
             {
                 return Warhead::StringFormat("%s \"%s\"\n%s \"%s\"",
-                    GetWarheadString(handler, LANG_CMDPARSER_EITHER), result2.GetErrorMessage().c_str(),
-                    GetWarheadString(handler, LANG_CMDPARSER_OR), result1.GetErrorMessage().c_str());
+                                             GetWarheadString(handler, LANG_CMDPARSER_EITHER), result2.GetErrorMessage().c_str(),
+                                             GetWarheadString(handler, LANG_CMDPARSER_OR), result1.GetErrorMessage().c_str());
             }
             else if (result1.HasErrorMessage())
                 return result1;
@@ -122,10 +122,9 @@ namespace Warhead::Impl::ChatCommands
     struct CommandInvoker
     {
         CommandInvoker() : _wrapper(nullptr), _handler(nullptr) {}
-        template <typename TypedHandler>
-        CommandInvoker(TypedHandler& handler)
+        template <typename TypedHandler> CommandInvoker(TypedHandler& handler)
         {
-            _wrapper = [](void* handler, ChatHandler* chatHandler, std::string_view argsStr)
+            _wrapper = [](void* handler, ChatHandler * chatHandler, std::string_view argsStr)
             {
                 using Tuple = TupleType<TypedHandler>;
 
@@ -145,7 +144,7 @@ namespace Warhead::Impl::ChatCommands
         }
         CommandInvoker(bool(&handler)(ChatHandler*, char const*))
         {
-            _wrapper = [](void* handler, ChatHandler* chatHandler, std::string_view argsStr)
+            _wrapper = [](void* handler, ChatHandler * chatHandler, std::string_view argsStr)
             {
                 return reinterpret_cast<bool(*)(ChatHandler*, char const*)>(handler)(chatHandler, argsStr.empty() ? "" : argsStr.data());
             };
@@ -178,34 +177,34 @@ namespace Warhead::Impl::ChatCommands
         friend struct FilteredCommandListIterator;
         using ChatCommandBuilder = Warhead::ChatCommands::ChatCommandBuilder;
 
-        public:
-            static void LoadCommandMap();
-            static void InvalidateCommandMap();
-            static bool TryExecuteCommand(ChatHandler& handler, std::string_view cmd);
-            static void SendCommandHelpFor(ChatHandler& handler, std::string_view cmd);
-            static std::vector<std::string> GetAutoCompletionsFor(ChatHandler const& handler, std::string_view cmd);
+    public:
+        static void LoadCommandMap();
+        static void InvalidateCommandMap();
+        static bool TryExecuteCommand(ChatHandler& handler, std::string_view cmd);
+        static void SendCommandHelpFor(ChatHandler& handler, std::string_view cmd);
+        static std::vector<std::string> GetAutoCompletionsFor(ChatHandler const& handler, std::string_view cmd);
 
-            ChatCommandNode() : _name{}, _invoker {}, _permission{}, _help{}, _subCommands{} {}
+        ChatCommandNode() : _name{}, _invoker {}, _permission{}, _help{}, _subCommands{} {}
 
-        private:
-            static std::map<std::string_view, ChatCommandNode, StringCompareLessI_T> const& GetTopLevelMap();
-            static void LoadCommandsIntoMap(ChatCommandNode* blank, std::map<std::string_view, ChatCommandNode, StringCompareLessI_T>& map, Warhead::ChatCommands::ChatCommandTable const& commands);
+    private:
+        static std::map<std::string_view, ChatCommandNode, StringCompareLessI_T> const& GetTopLevelMap();
+        static void LoadCommandsIntoMap(ChatCommandNode* blank, std::map<std::string_view, ChatCommandNode, StringCompareLessI_T>& map, Warhead::ChatCommands::ChatCommandTable const& commands);
 
-            void LoadFromBuilder(ChatCommandBuilder const& builder);
-            ChatCommandNode(ChatCommandNode&& other) = default;
+        void LoadFromBuilder(ChatCommandBuilder const& builder);
+        ChatCommandNode(ChatCommandNode&& other) = default;
 
-            void ResolveNames(std::string name);
-            void SendCommandHelp(ChatHandler& handler) const;
+        void ResolveNames(std::string name);
+        void SendCommandHelp(ChatHandler& handler) const;
 
-            bool IsVisible(ChatHandler const& who) const { return (IsInvokerVisible(who) || HasVisibleSubCommands(who)); }
-            bool IsInvokerVisible(ChatHandler const& who) const;
-            bool HasVisibleSubCommands(ChatHandler const& who) const;
+        bool IsVisible(ChatHandler const& who) const { return (IsInvokerVisible(who) || HasVisibleSubCommands(who)); }
+        bool IsInvokerVisible(ChatHandler const& who) const;
+        bool HasVisibleSubCommands(ChatHandler const& who) const;
 
-            std::string _name;
-            CommandInvoker _invoker;
-            CommandPermissions _permission;
-            std::variant<std::monostate, WarheadStrings, std::string> _help;
-            std::map<std::string_view, ChatCommandNode, StringCompareLessI_T> _subCommands;
+        std::string _name;
+        CommandInvoker _invoker;
+        CommandPermissions _permission;
+        std::variant<std::monostate, WarheadStrings, std::string> _help;
+        std::map<std::string_view, ChatCommandNode, StringCompareLessI_T> _subCommands;
     };
 }
 
@@ -216,8 +215,7 @@ namespace Warhead::ChatCommands
         friend class Warhead::Impl::ChatCommands::ChatCommandNode;
         struct InvokerEntry
         {
-            template <typename T>
-            InvokerEntry(T& handler, WarheadStrings help, rbac::RBACPermissions permission, Warhead::ChatCommands::Console allowConsole)
+            template <typename T> InvokerEntry(T& handler, WarheadStrings help, rbac::RBACPermissions permission, Warhead::ChatCommands::Console allowConsole)
                 : _invoker{ handler }, _help{ help }, _permissions{ permission, allowConsole }
             {}
             InvokerEntry(InvokerEntry const&) = default;
@@ -234,13 +232,11 @@ namespace Warhead::ChatCommands
         ChatCommandBuilder(ChatCommandBuilder&&) = default;
         ChatCommandBuilder(ChatCommandBuilder const&) = default;
 
-        template <typename TypedHandler>
-        ChatCommandBuilder(char const* name, TypedHandler& handler, WarheadStrings help, rbac::RBACPermissions permission, Warhead::ChatCommands::Console allowConsole)
+        template <typename TypedHandler> ChatCommandBuilder(char const* name, TypedHandler& handler, WarheadStrings help, rbac::RBACPermissions permission, Warhead::ChatCommands::Console allowConsole)
             : _name{ ASSERT_NOTNULL(name) }, _data{ std::in_place_type<InvokerEntry>, handler, help, permission, allowConsole }
         {}
 
-        template <typename TypedHandler>
-        ChatCommandBuilder(char const* name, TypedHandler& handler, rbac::RBACPermissions permission, Warhead::ChatCommands::Console allowConsole)
+        template <typename TypedHandler> ChatCommandBuilder(char const* name, TypedHandler& handler, rbac::RBACPermissions permission, Warhead::ChatCommands::Console allowConsole)
             : ChatCommandBuilder(name, handler, WarheadStrings(), permission, allowConsole)
         {}
         ChatCommandBuilder(char const* name, std::vector<ChatCommandBuilder> const& subCommands)
@@ -253,8 +249,7 @@ namespace Warhead::ChatCommands
         {}
 
         template <typename TypedHandler>
-        [[deprecated("you are using the old-style command format; convert this to the new format ({ name, handler (not a pointer!), permission, Console::(Yes/No) })")]]
-        ChatCommandBuilder(char const* name, rbac::RBACPermissions permission, bool console, TypedHandler* handler, char const*)
+        [[deprecated("you are using the old-style command format; convert this to the new format ({ name, handler (not a pointer!), permission, Console::(Yes/No) })")]] ChatCommandBuilder(char const* name, rbac::RBACPermissions permission, bool console, TypedHandler* handler, char const*)
             : ChatCommandBuilder(name, *handler, WarheadStrings(), permission, static_cast<Warhead::ChatCommands::Console>(console))
         {}
 

@@ -240,7 +240,7 @@ public:
     static bool HandleReloadAllNpcCommand(ChatHandler* handler, char const* args)
     {
         if (*args != 'a')                                          // will be reloaded from all_gossips
-        HandleReloadTrainerCommand(handler, "a");
+            HandleReloadTrainerCommand(handler, "a");
         HandleReloadNpcVendorCommand(handler, "a");
         HandleReloadPointsOfInterestCommand(handler, "a");
         HandleReloadSpellClickSpellsCommand(handler, "a");
@@ -301,7 +301,7 @@ public:
         HandleReloadGossipMenuCommand(handler, "a");
         HandleReloadGossipMenuOptionCommand(handler, "a");
         if (*args != 'a')                                          // already reload from all_scripts
-        HandleReloadPointsOfInterestCommand(handler, "a");
+            HandleReloadPointsOfInterestCommand(handler, "a");
         return true;
     }
 
@@ -767,7 +767,8 @@ public:
     }
 
     static bool HandleReloadSkillPerfectItemTemplateCommand(ChatHandler* handler, char const* /*args*/)
-    { // latched onto HandleReloadSkillExtraItemTemplateCommand as it's part of that table group (and i don't want to chance all the command IDs)
+    {
+        // latched onto HandleReloadSkillExtraItemTemplateCommand as it's part of that table group (and i don't want to chance all the command IDs)
         LOG_INFO("misc", "Re-Loading Skill Perfection Data Table...");
         LoadSkillPerfectItemTable();
         handler->SendGlobalGMSysMessage("DB table `skill_perfect_item_template` (perfect item procs when crafting) reloaded.");

@@ -28,7 +28,7 @@
 #include "WorldSession.h"
 
 template<class T>
-inline void Warhead::VisibleNotifier::Visit(GridRefManager<T> &m)
+inline void Warhead::VisibleNotifier::Visit(GridRefManager<T>& m)
 {
     for (typename GridRefManager<T>::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
@@ -42,7 +42,7 @@ inline void Warhead::VisibleNotifier::Visit(GridRefManager<T> &m)
 // WorldObject searchers & workers
 
 template<class Check>
-void Warhead::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
+void Warhead::WorldObjectSearcher<Check>::Visit(GameObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
@@ -51,7 +51,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
     if (i_object)
         return;
 
-    for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -65,7 +65,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::WorldObjectSearcher<Check>::Visit(PlayerMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
@@ -74,7 +74,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
     if (i_object)
         return;
 
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -88,7 +88,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::WorldObjectSearcher<Check>::Visit(CreatureMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
@@ -97,7 +97,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
     if (i_object)
         return;
 
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -111,7 +111,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
+void Warhead::WorldObjectSearcher<Check>::Visit(CorpseMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
@@ -120,7 +120,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
     if (i_object)
         return;
 
-    for (CorpseMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CorpseMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -134,7 +134,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
+void Warhead::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
@@ -143,7 +143,7 @@ void Warhead::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
     if (i_object)
         return;
 
-    for (DynamicObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (DynamicObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -158,12 +158,12 @@ void Warhead::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
 
 
 template<class Check>
-void Warhead::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
 
-    for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -174,12 +174,12 @@ void Warhead::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectLastSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(PlayerMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
 
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -190,12 +190,12 @@ void Warhead::WorldObjectLastSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectLastSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(CreatureMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
 
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -206,12 +206,12 @@ void Warhead::WorldObjectLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectLastSearcher<Check>::Visit(CorpseMapType &m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(CorpseMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
 
-    for (CorpseMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CorpseMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -222,12 +222,12 @@ void Warhead::WorldObjectLastSearcher<Check>::Visit(CorpseMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType &m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
 
-    for (DynamicObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (DynamicObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -238,56 +238,56 @@ void Warhead::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType &m)
 }
 
 template<class Check>
-void Warhead::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(PlayerMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
 
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (i_check(itr->GetSource()))
             Insert(itr->GetSource());
 }
 
 template<class Check>
-void Warhead::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(CreatureMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
 
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (i_check(itr->GetSource()))
             Insert(itr->GetSource());
 }
 
 template<class Check>
-void Warhead::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(CorpseMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
 
-    for (CorpseMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CorpseMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (i_check(itr->GetSource()))
             Insert(itr->GetSource());
 }
 
 template<class Check>
-void Warhead::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(GameObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
 
-    for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (i_check(itr->GetSource()))
             Insert(itr->GetSource());
 }
 
 template<class Check>
-void Warhead::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
 
-    for (DynamicObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (DynamicObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (i_check(itr->GetSource()))
             Insert(itr->GetSource());
 }
@@ -295,13 +295,13 @@ void Warhead::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
 // Gameobject searchers
 
 template<class Check>
-void Warhead::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
+void Warhead::GameObjectSearcher<Check>::Visit(GameObjectMapType& m)
 {
     // already found
     if (i_object)
         return;
 
-    for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -315,9 +315,9 @@ void Warhead::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Warhead::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
+void Warhead::GameObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
 {
-    for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -328,9 +328,9 @@ void Warhead::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Warhead::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
+void Warhead::GameObjectListSearcher<Check>::Visit(GameObjectMapType& m)
 {
-    for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->GetSource()))
                 Insert(itr->GetSource());
@@ -339,13 +339,13 @@ void Warhead::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 // Unit searchers
 
 template<class Check>
-void Warhead::UnitSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::UnitSearcher<Check>::Visit(CreatureMapType& m)
 {
     // already found
     if (i_object)
         return;
 
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -359,13 +359,13 @@ void Warhead::UnitSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Warhead::UnitSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::UnitSearcher<Check>::Visit(PlayerMapType& m)
 {
     // already found
     if (i_object)
         return;
 
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -379,9 +379,9 @@ void Warhead::UnitSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Warhead::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::UnitLastSearcher<Check>::Visit(CreatureMapType& m)
 {
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -392,9 +392,9 @@ void Warhead::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Warhead::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::UnitLastSearcher<Check>::Visit(PlayerMapType& m)
 {
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -405,18 +405,18 @@ void Warhead::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Warhead::UnitListSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::UnitListSearcher<Check>::Visit(PlayerMapType& m)
 {
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->GetSource()))
                 Insert(itr->GetSource());
 }
 
 template<class Check>
-void Warhead::UnitListSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::UnitListSearcher<Check>::Visit(CreatureMapType& m)
 {
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->GetSource()))
                 Insert(itr->GetSource());
@@ -425,13 +425,13 @@ void Warhead::UnitListSearcher<Check>::Visit(CreatureMapType &m)
 // Creature searchers
 
 template<class Check>
-void Warhead::CreatureSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::CreatureSearcher<Check>::Visit(CreatureMapType& m)
 {
     // already found
     if (i_object)
         return;
 
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -445,9 +445,9 @@ void Warhead::CreatureSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Warhead::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::CreatureLastSearcher<Check>::Visit(CreatureMapType& m)
 {
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -458,31 +458,31 @@ void Warhead::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Warhead::CreatureListSearcher<Check>::Visit(CreatureMapType &m)
+void Warhead::CreatureListSearcher<Check>::Visit(CreatureMapType& m)
 {
-    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->GetSource()))
                 Insert(itr->GetSource());
 }
 
 template<class Check>
-void Warhead::PlayerListSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::PlayerListSearcher<Check>::Visit(PlayerMapType& m)
 {
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->GetSource()))
                 Insert(itr->GetSource());
 }
 
 template<class Check>
-void Warhead::PlayerSearcher<Check>::Visit(PlayerMapType &m)
+void Warhead::PlayerSearcher<Check>::Visit(PlayerMapType& m)
 {
     // already found
     if (i_object)
         return;
 
-    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
         if (!itr->GetSource()->InSamePhase(i_phaseMask))
             continue;
@@ -512,7 +512,7 @@ template<class Builder>
 void Warhead::LocalizedPacketDo<Builder>::operator()(Player* p)
 {
     LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
-    uint32 cache_idx = loc_idx+1;
+    uint32 cache_idx = loc_idx + 1;
     WorldPacket* data;
 
     // create if not cached yet

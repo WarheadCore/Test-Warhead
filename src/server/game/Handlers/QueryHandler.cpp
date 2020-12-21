@@ -38,7 +38,7 @@ void WorldSession::SendNameQueryOpcode(ObjectGuid guid)
     Player* player = ObjectAccessor::FindConnectedPlayer(guid);
     CharacterCacheEntry const* nameData = sCharacterCache->GetCharacterCacheByGuid(guid);
 
-    WorldPacket data(SMSG_NAME_QUERY_RESPONSE, (8+1+1+1+1+1+10));
+    WorldPacket data(SMSG_NAME_QUERY_RESPONSE, (8 + 1 + 1 + 1 + 1 + 1 + 10));
     data << guid.WriteAsPacked();
     if (!nameData)
     {
@@ -77,14 +77,14 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
     SendNameQueryOpcode(guid);
 }
 
-void WorldSession::HandleQueryTimeOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleQueryTimeOpcode(WorldPacket& /*recvData*/)
 {
     SendQueryTimeResponse();
 }
 
 void WorldSession::SendQueryTimeResponse()
 {
-    WorldPacket data(SMSG_QUERY_TIME_RESPONSE, 4+4);
+    WorldPacket data(SMSG_QUERY_TIME_RESPONSE, 4 + 4);
     data << uint32(GameTime::GetGameTime());
     data << uint32(sWorld->GetNextDailyQuestsResetTime() - GameTime::GetGameTime());
     SendPacket(&data);
@@ -108,7 +108,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPackets::Query::QueryCreature&
     else
     {
         LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY - NO CREATURE INFO! (%s, ENTRY: %u)",
-            query.Guid.ToString().c_str(), query.CreatureID);
+                  query.Guid.ToString().c_str(), query.CreatureID);
 
         WorldPackets::Query::QueryCreatureResponse response;
         response.CreatureID = query.CreatureID;
@@ -134,7 +134,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPackets::Query::QueryGameObj
     else
     {
         LOG_DEBUG("network", "WORLD: CMSG_GAMEOBJECT_QUERY - Missing gameobject info for (%s, ENTRY: %u)",
-            query.Guid.ToString().c_str(), query.GameObjectID);
+                  query.Guid.ToString().c_str(), query.GameObjectID);
 
         WorldPackets::Query::QueryGameObjectResponse response;
         response.GameObjectID = query.GameObjectID;
@@ -143,7 +143,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPackets::Query::QueryGameObj
     }
 }
 
-void WorldSession::HandleCorpseQueryOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleCorpseQueryOpcode(WorldPacket& /*recvData*/)
 {
     if (!_player->HasCorpse())
     {
@@ -180,7 +180,7 @@ void WorldSession::HandleCorpseQueryOpcode(WorldPacket & /*recvData*/)
         }
     }
 
-    WorldPacket data(MSG_CORPSE_QUERY, 1+(6*4));
+    WorldPacket data(MSG_CORPSE_QUERY, 1 + (6 * 4));
     data << uint8(1);                                       // corpse found
     data << int32(mapID);
     data << float(x);
@@ -287,7 +287,7 @@ void WorldSession::HandleQueryPageText(WorldPacket& recvData)
     while (pageID)
     {
         PageText const* pageText = sObjectMgr->GetPageText(pageID);
-                                                            // guess size
+        // guess size
         WorldPacket data(SMSG_PAGE_TEXT_QUERY_RESPONSE, 50);
         data << pageID;
 
@@ -323,7 +323,7 @@ void WorldSession::HandleCorpseMapPositionQuery(WorldPacket& recvData)
     uint32 unk;
     recvData >> unk;
 
-    WorldPacket data(SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE, 4+4+4+4);
+    WorldPacket data(SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE, 4 + 4 + 4 + 4);
     data << float(0);
     data << float(0);
     data << float(0);

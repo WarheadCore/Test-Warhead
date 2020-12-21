@@ -93,11 +93,11 @@ public:
         {
             Player* player = handler->GetSession()->GetPlayer();
             result = WorldDatabase.PQuery("SELECT guid, position_x, position_y, position_z, map, (POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) AS order_ FROM creature WHERE id = '%u' ORDER BY order_ ASC LIMIT %u",
-                player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), creatureId, count);
+                                          player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), creatureId, count);
         }
         else
             result = WorldDatabase.PQuery("SELECT guid, position_x, position_y, position_z, map FROM creature WHERE id = '%u' LIMIT %u",
-                creatureId, count);
+                                          creatureId, count);
 
         if (result)
         {
@@ -143,8 +143,7 @@ public:
                     else
                         handler->PSendSysMessage(LANG_CREATURE_LIST_CONSOLE, guid, cInfo->Name.c_str(), x, y, z, mapId, "", "");
                 }
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
 
         handler->PSendSysMessage(LANG_COMMAND_LISTCREATUREMESSAGE, creatureId, creatureCount);
@@ -200,8 +199,7 @@ public:
                     itemPos = "";
 
                 handler->PSendSysMessage(LANG_ITEMLIST_SLOT, itemGuid, ownerName.c_str(), ownerGuid, ownerAccountId, itemPos);
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
 
             uint32 resultCount = uint32(result->GetRowCount());
 
@@ -247,8 +245,7 @@ public:
                 char const* itemPos = "[in mail]";
 
                 handler->PSendSysMessage(LANG_ITEMLIST_MAIL, itemGuid, itemSenderName.c_str(), itemSender, itemSenderAccountId, itemReceiverName.c_str(), itemReceiver, itemReceiverAccount, itemPos);
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
 
             uint32 resultCount = uint32(result->GetRowCount());
 
@@ -291,8 +288,7 @@ public:
                 char const* itemPos = "[in auction]";
 
                 handler->PSendSysMessage(LANG_ITEMLIST_AUCTION, itemGuid, ownerName.c_str(), owner, ownerAccountId, itemPos);
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
 
         // guild bank case
@@ -322,8 +318,7 @@ public:
                 char const* itemPos = "[in guild bank]";
 
                 handler->PSendSysMessage(LANG_ITEMLIST_GUILD, itemGuid, guildName.c_str(), guildGuid, itemPos);
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
 
             uint32 resultCount = uint32(result->GetRowCount());
 
@@ -371,11 +366,11 @@ public:
         {
             Player* player = handler->GetSession()->GetPlayer();
             result = WorldDatabase.PQuery("SELECT guid, position_x, position_y, position_z, map, id, (POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) AS order_ FROM gameobject WHERE id = '%u' ORDER BY order_ ASC LIMIT %u",
-                player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), gameObjectId, count);
+                                          player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), gameObjectId, count);
         }
         else
             result = WorldDatabase.PQuery("SELECT guid, position_x, position_y, position_z, map, id FROM gameobject WHERE id = '%u' LIMIT %u",
-                gameObjectId, count);
+                                          gameObjectId, count);
 
         if (result)
         {
@@ -422,8 +417,7 @@ public:
                     else
                         handler->PSendSysMessage(LANG_GO_LIST_CONSOLE, guid, gInfo->name.c_str(), x, y, z, mapId, "", "");
                 }
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
 
         handler->PSendSysMessage(LANG_COMMAND_LISTOBJMESSAGE, gameObjectId, objectCount);
@@ -457,10 +451,10 @@ public:
             ss_name << "|cffffffff|Hspell:" << aura->GetId() << "|h[" << name << "]|h|r";
 
             handler->PSendSysMessage(LANG_COMMAND_TARGET_AURADETAIL, aura->GetId(), (handler->GetSession() ? ss_name.str().c_str() : name),
-                aurApp->GetEffectMask(), aura->GetCharges(), aura->GetStackAmount(), aurApp->GetSlot(),
-                aura->GetDuration(), aura->GetMaxDuration(), (aura->IsPassive() ? passiveStr : ""),
-                (talent ? talentStr : ""), aura->GetCasterGUID().IsPlayer() ? "player" : "creature",
-                aura->GetCasterGUID().GetCounter());
+                                     aurApp->GetEffectMask(), aura->GetCharges(), aura->GetStackAmount(), aurApp->GetSlot(),
+                                     aura->GetDuration(), aura->GetMaxDuration(), (aura->IsPassive() ? passiveStr : ""),
+                                     (talent ? talentStr : ""), aura->GetCasterGUID().IsPlayer() ? "player" : "creature",
+                                     aura->GetCasterGUID().GetCounter());
         }
 
         for (uint16 i = 0; i < TOTAL_AURAS; ++i)
@@ -558,16 +552,13 @@ public:
                                         }
                                         else
                                             handler->PSendSysMessage(LANG_LIST_MAIL_INFO_ITEM, item_name.c_str(), item_entry, item_guid, item_count);
-                                    }
-                                    while (result3->NextRow());
+                                    } while (result3->NextRow());
                                 }
-                            }
-                            while (result2->NextRow());
+                            } while (result2->NextRow());
                         }
                     }
                     handler->PSendSysMessage(LANG_ACCOUNT_LIST_BAR);
-                }
-                while (queryResult->NextRow());
+                } while (queryResult->NextRow());
             }
             else
                 handler->PSendSysMessage(LANG_LIST_MAIL_NOT_FOUND);

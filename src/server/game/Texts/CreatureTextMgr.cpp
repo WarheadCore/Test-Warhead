@@ -32,49 +32,49 @@
 
 class CreatureTextBuilder
 {
-    public:
-        CreatureTextBuilder(WorldObject const* obj, uint8 gender, ChatMsg msgtype, uint8 textGroup, uint32 id, uint32 language, WorldObject const* target)
-            : _source(obj), _gender(gender), _msgType(msgtype), _textGroup(textGroup), _textId(id), _language(language), _target(target) { }
+public:
+    CreatureTextBuilder(WorldObject const* obj, uint8 gender, ChatMsg msgtype, uint8 textGroup, uint32 id, uint32 language, WorldObject const* target)
+        : _source(obj), _gender(gender), _msgType(msgtype), _textGroup(textGroup), _textId(id), _language(language), _target(target) { }
 
-        size_t operator()(WorldPacket* data, LocaleConstant locale) const
-        {
-            std::string const& text = sCreatureTextMgr->GetLocalizedChatString(_source->GetEntry(), _gender, _textGroup, _textId, locale);
+    size_t operator()(WorldPacket* data, LocaleConstant locale) const
+    {
+        std::string const& text = sCreatureTextMgr->GetLocalizedChatString(_source->GetEntry(), _gender, _textGroup, _textId, locale);
 
-            return ChatHandler::BuildChatPacket(*data, _msgType, Language(_language), _source, _target, text, 0, "", locale);
-        }
+        return ChatHandler::BuildChatPacket(*data, _msgType, Language(_language), _source, _target, text, 0, "", locale);
+    }
 
-    private:
-        WorldObject const* _source;
-        uint8 _gender;
-        ChatMsg _msgType;
-        uint8 _textGroup;
-        uint32 _textId;
-        uint32 _language;
-        WorldObject const* _target;
+private:
+    WorldObject const* _source;
+    uint8 _gender;
+    ChatMsg _msgType;
+    uint8 _textGroup;
+    uint32 _textId;
+    uint32 _language;
+    WorldObject const* _target;
 };
 
 class PlayerTextBuilder
 {
-    public:
-        PlayerTextBuilder(WorldObject const* obj, WorldObject const* speaker, uint8 gender, ChatMsg msgtype, uint8 textGroup, uint32 id, uint32 language, WorldObject const* target)
-            : _source(obj), _talker(speaker), _gender(gender), _msgType(msgtype), _textGroup(textGroup), _textId(id), _language(language), _target(target) { }
+public:
+    PlayerTextBuilder(WorldObject const* obj, WorldObject const* speaker, uint8 gender, ChatMsg msgtype, uint8 textGroup, uint32 id, uint32 language, WorldObject const* target)
+        : _source(obj), _talker(speaker), _gender(gender), _msgType(msgtype), _textGroup(textGroup), _textId(id), _language(language), _target(target) { }
 
-        size_t operator()(WorldPacket* data, LocaleConstant locale) const
-        {
-            std::string const& text = sCreatureTextMgr->GetLocalizedChatString(_source->GetEntry(), _gender, _textGroup, _textId, locale);
+    size_t operator()(WorldPacket* data, LocaleConstant locale) const
+    {
+        std::string const& text = sCreatureTextMgr->GetLocalizedChatString(_source->GetEntry(), _gender, _textGroup, _textId, locale);
 
-            return ChatHandler::BuildChatPacket(*data, _msgType, Language(_language), _talker, _target, text, 0, "", locale);
-        }
+        return ChatHandler::BuildChatPacket(*data, _msgType, Language(_language), _talker, _target, text, 0, "", locale);
+    }
 
-    private:
-        WorldObject const* _source;
-        WorldObject const* _talker;
-        uint8 _gender;
-        ChatMsg _msgType;
-        uint8 _textGroup;
-        uint32 _textId;
-        uint32 _language;
-        WorldObject const* _target;
+private:
+    WorldObject const* _source;
+    WorldObject const* _talker;
+    uint8 _gender;
+    ChatMsg _msgType;
+    uint8 _textGroup;
+    uint32 _textId;
+    uint32 _language;
+    WorldObject const* _target;
 };
 
 CreatureTextMgr* CreatureTextMgr::instance()
@@ -169,8 +169,7 @@ void CreatureTextMgr::LoadCreatureTexts()
         mTextMap[temp.creatureId][temp.groupId].push_back(temp);
 
         ++textCount;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u creature texts for " SZFMTD " creatures in %u ms", textCount, mTextMap.size(), GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -243,7 +242,7 @@ uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, WorldObject 
         tempGroup = textGroupContainer;
     }
 
-    auto iter = Warhead::Containers::SelectRandomWeightedContainerElement(tempGroup, [](CreatureTextEntry const& t) -> double
+    auto iter = Warhead::Containers::SelectRandomWeightedContainerElement(tempGroup, [](CreatureTextEntry const & t) -> double
     {
         return t.probability;
     });
@@ -319,7 +318,7 @@ void CreatureTextMgr::SendNonChatPacket(WorldObject* source, WorldPacket const* 
             if (Player const* whisperPlayer = whisperTarget->ToPlayer())
             {
                 if (Group const* group = whisperPlayer->GetGroup())
-                    group->BroadcastWorker([data](Player* player) { player->SendDirectMessage(data); });
+                    group->BroadcastWorker([data](Player * player) { player->SendDirectMessage(data); });
             }
             return;
         }

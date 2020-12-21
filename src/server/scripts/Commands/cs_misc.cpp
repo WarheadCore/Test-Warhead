@@ -282,18 +282,18 @@ public:
         char const* unknown = handler->GetWarheadString(LANG_UNKNOWN);
 
         handler->PSendSysMessage(LANG_MAP_POSITION,
-            mapId, (mapEntry ? mapEntry->MapName[handler->GetSessionDbcLocale()] : unknown),
-            zoneId, (zoneEntry ? zoneEntry->AreaName[handler->GetSessionDbcLocale()] : unknown),
-            areaId, (areaEntry ? areaEntry->AreaName[handler->GetSessionDbcLocale()] : unknown),
-            object->GetPhaseMask(),
-            object->GetPositionX(), object->GetPositionY(), object->GetPositionZ(), object->GetOrientation());
+                                 mapId, (mapEntry ? mapEntry->MapName[handler->GetSessionDbcLocale()] : unknown),
+                                 zoneId, (zoneEntry ? zoneEntry->AreaName[handler->GetSessionDbcLocale()] : unknown),
+                                 areaId, (areaEntry ? areaEntry->AreaName[handler->GetSessionDbcLocale()] : unknown),
+                                 object->GetPhaseMask(),
+                                 object->GetPositionX(), object->GetPositionY(), object->GetPositionZ(), object->GetOrientation());
         if (Transport* transport = object->GetTransport())
             handler->PSendSysMessage(LANG_TRANSPORT_POSITION,
-                transport->GetGOInfo()->moTransport.mapID, object->GetTransOffsetX(), object->GetTransOffsetY(), object->GetTransOffsetZ(), object->GetTransOffsetO(),
-                transport->GetEntry(), transport->GetName().c_str());
+                                     transport->GetGOInfo()->moTransport.mapID, object->GetTransOffsetX(), object->GetTransOffsetY(), object->GetTransOffsetZ(), object->GetTransOffsetO(),
+                                     transport->GetEntry(), transport->GetName().c_str());
         handler->PSendSysMessage(LANG_GRID_POSITION,
-            cell.GridX(), cell.GridY(), cell.CellX(), cell.CellY(), object->GetInstanceId(),
-            zoneX, zoneY, groundZ, floorZ, haveMap, haveVMap, haveMMap);
+                                 cell.GridX(), cell.GridY(), cell.CellX(), cell.CellY(), object->GetInstanceId(),
+                                 zoneX, zoneY, groundZ, floorZ, haveMap, haveVMap, haveMMap);
 
         LiquidData liquidStatus;
         ZLiquidStatus status = map->GetLiquidStatus(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), object->GetPositionZ(), MAP_ALL_LIQUIDS, &liquidStatus, object->GetCollisionHeight());
@@ -313,7 +313,7 @@ public:
             return false;
         }
 
-        if(!spell)
+        if (!spell)
             return false;
 
         AuraCreateInfo createInfo(spell, MAX_EFFECT_MASK, target);
@@ -590,12 +590,12 @@ public:
 
             // in point where GM stay
             Player::SavePositionInDB(WorldLocation(_player->GetMapId(),
-                _player->GetPositionX(),
-                _player->GetPositionY(),
-                _player->GetPositionZ(),
-                _player->GetOrientation()),
-                _player->GetZoneId(),
-                targetGuid, nullptr);
+                                                   _player->GetPositionX(),
+                                                   _player->GetPositionY(),
+                                                   _player->GetPositionZ(),
+                                                   _player->GetOrientation()),
+                                     _player->GetZoneId(),
+                                     targetGuid, nullptr);
         }
 
         return true;
@@ -1003,7 +1003,7 @@ public:
         uint32 zoneId = player->GetZoneId();
 
         AreaTableEntry const* areaEntry = sAreaTableStore.LookupEntry(zoneId);
-        if (!areaEntry || areaEntry->ParentAreaID !=0)
+        if (!areaEntry || areaEntry->ParentAreaID != 0)
         {
             handler->PSendSysMessage(LANG_COMMAND_GRAVEYARDWRONGZONE, graveyardId, zoneId);
             handler->SetSentErrorMessage(true);
@@ -1159,7 +1159,7 @@ public:
 
             if (itemNameStr && itemNameStr[0])
             {
-                std::string itemName = itemNameStr+1;
+                std::string itemName = itemNameStr + 1;
                 WorldDatabase.EscapeString(itemName);
 
                 WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_ITEM_TEMPLATE_BY_NAME);
@@ -1168,7 +1168,7 @@ public:
 
                 if (!result)
                 {
-                    handler->PSendSysMessage(LANG_COMMAND_COULDNOTFIND, itemNameStr+1);
+                    handler->PSendSysMessage(LANG_COMMAND_COULDNOTFIND, itemNameStr + 1);
                     handler->SetSentErrorMessage(true);
                     return false;
                 }
@@ -1604,7 +1604,7 @@ public:
 
             // Only fetch these fields if commander has sufficient rights)
             if (handler->HasPermission(rbac::RBAC_PERM_COMMANDS_PINFO_CHECK_PERSONAL_DATA) && // RBAC Perm. 48, Role 39
-               (!handler->GetSession() || handler->GetSession()->GetSecurity() >= AccountTypes(security)))
+                    (!handler->GetSession() || handler->GetSession()->GetSecurity() >= AccountTypes(security)))
             {
                 eMail     = fields[2].GetString();
                 regMail   = fields[3].GetString();
@@ -1737,7 +1737,7 @@ public:
         // Output XIII. LANG_PINFO_CHR_PHASE if player is not in GM mode (GM is in every phase)
         if (target && !target->IsGameMaster())                            // IsInWorld() returns false on loadingscreen, so it's more
             handler->PSendSysMessage(LANG_PINFO_CHR_PHASE, phase);        // precise than just target (safer ?).
-                                                                          // However, as we usually just require a target here, we use target instead.
+        // However, as we usually just require a target here, we use target instead.
         // Output XIV. LANG_PINFO_CHR_MONEY
         uint32 gold                   = money / GOLD;
         uint32 silv                   = (money % GOLD) / SILVER;
@@ -1794,7 +1794,7 @@ public:
 
             // Output XXI. LANG_INFO_CHR_MAILS if at least one mail is given
             if (totalmail >= 1)
-               handler->PSendSysMessage(LANG_PINFO_CHR_MAILS, readmail, totalmail);
+                handler->PSendSysMessage(LANG_PINFO_CHR_MAILS, readmail, totalmail);
         }
 
         return true;
@@ -1907,9 +1907,7 @@ public:
             handler->PSendSysMessage(LANG_YOU_DISABLE_CHAT, nameLink.c_str(), muteTime, muteReasonStr.c_str());
         }
         else
-        {
             handler->PSendSysMessage(LANG_COMMAND_DISABLE_CHAT_DELAYED, nameLink.c_str(), muteTime, muteReasonStr.c_str());
-        }
 
         return true;
     }
@@ -1984,9 +1982,9 @@ public:
     }
 
     // helper for mutehistory
-    static bool HandleMuteHistoryHelper(uint32 accountId, char const* accountName, ChatHandler *handler)
+    static bool HandleMuteHistoryHelper(uint32 accountId, char const* accountName, ChatHandler* handler)
     {
-        LoginDatabasePreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
+        LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
         stmt->setUInt32(0, accountId);
         PreparedQueryResult result = LoginDatabase.Query(stmt);
 
@@ -2008,7 +2006,7 @@ public:
 
             // set it to string
             localtime_r(&sqlTime, &timeinfo);
-            strftime(buffer, sizeof(buffer),"%Y-%m-%d %I:%M%p", &timeinfo);
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d %I:%M%p", &timeinfo);
 
             handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, buffer, fields[1].GetUInt32(), fields[2].GetCString(), fields[3].GetCString());
         } while (result->NextRow());
@@ -2502,8 +2500,7 @@ public:
             else
                 // show time left (seconds)
                 handler->PSendSysMessage(LANG_COMMAND_TEMP_FROZEN_PLAYER, player.c_str(), remaintime / IN_MILLISECONDS);
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
 
         return true;
     }

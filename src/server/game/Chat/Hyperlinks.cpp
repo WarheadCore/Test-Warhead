@@ -64,7 +64,7 @@ HyperlinkInfo Warhead::Hyperlinks::ParseSingleHyperlink(std::string_view str)
     if (size_t delimPos = str.find('|'); delimPos != std::string_view::npos)
     {
         tag = str.substr(0, delimPos);
-        str.remove_prefix(delimPos+1);
+        str.remove_prefix(delimPos + 1);
     }
     else
         return {};
@@ -72,7 +72,7 @@ HyperlinkInfo Warhead::Hyperlinks::ParseSingleHyperlink(std::string_view str)
     // split tag if : is present (data separator)
     if (size_t dataStart = tag.find(':'); dataStart != std::string_view::npos)
     {
-        data = tag.substr(dataStart+1);
+        data = tag.substr(dataStart + 1);
         tag = tag.substr(0, dataStart);
     }
 
@@ -153,11 +153,11 @@ struct LinkValidator<LinkTags::item>
             {
                 std::string_view randomSuffix((*randomSuffixes)[i]);
                 if (
-                  (!randomSuffix.empty()) &&
-                  (text.length() == (name.length() + 1 + randomSuffix.length())) &&
-                  (text.substr(0, name.length()) == name) &&
-                  (text[name.length()] == ' ') &&
-                  (text.substr(name.length() + 1) == randomSuffix)
+                    (!randomSuffix.empty()) &&
+                    (text.length() == (name.length() + 1 + randomSuffix.length())) &&
+                    (text.substr(0, name.length()) == name) &&
+                    (text[name.length()] == ' ') &&
+                    (text.substr(name.length() + 1) == randomSuffix)
                 )
                     return true;
             }
@@ -250,9 +250,9 @@ struct LinkValidator<LinkTags::enchant>
                 std::string_view spellName = info->SpellName[i];
                 // alternate form [Skill Name: Spell Name]
                 if ((text.length() == (skillName.length() + 2 + spellName.length())) &&
-                    (text.substr(0, skillName.length()) == skillName) &&
-                    (text.substr(skillName.length(), 2) == ": ") &&
-                    (text.substr(skillName.length() + 2) == spellName))
+                        (text.substr(0, skillName.length()) == skillName) &&
+                        (text.substr(skillName.length(), 2) == ": ") &&
+                        (text.substr(skillName.length() + 2) == spellName))
                     return true;
             }
         }

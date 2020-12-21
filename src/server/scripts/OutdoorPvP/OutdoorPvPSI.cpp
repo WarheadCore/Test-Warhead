@@ -98,58 +98,58 @@ bool OutdoorPvPSI::HandleAreaTrigger(Player* player, uint32 trigger)
 {
     switch (trigger)
     {
-    case SI_AREATRIGGER_A:
-        if (player->GetTeam() == ALLIANCE && player->HasAura(SI_SILITHYST_FLAG))
-        {
-            // remove aura
-            player->RemoveAurasDueToSpell(SI_SILITHYST_FLAG);
-            ++ m_Gathered_A;
-            if (m_Gathered_A >= SI_MAX_RESOURCES)
+        case SI_AREATRIGGER_A:
+            if (player->GetTeam() == ALLIANCE && player->HasAura(SI_SILITHYST_FLAG))
             {
-                TeamApplyBuff(TEAM_ALLIANCE, SI_CENARION_FAVOR);
-                /// @todo: confirm this text
-                sWorld->SendZoneText(OutdoorPvPSIBuffZones[0], sGameLocale->GetWarheadStringForDBCLocale(LANG_OPVP_SI_CAPTURE_A));
-                m_LastController = ALLIANCE;
-                m_Gathered_A = 0;
-                m_Gathered_H = 0;
+                // remove aura
+                player->RemoveAurasDueToSpell(SI_SILITHYST_FLAG);
+                ++ m_Gathered_A;
+                if (m_Gathered_A >= SI_MAX_RESOURCES)
+                {
+                    TeamApplyBuff(TEAM_ALLIANCE, SI_CENARION_FAVOR);
+                    /// @todo: confirm this text
+                    sWorld->SendZoneText(OutdoorPvPSIBuffZones[0], sGameLocale->GetWarheadStringForDBCLocale(LANG_OPVP_SI_CAPTURE_A));
+                    m_LastController = ALLIANCE;
+                    m_Gathered_A = 0;
+                    m_Gathered_H = 0;
+                }
+                UpdateWorldState();
+                // reward player
+                player->CastSpell(player, SI_TRACES_OF_SILITHYST, true);
+                // add 19 honor
+                player->RewardHonor(nullptr, 1, 19);
+                // add 20 cenarion circle repu
+                player->GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(609), 20);
+                // complete quest
+                player->KilledMonsterCredit(SI_TURNIN_QUEST_CM_A);
             }
-            UpdateWorldState();
-            // reward player
-            player->CastSpell(player, SI_TRACES_OF_SILITHYST, true);
-            // add 19 honor
-            player->RewardHonor(nullptr, 1, 19);
-            // add 20 cenarion circle repu
-            player->GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(609), 20);
-            // complete quest
-            player->KilledMonsterCredit(SI_TURNIN_QUEST_CM_A);
-        }
-        return true;
-    case SI_AREATRIGGER_H:
-        if (player->GetTeam() == HORDE && player->HasAura(SI_SILITHYST_FLAG))
-        {
-            // remove aura
-            player->RemoveAurasDueToSpell(SI_SILITHYST_FLAG);
-            ++ m_Gathered_H;
-            if (m_Gathered_H >= SI_MAX_RESOURCES)
+            return true;
+        case SI_AREATRIGGER_H:
+            if (player->GetTeam() == HORDE && player->HasAura(SI_SILITHYST_FLAG))
             {
-                TeamApplyBuff(TEAM_HORDE, SI_CENARION_FAVOR);
-                /// @todo: confirm this text
-                sWorld->SendZoneText(OutdoorPvPSIBuffZones[0], sGameLocale->GetWarheadStringForDBCLocale(LANG_OPVP_SI_CAPTURE_H));
-                m_LastController = HORDE;
-                m_Gathered_A = 0;
-                m_Gathered_H = 0;
+                // remove aura
+                player->RemoveAurasDueToSpell(SI_SILITHYST_FLAG);
+                ++ m_Gathered_H;
+                if (m_Gathered_H >= SI_MAX_RESOURCES)
+                {
+                    TeamApplyBuff(TEAM_HORDE, SI_CENARION_FAVOR);
+                    /// @todo: confirm this text
+                    sWorld->SendZoneText(OutdoorPvPSIBuffZones[0], sGameLocale->GetWarheadStringForDBCLocale(LANG_OPVP_SI_CAPTURE_H));
+                    m_LastController = HORDE;
+                    m_Gathered_A = 0;
+                    m_Gathered_H = 0;
+                }
+                UpdateWorldState();
+                // reward player
+                player->CastSpell(player, SI_TRACES_OF_SILITHYST, true);
+                // add 19 honor
+                player->RewardHonor(nullptr, 1, 19);
+                // add 20 cenarion circle repu
+                player->GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(609), 20);
+                // complete quest
+                player->KilledMonsterCredit(SI_TURNIN_QUEST_CM_H);
             }
-            UpdateWorldState();
-            // reward player
-            player->CastSpell(player, SI_TRACES_OF_SILITHYST, true);
-            // add 19 honor
-            player->RewardHonor(nullptr, 1, 19);
-            // add 20 cenarion circle repu
-            player->GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(609), 20);
-            // complete quest
-            player->KilledMonsterCredit(SI_TURNIN_QUEST_CM_H);
-        }
-        return true;
+            return true;
     }
     return false;
 }
@@ -241,13 +241,13 @@ bool OutdoorPvPSI::HandleCustomSpell(Player* player, uint32 spellId, GameObject*
 
 class OutdoorPvP_silithus : public OutdoorPvPScript
 {
-    public:
-        OutdoorPvP_silithus() : OutdoorPvPScript("outdoorpvp_si") { }
+public:
+    OutdoorPvP_silithus() : OutdoorPvPScript("outdoorpvp_si") { }
 
-        OutdoorPvP* GetOutdoorPvP() const override
-        {
-            return new OutdoorPvPSI();
-        }
+    OutdoorPvP* GetOutdoorPvP() const override
+    {
+        return new OutdoorPvPSI();
+    }
 };
 
 void AddSC_outdoorpvp_si()

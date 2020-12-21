@@ -127,7 +127,7 @@ void ChatHandler::SendSysMessage(std::string_view str, bool escapeCharacters)
     }
 }
 
-void ChatHandler::SendGlobalSysMessage(const char *str)
+void ChatHandler::SendGlobalSysMessage(const char* str)
 {
     WorldPacket data;
     for (std::string_view line : Warhead::Tokenize(str, '\n', true))
@@ -137,7 +137,7 @@ void ChatHandler::SendGlobalSysMessage(const char *str)
     }
 }
 
-void ChatHandler::SendGlobalGMSysMessage(const char *str)
+void ChatHandler::SendGlobalGMSysMessage(const char* str)
 {
     WorldPacket data;
     for (std::string_view line : Warhead::Tokenize(str, '\n', true))
@@ -191,8 +191,8 @@ bool ChatHandler::ParseCommands(std::string_view text)
 }
 
 size_t ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg chatType, Language language, ObjectGuid senderGUID, ObjectGuid receiverGUID, std::string_view message, uint8 chatTag,
-                                  std::string const& senderName /*= ""*/, std::string const& receiverName /*= ""*/,
-                                  uint32 achievementId /*= 0*/, bool gmMessage /*= false*/, std::string const& channelName /*= ""*/)
+                                    std::string const& senderName /*= ""*/, std::string const& receiverName /*= ""*/,
+                                    uint32 achievementId /*= 0*/, bool gmMessage /*= false*/, std::string const& channelName /*= ""*/)
 {
     size_t receiverGUIDPos = 0;
     data.Initialize(!gmMessage ? SMSG_MESSAGECHAT : SMSG_GM_MESSAGECHAT);
@@ -271,7 +271,7 @@ size_t ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg chatType, Languag
 }
 
 size_t ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg chatType, Language language, WorldObject const* sender, WorldObject const* receiver, std::string_view message,
-                                  uint32 achievementId /*= 0*/, std::string const& channelName /*= ""*/, LocaleConstant locale /*= DEFAULT_LOCALE*/)
+                                    uint32 achievementId /*= 0*/, std::string const& channelName /*= ""*/, LocaleConstant locale /*= DEFAULT_LOCALE*/)
 {
     ObjectGuid senderGUID;
     std::string senderName = "";
@@ -368,7 +368,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* linkType, char** s
         return nullptr;
 
     // skip spaces
-    while (*text == ' '||*text == '\t'||*text == '\b')
+    while (*text == ' ' || *text == '\t' || *text == '\b')
         ++text;
 
     if (!*text)
@@ -416,7 +416,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* const* linkTypes, 
         return nullptr;
 
     // skip spaces
-    while (*text == ' '||*text == '\t'||*text == '\b')
+    while (*text == ' ' || *text == '\t' || *text == '\b')
         ++text;
 
     if (!*text)
@@ -443,7 +443,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* const* linkTypes, 
         tail = strtok(nullptr, "");                            // tail
     }
     else
-        tail = text+1;                                      // skip first |
+        tail = text + 1;                                    // skip first |
 
     char* cLinkType = strtok(tail, ":");                    // linktype
     if (!cLinkType)
@@ -719,7 +719,7 @@ char* ChatHandler::extractQuotedArg(char* args)
         return nullptr;
 
     if (*args == '"')
-        return strtok(args+1, "\"");
+        return strtok(args + 1, "\"");
     else
     {
         // skip spaces
@@ -912,7 +912,7 @@ void AddonChannelCommandHandler::SendAck() // a Command acknowledged, no body
 {
     ASSERT(echo);
     char ack[18] = "WarheadCore\ta";
-    memcpy(ack+13, echo, 4);
+    memcpy(ack + 13, echo, 4);
     ack[17] = '\0';
     Send(ack);
     hadAck = true;
@@ -922,7 +922,7 @@ void AddonChannelCommandHandler::SendOK() // o Command OK, no body
 {
     ASSERT(echo);
     char ok[18] = "WarheadCore\to";
-    memcpy(ok+13, echo, 4);
+    memcpy(ok + 13, echo, 4);
     ok[17] = '\0';
     Send(ok);
 }

@@ -157,13 +157,13 @@ static void LogCommandUsage(WorldSession const& session, uint32 permission, std:
     }
 
     LOG_GM(session.GetAccountId(), "Command: " STRING_VIEW_FMT " [Player: %s (%s) (Account: %u) X: %f Y: %f Z: %f Map: %u (%s) Area: %u (%s) Zone: %s Selected: %s (%s)]",
-        STRING_VIEW_FMT_ARG(cmdStr), player->GetName().c_str(), player->GetGUID().ToString().c_str(),
-        session.GetAccountId(), player->GetPositionX(), player->GetPositionY(),
-        player->GetPositionZ(), player->GetMapId(),
-        player->FindMap() ? player->FindMap()->GetMapName() : "Unknown",
-        areaId, areaName.c_str(), zoneName.c_str(),
-        (player->GetSelectedUnit()) ? player->GetSelectedUnit()->GetName().c_str() : "",
-        targetGuid.ToString().c_str());
+           STRING_VIEW_FMT_ARG(cmdStr), player->GetName().c_str(), player->GetGUID().ToString().c_str(),
+           session.GetAccountId(), player->GetPositionX(), player->GetPositionY(),
+           player->GetPositionZ(), player->GetMapId(),
+           player->FindMap() ? player->FindMap()->GetMapName() : "Unknown",
+           areaId, areaName.c_str(), zoneName.c_str(),
+           (player->GetSelectedUnit()) ? player->GetSelectedUnit()->GetName().c_str() : "",
+           targetGuid.ToString().c_str());
 }
 
 void Warhead::Impl::ChatCommands::ChatCommandNode::SendCommandHelp(ChatHandler& handler) const
@@ -203,39 +203,39 @@ namespace Warhead::Impl::ChatCommands
 {
     struct FilteredCommandListIterator
     {
-        public:
-            FilteredCommandListIterator(ChatSubCommandMap const& map, ChatHandler const& handler, std::string_view token)
-                : _handler{ handler }, _token{ token }, _it{ map.lower_bound(token) }, _end{ map.end() }
-            {
-                _skip();
-            }
+    public:
+        FilteredCommandListIterator(ChatSubCommandMap const& map, ChatHandler const& handler, std::string_view token)
+            : _handler{ handler }, _token{ token }, _it{ map.lower_bound(token) }, _end{ map.end() }
+        {
+            _skip();
+        }
 
-            decltype(auto) operator*() const { return _it.operator*(); }
-            decltype(auto) operator->() const { return _it.operator->(); }
-            FilteredCommandListIterator& operator++()
+        decltype(auto) operator*() const { return _it.operator * (); }
+        decltype(auto) operator->() const { return _it.operator->(); }
+        FilteredCommandListIterator& operator++()
+        {
+            ++_it;
+            _skip();
+            return *this;
+        }
+        explicit operator bool() const { return (_it != _end); }
+        bool operator!() const { return !static_cast<bool>(*this); }
+
+    private:
+        void _skip()
+        {
+            if ((_it != _end) && !StringStartsWithI(_it->first, _token))
+                _it = _end;
+            while ((_it != _end) && !_it->second.IsVisible(_handler))
             {
                 ++_it;
-                _skip();
-                return *this;
-            }
-            explicit operator bool() const { return (_it != _end); }
-            bool operator!() const { return !static_cast<bool>(*this); }
-
-        private:
-            void _skip()
-            {
                 if ((_it != _end) && !StringStartsWithI(_it->first, _token))
                     _it = _end;
-                while ((_it != _end) && !_it->second.IsVisible(_handler))
-                {
-                    ++_it;
-                    if ((_it != _end) && !StringStartsWithI(_it->first, _token))
-                        _it = _end;
-                }
             }
-            ChatHandler const& _handler;
-            std::string_view const _token;
-            ChatSubCommandMap::const_iterator _it, _end;
+        }
+        ChatHandler const& _handler;
+        std::string_view const _token;
+        ChatSubCommandMap::const_iterator _it, _end;
 
     };
 }
@@ -260,12 +260,14 @@ namespace Warhead::Impl::ChatCommands
             break; /* no matching subcommands found */
 
         if (!StringEqualI(it1->first, token))
-        { /* ok, so it1 points at a partially matching subcommand - let's see if there are others */
+        {
+            /* ok, so it1 points at a partially matching subcommand - let's see if there are others */
             auto it2 = it1;
             ++it2;
 
             if (it2)
-            { /* there are multiple matching subcommands - print possibilities and return */
+            {
+                /* there are multiple matching subcommands - print possibilities and return */
                 if (cmd)
                     handler.PSendSysMessage(LANG_SUBCMD_AMBIGUOUS, STRING_VIEW_FMT_ARG(cmd->_name), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(token));
                 else
@@ -289,15 +291,18 @@ namespace Warhead::Impl::ChatCommands
     }
 
     if (cmd)
-    { /* if we matched a command at some point, invoke it */
+    {
+        /* if we matched a command at some point, invoke it */
         handler.SetSentErrorMessage(false);
         if (cmd->IsInvokerVisible(handler) && cmd->_invoker(&handler, oldTail))
-        { /* invocation succeeded, log this */
+        {
+            /* invocation succeeded, log this */
             if (!handler.IsConsole())
                 LogCommandUsage(*handler.GetSession(), cmd->_permission.RequiredPermission, cmdStr);
         }
         else if (!handler.HasSentErrorMessage())
-        { /* invocation failed, we should show usage */
+        {
+            /* invocation failed, we should show usage */
             cmd->SendCommandHelp(handler);
             handler.SetSentErrorMessage(true);
         }
@@ -315,7 +320,8 @@ namespace Warhead::Impl::ChatCommands
     {
         FilteredCommandListIterator it1(*map, handler, token);
         if (!it1)
-        { /* no matching subcommands found */
+        {
+            /* no matching subcommands found */
             if (cmd)
             {
                 cmd->SendCommandHelp(handler);
@@ -327,12 +333,14 @@ namespace Warhead::Impl::ChatCommands
         }
 
         if (!StringEqualI(it1->first, token))
-        { /* ok, so it1 points at a partially matching subcommand - let's see if there are others */
+        {
+            /* ok, so it1 points at a partially matching subcommand - let's see if there are others */
             auto it2 = it1;
             ++it2;
 
             if (it2)
-            { /* there are multiple matching subcommands - print possibilities and return */
+            {
+                /* there are multiple matching subcommands - print possibilities and return */
                 if (cmd)
                     handler.PSendSysMessage(LANG_SUBCMD_AMBIGUOUS, STRING_VIEW_FMT_ARG(cmd->_name), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(token));
                 else
@@ -390,24 +398,26 @@ namespace Warhead::Impl::ChatCommands
             break; /* no matching subcommands found */
 
         if (!StringEqualI(it1->first, token))
-        { /* ok, so it1 points at a partially matching subcommand - let's see if there are others */
+        {
+            /* ok, so it1 points at a partially matching subcommand - let's see if there are others */
             auto it2 = it1;
             ++it2;
 
             if (it2)
-            { /* there are multiple matching subcommands - terminate here and show possibilities */
+            {
+                /* there are multiple matching subcommands - terminate here and show possibilities */
                 std::vector<std::string> vec;
                 auto possibility = ([prefix = std::string_view(path), suffix = std::string_view(newTail)](std::string_view match)
                 {
                     if (prefix.empty())
                     {
                         return Warhead::StringFormat(STRING_VIEW_FMT "%c" STRING_VIEW_FMT,
-                            STRING_VIEW_FMT_ARG(match), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(suffix));
+                                                     STRING_VIEW_FMT_ARG(match), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(suffix));
                     }
                     else
                     {
                         return Warhead::StringFormat(STRING_VIEW_FMT "%c" STRING_VIEW_FMT "%c" STRING_VIEW_FMT,
-                            STRING_VIEW_FMT_ARG(prefix), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(match), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(suffix));
+                                                     STRING_VIEW_FMT_ARG(prefix), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(match), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(suffix));
                     }
                 });
 
@@ -426,7 +436,7 @@ namespace Warhead::Impl::ChatCommands
         else
         {
             path = Warhead::StringFormat(STRING_VIEW_FMT "%c" STRING_VIEW_FMT,
-                STRING_VIEW_FMT_ARG(path), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(it1->first));
+                                         STRING_VIEW_FMT_ARG(path), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(it1->first));
         }
         cmd = &it1->second;
         map = &cmd->_subCommands;
@@ -435,19 +445,23 @@ namespace Warhead::Impl::ChatCommands
     }
 
     if (!oldTail.empty())
-    { /* there is some trailing text, leave it as is */
+    {
+        /* there is some trailing text, leave it as is */
         if (cmd)
-        { /* if we matched a command at some point, auto-complete it */
-            return {
+        {
+            /* if we matched a command at some point, auto-complete it */
+            return
+            {
                 Warhead::StringFormat(STRING_VIEW_FMT "%c" STRING_VIEW_FMT,
-                    STRING_VIEW_FMT_ARG(path), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(oldTail))
+                                      STRING_VIEW_FMT_ARG(path), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(oldTail))
             };
         }
         else
             return {};
     }
     else
-    { /* offer all subcommands */
+    {
+        /* offer all subcommands */
         auto possibility = ([prefix = std::string_view(path)](std::string_view match)
         {
             if (prefix.empty())
@@ -455,7 +469,7 @@ namespace Warhead::Impl::ChatCommands
             else
             {
                 return Warhead::StringFormat(STRING_VIEW_FMT "%c" STRING_VIEW_FMT,
-                    STRING_VIEW_FMT_ARG(prefix), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(match));
+                                             STRING_VIEW_FMT_ARG(prefix), COMMAND_DELIMITER, STRING_VIEW_FMT_ARG(match));
             }
         });
 

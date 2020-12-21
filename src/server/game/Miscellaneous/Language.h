@@ -337,9 +337,9 @@ enum WarheadStrings
     LANG_COMMAND_NPC_SHOWLOOT_LABEL_2     = 293,
     LANG_COMMAND_NPC_SHOWLOOT_SUBLABEL    = 294,
     LANG_COMMAND_NPC_SHOWLOOT_ENTRY_2     = 295,
-      // 296 free
+    // 296 free
 
-      // END
+    // END
     LANG_COMMAND_WANDER_DISTANCE          = 297,
     LANG_COMMAND_SPAWNTIME                = 298,
     LANG_COMMAND_MODIFY_HONOR             = 299,
@@ -693,9 +693,9 @@ enum WarheadStrings
     LANG_BG_QUEUE_ANNOUNCE_SELF           = 711,
     LANG_BG_QUEUE_ANNOUNCE_WORLD          = 712,
     LANG_YOUR_ARENA_LEVEL_REQ_ERROR       = 713,
-//                                        = 714, see LANG_PINFO_ACC_ACCOUNT
+    //                                        = 714, see LANG_PINFO_ACC_ACCOUNT
     LANG_YOUR_BG_LEVEL_REQ_ERROR          = 715,
-//                                        = 716, see LANG_PINFO_ACC_LASTLOGIN
+    //                                        = 716, see LANG_PINFO_ACC_LASTLOGIN
     LANG_BG_STARTED_ANNOUNCE_WORLD        = 717,
     LANG_ARENA_QUEUE_ANNOUNCE_WORLD_JOIN  = 718,
     LANG_ARENA_QUEUE_ANNOUNCE_WORLD_EXIT  = 719,
@@ -728,10 +728,10 @@ enum WarheadStrings
     LANG_DIST_ARENA_POINTS_END            = 746,
     LANG_BG_DISABLED                      = 747,
     LANG_ARENA_DISABLED                   = 748,
-//                                        = 749, see LANG_PINFO_ACC_OS
+    //                                        = 749, see LANG_PINFO_ACC_OS
     LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING = 750,       // "Not enough players. This game will close in %u mins."
     LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING_SECS = 751,  // "Not enough players. This game will close in %u seconds."
-//                                        = 752, see LANG_PINFO_ACC_IP
+    //                                        = 752, see LANG_PINFO_ACC_IP
     // 753-755 - free
 
     // Room for BG/ARENA                  = 773-784

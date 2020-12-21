@@ -25,10 +25,10 @@
 bool ItemTemplate::HasSignature() const
 {
     return GetMaxStackSize() == 1 &&
-        Class != ITEM_CLASS_CONSUMABLE &&
-        Class != ITEM_CLASS_QUEST &&
-        !HasFlag(ITEM_FLAG_NO_CREATOR) &&
-        ItemId != 6948; /*Hearthstone*/
+           Class != ITEM_CLASS_CONSUMABLE &&
+           Class != ITEM_CLASS_QUEST &&
+           !HasFlag(ITEM_FLAG_NO_CREATOR) &&
+           ItemId != 6948; /*Hearthstone*/
 }
 
 bool ItemTemplate::CanChangeEquipStateInCombat() const

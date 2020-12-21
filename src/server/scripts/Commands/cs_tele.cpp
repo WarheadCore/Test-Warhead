@@ -80,9 +80,7 @@ public:
         tele.name        = name;
 
         if (sObjectMgr->AddGameTele(tele))
-        {
             handler->SendSysMessage(LANG_COMMAND_TP_ADDED);
-        }
         else
         {
             handler->SendSysMessage(LANG_COMMAND_TP_ADDEDERR);
@@ -178,7 +176,7 @@ public:
             handler->PSendSysMessage(LANG_TELEPORTING_TO, nameLink.c_str(), handler->GetWarheadString(LANG_OFFLINE), tele->name.c_str());
 
             Player::SavePositionInDB(WorldLocation(tele->mapId, tele->position_x, tele->position_y, tele->position_z, tele->orientation),
-                sMapMgr->GetZoneId(PHASEMASK_NORMAL, tele->mapId, tele->position_x, tele->position_y, tele->position_z), player->GetGUID(), nullptr);
+                                     sMapMgr->GetZoneId(PHASEMASK_NORMAL, tele->mapId, tele->position_x, tele->position_y, tele->position_z), player->GetGUID(), nullptr);
         }
 
         return true;

@@ -664,14 +664,14 @@ void GameLocale::LoadQuestGreetingLocales()
         // overwrite
         switch (type)
         {
-        case 0: // Creature
-            type = TYPEID_UNIT;
-            break;
-        case 1: // GameObject
-            type = TYPEID_GAMEOBJECT;
-            break;
-        default:
-            break;
+            case 0: // Creature
+                type = TYPEID_UNIT;
+                break;
+            case 1: // GameObject
+                type = TYPEID_GAMEOBJECT;
+                break;
+            default:
+                break;
         }
 
         std::string localeName = fields[2].GetString();

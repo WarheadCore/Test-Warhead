@@ -105,10 +105,10 @@ namespace Warhead::ChatCommands
             return Warhead::Impl::ChatCommands::FormatWarheadString(handler, LANG_CMDPARSER_EXACT_SEQ_MISMATCH, STRING_VIEW_FMT_ARG(_string), STRING_VIEW_FMT_ARG(start));
         }
 
-        private:
-            static constexpr std::array<char, sizeof...(chars)> _storage = { chars... };
-            static_assert(!_storage.empty() && (_storage.back() == '\0'), "ExactSequence parameters must be null terminated! Use the EXACT_SEQUENCE macro to make this easier!");
-            static constexpr std::string_view _string = { _storage.data(), std::string_view::traits_type::length(_storage.data()) };
+    private:
+        static constexpr std::array<char, sizeof...(chars)> _storage = { chars... };
+        static_assert(!_storage.empty()&& (_storage.back() == '\0'), "ExactSequence parameters must be null terminated! Use the EXACT_SEQUENCE macro to make this easier!");
+        static constexpr std::string_view _string = { _storage.data(), std::string_view::traits_type::length(_storage.data()) };
     };
 
 #define EXACT_SEQUENCE(str) Warhead::ChatCommands::ExactSequence<CHATCOMMANDS_IMPL_SPLIT_LITERAL(str)>
@@ -119,7 +119,7 @@ namespace Warhead::ChatCommands
 
         using std::string_view::operator=;
 
-        ChatCommandResult TryConsume(ChatHandler const*,std::string_view args)
+        ChatCommandResult TryConsume(ChatHandler const*, std::string_view args)
         {
             std::string_view::operator=(args);
             return std::string_view();
@@ -161,9 +161,9 @@ namespace Warhead::ChatCommands
 
         ChatCommandResult TryConsume(ChatHandler const* handler, std::string_view args);
 
-        private:
-            uint32 _id;
-            std::string _name;
+    private:
+        uint32 _id;
+        std::string _name;
     };
 
     struct WH_GAME_API PlayerIdentifier : Warhead::Impl::ChatCommands::ContainerTag
@@ -174,7 +174,7 @@ namespace Warhead::ChatCommands
         PlayerIdentifier(Player& player);
 
         operator ObjectGuid() const { return _guid; }
-        operator std::string const&() const { return _name; }
+        operator std::string const& () const { return _name; }
         operator std::string_view() const { return _name; }
 
         std::string const& GetName() const { return _name; }
@@ -194,10 +194,10 @@ namespace Warhead::ChatCommands
                 return FromSelf(handler);
         }
 
-        private:
-            std::string _name;
-            ObjectGuid _guid;
-            Player* _player;
+    private:
+        std::string _name;
+        ObjectGuid _guid;
+        Player* _player;
     };
 
     template <typename linktag>
@@ -233,8 +233,8 @@ namespace Warhead::ChatCommands
                 return info.tail;
         }
 
-        private:
-            storage_type val;
+    private:
+        storage_type val;
     };
 
     // pull in link tags for user convenience
@@ -267,20 +267,18 @@ namespace Warhead::ChatCommands
             return visit(Warhead::Impl::CastToVisitor<first_type>());
         }
 
-        template <bool C = have_operators>
-        operator std::enable_if_t<C, first_type>() const
+        template <bool C = have_operators> operator std::enable_if_t<C, first_type>() const
         {
             return operator*();
         }
 
-        template<bool C = have_operators>
-        operator std::enable_if_t<C && !std::is_same_v<first_type, size_t> && std::is_convertible_v<first_type, size_t>, size_t>() const
+        template<bool C = have_operators> operator std::enable_if_t < C && !std::is_same_v<first_type, size_t>&& std::is_convertible_v<first_type, size_t>, size_t > () const
         {
             return operator*();
         }
 
         template <bool C = have_operators>
-        std::enable_if_t<C, bool> operator!() const { return !**this; }
+        std::enable_if_t<C, bool> operator!() const { return !** this; }
 
         template <typename T>
         Variant& operator=(T&& arg) { base::operator=(std::forward<T>(arg)); return *this; }

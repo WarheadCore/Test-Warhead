@@ -183,7 +183,7 @@ void OPvPCapturePointEP_EWT::SummonSupportUnitAtNorthpassTower(uint32 team)
 
 // NPT
 OPvPCapturePointEP_NPT::OPvPCapturePointEP_NPT(OutdoorPvP* pvp)
-: OPvPCapturePoint(pvp), m_TowerState(EP_TS_N), m_SummonedGOSide(0)
+    : OPvPCapturePoint(pvp), m_TowerState(EP_TS_N), m_SummonedGOSide(0)
 {
     SetCapturePointData(EPCapturePoints[EP_NPT].entry, EPCapturePoints[EP_NPT].map, EPCapturePoints[EP_NPT].pos, EPCapturePoints[EP_NPT].rot);
     AddObject(EP_NPT_FLAGS, EPTowerFlags[EP_NPT].entry, EPTowerFlags[EP_NPT].map, EPTowerFlags[EP_NPT].pos, EPTowerFlags[EP_NPT].rot);
@@ -288,7 +288,7 @@ void OPvPCapturePointEP_NPT::SummonGO(uint32 team)
 
 // CGT
 OPvPCapturePointEP_CGT::OPvPCapturePointEP_CGT(OutdoorPvP* pvp)
-: OPvPCapturePoint(pvp), m_TowerState(EP_TS_N), m_GraveyardSide(0)
+    : OPvPCapturePoint(pvp), m_TowerState(EP_TS_N), m_GraveyardSide(0)
 {
     SetCapturePointData(EPCapturePoints[EP_CGT].entry, EPCapturePoints[EP_CGT].map, EPCapturePoints[EP_CGT].pos, EPCapturePoints[EP_CGT].rot);
     AddObject(EP_CGT_FLAGS, EPTowerFlags[EP_CGT].entry, EPTowerFlags[EP_CGT].map, EPTowerFlags[EP_CGT].pos, EPTowerFlags[EP_CGT].rot);
@@ -377,7 +377,7 @@ void OPvPCapturePointEP_CGT::LinkGraveyard(uint32 team)
 
 // PWT
 OPvPCapturePointEP_PWT::OPvPCapturePointEP_PWT(OutdoorPvP* pvp)
-: OPvPCapturePoint(pvp), m_FlightMasterSpawned(0), m_TowerState(EP_TS_N)
+    : OPvPCapturePoint(pvp), m_FlightMasterSpawned(0), m_TowerState(EP_TS_N)
 {
     SetCapturePointData(EPCapturePoints[EP_PWT].entry, EPCapturePoints[EP_PWT].map, EPCapturePoints[EP_PWT].pos, EPCapturePoints[EP_PWT].rot);
     AddObject(EP_PWT_FLAGS, EPTowerFlags[EP_PWT].entry, EPTowerFlags[EP_PWT].map, EPTowerFlags[EP_PWT].pos, EPTowerFlags[EP_PWT].rot);
@@ -563,12 +563,12 @@ void OutdoorPvPEP::HandlePlayerEnterZone(Player* player, uint32 zone)
     if (player->GetTeam() == ALLIANCE)
     {
         if (m_AllianceTowersControlled && m_AllianceTowersControlled < 5)
-            player->CastSpell(player, EP_AllianceBuffs[m_AllianceTowersControlled-1], true);
+            player->CastSpell(player, EP_AllianceBuffs[m_AllianceTowersControlled - 1], true);
     }
     else
     {
         if (m_HordeTowersControlled && m_HordeTowersControlled < 5)
-            player->CastSpell(player, EP_HordeBuffs[m_HordeTowersControlled-1], true);
+            player->CastSpell(player, EP_HordeBuffs[m_HordeTowersControlled - 1], true);
     }
     OutdoorPvP::HandlePlayerEnterZone(player, zone);
 }
@@ -598,7 +598,7 @@ void OutdoorPvPEP::BuffTeams()
             for (int i = 0; i < 4; ++i)
                 player->RemoveAurasDueToSpell(EP_AllianceBuffs[i]);
             if (m_AllianceTowersControlled && m_AllianceTowersControlled < 5)
-                player->CastSpell(player, EP_AllianceBuffs[m_AllianceTowersControlled-1], true);
+                player->CastSpell(player, EP_AllianceBuffs[m_AllianceTowersControlled - 1], true);
         }
     }
     for (GuidSet::iterator itr = m_players[1].begin(); itr != m_players[1].end(); ++itr)
@@ -608,7 +608,7 @@ void OutdoorPvPEP::BuffTeams()
             for (int i = 0; i < 4; ++i)
                 player->RemoveAurasDueToSpell(EP_HordeBuffs[i]);
             if (m_HordeTowersControlled && m_HordeTowersControlled < 5)
-                player->CastSpell(player, EP_HordeBuffs[m_HordeTowersControlled-1], true);
+                player->CastSpell(player, EP_HordeBuffs[m_HordeTowersControlled - 1], true);
         }
     }
 }
@@ -659,13 +659,13 @@ void OutdoorPvPEP::SendRemoveWorldStates(Player* player)
 
 class OutdoorPvP_eastern_plaguelands : public OutdoorPvPScript
 {
-    public:
-        OutdoorPvP_eastern_plaguelands() : OutdoorPvPScript("outdoorpvp_ep") { }
+public:
+    OutdoorPvP_eastern_plaguelands() : OutdoorPvPScript("outdoorpvp_ep") { }
 
-        OutdoorPvP* GetOutdoorPvP() const override
-        {
-            return new OutdoorPvPEP();
-        }
+    OutdoorPvP* GetOutdoorPvP() const override
+    {
+        return new OutdoorPvPEP();
+    }
 };
 
 void AddSC_outdoorpvp_ep()

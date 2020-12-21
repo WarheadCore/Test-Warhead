@@ -93,7 +93,7 @@ public:
     {
         sAuctionBot->SetItemsAmountForQuality(Q, amount);
         handler->PSendSysMessage(LANG_AHBOT_ITEMS_AMOUNT, handler->GetWarheadString(ahbotQualityLangIds.at(Q)),
-            sAuctionBotConfig->GetConfigItemQualityAmount(Q));
+                                 sAuctionBotConfig->GetConfigItemQualityAmount(Q));
 
         return true;
     }
@@ -147,22 +147,22 @@ public:
         uint32 fmtId = session ? LANG_AHBOT_STATUS_FORMAT_CHAT : LANG_AHBOT_STATUS_FORMAT_CONSOLE;
 
         handler->PSendSysMessage(fmtId, handler->GetWarheadString(LANG_AHBOT_STATUS_ITEM_COUNT),
-            statusInfo[AUCTION_HOUSE_ALLIANCE].ItemsCount,
-            statusInfo[AUCTION_HOUSE_HORDE].ItemsCount,
-            statusInfo[AUCTION_HOUSE_NEUTRAL].ItemsCount,
-            statusInfo[AUCTION_HOUSE_ALLIANCE].ItemsCount +
-            statusInfo[AUCTION_HOUSE_HORDE].ItemsCount +
-            statusInfo[AUCTION_HOUSE_NEUTRAL].ItemsCount);
+                                 statusInfo[AUCTION_HOUSE_ALLIANCE].ItemsCount,
+                                 statusInfo[AUCTION_HOUSE_HORDE].ItemsCount,
+                                 statusInfo[AUCTION_HOUSE_NEUTRAL].ItemsCount,
+                                 statusInfo[AUCTION_HOUSE_ALLIANCE].ItemsCount +
+                                 statusInfo[AUCTION_HOUSE_HORDE].ItemsCount +
+                                 statusInfo[AUCTION_HOUSE_NEUTRAL].ItemsCount);
 
         if (all)
         {
             handler->PSendSysMessage(fmtId, handler->GetWarheadString(LANG_AHBOT_STATUS_ITEM_RATIO),
-                sAuctionBotConfig->GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO),
-                sAuctionBotConfig->GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO),
-                sAuctionBotConfig->GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO),
-                sAuctionBotConfig->GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO) +
-                sAuctionBotConfig->GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO) +
-                sAuctionBotConfig->GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO));
+                                     sAuctionBotConfig->GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO),
+                                     sAuctionBotConfig->GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO),
+                                     sAuctionBotConfig->GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO),
+                                     sAuctionBotConfig->GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO) +
+                                     sAuctionBotConfig->GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO) +
+                                     sAuctionBotConfig->GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO));
 
             if (!session)
             {
@@ -175,10 +175,10 @@ public:
 
             for (AuctionQuality quality : EnumUtils::Iterate<AuctionQuality>())
                 handler->PSendSysMessage(fmtId, handler->GetWarheadString(ahbotQualityLangIds.at(quality)),
-                    statusInfo[AUCTION_HOUSE_ALLIANCE].QualityInfo.at(quality),
-                    statusInfo[AUCTION_HOUSE_HORDE].QualityInfo.at(quality),
-                    statusInfo[AUCTION_HOUSE_NEUTRAL].QualityInfo.at(quality),
-                    sAuctionBotConfig->GetConfigItemQualityAmount(quality));
+                                         statusInfo[AUCTION_HOUSE_ALLIANCE].QualityInfo.at(quality),
+                                         statusInfo[AUCTION_HOUSE_HORDE].QualityInfo.at(quality),
+                                         statusInfo[AUCTION_HOUSE_NEUTRAL].QualityInfo.at(quality),
+                                         sAuctionBotConfig->GetConfigItemQualityAmount(quality));
         }
 
         if (!session)
