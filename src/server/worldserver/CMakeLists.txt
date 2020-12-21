@@ -71,6 +71,7 @@ endif()
 
 # Install config
 ConfigInstall(worldserver)
+ConfigInstall(warhead)
 
 if(UNIX)
   install(TARGETS worldserver DESTINATION bin)

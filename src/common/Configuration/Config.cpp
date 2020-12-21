@@ -232,6 +232,7 @@ void ConfigMgr::Configure(std::string const& fileName, std::vector<std::string> 
 bool ConfigMgr::LoadAppConfigs()
 {
     std::string configError;
+    std::string whConfig = "warhead.conf";
 
     // #1 - Load init config file .conf.dist
     if (!sConfigMgr->LoadInitial(_filename + ".dist", configError))
@@ -242,6 +243,20 @@ bool ConfigMgr::LoadAppConfigs()
 
     // #2 - Load .conf file
     if (!sConfigMgr->LoadAdditionalFile(_filename, true, configError))
+    {
+        SYS_LOG_ERROR("Error in config file: %s\n", configError.c_str());
+        return false;
+    }
+
+    // #3 - Load .dist custom file
+    if (!sConfigMgr->LoadAdditionalFile(sConfigMgr->GetConfigPath() + whConfig + ".dist", true, configError))
+    {
+        SYS_LOG_ERROR("Error in config file: %s\n", configError.c_str());
+        return false;
+    }
+
+    // #4 - Load .conf custom file
+    if (!sConfigMgr->LoadAdditionalFile(sConfigMgr->GetConfigPath() + whConfig, true, configError))
     {
         SYS_LOG_ERROR("Error in config file: %s\n", configError.c_str());
         return false;
