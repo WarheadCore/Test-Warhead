@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -75,7 +75,7 @@ bool GameLocale::LoadWarheadStrings()
 
     _warheadStringStore.clear(); // for reload case
 
-    QueryResult result = WorldDatabase.PQuery("SELECT entry, content_default, content_loc1, content_loc2, content_loc3, content_loc4, content_loc5, content_loc6, content_loc7, content_loc8 FROM warhead_strings");
+    QueryResult result = WorldDatabase.PQuery("SELECT entry, content_default, content_loc1, content_loc2, content_loc3, content_loc4, content_loc5, content_loc6, content_loc7, content_loc8 FROM warhead_string");
     if (!result)
     {
         LOG_WARN("sql.sql", ">> Loaded 0 warhead strings. DB table `warhead_strings` is empty.");
@@ -317,7 +317,7 @@ void GameLocale::LoadCreatureLocales()
         Warhead::Game::Locale::AddLocaleString(fields[3].GetString(), locale, data.Title);
     } while (result->NextRow());
 
-    LOG_INFO("server.loading", ">> Loaded %u ?reature Locale strings in %u ms", static_cast<uint32>(_creatureLocaleStore.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded %u creature Locale strings in %u ms", static_cast<uint32>(_creatureLocaleStore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void GameLocale::LoadGossipMenuItemsLocales()

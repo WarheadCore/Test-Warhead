@@ -1,5 +1,5 @@
 -- Rename string table
-RENAME TABLE `trinity_string` TO `warhead_string`;
+RENAME TABLE IF EXISTS `trinity_string` TO `warhead_string`;
 
 -- ----------------------------
 -- Table structure for string_class
