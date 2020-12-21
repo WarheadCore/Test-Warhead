@@ -19,25 +19,19 @@
 #define _MAIL_EXTERNAL_H
 
 #include "Common.h"
-#include "ObjectGuid.h"
 
 class WH_GAME_API MailExternalMgr
 {
-private:
-    MailExternalMgr() { };
-    ~MailExternalMgr() { };
-
 public:
     static MailExternalMgr* instance();
 
     void Initialize();
-
     void Update(uint32 diff);
 
-protected:
-    void _DoUpdate();
-
 private:
+    void SendMails();
+    void GetMailsFromDB();
+
     // update interval
     uint32 m_updateTimer;
 };
