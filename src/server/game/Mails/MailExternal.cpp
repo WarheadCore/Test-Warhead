@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MailExternalMgr.h"
+#include "MailExternal.h"
 #include "CharacterCache.h"
 #include "DatabaseEnv.h"
 #include "ObjectMgr.h"
