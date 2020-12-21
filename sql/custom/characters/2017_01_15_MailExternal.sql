@@ -19,4 +19,3 @@ CREATE TABLE `mail_external` (
     PRIMARY KEY (`ID`)
     USING BTREE) ENGINE = InnoDB AUTO_INCREMENT = 501 CHARACTER
 SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
