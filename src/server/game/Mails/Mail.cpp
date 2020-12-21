@@ -1524,7 +1524,7 @@ void MailMgr::SendMail(uint8 messageType, uint8 stationery, ObjectGuid::LowType 
 }
 
 void MailMgr::SendMailItems(uint8 messageType, uint8 stationery, ObjectGuid::LowType sender, ObjectGuid::LowType receiver,
-                            std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, time_t expireTime, time_t deliverTime, uint32 COD, uint8 checkMask = MAIL_CHECK_MASK_NONE)
+                            std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, time_t expireTime, time_t deliverTime, uint32 COD, uint8 checkMask /*= MAIL_CHECK_MASK_NONE*/)
 {
     uint32 mail_id = AddNewMail(messageType, stationery, 0, sender, receiver, subject, body, true, money, expireTime, deliverTime, COD, checkMask);
     if (!mail_id)

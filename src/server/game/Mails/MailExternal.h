@@ -31,9 +31,6 @@ class WH_GAME_API MailExternalMgr
     private:
         void SendMails();
         void GetMailsFromDB();
-
-        // update interval
-        uint32 m_updateTimer;
 };
 
 #define sMailExternalMgr MailExternalMgr::instance()
