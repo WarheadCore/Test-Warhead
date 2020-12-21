@@ -120,13 +120,13 @@ T ConfigMgr::GetValueDefault(std::string const& name, T def, bool quiet) const
         if (!quiet)
         {
             LOG_WARN("server.loading", "Missing name %s in config file %s, add \"%s = %s\" to this file",
-                name.c_str(), _filename.c_str(), name.c_str(), std::to_string(def).c_str());
+                     name.c_str(), _filename.c_str(), name.c_str(), std::to_string(def).c_str());
         }
     }
     catch (bpt::ptree_bad_data const&)
     {
         LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use %s instead",
-            name.c_str(), _filename.c_str(), std::to_string(def).c_str());
+                  name.c_str(), _filename.c_str(), std::to_string(def).c_str());
     }
 
     return def;
@@ -144,13 +144,13 @@ std::string ConfigMgr::GetValueDefault<std::string>(std::string const& name, std
         if (!quiet)
         {
             LOG_WARN("server.loading", "Missing name %s in config file %s, add \"%s = %s\" to this file",
-                name.c_str(), _filename.c_str(), name.c_str(), def.c_str());
+                     name.c_str(), _filename.c_str(), name.c_str(), def.c_str());
         }
     }
     catch (bpt::ptree_bad_data const&)
     {
         LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use %s instead",
-            name.c_str(), _filename.c_str(), def.c_str());
+                  name.c_str(), _filename.c_str(), def.c_str());
     }
 
     return def;
@@ -173,7 +173,7 @@ bool ConfigMgr::GetBoolDefault(std::string const& name, bool def, bool quiet) co
     else
     {
         LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use '%s' instead",
-            name.c_str(), _filename.c_str(), def ? "true" : "false");
+                  name.c_str(), _filename.c_str(), def ? "true" : "false");
         return def;
     }
 }
