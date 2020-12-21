@@ -22,18 +22,18 @@
 
 class WH_GAME_API MailExternalMgr
 {
-public:
-    static MailExternalMgr* instance();
+    public:
+        static MailExternalMgr* instance();
 
-    void Initialize();
-    void Update(uint32 diff);
+        void Initialize();
+        void Update(uint32 diff);
 
-private:
-    void SendMails();
-    void GetMailsFromDB();
+    private:
+        void SendMails();
+        void GetMailsFromDB();
 
-    // update interval
-    uint32 m_updateTimer;
+        // update interval
+        uint32 m_updateTimer;
 };
 
 #define sMailExternalMgr MailExternalMgr::instance()

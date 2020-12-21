@@ -82,7 +82,7 @@ void MailMgr::Update(uint32 diff)
 
     if (m_updateTimer >= MAIL_UPDATE_INTERVAL) // upd only each 1 sec
     {
-        _ExpTimer.Update(m_updateTimer/1000);
+        _ExpTimer.Update(m_updateTimer / 1000);
 
         if (_ExpTimer.Passed())
             _DeleteExpiryMails();
@@ -107,7 +107,8 @@ void MailMgr::SendMailBy(Object* sender, ObjectGuid::LowType receiver, std::stri
     SendMail(messageType, stationery, senderID, receiver, subject, body, money, expireTime, deliverTime, COD, checkMask);
 }
 
-void MailMgr::SendMailByGUID(ObjectGuid::LowType sender, ObjectGuid::LowType receiver, uint8 messageType, std::string const& subject, std::string const& body, uint32 money, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void MailMgr::SendMailByGUID(ObjectGuid::LowType sender, ObjectGuid::LowType receiver, uint8 messageType, std::string const& subject, std::string const& body, uint32 money, MailCheckMask checkMask,
+                             uint32 deliver_delay, uint32 COD)
 {
     if (!receiver)
         return;
@@ -121,7 +122,8 @@ void MailMgr::SendMailByGUID(ObjectGuid::LowType sender, ObjectGuid::LowType rec
     SendMail(messageType, stationery, sender, receiver, subject, body, money, expireTime, deliverTime, COD, checkMask);
 }
 
-void MailMgr::SendMailWithItemsBy(Object* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void MailMgr::SendMailWithItemsBy(Object* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist,
+                                  MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
 {
     if (!sender || !receiver)
         return;
@@ -137,7 +139,8 @@ void MailMgr::SendMailWithItemsBy(Object* sender, ObjectGuid::LowType receiver, 
     SendMailItems(messageType, stationery, senderID, receiver, subject, body, money, itemlist, expireTime, deliverTime, COD, checkMask);
 }
 
-void MailMgr::SendMailWithItemsByGUID(ObjectGuid::LowType sender, ObjectGuid::LowType receiver, uint8 messageType, std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void MailMgr::SendMailWithItemsByGUID(ObjectGuid::LowType sender, ObjectGuid::LowType receiver, uint8 messageType, std::string const& subject, std::string const& body, uint32 money,
+                                      std::list<Item*> const& itemlist, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
 {
     if (!receiver)
         return;
@@ -151,7 +154,8 @@ void MailMgr::SendMailWithItemsByGUID(ObjectGuid::LowType sender, ObjectGuid::Lo
     SendMailItems(messageType, stationery, sender, receiver, subject, body, money, itemlist, expireTime, deliverTime, COD, checkMask);
 }
 
-void MailMgr::SendMailByAuctionHouse(AuctionEntry* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void MailMgr::SendMailByAuctionHouse(AuctionEntry* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, MailCheckMask checkMask,
+                                     uint32 deliver_delay, uint32 COD)
 {
     if (!sender || !receiver)
         return;
@@ -167,7 +171,8 @@ void MailMgr::SendMailByAuctionHouse(AuctionEntry* sender, ObjectGuid::LowType r
     SendMail(messageType, stationery, senderID, receiver, subject, body, money, expireTime, deliverTime, COD, checkMask);
 }
 
-void MailMgr::SendMailByAuctionHouseWithItems(AuctionEntry* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void MailMgr::SendMailByAuctionHouseWithItems(AuctionEntry* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist,
+        MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
 {
     if (!sender || !receiver)
         return;
@@ -183,7 +188,8 @@ void MailMgr::SendMailByAuctionHouseWithItems(AuctionEntry* sender, ObjectGuid::
     SendMailItems(messageType, stationery, m_senderId, receiver, subject, body, money, itemlist, expireTime, deliverTime, COD, checkMask);
 }
 
-void MailMgr::SendMailByCalendarEvent(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void MailMgr::SendMailByCalendarEvent(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, MailCheckMask checkMask,
+                                      uint32 deliver_delay, uint32 COD)
 {
     if (!sender || !receiver)
         return;
@@ -199,7 +205,8 @@ void MailMgr::SendMailByCalendarEvent(CalendarEvent* sender, ObjectGuid::LowType
     SendMail(messageType, stationery, senderID, receiver, subject, body, money, expireTime, deliverTime, COD, checkMask);
 }
 
-void MailMgr::SendMailByCalendarEventWithItems(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void MailMgr::SendMailByCalendarEventWithItems(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist,
+        MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
 {
     if (!sender || !receiver)
         return;
@@ -287,7 +294,8 @@ void MailMgr::PrepareItems(uint32 mailId, uint16 mailTemplateId, Player* receive
     CharacterDatabase.CommitTransaction(trans);
 }
 
-uint32 MailMgr::SendReturnMailByGUID(uint32 old_mailID, ObjectGuid::LowType sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, bool itemexist, uint32 deliver_delay)
+uint32 MailMgr::SendReturnMailByGUID(uint32 old_mailID, ObjectGuid::LowType sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, bool itemexist,
+                                     uint32 deliver_delay)
 {
     if (!old_mailID || !receiver)
         return 0;
@@ -399,7 +407,8 @@ void MailMgr::ClearDependInstanceItemsBeforeDeletePlayer(ObjectGuid::LowType pla
     }
 }
 
-bool MailMgr::PrepareMessageAttributeBy(Object* sender, ObjectGuid::LowType /*receiver*/, uint8& messageType, uint8& stationery, ObjectGuid::LowType& m_senderId, uint32 deliver_delay, uint32 COD, time_t& expireTime, time_t& deliverTime)
+bool MailMgr::PrepareMessageAttributeBy(Object* sender, ObjectGuid::LowType /*receiver*/, uint8& messageType, uint8& stationery, ObjectGuid::LowType& m_senderId, uint32 deliver_delay, uint32 COD,
+                                        time_t& expireTime, time_t& deliverTime)
 {
     stationery = MAIL_STATIONERY_DEFAULT;
 
@@ -502,8 +511,8 @@ bool MailMgr::PrepareMessageAttributeForAuctionAndCalendar(uint32 deliver_delay,
 }
 
 uint32 MailMgr::AddNewMail(uint8 messageType, uint8 stationery, uint16 mailTemplateId, ObjectGuid::LowType sender, ObjectGuid::LowType receiver,
-    std::string const& subject, std::string const& body, bool item_exists, uint32 money, time_t expireTime, time_t deliverTime,
-    uint32 COD, uint8 checked, uint8 state)
+                           std::string const& subject, std::string const& body, bool item_exists, uint32 money, time_t expireTime, time_t deliverTime,
+                           uint32 COD, uint8 checked, uint8 state)
 {
     // find max id
     uint32 newID = 0;
@@ -723,7 +732,7 @@ uint32 MailMgr::GetMailBoxSize(ObjectGuid::LowType playerId)
 bool MailMgr::HandleMailMarkAsRead(uint32 mailID)
 {
     bool result = false;
-    
+
     for (auto& [_mailID, mail] : _mails)
     {
         if (_mailID == mailID)
@@ -746,7 +755,7 @@ bool MailMgr::HandleMailMarkAsRead(uint32 mailID)
 bool MailMgr::HandleMailDelete(uint32 mailID)
 {
     bool result = false;
-    
+
     for (auto const& [_mailID, mail] : _mails)
     {
         if (_mailID == mailID)
@@ -882,7 +891,7 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
         return 0;
 
     uint8 result = 0;
-    
+
     // 0 = MAIL_ERR_INTERNAL_ERROR
     // 1 = MAIL_ERR_NOT_ENOUGH_MONEY
     // 2 = MAIL_OK
@@ -897,7 +906,7 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
 
             // check on item id
             bool itemexist = false;
-            
+
             for (auto const& [mailItemID, mailItem] : _mailItems)
                 if (mailItem.messageID == mailID && mailItem.item_guid == item_guid)
                     itemexist = true;
@@ -921,12 +930,12 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
             }
 
             ItemPosCountVec dest;
-            
+
             msg_result = player->CanStoreItem(NULL_BAG, NULL_SLOT, dest, it, false);
             if (msg_result == EQUIP_ERR_OK)
             {
                 CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
-                
+
                 if (mail.COD) // if there is COD, take COD money from player and send them to sender by mail
                 {
                     ObjectGuid sender_guid(HighGuid::Player, mail.sender);
@@ -952,7 +961,7 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
                         }
 
                         LOG_GM(player->GetSession()->GetAccountId(), "GM %s (Account: %u) receiver mail item: %s (Entry: %u Count: %u) and send COD money: %u to player: %s (Account: %u)",
-                            player->GetName().c_str(), player->GetSession()->GetAccountId(), it->GetTemplate()->Name1.c_str(), it->GetEntry(), it->GetCount(), mail.COD, sender_name.c_str(), sender_accId);
+                               player->GetName().c_str(), player->GetSession()->GetAccountId(), it->GetTemplate()->Name1.c_str(), it->GetEntry(), it->GetCount(), mail.COD, sender_name.c_str(), sender_accId);
                     }
                     else if (!receiver)
                         sender_accId = sCharacterCache->GetCharacterAccountIdByGuid(sender_guid);
@@ -1003,7 +1012,7 @@ uint8 MailMgr::HandleMailTakeItem(Player* player, uint32 mailID, ObjectGuid::Low
                 }
 
                 CharacterDatabase.CommitTransaction(trans);
-                
+
                 result = 2;
             }
             else
@@ -1075,14 +1084,15 @@ void MailMgr::HandleGetMailList(Player* player, WorldPacket& data)
 
             uint32 mailID = _mailID;
             uint8 item_count = 0;
-            
+
             for (auto const& [mailItemID, mailItem] : _mailItems)
             {
                 if (mailItem.messageID == mailID)
                     ++item_count;
             }
 
-            size_t next_mail_size = 2 + 4 + 1 + (mail.messageType == MAIL_NORMAL ? 8 : 4) + 4 * 8 + (mail.subject.size() + 1) + (mail.body.size() + 1) + 1 + item_count * (1 + 4 + 4 + MAX_INSPECTED_ENCHANTMENT_SLOT * 3 * 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1);
+            size_t next_mail_size = 2 + 4 + 1 + (mail.messageType == MAIL_NORMAL ? 8 : 4) + 4 * 8 + (mail.subject.size() + 1) + (mail.body.size() + 1) + 1 + item_count *
+                                    (1 + 4 + 4 + MAX_INSPECTED_ENCHANTMENT_SLOT * 3 * 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1);
 
             if (data.wpos() + next_mail_size > MAX_NETCLIENT_PACKET_SIZE)
             {
@@ -1319,7 +1329,8 @@ void MailMgr::_LoadMails()
     _mails.clear();
 
     //                                                    0       1            2               3         4       5         6       7       8         9             10         11    12     13      14
-    QueryResult result = CharacterDatabase.Query("SELECT id, messageType, stationery, mailTemplateId, sender, receiver, subject, body, has_items, expireTime, deliverTime, money, cod, checked, state FROM mail");
+    QueryResult result =
+        CharacterDatabase.Query("SELECT id, messageType, stationery, mailTemplateId, sender, receiver, subject, body, has_items, expireTime, deliverTime, money, cod, checked, state FROM mail");
     if (!result)
     {
         LOG_WARN("server.loading", ">> Loaded 0 Mails. DB table `mail` is empty.");
@@ -1494,7 +1505,7 @@ void MailMgr::_UpdateExpiryTime()
 }
 
 void MailMgr::SendMail(uint8 messageType, uint8 stationery, ObjectGuid::LowType sender, ObjectGuid::LowType receiver,
-    std::string const& subject, std::string const& body, uint32 money, time_t expireTime, time_t deliverTime, uint32 COD, uint8 checkMask = MAIL_CHECK_MASK_NONE)
+                       std::string const& subject, std::string const& body, uint32 money, time_t expireTime, time_t deliverTime, uint32 COD, uint8 checkMask = MAIL_CHECK_MASK_NONE)
 {
     uint32 mail_id = AddNewMail(messageType, stationery, 0, sender, receiver, subject, body, false, money, expireTime, deliverTime, COD, checkMask);
     if (!mail_id)
@@ -1506,7 +1517,7 @@ void MailMgr::SendMail(uint8 messageType, uint8 stationery, ObjectGuid::LowType 
 }
 
 void MailMgr::SendMailItems(uint8 messageType, uint8 stationery, ObjectGuid::LowType sender, ObjectGuid::LowType receiver,
-    std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, time_t expireTime, time_t deliverTime, uint32 COD, uint8 checkMask = MAIL_CHECK_MASK_NONE)
+                            std::string const& subject, std::string const& body, uint32 money, std::list<Item*> const& itemlist, time_t expireTime, time_t deliverTime, uint32 COD, uint8 checkMask = MAIL_CHECK_MASK_NONE)
 {
     uint32 mail_id = AddNewMail(messageType, stationery, 0, sender, receiver, subject, body, true, money, expireTime, deliverTime, COD, checkMask);
     if (!mail_id)
@@ -1531,7 +1542,7 @@ void MailMgr::SendMailItems(uint8 messageType, uint8 stationery, ObjectGuid::Low
 }
 
 void MailMgr::SendMailTemplate(uint8 messageType, uint8 stationery, uint16 mailTemplateId, ObjectGuid::LowType senderID,
-    ObjectGuid::LowType receiver, uint32 money, time_t expireTime, time_t deliverTime, MailCheckMask checkMask)
+                               ObjectGuid::LowType receiver, uint32 money, time_t expireTime, time_t deliverTime, MailCheckMask checkMask)
 {
     uint32 mail_id = AddNewMail(messageType, stationery, mailTemplateId, senderID, receiver, "", "", false, money, expireTime, deliverTime, 0, checkMask);
 
