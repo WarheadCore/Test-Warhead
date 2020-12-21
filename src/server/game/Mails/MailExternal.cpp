@@ -92,6 +92,8 @@ void MailExternalMgr::Initialize()
 
         context.Repeat();
     });
+
+    LOG_INFO("server.loading", ">> Done");
 }
 
 void MailExternalMgr::Update(uint32 diff)

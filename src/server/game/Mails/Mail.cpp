@@ -72,6 +72,8 @@ void MailMgr::Initialize()
 
     // delete old
     _DeleteExpiryMails(true);
+
+    LOG_INFO("server.loading", ">> Done");
 }
 
 void MailMgr::Update(uint32 diff)
