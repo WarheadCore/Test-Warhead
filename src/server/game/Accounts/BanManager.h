@@ -26,7 +26,6 @@ enum BanReturn
     BAN_SUCCESS,
     BAN_SYNTAX_ERROR,
     BAN_NOTFOUND,
-    BAN_LONGER_EXISTS,
     BAN_EXISTS
 };
 

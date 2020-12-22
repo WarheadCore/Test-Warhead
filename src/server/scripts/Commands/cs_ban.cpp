@@ -250,7 +250,7 @@ public:
                 }
                 handler->SetSentErrorMessage(true);
                 return false;
-            case BAN_LONGER_EXISTS:
+            case BAN_EXISTS:
                 handler->PSendSysMessage("Unsuccessful! A longer ban is already present on this account!");
                 break;
             default:
