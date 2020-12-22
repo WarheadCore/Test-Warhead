@@ -699,21 +699,23 @@ public:
         if (!nameStr)
             return false;
 
-        std::string CharacterName = nameStr;
+        std::string characterName = nameStr;
 
-        if (!normalizePlayerName(CharacterName))
+        if (!normalizePlayerName(characterName))
         {
             handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        if (!sBan->RemoveBanCharacter(CharacterName))
+        if (!sBan->RemoveBanCharacter(characterName))
         {
             handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
+        else
+            handler->PSendSysMessage(LANG_UNBAN_UNBANNED, characterName.c_str());
 
         return true;
     }
@@ -763,29 +765,25 @@ public:
                 break;
         }
 
-        switch (mode)
+        auto isUnBanned = [&]()
         {
-            case BAN_ACCOUNT:
-                if (sBan->RemoveBanAccount(nameOrIP))
-                    handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
-                else
-                    handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
-                break;
-            case BAN_CHARACTER:
-                if (sBan->RemoveBanAccountByPlayerName(nameOrIP))
-                    handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
-                else
-                    handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
-                break;
-            case BAN_IP:
-                if (sBan->RemoveBanIP(nameOrIP))
-                    handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
-                else
-                    handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
-                break;
-            default:
-                break;
-        }
+            switch (mode)
+            {
+                case BAN_ACCOUNT:
+                    return sBan->RemoveBanAccount(nameOrIP);
+                case BAN_CHARACTER:
+                    return sBan->RemoveBanAccountByPlayerName(nameOrIP);
+                case BAN_IP:
+                    return sBan->RemoveBanIP(nameOrIP);
+                default:
+                    return false;
+            }
+        };
+
+        if (isUnBanned())
+            handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
+        else
+            handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
 
         return true;
     }
