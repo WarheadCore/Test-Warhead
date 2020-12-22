@@ -1387,7 +1387,7 @@ bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) co
                     break;
             }
 
-            LOG_WARN("network", "AntiDOS: Player automatically banned for %u seconds.", duration);
+            LOG_WARN("network", "AntiDOS: Player automatically banned for %s seconds.", duration.c_str());
             Session->KickPlayer("WorldSession::DosProtection::EvaluateOpcode AntiDOS");
             return false;
         }
