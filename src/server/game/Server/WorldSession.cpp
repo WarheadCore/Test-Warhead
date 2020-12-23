@@ -40,6 +40,7 @@
 #include "Map.h"
 #include "Metric.h"
 #include "MoveSpline.h"
+#include "MuteManager.h"
 #include "Opcodes.h"
 #include "OutdoorPvPMgr.h"
 #include "PacketUtilities.h"
