@@ -142,20 +142,20 @@ enum RealmZone
 /// Storage class for commands issued for delayed execution
 struct WH_GAME_API CliCommandHolder
 {
-    using Print = void(*)(void*, std::string_view);
-    using CommandFinished = void(*)(void*, bool success);
+        using Print = void(*)(void*, std::string_view);
+        using CommandFinished = void(*)(void*, bool success);
 
-    void* m_callbackArg;
-    char* m_command;
-    Print m_print;
-    CommandFinished m_commandFinished;
+        void* m_callbackArg;
+        char* m_command;
+        Print m_print;
+        CommandFinished m_commandFinished;
 
-    CliCommandHolder(void* callbackArg, char const* command, Print zprint, CommandFinished commandFinished);
-    ~CliCommandHolder();
+        CliCommandHolder(void* callbackArg, char const* command, Print zprint, CommandFinished commandFinished);
+        ~CliCommandHolder();
 
-private:
-    CliCommandHolder(CliCommandHolder const& right) = delete;
-    CliCommandHolder& operator=(CliCommandHolder const& right) = delete;
+    private:
+        CliCommandHolder(CliCommandHolder const& right) = delete;
+        CliCommandHolder& operator=(CliCommandHolder const& right) = delete;
 };
 
 typedef std::unordered_map<uint32, WorldSession*> SessionMap;
@@ -262,7 +262,7 @@ class WH_GAME_API World
         void SendGlobalMessage(WorldPacket const* packet, WorldSession* self = nullptr, uint32 team = 0);
         void SendGlobalGMMessage(WorldPacket const* packet, WorldSession* self = nullptr, uint32 team = 0);
         bool SendZoneMessage(uint32 zone, WorldPacket const* packet, WorldSession* self = nullptr, uint32 team = 0);
-        void SendZoneText(uint32 zone, const char *text, WorldSession* self = nullptr, uint32 team = 0);
+        void SendZoneText(uint32 zone, const char* text, WorldSession* self = nullptr, uint32 team = 0);
 
         /// Are we in the middle of a shutdown?
         bool IsShuttingDown() const { return m_ShutdownTimer > 0; }
@@ -293,7 +293,7 @@ class WH_GAME_API World
         static float GetMaxVisibleDistanceInInstances()     { return m_MaxVisibleDistanceInInstances;  }
         static float GetMaxVisibleDistanceInBGArenas()      { return m_MaxVisibleDistanceInBGArenas;   }
 
-        static int32 GetVisibilityNotifyPeriodOnContinents(){ return m_visibility_notify_periodOnContinents; }
+        static int32 GetVisibilityNotifyPeriodOnContinents() { return m_visibility_notify_periodOnContinents; }
         static int32 GetVisibilityNotifyPeriodInInstances() { return m_visibility_notify_periodInInstances;  }
         static int32 GetVisibilityNotifyPeriodInBGArenas()  { return m_visibility_notify_periodInBGArenas;   }
 
@@ -432,7 +432,7 @@ class WH_GAME_API World
         uint32 _warnDiff;
         time_t _warnShutdownTime;
 
-    friend class debug_commandscript;
+        friend class debug_commandscript;
 };
 
 WH_GAME_API extern Realm realm;
