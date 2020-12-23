@@ -37,7 +37,7 @@ public:
     }
 };
 
-void AddSC_login_mute_time()
+void AddSC_account_script()
 {
     new LoginMuteTime();
 }

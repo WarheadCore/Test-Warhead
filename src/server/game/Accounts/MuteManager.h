@@ -21,10 +21,9 @@
 #include "Common.h"
 #include <unordered_map>
 
-class MuteManager
+class WH_GAME_API MuteManager
 {
 public:
-
     static MuteManager* instance();
 
     void MutePlayer(std::string const& targetName, uint32 notSpeakTime, std::string const& muteBy, std::string const& muteReason);
@@ -35,7 +34,6 @@ public:
     uint32 GetMuteTime(uint32 accountID);
     std::string const GetMuteTimeString(uint32 accountID);
     void DeleteMuteTime(uint32 accountID, bool delFromDB = true);
-
     void CheckMuteExpired(uint32 accountID);
     bool CanSpeak(uint32 accountID);
     void LoginAccount(uint32 accountID);
