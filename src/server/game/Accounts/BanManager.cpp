@@ -88,7 +88,7 @@ BanReturn BanManager::BanAccountByPlayerName(std::string const& characterName, s
 {
     if (characterName.empty() || duration.empty())
         return BAN_SYNTAX_ERROR;
-    
+
     uint32 accountID = sCharacterCache->GetCharacterAccountIdByName(characterName);
     if (!accountID)
         return BAN_SYNTAX_ERROR;

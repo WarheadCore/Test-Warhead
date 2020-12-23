@@ -215,7 +215,7 @@ public:
             case BAN_CHARACTER:
                 banReturn = sBan->BanAccountByPlayerName(nameOrIP, durationStr, reasonStr, author);
                 break;
-            case BAN_IP:            
+            case BAN_IP:
                 banReturn = sBan->BanIP(nameOrIP, durationStr, reasonStr, author);
                 break;
             default:
