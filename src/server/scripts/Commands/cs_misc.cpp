@@ -1624,7 +1624,7 @@ public:
                 regMail   = handler->GetWarheadString(LANG_UNAUTHORIZED);
                 lastIp    = handler->GetWarheadString(LANG_UNAUTHORIZED);
                 lastLogin = handler->GetWarheadString(LANG_UNAUTHORIZED);
-            }           
+            }
 
             failedLogins  = fields[6].GetUInt32();
             locked        = fields[7].GetUInt8();
@@ -1632,10 +1632,10 @@ public:
         }
 
         // Check mute info if exist
-        stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
-        stmt->setUInt32(0, accId);
+        auto loginStmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
+        loginStmt->setUInt32(0, accId);
 
-        PreparedQueryResult accmuteInfoResult = LoginDatabase.Query(stmt);
+        PreparedQueryResult accmuteInfoResult = LoginDatabase.Query(loginStmt);
         if (accmuteInfoResult)
         {
             Field* fields   = accmuteInfoResult->Fetch();
@@ -1877,10 +1877,10 @@ public:
         if (handler->HasLowerSecurity(target, player->GetGUID(), true))
             return false;
 
-        sMute->MutePlayer(targetName, notSpeakTime, handler->GetSession() ? handler->GetSession()->GetPlayerName() : handler->GetAcoreString(LANG_CONSOLE), muteReasonStr);
+        sMute->MutePlayer(player->GetName(), muteTime, handler->GetSession() ? handler->GetSession()->GetPlayerName() : handler->GetWarheadString(LANG_CONSOLE), muteReasonStr);
 
         if (!CONF_GET_BOOL("ShowMuteInWorld"))
-            handler->PSendSysMessage(LANG_YOU_DISABLE_CHAT, handler->playerLink(targetName).c_str(), muteTime, muteReasonStr.c_str());
+            handler->PSendSysMessage(LANG_YOU_DISABLE_CHAT, handler->playerLink(player->GetName()).c_str(), muteTime, muteReasonStr.c_str());
 
         return true;
     }
@@ -1905,7 +1905,7 @@ public:
         if (handler->HasLowerSecurity(target, targetGuid, true))
             return false;
 
-        if (target && target->CanSpeak())
+        if (target && target->GetSession() && target->GetSession()->CanSpeak())
         {
             handler->SendSysMessage(LANG_CHAT_ALREADY_ENABLED);
             handler->SetSentErrorMessage(true);

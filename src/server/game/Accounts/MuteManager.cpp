@@ -31,7 +31,7 @@ MuteManager* MuteManager::instance()
     return &instance;
 }
 
-void MuteManager::MutePlayer(std::string const targetName, uint32 notSpeakTime, std::string const muteBy, std::string const muteReason)
+void MuteManager::MutePlayer(std::string const& targetName, uint32 notSpeakTime, std::string const& muteBy, std::string const& muteReason)
 {
     uint32 accountId = sCharacterCache->GetCharacterAccountIdByName(targetName);
     auto targetSession = sWorld->FindSession(accountId);
@@ -69,7 +69,7 @@ void MuteManager::MutePlayer(std::string const targetName, uint32 notSpeakTime, 
         ChatHandler(targetSession).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notSpeakTime, muteBy.c_str(), muteReason.c_str());
 }
 
-void MuteManager::UnMutePlayer(std::string const targetName)
+void MuteManager::UnMutePlayer(std::string const& targetName)
 {
     uint32 accID = sCharacterCache->GetCharacterAccountIdByName(targetName);
 

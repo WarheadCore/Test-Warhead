@@ -154,7 +154,7 @@ WorldSession::WorldSession(uint32 id, std::string&& name, std::shared_ptr<WorldS
 WorldSession::~WorldSession()
 {
     sScriptMgr->OnAccountLogout(GetAccountId());
-    
+
     ///- unload player if not unloaded
     if (_player)
         LogoutPlayer (true);

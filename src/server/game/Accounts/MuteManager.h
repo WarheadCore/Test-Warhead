@@ -27,8 +27,8 @@ public:
 
     static MuteManager* instance();
 
-    void MutePlayer(std::string const targetName, uint32 notSpeakTime, std::string const muteBy, std::string const muteReason);
-    void UnMutePlayer(std::string const targetName);
+    void MutePlayer(std::string const& targetName, uint32 notSpeakTime, std::string const& muteBy, std::string const& muteReason);
+    void UnMutePlayer(std::string const& targetName);
     void UpdateMuteAccount(uint32 accountID, uint32 muteDate, int32 muteTime);
     void SetMuteTime(uint32 accountID, uint32 muteTime);
     void AddMuteTime(uint32 accountID, uint32 muteTime);
