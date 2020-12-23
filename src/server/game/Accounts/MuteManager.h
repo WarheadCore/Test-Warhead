@@ -19,6 +19,8 @@
 #define _MUTE_MANAGER_H_
 
 #include "Common.h"
+#include "Optional.h"
+#include <tuple>
 #include <unordered_map>
 
 class WH_GAME_API MuteManager
@@ -37,6 +39,7 @@ public:
     void CheckMuteExpired(uint32 accountID);
     bool CanSpeak(uint32 accountID);
     void LoginAccount(uint32 accountID);
+    Optional<std::tuple<uint32, int32, std::string, std::string>> GetMuteInfo(uint32 accountID);
 
 private:
     std::unordered_map<uint32, uint32> _listSessions;

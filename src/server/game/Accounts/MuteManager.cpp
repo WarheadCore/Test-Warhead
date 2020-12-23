@@ -96,7 +96,8 @@ void MuteManager::SetMuteTime(uint32 accountID, uint32 muteTime)
     if (itr == _listSessions.end())
         return;
 
-    _listSessions[accountID] = muteTime;
+    _listSessions.erase(accountID);
+    _listSessions.emplace(accountID, muteTime);
 }
 
 uint32 MuteManager::GetMuteTime(uint32 accountID)
@@ -106,7 +107,7 @@ uint32 MuteManager::GetMuteTime(uint32 accountID)
     if (itr == _listSessions.end())
         return 0;
 
-    return _listSessions[accountID];
+    return _listSessions.at(accountID);
 }
 
 void MuteManager::DeleteMuteTime(uint32 accountID, bool delFromDB /*= true*/)
@@ -193,4 +194,18 @@ void MuteManager::UpdateMuteAccount(uint32 accountID, uint32 muteDate, int32 mut
     auto session = sWorld->FindSession(accountID);
     if (session)
         SetMuteTime(accountID, muteDate);
+}
+
+Optional<std::tuple<uint32, int32, std::string, std::string>> MuteManager::GetMuteInfo(uint32 accountID)
+{
+    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE);
+    stmt->setUInt32(0, accountID);
+
+    PreparedQueryResult result = LoginDatabase.Query(stmt);
+    if (!result)
+        return std::nullopt;
+
+    Field* fields = result->Fetch();
+
+    return std::make_tuple(fields[0].GetUInt32(), fields[1].GetInt32(), fields[2].GetString(), fields[3].GetString());
 }

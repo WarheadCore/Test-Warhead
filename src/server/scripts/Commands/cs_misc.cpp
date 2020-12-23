@@ -1498,7 +1498,8 @@ public:
         std::string OS                = handler->GetWarheadString(LANG_UNKNOWN);
 
         // Mute data print variables
-        int32 muteTime                = 0;
+        std::string muteLeft          = "0000-00-00_00-00-00";
+        uint32 muteTime                = 0;
         std::string muteReason        = handler->GetWarheadString(LANG_NO_REASON);
         std::string muteBy            = handler->GetWarheadString(LANG_UNKNOWN);
 
@@ -1632,16 +1633,15 @@ public:
         }
 
         // Check mute info if exist
-        auto loginStmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
-        loginStmt->setUInt32(0, accId);
-
-        PreparedQueryResult accmuteInfoResult = LoginDatabase.Query(loginStmt);
-        if (accmuteInfoResult)
+        auto muteInfo = sMute->GetMuteInfo(accId);
+        if (muteInfo)
         {
-            Field* fields   = accmuteInfoResult->Fetch();
-            muteTime        = std::abs(fields[1].GetInt32());
-            muteReason      = fields[2].GetString();
-            muteBy          = fields[3].GetString();
+            auto const& [_muteDate, _muteTime, _reason, _author] = *muteInfo;
+
+            muteTime = std::abs(_muteTime);
+            muteLeft = secsToTimeString(static_cast<uint64>(_muteDate + muteTime) - GameTime::GetGameTime(), TimeFormat::ShortText);
+            muteReason = _reason;
+            muteBy = _author;
         }
 
         // Creates a chat link to the character. Returns nameLink
@@ -1712,7 +1712,7 @@ public:
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
         if (muteTime)
-            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime, TimeFormat::ShortText).c_str(), muteBy.c_str());
+            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime, TimeFormat::ShortText).c_str(), muteLeft.c_str(), muteBy.c_str());
 
         // Output V. LANG_PINFO_ACC_ACCOUNT
         handler->PSendSysMessage(LANG_PINFO_ACC_ACCOUNT, userName.c_str(), accId, security);
