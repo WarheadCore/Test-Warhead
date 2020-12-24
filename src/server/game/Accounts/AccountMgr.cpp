@@ -436,8 +436,7 @@ void AccountMgr::LoadRBAC()
         uint32 id = field[0].GetUInt32();
         _permissions[id] = new rbac::RBACPermission(id, field[1].GetString());
         ++count1;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_DEBUG("rbac", "AccountMgr::LoadRBAC: Loading linked permissions");
     result = LoginDatabase.Query("SELECT id, linkedId FROM rbac_linked_permissions ORDER BY id ASC");
@@ -469,8 +468,7 @@ void AccountMgr::LoadRBAC()
         }
         permission->AddLinkedPermission(linkedPermissionId);
         ++count2;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_DEBUG("rbac", "AccountMgr::LoadRBAC: Loading default permissions");
     result = LoginDatabase.PQuery("SELECT secId, permissionId FROM rbac_default_permissions WHERE (realmId = %u OR realmId = -1) ORDER BY secId ASC", realm.Id.Realm);
@@ -495,8 +493,7 @@ void AccountMgr::LoadRBAC()
 
         permissions->insert(field[1].GetUInt32());
         ++count3;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u permission definitions, %u linked permissions and %u default permissions in %u ms", count1, count2, count3, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -559,7 +556,7 @@ bool AccountMgr::HasPermission(uint32 accountId, uint32 permissionId, uint32 rea
     bool hasPermission = rbac.HasPermission(permissionId);
 
     LOG_DEBUG("rbac", "AccountMgr::HasPermission [AccountId: %u, PermissionId: %u, realmId: %d]: %u",
-                   accountId, permissionId, realmId, hasPermission);
+              accountId, permissionId, realmId, hasPermission);
     return hasPermission;
 }
 

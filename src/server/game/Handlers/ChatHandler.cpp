@@ -261,7 +261,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             if (isNasty(c))
             {
                 LOG_ERROR("network", "Player %s %s sent a message containing invalid character %u - blocked", GetPlayer()->GetName().c_str(),
-                    GetPlayer()->GetGUID().ToString().c_str(), uint8(c));
+                          GetPlayer()->GetGUID().ToString().c_str(), uint8(c));
                 return;
             }
 
@@ -333,7 +333,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             }
 
             Player* receiver = ObjectAccessor::FindConnectedPlayerByName(to);
-            if (!receiver || (lang != LANG_ADDON && !receiver->isAcceptWhispers() && receiver->GetSession()->HasPermission(rbac::RBAC_PERM_CAN_FILTER_WHISPERS) && !receiver->IsInWhisperWhiteList(sender->GetGUID())))
+            if (!receiver || (lang != LANG_ADDON && !receiver->isAcceptWhispers() && receiver->GetSession()->HasPermission(rbac::RBAC_PERM_CAN_FILTER_WHISPERS)
+                              && !receiver->IsInWhisperWhiteList(sender->GetGUID())))
             {
                 SendPlayerNotFoundNotice(to);
                 return;
@@ -364,7 +365,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             // If player is a Gamemaster and doesn't accept whisper, we auto-whitelist every player that the Gamemaster is talking to
             // We also do that if a player is under the required level for whispers.
             if (receiver->GetLevel() < CONF_GET_INT("ChatLevelReq.Whisper") ||
-                (HasPermission(rbac::RBAC_PERM_CAN_FILTER_WHISPERS) && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID())))
+                    (HasPermission(rbac::RBAC_PERM_CAN_FILTER_WHISPERS) && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID())))
                 sender->AddWhisperWhiteList(receiver->GetGUID());
 
             GetPlayer()->Whisper(msg, Language(lang), receiver);
@@ -664,8 +665,8 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket& recvData)
 
     Warhead::EmoteChatBuilder emote_builder(*GetPlayer(), text_emote, emoteNum, unit);
     Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > emote_do(emote_builder);
-    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > > emote_worker(GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"), emote_do);
-    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder >> emote_worker(GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"), emote_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder>>, WorldTypeMapContainer> message(emote_worker);
     cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"));
 
     GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_DO_EMOTE, text_emote, 0, unit);
@@ -693,21 +694,21 @@ void WorldSession::HandleChatIgnoredOpcode(WorldPacket& recvData)
     player->SendDirectMessage(&data);
 }
 
-void WorldSession::HandleChannelDeclineInvite(WorldPacket &recvPacket)
+void WorldSession::HandleChannelDeclineInvite(WorldPacket& recvPacket)
 {
     LOG_DEBUG("network", "Opcode %u", recvPacket.GetOpcode());
 }
 
 void WorldSession::SendPlayerNotFoundNotice(std::string const& name)
 {
-    WorldPacket data(SMSG_CHAT_PLAYER_NOT_FOUND, name.size()+1);
+    WorldPacket data(SMSG_CHAT_PLAYER_NOT_FOUND, name.size() + 1);
     data << name;
     SendPacket(&data);
 }
 
 void WorldSession::SendPlayerAmbiguousNotice(std::string const& name)
 {
-    WorldPacket data(SMSG_CHAT_PLAYER_AMBIGUOUS, name.size()+1);
+    WorldPacket data(SMSG_CHAT_PLAYER_AMBIGUOUS, name.size() + 1);
     data << name;
     SendPacket(&data);
 }

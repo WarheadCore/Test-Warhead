@@ -74,7 +74,7 @@ namespace lfg
 
 namespace rbac
 {
-class RBACData;
+    class RBACData;
 }
 
 namespace WorldPackets
@@ -295,49 +295,49 @@ enum TutorialsFlag : uint8
 //allows to determine if next packet is safe to be processed
 class PacketFilter
 {
-public:
-    explicit PacketFilter(WorldSession* pSession) : m_pSession(pSession) { }
-    virtual ~PacketFilter() { }
+    public:
+        explicit PacketFilter(WorldSession* pSession) : m_pSession(pSession) { }
+        virtual ~PacketFilter() { }
 
-    virtual bool Process(WorldPacket* /*packet*/) { return true; }
-    virtual bool ProcessUnsafe() const { return true; }
+        virtual bool Process(WorldPacket* /*packet*/) { return true; }
+        virtual bool ProcessUnsafe() const { return true; }
 
-protected:
-    WorldSession* const m_pSession;
+    protected:
+        WorldSession* const m_pSession;
 
-private:
-    PacketFilter(PacketFilter const& right) = delete;
-    PacketFilter& operator=(PacketFilter const& right) = delete;
+    private:
+        PacketFilter(PacketFilter const& right) = delete;
+        PacketFilter& operator=(PacketFilter const& right) = delete;
 };
 //process only thread-safe packets in Map::Update()
 class MapSessionFilter : public PacketFilter
 {
-public:
-    explicit MapSessionFilter(WorldSession* pSession) : PacketFilter(pSession) { }
-    ~MapSessionFilter() { }
+    public:
+        explicit MapSessionFilter(WorldSession* pSession) : PacketFilter(pSession) { }
+        ~MapSessionFilter() { }
 
-    virtual bool Process(WorldPacket* packet) override;
-    //in Map::Update() we do not process player logout!
-    virtual bool ProcessUnsafe() const override { return false; }
+        virtual bool Process(WorldPacket* packet) override;
+        //in Map::Update() we do not process player logout!
+        virtual bool ProcessUnsafe() const override { return false; }
 };
 
 //class used to filer only thread-unsafe packets from queue
 //in order to update only be used in World::UpdateSessions()
 class WorldSessionFilter : public PacketFilter
 {
-public:
-    explicit WorldSessionFilter(WorldSession* pSession) : PacketFilter(pSession) { }
-    ~WorldSessionFilter() { }
+    public:
+        explicit WorldSessionFilter(WorldSession* pSession) : PacketFilter(pSession) { }
+        ~WorldSessionFilter() { }
 
-    virtual bool Process(WorldPacket* packet) override;
+        virtual bool Process(WorldPacket* packet) override;
 };
 
 // Proxy structure to contain data passed to callback function,
 // only to prevent bloating the parameter list
 class CharacterCreateInfo
 {
-    friend class WorldSession;
-    friend class Player;
+        friend class WorldSession;
+        friend class Player;
 
     protected:
         /// User specified variables
@@ -358,7 +358,7 @@ class CharacterCreateInfo
 
 struct CharacterRenameInfo
 {
-    friend class WorldSession;
+        friend class WorldSession;
 
     protected:
         ObjectGuid Guid;
@@ -367,8 +367,8 @@ struct CharacterRenameInfo
 
 struct CharacterCustomizeInfo : public CharacterRenameInfo
 {
-    friend class Player;
-    friend class WorldSession;
+        friend class Player;
+        friend class WorldSession;
 
     protected:
         uint8 Gender     = GENDER_NONE;
@@ -381,8 +381,8 @@ struct CharacterCustomizeInfo : public CharacterRenameInfo
 
 struct CharacterFactionChangeInfo : public CharacterCustomizeInfo
 {
-    friend class Player;
-    friend class WorldSession;
+        friend class Player;
+        friend class WorldSession;
 
     protected:
         uint8 Race = 0;
@@ -415,9 +415,9 @@ class WH_GAME_API WorldSession
         void WriteMovementInfo(WorldPacket* data, MovementInfo* mi);
 
         void SendPacket(WorldPacket const* packet);
-        void SendNotification(const char *format, ...) ATTR_PRINTF(2, 3);
+        void SendNotification(const char* format, ...) ATTR_PRINTF(2, 3);
         void SendNotification(uint32 string_id, ...);
-        void SendPetNameInvalid(uint32 error, std::string const& name, DeclinedName *declinedName);
+        void SendPetNameInvalid(uint32 error, std::string const& name, DeclinedName* declinedName);
         void SendPartyResult(PartyOperation operation, std::string const& member, PartyResult res, uint32 val = 0);
         void SendAreaTriggerMessage(char const* Text, ...) ATTR_PRINTF(2, 3);
         void SendSetPhaseShift(uint32 phaseShift);
@@ -1128,11 +1128,11 @@ class WH_GAME_API WorldSession
         AsyncCallbackProcessor<TransactionCallback> _transactionCallbacks;
         AsyncCallbackProcessor<SQLQueryHolderCallback> _queryHolderProcessor;
 
-    friend class World;
+        friend class World;
     protected:
         class DosProtection
         {
-            friend class World;
+                friend class World;
             public:
                 DosProtection(WorldSession* s);
                 bool EvaluateOpcode(WorldPacket& p, time_t time) const;
@@ -1165,7 +1165,7 @@ class WH_GAME_API WorldSession
         bool CanUseBank(ObjectGuid bankerGUID = ObjectGuid::Empty) const;
 
         // logging helper
-        void LogUnexpectedOpcode(WorldPacket* packet, char const* status, const char *reason);
+        void LogUnexpectedOpcode(WorldPacket* packet, char const* status, const char* reason);
         void LogUnprocessedTail(WorldPacket* packet);
 
         // EnumData helpers
@@ -1182,7 +1182,7 @@ class WH_GAME_API WorldSession
         Player* _player;
         std::shared_ptr<WorldSocket> m_Socket;
         std::string m_Address;                              // Current Remote Address
-     // std::string m_LAddress;                             // Last Attempted Remote Adress - we can not set attempted ip for a non-existing session!
+        // std::string m_LAddress;                             // Last Attempted Remote Adress - we can not set attempted ip for a non-existing session!
 
         AccountTypes _security;
         uint32 _accountId;

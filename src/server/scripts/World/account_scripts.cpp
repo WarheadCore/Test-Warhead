@@ -23,18 +23,18 @@
 
 class LoginMuteTime : public AccountScript
 {
-public:
-    LoginMuteTime() : AccountScript("LoginMuteTime") { }
+    public:
+        LoginMuteTime() : AccountScript("LoginMuteTime") { }
 
-    void OnAccountLogin(uint32 accountID) override
-    {
-        sMute->LoginAccount(accountID);
-    }
+        void OnAccountLogin(uint32 accountID) override
+        {
+            sMute->LoginAccount(accountID);
+        }
 
-    void OnAccountLogout(uint32 accountID) override
-    {
-        sMute->DeleteMuteTime(accountID, false);
-    }
+        void OnAccountLogout(uint32 accountID) override
+        {
+            sMute->DeleteMuteTime(accountID, false);
+        }
 };
 
 void AddSC_account_script()

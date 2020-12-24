@@ -219,7 +219,7 @@ bool WorldSocket::ReadHeaderHandler()
     if (!header->IsValidSize() || !header->IsValidOpcode())
     {
         LOG_ERROR("network", "WorldSocket::ReadHeaderHandler(): client %s sent malformed packet (size: %hu, cmd: %u)",
-            GetRemoteIpAddress().to_string().c_str(), header->size, header->cmd);
+                  GetRemoteIpAddress().to_string().c_str(), header->size, header->cmd);
         return false;
     }
 
@@ -388,13 +388,11 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
 void WorldSocket::LogOpcodeText(OpcodeClient opcode, std::unique_lock<std::mutex> const& guard) const
 {
     if (!guard)
-    {
         LOG_TRACE("network.opcode", "C->S: %s %s", GetRemoteIpAddress().to_string().c_str(), GetOpcodeNameForLogging(opcode).c_str());
-    }
     else
     {
         LOG_TRACE("network.opcode", "C->S: %s %s", (_worldSession ? _worldSession->GetPlayerInfo() : GetRemoteIpAddress().to_string()).c_str(),
-            GetOpcodeNameForLogging(opcode).c_str());
+                  GetOpcodeNameForLogging(opcode).c_str());
     }
 }
 
@@ -481,7 +479,7 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
     {
         SendAuthResponseError(REALM_LIST_REALM_NOT_FOUND);
         LOG_ERROR("network", "WorldSocket::HandleAuthSession: Client %s requested connecting with realm id %u but this realm has id %u set in config.",
-            GetRemoteIpAddress().to_string().c_str(), authSession->RealmID, realm.Id.Realm);
+                  GetRemoteIpAddress().to_string().c_str(), authSession->RealmID, realm.Id.Realm);
         DelayedCloseSocket();
         return;
     }
@@ -497,7 +495,7 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
     }
 
     // Check that Key and account name are the same on client and server
-    uint8 t[4] = { 0x00,0x00,0x00,0x00 };
+    uint8 t[4] = { 0x00, 0x00, 0x00, 0x00 };
 
     Warhead::Crypto::SHA1 sha;
     sha.UpdateData(authSession->Account);
@@ -580,7 +578,7 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
 
     _authed = true;
     _worldSession = new WorldSession(account.Id, std::move(authSession->Account), shared_from_this(), account.Security,
-        account.Expansion, account.Locale, account.Recruiter, account.IsRectuiter);
+                                     account.Expansion, account.Locale, account.Recruiter, account.IsRectuiter);
     _worldSession->ReadAddonsInfo(authSession->AddonInfo);
 
     // Initialize Warden system only if it is enabled by config
@@ -619,9 +617,7 @@ bool WorldSocket::HandlePing(WorldPacket& recvPacket)
     recvPacket >> latency;
 
     if (_LastPingTime == steady_clock::time_point())
-    {
         _LastPingTime = steady_clock::now();
-    }
     else
     {
         steady_clock::time_point now = steady_clock::now();
@@ -643,7 +639,7 @@ bool WorldSocket::HandlePing(WorldPacket& recvPacket)
                 if (_worldSession && !_worldSession->HasPermission(rbac::RBAC_PERM_SKIP_CHECK_OVERSPEED_PING))
                 {
                     LOG_ERROR("network", "WorldSocket::HandlePing: %s kicked for over-speed pings (address: %s)",
-                        _worldSession->GetPlayerInfo().c_str(), GetRemoteIpAddress().to_string().c_str());
+                              _worldSession->GetPlayerInfo().c_str(), GetRemoteIpAddress().to_string().c_str());
 
                     return false;
                 }
