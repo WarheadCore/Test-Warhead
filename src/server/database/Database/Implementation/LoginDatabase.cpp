@@ -119,7 +119,7 @@ void LoginDatabaseConnection::DoPrepareStatements()
     PrepareStatement(LOGIN_SEL_ACCOUNT_BANNED_INFO, "SELECT `bandate`, `unbandate`, `bannedby`, `banreason` FROM `account_banned` WHERE `id` = ? AND `active` = 1 AND UNIX_TIMESTAMP() <= `unbandate` ORDER BY `unbandate` DESC LIMIT 1;", CONNECTION_SYNCH);
     PrepareStatement(LOGIN_INS_ACCOUNT_AUTO_BANNED, "INSERT INTO account_banned (id, bandate, unbandate, bannedby, banreason, active) VALUES (?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+?, 'Warhead Auth', 'Failed login autoban', 1)", CONNECTION_ASYNC);
     PrepareStatement(LOGIN_DEL_ACCOUNT_BANNED, "DELETE FROM account_banned WHERE id = ?", CONNECTION_ASYNC);
-    
+
     // Mute system
     PrepareStatement(LOGIN_INS_ACCOUNT_MUTE, "INSERT INTO `account_muted` (`accountid`, `mutedate`, `mutetime`, `mutedby`, `mutereason`, `active`) VALUES (?, ?, ?, ?, ?, 1)", CONNECTION_ASYNC);
     PrepareStatement(LOGIN_UPD_ACCOUNT_MUTE, "UPDATE `account_muted` SET `mutedate` = ?, `mutetime` = ? WHERE `accountid` = ?", CONNECTION_ASYNC);
