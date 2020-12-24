@@ -5,4 +5,3 @@ ALTER TABLE `account_muted` CHANGE COLUMN `guid` `accountid` int (10) UNSIGNED N
                             USING BTREE;
 
 ALTER TABLE `account` DROP COLUMN `mutetime`, DROP COLUMN `mutereason`, DROP COLUMN `muteby`;
-
