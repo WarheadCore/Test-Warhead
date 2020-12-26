@@ -1727,7 +1727,7 @@ public:
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
         if (muteTime)
-            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime, TimeFormat::ShortText).c_str(), muteLeft.c_str(), muteBy.c_str());
+            handler->PSendSysMessage(LANG_PINFO_MUTED, muteLeft.c_str(), secsToTimeString(muteTime, TimeFormat::ShortText).c_str(), muteBy.c_str(), muteReason.c_str());
 
         // Output V. LANG_PINFO_ACC_ACCOUNT
         handler->PSendSysMessage(LANG_PINFO_ACC_ACCOUNT, userName.c_str(), accId, security);
