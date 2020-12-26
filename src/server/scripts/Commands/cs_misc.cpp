@@ -1642,10 +1642,46 @@ public:
         // Creates a chat link to the character. Returns nameLink
         std::string nameLink = handler->playerLink(targetName);
 
-        // Ban section Returns banType, banTime, bannedBy, banreason
-        auto banInfoIP = sBan->GetBanInfoIP(targetName);
-        auto banInfoAcc = sBan->GetBanInfoAccount(targetName);
-        auto banInfoChar = sBan->GetBanInfoCharacter(targetName);
+        // Ban section. Returns banType, banLeft, banTime, bannedBy, banreason
+        auto ShowBanInfo = [&]()
+        {
+            auto const& banInfoIP = sBan->GetBanInfoIP(targetName);
+            auto const& banInfoAcc = sBan->GetBanInfoAccount(targetName);
+            auto const& banInfoChar = sBan->GetBanInfoCharacter(targetName);
+
+            if (!banInfoIP && !banInfoAcc && !banInfoChar)
+                return;
+
+            auto GetTimers = [&](uint32 const& _banDate, uint32 const& _unBanDate) -> std::tuple<const char*, const char*>
+            {
+                bool isPermanently = _banDate == _unBanDate;
+                auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText).c_str();
+                auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText).c_str();
+
+                return std::make_tuple(leftTime, banTime);
+            };
+
+            if (banInfoIP)
+            {
+                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoIP;
+                auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
+                handler->PSendSysMessage(LANG_PINFO_BANNED_IP, leftTime, banTime, _author.c_str(), _reason.c_str());
+            }
+
+            if (banInfoAcc)
+            {
+                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoAcc;
+                auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
+                handler->PSendSysMessage(LANG_PINFO_BANNED_ACCOUNT, leftTime, banTime, _author.c_str(), _reason.c_str());
+            }
+
+            if (banInfoChar)
+            {
+                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoChar;
+                auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
+                handler->PSendSysMessage(LANG_PINFO_BANNED_CHARACTER, leftTime, banTime, _author.c_str(), _reason.c_str());
+            }
+        };
 
         // Can be used to query data from Characters database
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PINFO_XP);
@@ -1687,44 +1723,7 @@ public:
             handler->PSendSysMessage(LANG_PINFO_GM_ACTIVE);
 
         // Output III. LANG_PINFO_BANNED if ban exists and is applied
-        if (banInfoIP || banInfoAcc || banInfoChar)
-        {
-            if (banInfoIP)
-            {
-                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoIP;
-
-                bool isPermanently = _banDate == _unBanDate;
-
-                auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText).c_str();
-                auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText).c_str();
-
-                handler->PSendSysMessage(LANG_PINFO_BANNED_IP, leftTime, banTime, _author.c_str(), _reason.c_str());
-            }
-
-            if (banInfoAcc)
-            {
-                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoAcc;
-
-                bool isPermanently = _banDate == _unBanDate;
-
-                auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText).c_str();
-                auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText).c_str();
-
-                handler->PSendSysMessage(LANG_PINFO_BANNED_ACCOUNT, leftTime, banTime, _author.c_str(), _reason.c_str());
-            }
-
-            if (banInfoChar)
-            {
-                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoChar;
-
-                bool isPermanently = _banDate == _unBanDate;
-
-                auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText).c_str();
-                auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText).c_str();
-
-                handler->PSendSysMessage(LANG_PINFO_BANNED_CHARACTER, leftTime, banTime, _author.c_str(), _reason.c_str());
-            }
-        }
+        ShowBanInfo();
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
         if (muteTime)
@@ -1765,9 +1764,9 @@ public:
             handler->PSendSysMessage(LANG_PINFO_CHR_PHASE, phase);
 
         // Output XIV. LANG_PINFO_CHR_MONEY
-        uint32 gold                   = money / GOLD;
-        uint32 silv                   = (money % GOLD) / SILVER;
-        uint32 copp                   = (money % GOLD) % SILVER;
+        uint32 gold = money / GOLD;
+        uint32 silv = (money % GOLD) / SILVER;
+        uint32 copp = (money % GOLD) % SILVER;
         handler->PSendSysMessage(LANG_PINFO_CHR_MONEY, gold, silv, copp);
 
         // Position data
@@ -1798,8 +1797,10 @@ public:
         {
             handler->PSendSysMessage(LANG_PINFO_CHR_GUILD, guildName.c_str(), guildId);
             handler->PSendSysMessage(LANG_PINFO_CHR_GUILD_RANK, guildRank.c_str(), uint32(guildRankId));
+
             if (!note.empty())
                 handler->PSendSysMessage(LANG_PINFO_CHR_GUILD_NOTE, note.c_str());
+
             if (!officeNote.empty())
                 handler->PSendSysMessage(LANG_PINFO_CHR_GUILD_ONOTE, officeNote.c_str());
         }
