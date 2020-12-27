@@ -90,4 +90,3 @@ SET
     `content_loc8` = 'Женщина'
 WHERE
     `entry` = 856;
-
