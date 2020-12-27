@@ -1652,11 +1652,11 @@ public:
             if (!banInfoIP && !banInfoAcc && !banInfoChar)
                 return;
 
-            auto GetTimers = [&](uint32 const& _banDate, uint32 const& _unBanDate) -> std::tuple<const char*, const char*>
+            auto GetTimers = [&](uint32 const& _banDate, uint32 const& _unBanDate) -> std::tuple<std::string, std::string>
             {
                 bool isPermanently = _banDate == _unBanDate;
-                auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText).c_str();
-                auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText).c_str();
+                auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText);
+                auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText);
 
                 return std::make_tuple(leftTime, banTime);
             };
@@ -1665,21 +1665,21 @@ public:
             {
                 auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoIP;
                 auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
-                handler->PSendSysMessage(LANG_PINFO_BANNED_IP, leftTime, banTime, _author.c_str(), _reason.c_str());
+                handler->PSendSysMessage(LANG_PINFO_BANNED_IP, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
             }
 
             if (banInfoAcc)
             {
                 auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoAcc;
                 auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
-                handler->PSendSysMessage(LANG_PINFO_BANNED_ACCOUNT, leftTime, banTime, _author.c_str(), _reason.c_str());
+                handler->PSendSysMessage(LANG_PINFO_BANNED_ACCOUNT, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
             }
 
             if (banInfoChar)
             {
                 auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoChar;
                 auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
-                handler->PSendSysMessage(LANG_PINFO_BANNED_CHARACTER, leftTime, banTime, _author.c_str(), _reason.c_str());
+                handler->PSendSysMessage(LANG_PINFO_BANNED_CHARACTER, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
             }
         };
 
