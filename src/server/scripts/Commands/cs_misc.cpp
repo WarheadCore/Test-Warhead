@@ -1414,6 +1414,46 @@ public:
         return true;
     }
 
+    static void ShowBanInfo(ChatHandler* handler, std::string_view targetName)
+    {
+        auto const& banInfoIP = sBan->GetBanInfoIP(targetName);
+        auto const& banInfoAcc = sBan->GetBanInfoAccount(targetName);
+        auto const& banInfoChar = sBan->GetBanInfoCharacter(targetName);
+
+        if (!banInfoIP && !banInfoAcc && !banInfoChar)
+            return;
+
+        auto GetTimers = [&](uint32 const& _banDate, uint32 const& _unBanDate)
+        {
+            bool isPermanently = _banDate == _unBanDate;
+            auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText);
+            auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText);
+
+            return std::make_tuple(leftTime, banTime);
+        };
+
+        if (banInfoIP)
+        {
+            auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoIP;
+            auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
+            handler->PSendSysMessage(LANG_PINFO_BANNED_IP, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
+        }
+
+        if (banInfoAcc)
+        {
+            auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoAcc;
+            auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
+            handler->PSendSysMessage(LANG_PINFO_BANNED_ACCOUNT, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
+        }
+
+        if (banInfoChar)
+        {
+            auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoChar;
+            auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
+            handler->PSendSysMessage(LANG_PINFO_BANNED_CHARACTER, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
+        }
+    }
+    
     /**
     * @name Player command: .pinfo
     * @date 05/19/2013
@@ -1640,48 +1680,7 @@ public:
         }
 
         // Creates a chat link to the character. Returns nameLink
-        std::string nameLink = handler->playerLink(targetName);
-
-        // Ban section. Returns banType, banLeft, banTime, bannedBy, banreason
-        auto ShowBanInfo = [&]()
-        {
-            auto const& banInfoIP = sBan->GetBanInfoIP(targetName);
-            auto const& banInfoAcc = sBan->GetBanInfoAccount(targetName);
-            auto const& banInfoChar = sBan->GetBanInfoCharacter(targetName);
-
-            if (!banInfoIP && !banInfoAcc && !banInfoChar)
-                return;
-
-            auto GetTimers = [&](uint32 const& _banDate, uint32 const& _unBanDate) -> std::tuple<std::string, std::string>
-            {
-                bool isPermanently = _banDate == _unBanDate;
-                auto leftTime = isPermanently ? "--" : secsToTimeString(_unBanDate - GameTime::GetGameTime(), TimeFormat::ShortText);
-                auto banTime = isPermanently ? handler->GetWarheadString(LANG_PERMANENTLY) : secsToTimeString(_unBanDate - _banDate, TimeFormat::ShortText);
-
-                return std::make_tuple(leftTime, banTime);
-            };
-
-            if (banInfoIP)
-            {
-                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoIP;
-                auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
-                handler->PSendSysMessage(LANG_PINFO_BANNED_IP, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
-            }
-
-            if (banInfoAcc)
-            {
-                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoAcc;
-                auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
-                handler->PSendSysMessage(LANG_PINFO_BANNED_ACCOUNT, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
-            }
-
-            if (banInfoChar)
-            {
-                auto const& [_banDate, _unBanDate, _author, _reason] = *banInfoChar;
-                auto const& [leftTime, banTime] = GetTimers(_banDate, _unBanDate);
-                handler->PSendSysMessage(LANG_PINFO_BANNED_CHARACTER, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
-            }
-        };
+        std::string nameLink = handler->playerLink(targetName);        
 
         // Can be used to query data from Characters database
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PINFO_XP);
@@ -1723,7 +1722,7 @@ public:
             handler->PSendSysMessage(LANG_PINFO_GM_ACTIVE);
 
         // Output III. LANG_PINFO_BANNED if ban exists and is applied
-        ShowBanInfo();
+        ShowBanInfo(targetName);
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
         if (muteTime)
@@ -1826,7 +1825,7 @@ public:
 
         return true;
     }
-
+    
     static bool HandleRespawnCommand(ChatHandler* handler)
     {
         Player* player = handler->GetSession()->GetPlayer();
