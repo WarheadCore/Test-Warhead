@@ -1453,7 +1453,7 @@ public:
             handler->PSendSysMessage(LANG_PINFO_BANNED_CHARACTER, leftTime.c_str(), banTime.c_str(), _author.c_str(), _reason.c_str());
         }
     }
-    
+
     /**
     * @name Player command: .pinfo
     * @date 05/19/2013
@@ -1680,7 +1680,7 @@ public:
         }
 
         // Creates a chat link to the character. Returns nameLink
-        std::string nameLink = handler->playerLink(targetName);        
+        std::string nameLink = handler->playerLink(targetName);
 
         // Can be used to query data from Characters database
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PINFO_XP);
