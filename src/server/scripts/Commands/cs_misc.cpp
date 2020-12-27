@@ -1722,7 +1722,7 @@ public:
             handler->PSendSysMessage(LANG_PINFO_GM_ACTIVE);
 
         // Output III. LANG_PINFO_BANNED if ban exists and is applied
-        ShowBanInfo(targetName);
+        ShowBanInfo(handler, targetName);
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
         if (muteTime)
