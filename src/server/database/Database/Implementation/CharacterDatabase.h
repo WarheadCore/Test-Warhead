@@ -516,16 +516,16 @@ enum CharacterDatabaseStatements : uint32
 
 class WH_DATABASE_API CharacterDatabaseConnection : public MySQLConnection
 {
-public:
-    typedef CharacterDatabaseStatements Statements;
+    public:
+        typedef CharacterDatabaseStatements Statements;
 
-    //- Constructors for sync and async connections
-    CharacterDatabaseConnection(MySQLConnectionInfo& connInfo);
-    CharacterDatabaseConnection(ProducerConsumerQueue<SQLOperation*>* q, MySQLConnectionInfo& connInfo);
-    ~CharacterDatabaseConnection();
+        //- Constructors for sync and async connections
+        CharacterDatabaseConnection(MySQLConnectionInfo& connInfo);
+        CharacterDatabaseConnection(ProducerConsumerQueue<SQLOperation*>* q, MySQLConnectionInfo& connInfo);
+        ~CharacterDatabaseConnection();
 
-    //- Loads database type specific prepared statements
-    void DoPrepareStatements() override;
+        //- Loads database type specific prepared statements
+        void DoPrepareStatements() override;
 };
 
 #endif
