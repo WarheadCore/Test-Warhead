@@ -1825,7 +1825,7 @@ public:
 
         return true;
     }
-    
+
     static bool HandleRespawnCommand(ChatHandler* handler)
     {
         Player* player = handler->GetSession()->GetPlayer();
