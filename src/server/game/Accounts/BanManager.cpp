@@ -268,7 +268,7 @@ bool BanManager::RemoveBanCharacter(std::string const& characterName)
 
 Optional<std::tuple<uint32, uint32, std::string, std::string>> BanManager::GetBanInfoIP(std::string_view characterName)
 {
-    uint32 accountID = sCharacterCache->GetCharacterAccountIdByName(characterName);
+    uint32 accountID = sCharacterCache->GetCharacterAccountIdByName(std::string(characterName));
     if (!accountID)
         return std::nullopt;
 
@@ -286,7 +286,7 @@ Optional<std::tuple<uint32, uint32, std::string, std::string>> BanManager::GetBa
 
 Optional<std::tuple<uint32, uint32, std::string, std::string>> BanManager::GetBanInfoAccount(std::string_view characterName)
 {
-    uint32 accountID = sCharacterCache->GetCharacterAccountIdByName(characterName);
+    uint32 accountID = sCharacterCache->GetCharacterAccountIdByName(std::string(characterName));
     if (!accountID)
         return std::nullopt;
 
@@ -308,7 +308,7 @@ Optional<std::tuple<uint32, uint32, std::string, std::string>> BanManager::GetBa
         return std::nullopt;
 
     CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_BAN_INFO_BY_NAME);
-    stmt->setString(0, characterName);
+    stmt->setStringView(0, characterName);
 
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
