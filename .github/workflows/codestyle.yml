@@ -21,9 +21,10 @@ jobs:
       with:
         persist-credentials: false
     - name: Check ./src
-      run: |
-        cd ./src
-        find -name '*.cpp' -or -name '*.h' -print0 | xargs -r0 sed -e 's/[[:blank:]]\+$//' -i
+      run:  / 
+      cd ./src
+      find -name '*.cpp' -print0 | xargs -r0 sed -e 's/[[:blank:]]\+$//' -i
+      find -name '*.h' -print0 | xargs -r0 sed -e 's/[[:blank:]]\+$//' -i
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
