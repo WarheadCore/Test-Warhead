@@ -50,7 +50,7 @@ endfunction()
 # CopyModuleConfig("warhead.conf.dist")
 #
 
-function(CopyModuleConfig current_dir filename)
+function(CopyModuleConfig configDir filename)
   set(postPath "configs/modules")
 
   if(WIN32)
@@ -60,21 +60,21 @@ function(CopyModuleConfig current_dir filename)
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/${postPath}")
       add_custom_command(TARGET worldserver
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy "${current_dir}/${filename}" "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/${postPath}")
+        COMMAND ${CMAKE_COMMAND} -E copy "${configDir}/${filename}" "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/${postPath}")
     elseif(MINGW)
       add_custom_command(TARGET worldserver
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/${postPath}")
       add_custom_command(TARGET worldserver
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy "${current_dir}/${filename} ${CMAKE_BINARY_DIR}/bin/${postPath}")
+        COMMAND ${CMAKE_COMMAND} -E copy "${configDir}/${filename} ${CMAKE_BINARY_DIR}/bin/${postPath}")
     endif()
   endif()
 
   if(UNIX)
-    install(FILES "${current_dir}/${filename}" DESTINATION "${CONF_DIR}/modules")
+    install(FILES "${configDir}/${filename}" DESTINATION "${CONF_DIR}/modules")
   elseif(WIN32)
-    install(FILES "${current_dir}/${filename}" DESTINATION "${CMAKE_INSTALL_PREFIX}/${postPath}")
+    install(FILES "${configDir}/${filename}" DESTINATION "${CMAKE_INSTALL_PREFIX}/${postPath}")
   endif()
   unset(postPath)
 endfunction()
@@ -84,15 +84,15 @@ endfunction()
 # CollectModulesConfig(${CMAKE_CURRENT_SOURCE_DIR})
 #
 
-function(CollectModulesConfig current_dir)
+function(CollectModulesConfig configDir)
   file(GLOB MODULE_CONFIG_LIST RELATIVE
-    ${current_dir}
-    ${current_dir}/*.conf.dist)
+    ${configDir}
+    ${configDir}/*.conf.dist)
 
   message(STATUS "* Modules config list:")
 
   foreach(configFileName ${MODULE_CONFIG_LIST})
-    CopyModuleConfig(${current_dir} ${configFileName})
+    CopyModuleConfig(${configDir} ${configFileName})
     set(CONFIG_LIST ${CONFIG_LIST}${configFileName},)
     message(STATUS "  |- ${configFileName}")
   endforeach()
