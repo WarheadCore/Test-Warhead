@@ -12,10 +12,10 @@
 
 #
 # Use it like:
-# ConfigInstall(worldserver)
+# CopyDefaultConfig(worldserver)
 #
 
-function(ConfigInstall servertype filename)
+function(CopyDefaultConfig servertype)
   if(COPY_CONF AND WIN32)
     if("${CMAKE_MAKE_PROGRAM}" MATCHES "MSBuild")
       add_custom_command(TARGET ${servertype}
@@ -23,25 +23,80 @@ function(ConfigInstall servertype filename)
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs")
       add_custom_command(TARGET ${servertype}
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${filename}.dist" "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs")
+        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${servertype}.conf.dist" "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs")
     elseif(MINGW)
       add_custom_command(TARGET ${servertype}
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/configs")
       add_custom_command(TARGET ${servertype}
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${filename}.dist ${CMAKE_BINARY_DIR}/bin/configs")
+        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${servertype}.conf.dist ${CMAKE_BINARY_DIR}/bin/configs")
     endif()
   endif()
 
   if(UNIX)
     if(COPY_CONF)
-      install(FILES "${filename}.dist" DESTINATION "${CONF_DIR}")
+      install(FILES "${filename}.conf.dist" DESTINATION "${CONF_DIR}")
     endif()
   elseif(WIN32)
     if(COPY_CONF)
-      install(FILES "${filename}.dist" DESTINATION "${CMAKE_INSTALL_PREFIX}/configs")
+      install(FILES "${filename}.conf.dist" DESTINATION "${CMAKE_INSTALL_PREFIX}/configs")
     endif()
   endif()
 endfunction()
 
+#
+# Use it like:
+# CopyModuleConfig("warhead.conf.dist")
+#
+
+function(CopyModuleConfig current_dir filename)
+  set(postPath "configs/modules")
+
+  if(WIN32)
+    if("${CMAKE_MAKE_PROGRAM}" MATCHES "MSBuild")
+      add_custom_command(TARGET worldserver
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/${postPath}")
+      add_custom_command(TARGET worldserver
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${current_dir}/${filename}" "${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/${postPath}")
+    elseif(MINGW)
+      add_custom_command(TARGET worldserver
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/${postPath}")
+      add_custom_command(TARGET worldserver
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${current_dir}/${filename} ${CMAKE_BINARY_DIR}/bin/${postPath}")
+    endif()
+  endif()
+
+  if(UNIX)
+    install(FILES "${filename}" DESTINATION "${CONF_DIR}")
+  elseif(WIN32)
+    install(FILES "${filename}" DESTINATION "${CMAKE_INSTALL_PREFIX}/${postPath}")
+  endif()
+  unset(postPath)
+endfunction()
+
+#
+# Use it like:
+# CollectModulesConfig(${CMAKE_CURRENT_SOURCE_DIR})
+#
+
+function(CollectModulesConfig current_dir)
+  file(GLOB MODULE_CONFIG_LIST RELATIVE
+    ${current_dir}
+    ${current_dir}/*.conf.dist)
+
+  message(STATUS "* Modules config list:")
+  
+  foreach(configFileName ${MODULE_CONFIG_LIST})
+    CopyModuleConfig(${current_dir} ${configFileName})
+    set(CONFIG_LIST ${CONFIG_LIST}${configFileName},)
+    message(STATUS "  |- ${configFileName}")
+  endforeach()
+
+  message("")
+  add_definitions(-DWH_MODULE_CONFIG_LIST=$<1:"${CONFIG_LIST}">)
+endfunction()
