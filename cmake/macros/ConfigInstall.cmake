@@ -90,7 +90,7 @@ function(CollectModulesConfig current_dir)
     ${current_dir}/*.conf.dist)
 
   message(STATUS "* Modules config list:")
-  
+
   foreach(configFileName ${MODULE_CONFIG_LIST})
     CopyModuleConfig(${current_dir} ${configFileName})
     set(CONFIG_LIST ${CONFIG_LIST}${configFileName},)
