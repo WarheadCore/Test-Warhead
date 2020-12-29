@@ -18,7 +18,7 @@
 #include "Banner.h"
 #include "GitRevision.h"
 #include "StringFormat.h"
- 
+
 void Warhead::Banner::Show(char const* applicationName, void(*log)(char const* text), void(*logExtraInfo)())
 {
     log(Warhead::StringFormat("%s (%s)", GitRevision::GetFullVersion(), applicationName).c_str());
