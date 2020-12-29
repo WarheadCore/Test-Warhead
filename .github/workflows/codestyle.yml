@@ -30,7 +30,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git fetch --unshallow origin ${BRANCH}
         git add -A .
-        git commit -am "Del w" -m "SHA: ${GITHUB_SHA}" || true
+        git commit -am "Del w" || true
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
