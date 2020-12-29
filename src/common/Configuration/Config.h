@@ -24,38 +24,38 @@
 
 class WH_COMMON_API ConfigMgr
 {
-    ConfigMgr() = default;
-    ConfigMgr(ConfigMgr const&) = delete;
-    ConfigMgr& operator=(ConfigMgr const&) = delete;
-    ~ConfigMgr() = default;
+        ConfigMgr() = default;
+        ConfigMgr(ConfigMgr const&) = delete;
+        ConfigMgr& operator=(ConfigMgr const&) = delete;
+        ~ConfigMgr() = default;
 
-public:
-    bool LoadAppConfigs();
-    bool LoadModulesConfigs();
-    void Configure(std::string const& initFileName, std::vector<std::string> args, std::string const& modulesConfigList = "");
+    public:
+        bool LoadAppConfigs();
+        bool LoadModulesConfigs();
+        void Configure(std::string const& initFileName, std::vector<std::string> args, std::string const& modulesConfigList = "");
 
-    static ConfigMgr* instance();
+        static ConfigMgr* instance();
 
-    bool Reload();
+        bool Reload();
 
-    std::string GetStringDefault(std::string const& name, const std::string& def, bool quiet = false) const;
-    bool GetBoolDefault(std::string const& name, bool def, bool quiet = false) const;
-    int GetIntDefault(std::string const& name, int def, bool quiet = false) const;
-    float GetFloatDefault(std::string const& name, float def, bool quiet = false) const;
+        std::string GetStringDefault(std::string const& name, const std::string& def, bool quiet = false) const;
+        bool GetBoolDefault(std::string const& name, bool def, bool quiet = false) const;
+        int GetIntDefault(std::string const& name, int def, bool quiet = false) const;
+        float GetFloatDefault(std::string const& name, float def, bool quiet = false) const;
 
-    std::string const& GetFilename();
-    std::string const GetConfigPath();
-    std::vector<std::string> const& GetArguments() const;
-    std::vector<std::string> GetKeysByString(std::string const& name);
+        std::string const& GetFilename();
+        std::string const GetConfigPath();
+        std::vector<std::string> const& GetArguments() const;
+        std::vector<std::string> GetKeysByString(std::string const& name);
 
-private:
-    /// Method used only for loading main configuration files (authserver.conf and worldserver.conf)
-    bool LoadInitial(std::string const& file, std::string& error);
-    bool LoadAdditionalFile(std::string file, std::string& error);
+    private:
+        /// Method used only for loading main configuration files (authserver.conf and worldserver.conf)
+        bool LoadInitial(std::string const& file, std::string& error);
+        bool LoadAdditionalFile(std::string file, std::string& error);
 
 
-    template<class T>
-    T GetValueDefault(std::string const& name, T def, bool quiet) const;
+        template<class T>
+        T GetValueDefault(std::string const& name, T def, bool quiet) const;
 };
 
 #define sConfigMgr ConfigMgr::instance()
