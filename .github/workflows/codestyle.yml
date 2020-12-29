@@ -14,8 +14,7 @@ jobs:
       - name: Check core codestyle
         run: source ./apps/ci/ci-codestyle.sh
 
-jobs:
-  build:
+  push-changes:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
