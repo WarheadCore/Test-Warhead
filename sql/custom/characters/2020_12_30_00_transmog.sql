@@ -25,4 +25,3 @@ CREATE TABLE `custom_transmogrification_sets` (
     PRIMARY KEY (`Owner`, `PresetID`)
     USING BTREE) ENGINE = InnoDB CHARACTER
 SET = utf8 COLLATE = utf8_general_ci COMMENT = '6_1' ROW_FORMAT = Dynamic;
-
