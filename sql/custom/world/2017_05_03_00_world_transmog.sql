@@ -1,5 +1,7 @@
 -- String module
-DELETE FROM `string_module` WHERE `ModuleName` = 'mod-transmogrification';
+DELETE FROM `string_module`
+WHERE `ModuleName` = 'mod-transmogrification';
+
 INSERT INTO `string_module` (`ModuleName`, `ID`, `Locale`, `Text`)
         VALUES
             -- Slot name enUS
@@ -14,16 +16,23 @@ INSERT INTO `string_module` (`ModuleName`, `ID`, `Locale`, `Text`)
             ('mod-transmogrification', 30, 'ruRU', 'Предмет изменён'), ('mod-transmogrification', 31, 'ruRU', 'Пустой слот'), ('mod-transmogrification', 32, 'ruRU', 'Неверно выбранный предмет'), ('mod-transmogrification', 33, 'ruRU', 'Изначальный предмет не найден'), ('mod-transmogrification', 34, 'ruRU', 'Выбранный предмет не найден'), ('mod-transmogrification', 35, 'ruRU', 'Выбранный предмет неверный'), ('mod-transmogrification', 36, 'ruRU', 'Вам не хватает золота'), ('mod-transmogrification', 37, 'ruRU', 'Вам не хватает токенов'), ('mod-transmogrification', 38, 'ruRU', 'Трансмогрификация удалена'), ('mod-transmogrification', 39, 'ruRU', 'Трансмогрификации не найдены'), ('mod-transmogrification', 40, 'ruRU', 'Введёное имя некорректно'),
             -- Strings enUS
             ('mod-transmogrification', 30, 'enUS', 'Item transmogrified'), ('mod-transmogrification', 31, 'enUS', 'Equipment slot is empty'), ('mod-transmogrification', 32, 'enUS', 'Invalid source item selected'), ('mod-transmogrification', 33, 'enUS', 'Source item does not exist'), ('mod-transmogrification', 34, 'enUS', 'Destination item does not exist'), ('mod-transmogrification', 35, 'enUS', 'Selected items are invalid'), ('mod-transmogrification', 36, 'enUS', 'Not enough money'), ('mod-transmogrification', 37, 'enUS', 'You don\'t have enough tokens'), ('mod-transmogrification', 38, 'enUS', 'Transmogrifications removed'), ('mod-transmogrification', 39, 'enUS', 'There are no transmogrifications'), ('mod-transmogrification', 40, 'enUS', 'Invalid name inserted');
-
 -- Text
+
 SET @TEXT_ID := 65000;
-REPLACE INTO `npc_text` (`ID`, `text0_0`) VALUES
-(@TEXT_ID, 'Transmogrification allows you to change how your items look like without changing the stats of the items.\r\nItems used in transmogrification are no longer refundable, tradeable and are bound to you.\r\nUpdating a menu updates the view and prices.\r\n\r\nNot everything can be transmogrified with eachother.\r\nRestrictions include but are not limited to:\r\nOnly armor and weapons can be transmogrified\r\nGuns, bows and crossbows can be transmogrified with eachother\r\nFishing poles can not be transmogrified\r\nYou must be able to equip both items used in the process.\r\n\r\nTransmogrifications stay on your items as long as you own them.\r\nIf you try to put the item in guild bank or mail it to someone else, the transmogrification is stripped.\r\n\r\nYou can also remove transmogrifications for free at the transmogrifier.'),
-(@TEXT_ID+1, 'You can save your own transmogrification sets.\r\n\r\nTo save, first you must transmogrify your equipped items.\r\nThen when you go to the set management menu and go to save set menu,\r\nall items you have transmogrified are displayed so you see what you are saving.\r\nIf you think the set is fine, you can click to save the set and name it as you wish.\r\n\r\nTo use a set you can click the saved set in the set management menu and then select use set.\r\nIf the set has a transmogrification for an item that is already transmogrified, the old transmogrification is lost.\r\nNote that same transmogrification restrictions apply when trying to use a set as in normal transmogrification.\r\n\r\nTo delete a set you can go to the set\'s menu and select delete set.');
+
+REPLACE INTO `npc_text` (`ID`,
+    `text0_0`)
+VALUES (@TEXT_ID,
+    'Transmogrification allows you to change how your items look like without changing the stats of the items.\r\nItems used in transmogrification are no longer refundable, tradeable and are bound to you.\r\nUpdating a menu updates the view and prices.\r\n\r\nNot everything can be transmogrified with eachother.\r\nRestrictions include but are not limited to:\r\nOnly armor and weapons can be transmogrified\r\nGuns, bows and crossbows can be transmogrified with eachother\r\nFishing poles can not be transmogrified\r\nYou must be able to equip both items used in the process.\r\n\r\nTransmogrifications stay on your items as long as you own them.\r\nIf you try to put the item in guild bank or mail it to someone else, the transmogrification is stripped.\r\n\r\nYou can also remove transmogrifications for free at the transmogrifier.'),
+(@TEXT_ID + 1,
+    'You can save your own transmogrification sets.\r\n\r\nTo save, first you must transmogrify your equipped items.\r\nThen when you go to the set management menu and go to save set menu,\r\nall items you have transmogrified are displayed so you see what you are saving.\r\nIf you think the set is fine, you can click to save the set and name it as you wish.\r\n\r\nTo use a set you can click the saved set in the set management menu and then select use set.\r\nIf the set has a transmogrification for an item that is already transmogrified, the old transmogrification is lost.\r\nNote that same transmogrification restrictions apply when trying to use a set as in normal transmogrification.\r\n\r\nTo delete a set you can go to the set\'s menu and select delete set.');
 
 SET @Entry := 190010;
+
 SET @Name := "Warpweaver";
 
-DELETE FROM `creature_template` WHERE `entry` = @Entry;
-INSERT INTO `creature_template` (`entry`, `modelid1`, `modelid2`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction`, `npcflag`, `scale`, `rank`, `dmgschool`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `AIName`, `MovementType`, `HoverHeight`, `RacialLeader`, `movementId`, `RegenHealth`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES
-(@Entry, 19646, 0, @Name, "Transmogrifier", NULL, 0, 80, 80, 2, 35, 1, 1, 0, 0, 2000, 0, 1, 0, 7, 138936390, 0, 0, 0, '', 0, 1, 0, 0, 1, 0, 0, 'Transmogrification_NPC');
+DELETE FROM `creature_template`
+WHERE `entry` = @Entry;
+
+INSERT INTO `creature_template` (`entry`, `modelid1`, `modelid2`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction`, `npcflag`, `scale`, `rank`, `dmgschool`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `AIName`, `MovementType`, `HoverHeight`, `RacialLeader`, `movementId`, `RegenHealth`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`)
+        VALUES (@Entry, 19646, 0, @Name, "Transmogrifier", NULL, 0, 80, 80, 2, 35, 1, 1, 0, 0, 2000, 0, 1, 0, 7, 138936390, 0, 0, 0, '', 0, 1, 0, 0, 1, 0, 0, 'Transmogrification_NPC');
