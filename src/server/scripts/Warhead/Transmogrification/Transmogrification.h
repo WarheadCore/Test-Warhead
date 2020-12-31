@@ -88,7 +88,7 @@ private:
     void SendNotification(Player* player, uint8 stringID);
     bool CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* destination, ItemTemplate const* source) const;
     bool SuitableForTransmogrification(Player* player, ItemTemplate const* proto) const;
-    std::vector<ObjectGuid> GetItemList(const Player* player) const;
+    //std::vector<ObjectGuid> GetItemList(const Player* player) const;
 
     std::string const GetGossipIcon(uint8 slot, Player* player);
     std::string const GetGossipItemName(Player* player, uint8 gossipItem);

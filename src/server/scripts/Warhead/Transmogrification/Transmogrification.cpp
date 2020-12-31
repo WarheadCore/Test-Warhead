@@ -247,13 +247,12 @@ std::string const Transmogrification::GetSlotName(Player* player, uint8 slot) co
 
 std::string Transmogrification::GetItemIcon(uint32 entry, uint32 width, uint32 height, int x, int y) const
 {
-    const ItemTemplate* temp = sObjectMgr->GetItemTemplate(entry);
-    const ItemDisplayInfoEntry* dispInfo = nullptr;
-
     std::ostringstream ss;
     ss << "|TInterface";
+
+    const ItemDisplayInfoEntry* dispInfo = nullptr;
     
-    if (temp)
+    if (const ItemTemplate* temp = sObjectMgr->GetItemTemplate(entry))
     {
         dispInfo = sItemDisplayInfoStore.LookupEntry(temp->DisplayInfoID);
         if (dispInfo)
@@ -270,8 +269,6 @@ std::string Transmogrification::GetItemIcon(uint32 entry, uint32 width, uint32 h
 
 std::string Transmogrification::GetSlotIcon(uint8 slot, uint32 width, uint32 height, int x, int y) const
 {
-    LOG_DEBUG("custom.transmog", "Transmogrification::GetSlotIcon");
-
     std::ostringstream ss;
     ss << "|TInterface/PaperDoll/";
 
@@ -350,6 +347,7 @@ std::string Transmogrification::GetItemLink(Item* item, WorldSession* session) c
             if (const ItemRandomPropertiesEntry* itemRandEntry = sItemRandomPropertiesStore.LookupEntry(itemRandPropId))
                 suffix = &itemRandEntry->Name;
         }
+
         if (suffix)
         {
             std::string_view test((*suffix)[(name != temp->Name1) ? loc_idx : DEFAULT_LOCALE]);
@@ -378,11 +376,10 @@ std::string Transmogrification::GetItemLink(Item* item, WorldSession* session) c
 std::string Transmogrification::GetItemLink(uint32 entry, WorldSession* session) const
 {
     const ItemTemplate* temp = sObjectMgr->GetItemTemplate(entry);
-    LocaleConstant loc_idx = session->GetSessionDbLocaleIndex();
 
     std::string name = temp->Name1;
     if (ItemLocale const* il = sGameLocale->GetItemLocale(entry))
-        sGameLocale->GetLocaleString(il->Name, loc_idx, name);
+        sGameLocale->GetLocaleString(il->Name, session->GetSessionDbLocaleIndex(), name);
 
     std::ostringstream oss;
     oss << "|c" << std::hex << ItemQualityColors[temp->Quality] << std::dec <<
@@ -432,7 +429,9 @@ void Transmogrification::SetFakeEntry(Player* player, uint32 newEntry, uint8 /*s
     _mapStore[player->GetGUID()][itemGUID] = newEntry;
     _dataMapStore[itemGUID] = player->GetGUID();
 
-    CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)", itemTransmogrified->GetGUID().GetCounter(), newEntry, player->GetGUID().GetCounter());
+    CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)", 
+        itemTransmogrified->GetGUID().GetCounter(), newEntry, player->GetGUID().GetCounter());
+
     UpdateItem(player, itemTransmogrified);
 }
 
@@ -533,8 +532,6 @@ void Transmogrification::Transmogrify(Player* player, ObjectGuid itemGUID, uint8
         itemTransmogrifier->ClearSoulboundTradeable(player);
         itemTransmogrifier->SetState(ITEM_CHANGED, player);
         itemTransmogrified->SetState(ITEM_CHANGED, player);
-
-        UpdateItem(player, itemTransmogrified);
     }
 
     SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_OK);
@@ -810,7 +807,7 @@ void Transmogrification::LoadConfig(bool reload)
     }
 }
 
-std::vector<ObjectGuid> Transmogrification::GetItemList(const Player* player) const
+/*std::vector<ObjectGuid> Transmogrification::GetItemList(const Player* player) const
 {
     std::vector<ObjectGuid> itemlist;
 
@@ -841,7 +838,7 @@ std::vector<ObjectGuid> Transmogrification::GetItemList(const Player* player) co
                     itemlist.push_back(pItem->GetGUID());
 
     return itemlist;
-}
+}*/
 
 void Transmogrification::OnPlayerDelete(ObjectGuid guid)
 {
