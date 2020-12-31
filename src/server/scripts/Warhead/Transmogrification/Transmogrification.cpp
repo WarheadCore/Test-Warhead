@@ -251,7 +251,7 @@ std::string Transmogrification::GetItemIcon(uint32 entry, uint32 width, uint32 h
     ss << "|TInterface";
 
     const ItemDisplayInfoEntry* dispInfo = nullptr;
-    
+
     if (const ItemTemplate* temp = sObjectMgr->GetItemTemplate(entry))
     {
         dispInfo = sItemDisplayInfoStore.LookupEntry(temp->DisplayInfoID);
@@ -429,7 +429,7 @@ void Transmogrification::SetFakeEntry(Player* player, uint32 newEntry, uint8 /*s
     _mapStore[player->GetGUID()][itemGUID] = newEntry;
     _dataMapStore[itemGUID] = player->GetGUID();
 
-    CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)", 
+    CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)",
         itemTransmogrified->GetGUID().GetCounter(), newEntry, player->GetGUID().GetCounter());
 
     UpdateItem(player, itemTransmogrified);
