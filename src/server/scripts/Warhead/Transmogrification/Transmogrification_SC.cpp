@@ -146,7 +146,7 @@ public:
 
     void OnStartup() override
     {
-        sTransmog->LoadConfig(false);
+        sTransmog->Init();
     }
 };
 
