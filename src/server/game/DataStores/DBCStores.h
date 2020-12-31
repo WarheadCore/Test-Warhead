@@ -28,7 +28,7 @@
 
 enum LocaleConstant : uint8;
 
- // temporary hack until includes are sorted out (don't want to pull in Windows.h)
+// temporary hack until includes are sorted out (don't want to pull in Windows.h)
 #ifdef GetClassName
 #undef GetClassName
 #endif
@@ -57,12 +57,12 @@ WH_GAME_API ContentLevels GetContentLevelsForMapAndZone(uint32 mapid, uint32 zon
 
 WH_GAME_API bool IsTotemCategoryCompatiableWith(uint32 itemTotemCategoryId, uint32 requiredTotemCategoryId);
 
-WH_GAME_API void Zone2MapCoordinates(float &x, float &y, uint32 zone);
-WH_GAME_API void Map2ZoneCoordinates(float &x, float &y, uint32 zone);
+WH_GAME_API void Zone2MapCoordinates(float& x, float& y, uint32 zone);
+WH_GAME_API void Map2ZoneCoordinates(float& x, float& y, uint32 zone);
 
 typedef std::map<uint32/*pair32(map, diff)*/, MapDifficulty> MapDifficultyMap;
 WH_GAME_API MapDifficulty const* GetMapDifficultyData(uint32 mapId, Difficulty difficulty);
-WH_GAME_API MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty &difficulty);
+WH_GAME_API MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty& difficulty);
 
 WH_GAME_API uint32 const* /*[MAX_TALENT_TABS]*/ GetTalentTabPages(uint8 cls);
 

@@ -259,7 +259,8 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
         if (FILE* f = fopen(dbcFilename.c_str(), "rb"))
         {
             std::ostringstream stream;
-            stream << dbcFilename << " exists, and has " << storage.GetFieldCount() << " field(s) (expected " << strlen(storage.GetFormat()) << "). Extracted file might be from wrong client version or a database-update has been forgotten. Search on forum for TCE00008 for more info.";
+            stream << dbcFilename << " exists, and has " << storage.GetFieldCount() << " field(s) (expected " << strlen(storage.GetFormat()) <<
+                   "). Extracted file might be from wrong client version or a database-update has been forgotten. Search on forum for TCE00008 for more info.";
             std::string buf = stream.str();
             errors.push_back(buf);
             fclose(f);
@@ -471,9 +472,7 @@ void LoadDBCStores(const std::string& dataPath)
     }
 
     for (PvPDifficultyEntry const* entry : sPvPDifficultyStore)
-    {
         ASSERT(entry->RangeIndex < MAX_BATTLEGROUND_BRACKETS, "PvpDifficulty bracket (%d) exceeded max allowed value (%d)", entry->RangeIndex, MAX_BATTLEGROUND_BRACKETS);
-    }
 
     for (SkillRaceClassInfoEntry const* entry : sSkillRaceClassInfoStore)
         if (sSkillLineStore.LookupEntry(entry->SkillID))
@@ -503,7 +502,7 @@ void LoadDBCStores(const std::string& dataPath)
     for (SpellDifficultyEntry const* spellDiff : sSpellDifficultyStore)
     {
         SpellDifficultyEntry newEntry;
-        memset(newEntry.DifficultySpellID, 0, 4*sizeof(uint32));
+        memset(newEntry.DifficultySpellID, 0, 4 * sizeof(uint32));
         for (uint8 x = 0; x < MAX_DIFFICULTY; ++x)
         {
             if (spellDiff->DifficultySpellID[x] <= 0 || !sSpellStore.LookupEntry(spellDiff->DifficultySpellID[x]))
@@ -652,12 +651,12 @@ void LoadDBCStores(const std::string& dataPath)
 
     // Check loaded DBC files proper version
     if (!sAreaTableStore.LookupEntry(4987)         ||       // last area added in 3.3.5a
-        !sCharTitlesStore.LookupEntry(177)         ||       // last char title added in 3.3.5a
-        !sGemPropertiesStore.LookupEntry(1629)     ||       // last gem property added in 3.3.5a
-        !sItemStore.LookupEntry(56806)             ||       // last client known item added in 3.3.5a
-        !sItemExtendedCostStore.LookupEntry(2997)  ||       // last item extended cost added in 3.3.5a
-        !sMapStore.LookupEntry(724)                ||       // last map added in 3.3.5a
-        !sSpellStore.LookupEntry(80864)            )        // last added spell in 3.3.5a
+            !sCharTitlesStore.LookupEntry(177)         ||       // last char title added in 3.3.5a
+            !sGemPropertiesStore.LookupEntry(1629)     ||       // last gem property added in 3.3.5a
+            !sItemStore.LookupEntry(56806)             ||       // last client known item added in 3.3.5a
+            !sItemExtendedCostStore.LookupEntry(2997)  ||       // last item extended cost added in 3.3.5a
+            !sMapStore.LookupEntry(724)                ||       // last map added in 3.3.5a
+            !sSpellStore.LookupEntry(80864)            )        // last added spell in 3.3.5a
     {
         LOG_ERROR("misc", "You have _outdated_ DBC files. Please extract correct versions from current using client.");
         exit(1);
@@ -698,7 +697,7 @@ TalentSpellPos const* GetTalentSpellPos(uint32 spellId)
 uint32 GetTalentSpellCost(uint32 spellId)
 {
     if (TalentSpellPos const* pos = GetTalentSpellPos(spellId))
-        return pos->rank+1;
+        return pos->rank + 1;
 
     return 0;
 }
@@ -747,9 +746,12 @@ ContentLevels GetContentLevelsForMapAndZone(uint32 mapid, uint32 zoneId)
 
     switch (mapEntry->Expansion())
     {
-        default: return CONTENT_1_60;
-        case 1:  return CONTENT_61_70;
-        case 2:  return CONTENT_71_80;
+        default:
+            return CONTENT_1_60;
+        case 1:
+            return CONTENT_61_70;
+        case 2:
+            return CONTENT_71_80;
     }
 }
 
@@ -782,8 +784,8 @@ void Zone2MapCoordinates(float& x, float& y, uint32 zone)
         return;
 
     std::swap(x, y);                                         // at client map coords swapped
-    x = x*((maEntry->LocBottom-maEntry->LocTop)/100)+maEntry->LocTop;
-    y = y*((maEntry->LocRight-maEntry->LocLeft)/100)+maEntry->LocLeft;      // client y coord from top to down
+    x = x * ((maEntry->LocBottom - maEntry->LocTop) / 100) + maEntry->LocTop;
+    y = y * ((maEntry->LocRight - maEntry->LocLeft) / 100) + maEntry->LocLeft; // client y coord from top to down
 }
 
 void Map2ZoneCoordinates(float& x, float& y, uint32 zone)
@@ -794,8 +796,8 @@ void Map2ZoneCoordinates(float& x, float& y, uint32 zone)
     if (!maEntry)
         return;
 
-    x = (x-maEntry->LocTop)/((maEntry->LocBottom-maEntry->LocTop)/100);
-    y = (y-maEntry->LocLeft)/((maEntry->LocRight-maEntry->LocLeft)/100);    // client y coord from top to down
+    x = (x - maEntry->LocTop) / ((maEntry->LocBottom - maEntry->LocTop) / 100);
+    y = (y - maEntry->LocLeft) / ((maEntry->LocRight - maEntry->LocLeft) / 100); // client y coord from top to down
     std::swap(x, y);                                         // client have map coords swapped
 }
 
@@ -805,7 +807,7 @@ MapDifficulty const* GetMapDifficultyData(uint32 mapId, Difficulty difficulty)
     return itr != sMapDifficultyMap.end() ? &itr->second : nullptr;
 }
 
-MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty &difficulty)
+MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty& difficulty)
 {
     uint32 tmpDiff = difficulty;
     MapDifficulty const* mapDiff = GetMapDifficultyData(mapId, Difficulty(tmpDiff));

@@ -169,7 +169,7 @@ enum XPColorChar : uint8;
 
 class WH_GAME_API ScriptObject
 {
-    friend class ScriptMgr;
+        friend class ScriptMgr;
 
     public:
 
@@ -310,7 +310,7 @@ class WH_GAME_API FormulaScript : public ScriptObject
 
 template<class TMap> class MapScript : public UpdatableScript<TMap>
 {
-    MapEntry const* _mapEntry;
+        MapEntry const* _mapEntry;
 
     protected:
 
@@ -462,7 +462,7 @@ class WH_GAME_API AreaTriggerScript : public ScriptObject
 
 class WH_GAME_API OnlyOnceAreaTriggerScript : public AreaTriggerScript
 {
-    using AreaTriggerScript::AreaTriggerScript;
+        using AreaTriggerScript::AreaTriggerScript;
 
     public:
         bool OnTrigger(Player* /*player*/, AreaTriggerEntry const* /*trigger*/) final override;
@@ -809,7 +809,7 @@ class WH_GAME_API GuildScript : public ScriptObject
 
         // Called when a guild member moves an item in a guild bank.
         virtual void OnItemMove(Guild* /*guild*/, Player* /*player*/, Item* /*pItem*/, bool /*isSrcBank*/, uint8 /*srcContainer*/, uint8 /*srcSlotId*/,
-            bool /*isDestBank*/, uint8 /*destContainer*/, uint8 /*destSlotId*/) { }
+                                bool /*isDestBank*/, uint8 /*destContainer*/, uint8 /*destSlotId*/) { }
 
         virtual void OnEvent(Guild* /*guild*/, uint8 /*eventType*/, ObjectGuid::LowType /*playerGuid1*/, ObjectGuid::LowType /*playerGuid2*/, uint8 /*newRank*/) { }
 
@@ -843,7 +843,7 @@ class WH_GAME_API GroupScript : public ScriptObject
 // Manages registration, loading, and execution of scripts.
 class WH_GAME_API ScriptMgr
 {
-    friend class ScriptObject;
+        friend class ScriptObject;
 
     private:
         ScriptMgr();
@@ -1084,10 +1084,10 @@ class WH_GAME_API ScriptMgr
         void OnGuildInfoChanged(Guild* guild, const std::string& newInfo);
         void OnGuildCreate(Guild* guild, Player* leader, const std::string& name);
         void OnGuildDisband(Guild* guild);
-        void OnGuildMemberWitdrawMoney(Guild* guild, Player* player, uint32 &amount, bool isRepair);
-        void OnGuildMemberDepositMoney(Guild* guild, Player* player, uint32 &amount);
+        void OnGuildMemberWitdrawMoney(Guild* guild, Player* player, uint32& amount, bool isRepair);
+        void OnGuildMemberDepositMoney(Guild* guild, Player* player, uint32& amount);
         void OnGuildItemMove(Guild* guild, Player* player, Item* pItem, bool isSrcBank, uint8 srcContainer, uint8 srcSlotId,
-            bool isDestBank, uint8 destContainer, uint8 destSlotId);
+                             bool isDestBank, uint8 destContainer, uint8 destSlotId);
         void OnGuildEvent(Guild* guild, uint8 eventType, ObjectGuid::LowType playerGuid1, ObjectGuid::LowType playerGuid2, uint8 newRank);
         void OnGuildBankEvent(Guild* guild, uint8 eventType, uint8 tabId, ObjectGuid::LowType playerGuid, uint32 itemOrMoney, uint16 itemStackCount, uint8 destTabId);
 
@@ -1128,31 +1128,31 @@ namespace Warhead::SpellScripts
 template <typename... Ts>
 class GenericSpellAndAuraScriptLoader : public SpellScriptLoader
 {
-    using SpellScriptType = typename Warhead::find_type_if_t<Warhead::SpellScripts::is_SpellScript, Ts...>;
-    using AuraScriptType = typename Warhead::find_type_if_t<Warhead::SpellScripts::is_AuraScript, Ts...>;
-    using ArgsType = typename Warhead::find_type_if_t<Warhead::is_tuple, Ts...>;
+        using SpellScriptType = typename Warhead::find_type_if_t<Warhead::SpellScripts::is_SpellScript, Ts...>;
+        using AuraScriptType = typename Warhead::find_type_if_t<Warhead::SpellScripts::is_AuraScript, Ts...>;
+        using ArgsType = typename Warhead::find_type_if_t<Warhead::is_tuple, Ts...>;
 
-public:
-    GenericSpellAndAuraScriptLoader(char const* name, ArgsType&& args) : SpellScriptLoader(name), _args(std::move(args)) { }
+    public:
+        GenericSpellAndAuraScriptLoader(char const* name, ArgsType&& args) : SpellScriptLoader(name), _args(std::move(args)) { }
 
-private:
-    SpellScript* GetSpellScript() const override
-    {
-        if constexpr (!std::is_same_v<SpellScriptType, Warhead::find_type_end>)
-            return Warhead::new_from_tuple<SpellScriptType>(_args);
-        else
-            return nullptr;
-    }
+    private:
+        SpellScript* GetSpellScript() const override
+        {
+            if constexpr (!std::is_same_v<SpellScriptType, Warhead::find_type_end>)
+                return Warhead::new_from_tuple<SpellScriptType>(_args);
+            else
+                return nullptr;
+        }
 
-    AuraScript* GetAuraScript() const override
-    {
-        if constexpr (!std::is_same_v<AuraScriptType, Warhead::find_type_end>)
-            return Warhead::new_from_tuple<AuraScriptType>(_args);
-        else
-            return nullptr;
-    }
+        AuraScript* GetAuraScript() const override
+        {
+            if constexpr (!std::is_same_v<AuraScriptType, Warhead::find_type_end>)
+                return Warhead::new_from_tuple<AuraScriptType>(_args);
+            else
+                return nullptr;
+        }
 
-    ArgsType _args;
+        ArgsType _args;
 };
 
 #define RegisterSpellScriptWithArgs(spell_script, script_name, ...) new GenericSpellAndAuraScriptLoader<spell_script, decltype(std::make_tuple(__VA_ARGS__))>(script_name, std::make_tuple(__VA_ARGS__))

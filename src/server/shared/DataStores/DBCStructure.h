@@ -665,9 +665,9 @@ struct FactionEntry
     uint32 ReputationFlags[4];                              // 14-17
     uint32 ParentFactionID;                                 // 18
     float ParentFactionMod[2];                              // 19-20 [0] Faction gains incoming rep * spilloverRateIn
-                                                            //       [1] Faction outputs rep * spilloverRateOut as spillover reputation
+    //       [1] Faction outputs rep * spilloverRateOut as spillover reputation
     uint32 ParentFactionCap[2];                             // 21-22 [0] The highest rank the faction will profit from incoming spillover
-                                                            //       [1] It does not seem to be the max standing at which a faction outputs spillover ...so no idea
+    //       [1] It does not seem to be the max standing at which a faction outputs spillover ...so no idea
     char const* Name[16];                                   // 23-38
     //uint32 Name_lang_mask;                                // 39
     //char const* Description[16];                          // 40-55
@@ -720,7 +720,7 @@ struct FactionTemplateEntry
         }
         return (EnemyGroup & entry.FactionGroup) != 0;
     }
-    bool IsHostileToPlayers() const { return (EnemyGroup & FACTION_MASK_PLAYER) !=0; }
+    bool IsHostileToPlayers() const { return (EnemyGroup & FACTION_MASK_PLAYER) != 0; }
     bool IsNeutralToAll() const
     {
         for (int i = 0; i < MAX_FACTION_RELATIONS; ++i)
@@ -879,14 +879,14 @@ struct HolidaysEntry
 
 struct ItemEntry
 {
-   uint32 ID;                                               // 0
-   uint32 ClassID;                                          // 1
-   uint32 SubclassID;                                       // 2
-   int32 SoundOverrideSubclassID;                           // 3
-   int32 Material;                                          // 4
-   uint32 DisplayInfoID;                                    // 5
-   uint32 InventoryType;                                    // 6
-   uint32 SheatheType;                                      // 7
+    uint32 ID;                                               // 0
+    uint32 ClassID;                                          // 1
+    uint32 SubclassID;                                       // 2
+    int32 SoundOverrideSubclassID;                           // 3
+    int32 Material;                                          // 4
+    uint32 DisplayInfoID;                                    // 5
+    uint32 InventoryType;                                    // 6
+    uint32 SheatheType;                                      // 7
 };
 
 struct ItemBagFamilyEntry
@@ -1099,7 +1099,7 @@ struct MapEntry
     bool IsBattlegroundOrArena() const { return InstanceType == MAP_BATTLEGROUND || InstanceType == MAP_ARENA; }
     bool IsWorldMap() const { return InstanceType == MAP_COMMON; }
 
-    bool GetEntrancePos(int32 &mapid, float &x, float &y) const
+    bool GetEntrancePos(int32& mapid, float& x, float& y) const
     {
         if (CorpseMapID < 0)
             return false;
@@ -1849,9 +1849,12 @@ struct VehicleSeatEntry
 
     inline bool CanEnterOrExit() const { return HasFlag(VehicleSeatFlags(VEHICLE_SEAT_FLAG_CAN_ENTER_OR_EXIT | VEHICLE_SEAT_FLAG_CAN_CONTROL | VEHICLE_SEAT_FLAG_SHOULD_USE_VEH_SEAT_EXIT_ANIM_ON_VOLUNTARY_EXIT)); }
     inline bool CanSwitchFromSeat() const { return HasFlag(VEHICLE_SEAT_FLAG_CAN_SWITCH); }
-    inline bool IsUsableByOverride() const { return HasFlag(VehicleSeatFlags(VEHICLE_SEAT_FLAG_UNCONTROLLED | VEHICLE_SEAT_FLAG_UNK18))
-                                    || HasFlag(VehicleSeatFlagsB(VEHICLE_SEAT_FLAG_B_USABLE_FORCED | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_2 |
-                                        VEHICLE_SEAT_FLAG_B_USABLE_FORCED_3 | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_4)); }
+    inline bool IsUsableByOverride() const
+    {
+        return HasFlag(VehicleSeatFlags(VEHICLE_SEAT_FLAG_UNCONTROLLED | VEHICLE_SEAT_FLAG_UNK18))
+               || HasFlag(VehicleSeatFlagsB(VEHICLE_SEAT_FLAG_B_USABLE_FORCED | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_2 |
+                                            VEHICLE_SEAT_FLAG_B_USABLE_FORCED_3 | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_4));
+    }
     inline bool IsEjectable() const { return HasFlag(VEHICLE_SEAT_FLAG_B_EJECTABLE); }
 };
 
