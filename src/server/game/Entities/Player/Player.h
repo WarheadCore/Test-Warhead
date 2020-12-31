@@ -732,6 +732,8 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOAD_MONTHLY_QUEST_STATUS    = 32,
     PLAYER_LOGIN_QUERY_LOAD_CORPSE_LOCATION         = 33,
     PLAYER_LOGIN_QUERY_LOAD_PET_SLOTS               = 34,
+	PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_ITEMS          = 35,
+	PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_LIMIT          = 36,
     MAX_PLAYER_LOGIN_QUERY
 };
 
@@ -2158,6 +2160,17 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
 
         bool CanFly() const override { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY); }
 
+		typedef std::pair<uint32 /*fakeEntry*/, time_t /*transmogTime*/> TransmogData;
+		typedef std::map<uint32 /*itemGuid*/, TransmogData> TransmogMap;
+		uint32 GetTransmogForItem(uint32 itemGuid) const;
+		uint32 GetTransmogCooldown(uint32 itemGuid) const;
+		uint32 GetTransmogCooldown(TransmogMap::const_iterator itr) const;
+		void AddTransmog(Item* item, uint32 fakeEntry, time_t time);
+		bool RemoveTransmog(Item* item, bool force);
+		uint32 RemoveAllTransmogs(bool force);
+		uint32 GetTransmogCount() const { return _transmogMap.size(); }
+		uint32 GetTransmogLimit() const { return _transmogLimit; }
+
         std::string GetMapAreaAndZoneString() const;
         std::string GetCoordsMapAreaAndZoneString() const;
 
@@ -2170,6 +2183,8 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         uint32 m_foodEmoteTimerCount;
         float m_powerFraction[MAX_POWERS];
         uint32 m_contestedPvPTimer;
+		TransmogMap _transmogMap;
+		uint32 _transmogLimit;
 
         /*********************************************************/
         /***               BATTLEGROUND SYSTEM                 ***/
@@ -2234,6 +2249,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void _LoadTalents(PreparedQueryResult result);
         void _LoadInstanceTimeRestrictions(PreparedQueryResult result);
         void _LoadPetStable(uint8 petStableSlots, PreparedQueryResult result);
+        void _LoadTransmog(PreparedQueryResult resultItems, PreparedQueryResult resultLimit);
 
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
@@ -2255,6 +2271,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void _SaveTalents(CharacterDatabaseTransaction trans);
         void _SaveStats(CharacterDatabaseTransaction trans) const;
         void _SaveInstanceTimeRestrictions(CharacterDatabaseTransaction trans);
+        void _SaveTransmog(SQLTransaction& trans);
 
         /*********************************************************/
         /***              ENVIRONMENTAL SYSTEM                 ***/

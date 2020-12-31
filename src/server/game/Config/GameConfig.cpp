@@ -580,6 +580,7 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
 
     // Custom
     AddOption<int32>("Antispam.Mail.Controller");
+    AddOption<int32>("TransmogItemCooldownDuration");
 
     // Check options can't be changed at worldserver.conf reload
     if (reload)

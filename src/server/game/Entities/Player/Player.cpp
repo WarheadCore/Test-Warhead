@@ -404,6 +404,7 @@ Player::Player(WorldSession* session): Unit(true)
     _activeCheats = CHEAT_NONE;
     healthBeforeDuel = 0;
     manaBeforeDuel = 0;
+    _transmogLimit = 0;
 
     _cinematicMgr = new CinematicMgr(this);
 
@@ -12135,7 +12136,8 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 {
     if (pItem)
     {
-        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
+		uint32 fakeEntry = GetTransmogForItem(pItem->GetGUIDLow());
+		SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), (fakeEntry ? fakeEntry : pItem->GetEntry()));
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
     }
@@ -17642,6 +17644,8 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     // must be before inventory (some items required reputation check)
     m_reputationMgr->LoadFromDB(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_REPUTATION));
 
+ 	_LoadTransmog(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_ITEMS), holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_LIMIT));
+
     _LoadInventory(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_INVENTORY), time_diff);
 
     // update items with duration and realtime
@@ -19364,6 +19368,7 @@ void Player::SaveToDB(CharacterDatabaseTransaction trans, bool create /* = false
     GetSession()->SaveTutorialsData(trans);                 // changed only while character in game
     _SaveGlyphs(trans);
     _SaveInstanceTimeRestrictions(trans);
+    _SaveTransmog(trans);
 
     // check if stats should only be saved on logout
     // save stats can be out of transaction
@@ -26244,6 +26249,99 @@ void Player::_LoadPetStable(uint8 petStableSlots, PreparedQueryResult result)
     }
 }
 
+uint32 Player::GetTransmogForItem(uint32 itemGuid) const
+{
+	if (_transmogMap.empty())
+		return 0;
+
+	const auto& itr = _transmogMap.find(itemGuid);
+	if (itr != _transmogMap.end())
+		return itr->second.first;
+
+	return 0;
+}
+
+uint32 Player::GetTransmogCooldown(uint32 itemGuid) const
+{
+	const auto& itr = _transmogMap.find(itemGuid);
+	if (itr != _transmogMap.end())
+		return GetTransmogCooldown(itr);
+
+	return 0;
+}
+
+uint32 Player::GetTransmogCooldown(TransmogMap::const_iterator itr) const
+{
+	const uint32 cooldownDuration = sWorld->getIntConfig(CONFIG_TRANSMOG_ITEM_COOLDOWN_DURATION);
+	if (itr->second.second > GameTime::GetGameTime())
+		return cooldownDuration;
+	uint32 elapsed = (uint32)(GameTime::GetGameTime() - itr->second.second);
+	if (elapsed >= cooldownDuration)
+		return 0;
+	return (cooldownDuration - elapsed);
+}
+
+void Player::AddTransmog(Item* item, uint32 fakeEntry, time_t time)
+{
+	_transmogMap[item->GetGUIDLow()] = TransmogData(fakeEntry, time);
+
+	if (item->IsEquipped())
+		SetVisibleItemSlot(item->GetSlot(), item);
+}
+
+bool Player::RemoveTransmog(Item* item, bool force)
+{
+	auto& itr = _transmogMap.find(item->GetGUIDLow());
+	if (itr != _transmogMap.end())
+		if (force || !GetTransmogCooldown(itr))
+		{
+			_transmogMap.erase(itr);
+
+			if (item->IsEquipped())
+				SetVisibleItemSlot(item->GetSlot(), item);
+
+			return true;
+		}
+	return false;
+}
+
+uint32 Player::RemoveAllTransmogs(bool force)
+{
+	uint32 cnt = 0;
+	for (auto& iter : _transmogMap)
+	{
+		itr = iter++;
+		if (force || !GetTransmogCooldown(itr))
+		{
+			++cnt;
+			if (Item* item = GetItemByGuid(MAKE_NEW_GUID(itr.first, 0, HIGHGUID_ITEM)))
+				RemoveTransmog(item, true);
+			else
+				_transmogMap.erase(itr);
+		}
+	}
+	return cnt;
+}
+
+void Player::_LoadTransmog(PreparedQueryResult resultItems, PreparedQueryResult resultLimit)
+{
+	if (resultItems)
+		do
+		{
+			Field *fields = resultItems->Fetch();
+			uint32 itemGuid = fields[0].GetUInt32();
+			uint32 fakeEntry = fields[1].GetUInt32();
+			uint32 transmogTime = fields[2].GetUInt32();
+			_transmogMap[itemGuid] = TransmogData(fakeEntry, transmogTime);
+		} while(resultItems->NextRow());
+
+	if (resultLimit)
+	{
+		Field *fields = resultLimit->Fetch();
+		_transmogLimit = fields[0].GetUInt32();
+	}
+}
+
 void Player::_SaveInstanceTimeRestrictions(CharacterDatabaseTransaction trans)
 {
     if (_instanceResetTimes.empty())
@@ -26261,6 +26359,23 @@ void Player::_SaveInstanceTimeRestrictions(CharacterDatabaseTransaction trans)
         stmt->setUInt64(2, itr->second);
         trans->Append(stmt);
     }
+}
+
+void Player::_SaveTransmog(SQLTransaction& trans)
+{
+	PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_TRANSMOG_ITEMS);
+    stmt->setUInt32(0, GetGUIDLow());
+    trans->Append(stmt);
+
+	for (const auto& itr : _transmogMap)
+    {
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_TRANSMOG_ITEM);
+        stmt->setUInt32(0, GetGUIDLow());
+        stmt->setUInt32(1, itr.first);
+        stmt->setUInt32(2, itr.second.first);
+        stmt->setUInt32(3, itr.second.second);
+        trans->Append(stmt);
+	}
 }
 
 bool Player::IsInWhisperWhiteList(ObjectGuid guid)

@@ -197,6 +197,14 @@ bool LoginQueryHolder::Initialize()
     stmt->setUInt32(0, lowGuid);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOAD_QUEST_STATUS_REW, stmt);
 
+	stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_TRANSMOG_ITEMS);
+	stmt->setUInt32(0, lowGuid);
+	res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_ITEMS, stmt);
+
+	stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_TRANSMOG_LIMIT);
+	stmt->setUInt32(0, lowGuid);
+	res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_LIMIT, stmt);
+
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_INSTANCELOCKTIMES);
     stmt->setUInt32(0, m_accountId);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOAD_INSTANCE_LOCK_TIMES, stmt);

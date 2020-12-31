@@ -118,6 +118,10 @@ void CharacterDatabaseConnection::DoPrepareStatements()
     PrepareStatement(CHAR_SEL_CHARACTER_BANNED, "SELECT guid FROM character_banned WHERE guid = ? AND active = 1", CONNECTION_ASYNC);
     PrepareStatement(CHAR_SEL_CHARACTER_QUESTSTATUSREW, "SELECT quest FROM character_queststatus_rewarded WHERE guid = ? AND active = 1", CONNECTION_ASYNC);
     PrepareStatement(CHAR_SEL_ACCOUNT_INSTANCELOCKTIMES, "SELECT instanceId, releaseTime FROM account_instance_times WHERE accountId = ?", CONNECTION_ASYNC);
+	PrepareStatement(CHAR_SEL_TRANSMOG_ITEMS, "SELECT item, fakeEntry, transmogTime FROM character_transmog WHERE guid = ?", CONNECTION_ASYNC);
+	PrepareStatement(CHAR_DEL_TRANSMOG_ITEMS, "DELETE FROM character_transmog WHERE guid = ?", CONNECTION_ASYNC);
+	PrepareStatement(CHAR_INS_TRANSMOG_ITEM, "INSERT INTO character_transmog (guid, item, fakeEntry, transmogTime) VALUES (?, ?, ?, ?)", CONNECTION_ASYNC);
+	PrepareStatement(CHAR_SEL_TRANSMOG_LIMIT, "SELECT tmoglimit FROM character_transmog_limit WHERE guid = ?", CONNECTION_ASYNC);
 
     PrepareStatement(CHAR_SEL_CHARACTER_ACTIONS_SPEC, "SELECT button, action, type FROM character_action WHERE guid = ? AND spec = ? ORDER BY button", CONNECTION_ASYNC);
     PrepareStatement(CHAR_SEL_AUCTION_ITEMS, "SELECT creatorGuid, giftCreatorGuid, count, duration, charges, ii.flags, enchantments, randomPropertyId, durability, playedTime, text, itemguid, itemEntry FROM auctionhouse ah JOIN item_instance ii ON ah.itemguid = ii.guid", CONNECTION_SYNCH);
