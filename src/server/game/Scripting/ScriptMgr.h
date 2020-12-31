@@ -19,6 +19,7 @@
 #define SC_SCRIPTMGR_H
 
 #include "Common.h"
+#include "DatabaseEnvFwd.h"
 #include "ObjectGuid.h"
 #include "Tuples.h"
 #include "Types.h"
