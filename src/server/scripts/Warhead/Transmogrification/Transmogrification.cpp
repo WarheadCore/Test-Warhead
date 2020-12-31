@@ -952,7 +952,7 @@ std::string const Transmogrification::GetGossipItemName(Player* player, uint8 go
 
 bool Transmogrification::CanSavePresets(Player* player)
 {
-    return CONF_GET_BOOL("Transmogrification.EnableSets") && static_cast<uint32>(_presetByName[player->GetGUID()].size()) < CONF_GET_INT("Transmogrification.MaxSets");
+    return CONF_GET_BOOL("Transmogrification.EnableSets") && static_cast<uint32>(_presetByName[player->GetGUID()].size()) < CONF_GET_UINT("Transmogrification.MaxSets");
 }
 
 void Transmogrification::SavePreset(Player* player, Creature* creature, std::string const& name)
