@@ -1,46 +1,25 @@
 /*
-6.1
-Transmogrification 3.3.5a - Gossip menu
-By Rochet2
-
-ScriptName for NPC:
-Creature_Transmogrify
-
-TODO:
-Fix the cost formula
--- Too much data handling, use default costs
-
-Cant transmogrify rediculus items // Foereaper: would be fun to stab people with a fish
--- Cant think of any good way to handle this easily, could rip flagged items from cata DB
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "Transmogrification.h"
-#include "Bag.h"
-#include "Common.h"
-#include "Config.h"
-#include "Creature.h"
-#include "DatabaseEnv.h"
-#include "DBCStructure.h"
-#include "Define.h"
-#include "Field.h"
-#include "GameEventMgr.h"
+#include "GameConfig.h"
 #include "GossipDef.h"
-#include "Item.h"
-#include "ItemTemplate.h"
-#include "Language.h"
-#include "Log.h"
 #include "Player.h"
-#include "ObjectGuid.h"
-#include "ObjectMgr.h"
-#include "QueryResult.h"
-#include "ScriptedCreature.h"
-#include "ScriptedGossip.h"
 #include "ScriptMgr.h"
-#include "SharedDefines.h"
-#include "Transaction.h"
-#include "WorldSession.h"
-#include <sstream>
-#include <string>
 
 class Transmogrification_NPC : public CreatureScript
 {
@@ -121,6 +100,47 @@ public:
 
     void OnConfigLoad(bool reload) override
     {
+        // Add bool
+        sGameConfig->AddOption<bool>("Transmogrification.EnableSetInfo");
+        sGameConfig->AddOption<bool>("Transmogrification.EnableSets", true);
+        sGameConfig->AddOption<bool>("Transmogrification.EnableTransmogInfo", true);
+        sGameConfig->AddOption<bool>("Transmogrification.RequireToken");
+        sGameConfig->AddOption<bool>("Transmogrification.AllowPoor");
+        sGameConfig->AddOption<bool>("Transmogrification.AllowCommon");
+        sGameConfig->AddOption<bool>("Transmogrification.AllowUncommon", true);
+        sGameConfig->AddOption<bool>("Transmogrification.AllowRare", true);
+        sGameConfig->AddOption<bool>("Transmogrification.AllowEpic", true);
+        sGameConfig->AddOption<bool>("Transmogrification.AllowLegendary");
+        sGameConfig->AddOption<bool>("Transmogrification.AllowArtifact");
+        sGameConfig->AddOption<bool>("Transmogrification.AllowHeirloom", true);
+        sGameConfig->AddOption<bool>("Transmogrification.AllowMixedArmorTypes");
+        sGameConfig->AddOption<bool>("Transmogrification.AllowMixedWeaponTypes");
+        sGameConfig->AddOption<bool>("Transmogrification.AllowFishingPoles");
+        sGameConfig->AddOption<bool>("Transmogrification.IgnoreReqRace");
+        sGameConfig->AddOption<bool>("Transmogrification.IgnoreReqClass");
+        sGameConfig->AddOption<bool>("Transmogrification.IgnoreReqSkill");
+        sGameConfig->AddOption<bool>("Transmogrification.IgnoreReqSpell");
+        sGameConfig->AddOption<bool>("Transmogrification.IgnoreReqLevel");
+        sGameConfig->AddOption<bool>("Transmogrification.IgnoreReqEvent");
+        sGameConfig->AddOption<bool>("Transmogrification.IgnoreReqStats");
+
+        // Add int
+        sGameConfig->AddOption<int32>("Transmogrification.SetNpcText", 601084);
+        sGameConfig->AddOption<int32>("Transmogrification.MaxSets", 10);
+        sGameConfig->AddOption<int32>("Transmogrification.SetCopperCost");
+        sGameConfig->AddOption<int32>("Transmogrification.TransmogNpcText", 601083);
+        sGameConfig->AddOption<int32>("Transmogrification.CopperCost");
+        sGameConfig->AddOption<int32>("Transmogrification.TokenEntry", 49426);
+        sGameConfig->AddOption<int32>("Transmogrification.TokenAmount", 1);
+
+        // Add float
+        sGameConfig->AddOption<float>("Transmogrification.SetCostModifier", 3.0f);
+        sGameConfig->AddOption<float>("Transmogrification.ScaledCostModifier");
+
+        // Add string
+        sGameConfig->AddOption<std::string>("Transmogrification.Allowed");
+        sGameConfig->AddOption<std::string>("Transmogrification.NotAllowed");
+
         sTransmog->LoadConfig(reload);
     }
 

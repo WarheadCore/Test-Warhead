@@ -471,12 +471,8 @@ void Transmogrification::Transmogrify(Player* player, ObjectGuid itemGUID, uint8
 
     if (!itemTransmogrifier) // reset look newEntry
     {
-        if (itemTransmogrified->transmog)
-        {
-            itemTransmogrified->transmog = 0;
-            itemTransmogrified->SetState(ITEM_CHANGED, player);
-            UpdateItem(player, itemTransmogrified);
-        }
+        DeleteFakeEntry(player, slot, itemTransmogrified);
+        itemTransmogrified->SetState(ITEM_CHANGED, player);
     }
     else
     {
