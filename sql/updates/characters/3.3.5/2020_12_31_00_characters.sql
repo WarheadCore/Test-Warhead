@@ -9,4 +9,3 @@ CREATE TABLE IF NOT EXISTS `character_transmog_limit` (
         `guid` int (10) unsigned NOT NULL,
         `tmoglimit` int (10) unsigned NOT NULL,
         PRIMARY KEY (`guid`)) ENGINE = InnoDB DEFAULT CHARSET = utf8;
-
