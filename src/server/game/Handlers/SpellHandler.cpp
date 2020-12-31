@@ -97,7 +97,8 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    LOG_DEBUG("network", "WORLD: CMSG_USE_ITEM packet, bagIndex: %u, slot: %u, castCount: %u, spellId: %u, Item: %u, glyphIndex: %u, data length = %i", bagIndex, slot, castCount, spellId, pItem->GetEntry(), glyphIndex, (uint32)recvPacket.size());
+    LOG_DEBUG("network", "WORLD: CMSG_USE_ITEM packet, bagIndex: %u, slot: %u, castCount: %u, spellId: %u, Item: %u, glyphIndex: %u, data length = %i", bagIndex, slot, castCount, spellId,
+              pItem->GetEntry(), glyphIndex, (uint32)recvPacket.size());
 
     ItemTemplate const* proto = pItem->GetTemplate();
     if (!proto)
@@ -212,7 +213,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
     {
         player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, item, nullptr);
         LOG_ERROR("entities.player.cheat", "Possible hacking attempt: Player %s %s tried to open item [%s, entry: %u] which is not openable!",
-            player->GetName().c_str(), player->GetGUID().ToString().c_str(), item->GetGUID().ToString().c_str(), proto->ItemId);
+                  player->GetName().c_str(), player->GetGUID().ToString().c_str(), item->GetGUID().ToString().c_str(), proto->ItemId);
         return;
     }
 
@@ -242,7 +243,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
         CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_GIFT_BY_ITEM);
         stmt->setUInt32(0, item->GetGUID().GetCounter());
         _queryProcessor.AddCallback(CharacterDatabase.AsyncQuery(stmt)
-            .WithPreparedCallback(std::bind(&WorldSession::HandleOpenWrappedItemCallback, this, item->GetPos(), item->GetGUID(), std::placeholders::_1)));
+                                    .WithPreparedCallback(std::bind(&WorldSession::HandleOpenWrappedItemCallback, this, item->GetPos(), item->GetGUID(), std::placeholders::_1)));
     }
     else
         player->SendLoot(item->GetGUID(), LOOT_CORPSE);
@@ -382,7 +383,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         bool allow = false;
 
         // allow casting of unknown spells for special lock cases
-        if (GameObject *go = targets.GetGOTarget())
+        if (GameObject* go = targets.GetGOTarget())
             if (go->GetSpellForLock(caster->ToPlayer()) == spellInfo)
                 allow = true;
 
@@ -521,7 +522,7 @@ void WorldSession::HandlePetCancelAuraOpcode(WorldPackets::Spells::PetCancelAura
 
 void WorldSession::HandleCancelGrowthAuraOpcode(WorldPackets::Spells::CancelGrowthAura& /*cancelGrowthAura*/)
 {
-    _player->RemoveAurasByType(SPELL_AURA_MOD_SCALE, [](AuraApplication const* aurApp)
+    _player->RemoveAurasByType(SPELL_AURA_MOD_SCALE, [](AuraApplication const * aurApp)
     {
         SpellInfo const* spellInfo = aurApp->GetBase()->GetSpellInfo();
         return !spellInfo->HasAttribute(SPELL_ATTR0_CANT_CANCEL) && spellInfo->IsPositive() && !spellInfo->IsPassive();
@@ -530,7 +531,7 @@ void WorldSession::HandleCancelGrowthAuraOpcode(WorldPackets::Spells::CancelGrow
 
 void WorldSession::HandleCancelMountAuraOpcode(WorldPackets::Spells::CancelMountAura& /*cancelMountAura*/)
 {
-    _player->RemoveAurasByType(SPELL_AURA_MOUNTED, [](AuraApplication const* aurApp)
+    _player->RemoveAurasByType(SPELL_AURA_MOUNTED, [](AuraApplication const * aurApp)
     {
         SpellInfo const* spellInfo = aurApp->GetBase()->GetSpellInfo();
         return !spellInfo->HasAttribute(SPELL_ATTR0_CANT_CANCEL) && spellInfo->IsPositive() && !spellInfo->IsPassive();
@@ -586,7 +587,7 @@ void WorldSession::HandleTotemDestroyed(WorldPackets::Totem::TotemDestroyed& tot
         totem->ToTotem()->UnSummon();
 }
 
-void WorldSession::HandleSelfResOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleSelfResOpcode(WorldPacket& /*recvData*/)
 {
     LOG_DEBUG("network", "WORLD: CMSG_SELF_RES");                  // empty opcode
 
@@ -677,14 +678,14 @@ void WorldSession::HandleMirrorImageDataRequest(WorldPacket& recvData)
             else if (*itr == EQUIPMENT_SLOT_BACK && player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK))
                 data << uint32(0);
             else if (Item const* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, *itr))
-			{
-				uint32 DisplayID = item->GetTemplate()->DisplayInfoID;
-				if (uint32 fakeEntry = player->GetTransmogForItem(item->GetGUIDLow()))
-					if (ItemTemplate const* fakeTemplate = sObjectMgr->GetItemTemplate(fakeEntry))
-						DisplayID = fakeTemplate->DisplayInfoID;
+            {
+                uint32 DisplayID = item->GetTemplate()->DisplayInfoID;
+                if (uint32 fakeEntry = player->GetTransmogForItem(item->GetGUIDLow()))
+                    if (ItemTemplate const* fakeTemplate = sObjectMgr->GetItemTemplate(fakeEntry))
+                        DisplayID = fakeTemplate->DisplayInfoID;
 
-				data << uint32(DisplayID);
-			}
+                data << uint32(DisplayID);
+            }
             else
                 data << uint32(0);
         }

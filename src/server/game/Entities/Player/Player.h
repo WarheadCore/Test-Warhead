@@ -294,7 +294,7 @@ struct EnchantDuration
 {
     EnchantDuration() : item(nullptr), slot(MAX_ENCHANTMENT_SLOT), leftduration(0) { }
     EnchantDuration(Item* _item, EnchantmentSlot _slot, uint32 _leftduration) : item(_item), slot(_slot),
-        leftduration(_leftduration){ ASSERT(item); }
+        leftduration(_leftduration) { ASSERT(item); }
 
     Item* item;
     EnchantmentSlot slot;
@@ -732,8 +732,8 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOAD_MONTHLY_QUEST_STATUS    = 32,
     PLAYER_LOGIN_QUERY_LOAD_CORPSE_LOCATION         = 33,
     PLAYER_LOGIN_QUERY_LOAD_PET_SLOTS               = 34,
-	PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_ITEMS          = 35,
-	PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_LIMIT          = 36,
+    PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_ITEMS          = 35,
+    PLAYER_LOGIN_QUERY_LOAD_TRANSMOG_LIMIT          = 36,
     MAX_PLAYER_LOGIN_QUERY
 };
 
@@ -780,7 +780,7 @@ enum CharDeleteMethod
 {
     CHAR_DELETE_REMOVE = 0,                      // Completely remove from the database
     CHAR_DELETE_UNLINK = 1                       // The character gets unlinked from the account,
-                                                 // the name gets freed up and appears as deleted ingame
+                         // the name gets freed up and appears as deleted ingame
 };
 
 enum CurrencyItems
@@ -833,7 +833,7 @@ struct BGData
         bgTeam(0), mountSpell(0) { ClearTaxiPath(); }
 
     uint32 bgInstanceID;                    ///< This variable is set to bg->m_InstanceID,
-                                            ///  when player is teleported to BG - (it is battleground's GUID)
+    ///  when player is teleported to BG - (it is battleground's GUID)
     BattlegroundTypeId bgTypeID;
 
     std::set<uint32>   bgAfkReporter;
@@ -877,10 +877,10 @@ struct ResurrectionData
 
 class WH_GAME_API Player : public Unit, public GridObject<Player>
 {
-    friend class WorldSession;
-    friend class CinematicMgr;
-    friend void AddItemToUpdateQueueOf(Item* item, Player* player);
-    friend void RemoveItemFromUpdateQueueOf(Item* item, Player* player);
+        friend class WorldSession;
+        friend class CinematicMgr;
+        friend void AddItemToUpdateQueueOf(Item* item, Player* player);
+        friend void RemoveItemFromUpdateQueueOf(Item* item, Player* player);
     public:
         explicit Player(WorldSession* session);
         ~Player();
@@ -1123,9 +1123,9 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         Item* BankItem(ItemPosCountVec const& dest, Item* pItem, bool update);
         void RemoveItem(uint8 bag, uint8 slot, bool update);
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
-                                                            // in trade, auction, guild bank, mail....
+        // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
-                                                            // in trade, guild bank, mail....
+        // in trade, guild bank, mail....
         void RemoveItemDependentAurasAndCasts(Item* pItem);
         void DestroyItem(uint8 bag, uint8 slot, bool update);
         uint32 DestroyItemCount(uint32 item, uint32 count, bool update, bool unequip_check = false);
@@ -1137,7 +1137,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void AddItemToBuyBackSlot(Item* pItem);
         Item* GetItemFromBuyBackSlot(uint32 slot);
         void RemoveItemFromBuyBackSlot(uint32 slot, bool del);
-        uint32 GetMaxKeyringSize() const { return KEYRING_SLOT_END-KEYRING_SLOT_START; }
+        uint32 GetMaxKeyringSize() const { return KEYRING_SLOT_END - KEYRING_SLOT_START; }
         void SendEquipError(InventoryResult msg, Item* pItem, Item* pItem2 = nullptr, uint32 itemid = 0) const;
         void SendBuyError(BuyResult msg, Creature* creature, uint32 item, uint32 param) const;
         void SendSellError(SellResult msg, Creature* creature, ObjectGuid guid, uint32 param) const;
@@ -1434,7 +1434,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         // Dual Spec
         void UpdateSpecCount(uint8 count);
         uint32 GetActiveSpec() const { return m_activeSpec; }
-        void SetActiveSpec(uint8 spec){ m_activeSpec = spec; }
+        void SetActiveSpec(uint8 spec) { m_activeSpec = spec; }
         uint8 GetSpecsCount() const { return m_specsCount; }
         void SetSpecsCount(uint8 count) { m_specsCount = count; }
         void ActivateSpec(uint8 spec);
@@ -1451,7 +1451,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void InitPrimaryProfessions();
 
         PlayerSpellMap const& GetSpellMap() const { return m_spells; }
-        PlayerSpellMap      & GetSpellMap()       { return m_spells; }
+        PlayerSpellMap&       GetSpellMap()       { return m_spells; }
 
         void AddSpellMod(SpellModifier* mod, bool apply);
         static bool IsAffectedBySpellmod(SpellInfo const* spellInfo, SpellModifier* mod, Spell* spell = nullptr);
@@ -1592,7 +1592,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void UpdateDefenseBonusesMod();
         void RecalculateRating(CombatRating cr) { ApplyRatingMod(cr, 0, true);}
         float GetMeleeCritFromAgility() const;
-        void GetDodgeFromAgility(float &diminishing, float &nondiminishing) const;
+        void GetDodgeFromAgility(float& diminishing, float& nondiminishing) const;
         float GetMissPercentageFromDefense() const;
         float GetSpellCritFromIntellect() const;
         float OCTRegenHPPerSpirit() const;
@@ -1636,7 +1636,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
 
         void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const override;
         void DestroyForPlayer(Player* target, bool onDeath = false) const override;
-        void SendLogXPGain(uint32 GivenXP, Unit* victim, uint32 BonusXP, bool recruitAFriend = false, float group_rate=1.0f) const;
+        void SendLogXPGain(uint32 GivenXP, Unit* victim, uint32 BonusXP, bool recruitAFriend = false, float group_rate = 1.0f) const;
 
         // notifiers
         void SendAttackSwingCantAttack() const;
@@ -2049,7 +2049,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         BoundInstancesMap& GetBoundInstances(Difficulty difficulty) { return m_boundInstances[difficulty]; }
         InstanceSave* GetInstanceSave(uint32 mapid, bool raid);
         void UnbindInstance(uint32 mapid, Difficulty difficulty, bool unload = false);
-        void UnbindInstance(BoundInstancesMap::iterator &itr, Difficulty difficulty, bool unload = false);
+        void UnbindInstance(BoundInstancesMap::iterator& itr, Difficulty difficulty, bool unload = false);
         InstancePlayerBind* BindToInstance(InstanceSave* save, bool permanent, BindExtensionState extendState = EXTEND_STATE_NORMAL, bool load = false);
         void BindToInstance();
         void SetPendingBind(uint32 instanceId, uint32 bindTimer);
@@ -2094,7 +2094,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void SetPassOnGroupLoot(bool bPassOnGroupLoot) { m_bPassOnGroupLoot = bPassOnGroupLoot; }
         bool GetPassOnGroupLoot() const { return m_bPassOnGroupLoot; }
 
-        MapReference &GetMapRef() { return m_mapRef; }
+        MapReference& GetMapRef() { return m_mapRef; }
 
         // Set map to player and add reference
         void SetMap(Map* map) override;
@@ -2160,16 +2160,16 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
 
         bool CanFly() const override { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY); }
 
-		typedef std::pair<uint32 /*fakeEntry*/, time_t /*transmogTime*/> TransmogData;
-		typedef std::map<uint32 /*itemGuid*/, TransmogData> TransmogMap;
-		uint32 GetTransmogForItem(uint32 itemGuid) const;
-		uint32 GetTransmogCooldown(uint32 itemGuid) const;
-		uint32 GetTransmogCooldown(TransmogMap::const_iterator itr) const;
-		void AddTransmog(Item* item, uint32 fakeEntry, time_t time);
-		bool RemoveTransmog(Item* item, bool force);
-		uint32 RemoveAllTransmogs(bool force);
-		uint32 GetTransmogCount() const { return _transmogMap.size(); }
-		uint32 GetTransmogLimit() const { return _transmogLimit; }
+        typedef std::pair<uint32 /*fakeEntry*/, time_t /*transmogTime*/> TransmogData;
+        typedef std::map<uint32 /*itemGuid*/, TransmogData> TransmogMap;
+        uint32 GetTransmogForItem(uint32 itemGuid) const;
+        uint32 GetTransmogCooldown(uint32 itemGuid) const;
+        uint32 GetTransmogCooldown(TransmogMap::const_iterator itr) const;
+        void AddTransmog(Item* item, uint32 fakeEntry, time_t time);
+        bool RemoveTransmog(Item* item, bool force);
+        uint32 RemoveAllTransmogs(bool force);
+        uint32 GetTransmogCount() const { return _transmogMap.size(); }
+        uint32 GetTransmogLimit() const { return _transmogLimit; }
 
         std::string GetMapAreaAndZoneString() const;
         std::string GetCoordsMapAreaAndZoneString() const;
@@ -2183,8 +2183,8 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         uint32 m_foodEmoteTimerCount;
         float m_powerFraction[MAX_POWERS];
         uint32 m_contestedPvPTimer;
-		TransmogMap _transmogMap;
-		uint32 _transmogLimit;
+        TransmogMap _transmogMap;
+        uint32 _transmogLimit;
 
         /*********************************************************/
         /***               BATTLEGROUND SYSTEM                 ***/
@@ -2415,8 +2415,8 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         // Recall position
         WorldLocation m_recall_location;
 
-        DeclinedName *m_declinedname;
-        Runes *m_runes;
+        DeclinedName* m_declinedname;
+        Runes* m_runes;
         EquipmentSetContainer _equipmentSets;
 
         bool CanAlwaysSee(WorldObject const* obj) const override;
@@ -2434,8 +2434,10 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
     private:
         // internal common parts for CanStore/StoreItem functions
         InventoryResult CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool swap, Item* pSrcItem) const;
-        InventoryResult CanStoreItem_InBag(uint8 bag, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool merge, bool non_specialized, Item* pSrcItem, uint8 skip_bag, uint8 skip_slot) const;
-        InventoryResult CanStoreItem_InInventorySlots(uint8 slot_begin, uint8 slot_end, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool merge, Item* pSrcItem, uint8 skip_bag, uint8 skip_slot) const;
+        InventoryResult CanStoreItem_InBag(uint8 bag, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool merge, bool non_specialized, Item* pSrcItem, uint8 skip_bag,
+                                           uint8 skip_slot) const;
+        InventoryResult CanStoreItem_InInventorySlots(uint8 slot_begin, uint8 slot_end, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool merge, Item* pSrcItem, uint8 skip_bag,
+                uint8 skip_slot) const;
         Item* _StoreItem(uint16 pos, Item* pItem, uint32 count, bool clone, bool update);
         Item* _LoadItem(CharacterDatabaseTransaction trans, uint32 zoneId, uint32 timeDiff, Field* fields);
 
