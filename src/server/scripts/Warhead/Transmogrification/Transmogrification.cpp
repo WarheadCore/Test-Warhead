@@ -1289,97 +1289,97 @@ void Transmogrification::OnGossipSelect(Player* player, Creature* creature, uint
 
     switch (sender)
     {
-    case EQUIPMENT_SLOT_END: // Show items you can use
-        GossipShowTransmogItems(player, creature, action);
-        break;
-    case EQUIPMENT_SLOT_END + 1: // Main menu
-        OnGossipHello(player, creature);
-        break;
-    case EQUIPMENT_SLOT_END + 2: // Remove Transmogrifications
-        GossipRemoveAllTransmogrifications(player);
-        OnGossipHello(player, creature);
-        break;
-    case EQUIPMENT_SLOT_END + 3: // Remove Transmogrification from single item
-        GossipRemoveSingleTransmogrifications(player, action);
-        OnGossipSelect(player, creature, EQUIPMENT_SLOT_END, action);
-        break;
-    case EQUIPMENT_SLOT_END + 4: // Presets menu
-    {
-        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
-        {
+        case EQUIPMENT_SLOT_END: // Show items you can use
+            GossipShowTransmogItems(player, creature, action);
+            break;
+        case EQUIPMENT_SLOT_END + 1: // Main menu
             OnGossipHello(player, creature);
-            return;
-        }
-
-        GossipShowPresetsMenu(player, creature);
-    }
-    break;
-    case EQUIPMENT_SLOT_END + 5: // Use preset
-    {
-        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
-        {
+            break;
+        case EQUIPMENT_SLOT_END + 2: // Remove Transmogrifications
+            GossipRemoveAllTransmogrifications(player);
             OnGossipHello(player, creature);
-            return;
-        }
-
-        GossipUsePreset(player, creature, action);
-        OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 6, action);
-    }
-    break;
-    case EQUIPMENT_SLOT_END + 6: // view preset
-    {
-        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+            break;
+        case EQUIPMENT_SLOT_END + 3: // Remove Transmogrification from single item
+            GossipRemoveSingleTransmogrifications(player, action);
+            OnGossipSelect(player, creature, EQUIPMENT_SLOT_END, action);
+            break;
+        case EQUIPMENT_SLOT_END + 4: // Presets menu
         {
-            OnGossipHello(player, creature);
-            return;
-        }
+            if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+            {
+                OnGossipHello(player, creature);
+                return;
+            }
 
-        GossipViewPreset(player, creature, action, sender);
-    }
-    break;
-    case EQUIPMENT_SLOT_END + 7: // Delete preset
-    {
-        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
-        {
-            OnGossipHello(player, creature);
-            return;
+            GossipShowPresetsMenu(player, creature);
         }
-
-        GossipDeletePreset(player, creature, action);
-        OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 4, 0);
-    }
-    break;
-    case EQUIPMENT_SLOT_END + 8: // Save preset
-    {
-        if (!CanSavePresets(player))
-        {
-            OnGossipHello(player, creature);
-            return;
-        }
-
-        GossipSavePreset(player, creature, action, sender);
-    }
-    break;
-    case EQUIPMENT_SLOT_END + 10: // Set info
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
-        SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.SetNpcText"), creature->GetGUID());
         break;
-    case EQUIPMENT_SLOT_END + 9: // Transmog info
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
-        SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.TransmogNpcText"), creature->GetGUID());
-        break;
-    default: // Transmogrify
-    {
-        if (!sender && !action)
+        case EQUIPMENT_SLOT_END + 5: // Use preset
         {
-            OnGossipHello(player, creature);
-            return;
-        }
+            if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+            {
+                OnGossipHello(player, creature);
+                return;
+            }
 
-        GossipTransmogrify(player, creature, action, sender);
-        CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
-    }
-    break;
+            GossipUsePreset(player, creature, action);
+            OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 6, action);
+        }
+        break;
+        case EQUIPMENT_SLOT_END + 6: // view preset
+        {
+            if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+            {
+                OnGossipHello(player, creature);
+                return;
+            }
+
+            GossipViewPreset(player, creature, action, sender);
+        }
+        break;
+        case EQUIPMENT_SLOT_END + 7: // Delete preset
+        {
+            if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+            {
+                OnGossipHello(player, creature);
+                return;
+            }
+
+            GossipDeletePreset(player, creature, action);
+            OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 4, 0);
+        }
+        break;
+        case EQUIPMENT_SLOT_END + 8: // Save preset
+        {
+            if (!CanSavePresets(player))
+            {
+                OnGossipHello(player, creature);
+                return;
+            }
+
+            GossipSavePreset(player, creature, action, sender);
+        }
+        break;
+        case EQUIPMENT_SLOT_END + 10: // Set info
+            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
+            SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.SetNpcText"), creature->GetGUID());
+            break;
+        case EQUIPMENT_SLOT_END + 9: // Transmog info
+            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+            SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.TransmogNpcText"), creature->GetGUID());
+            break;
+        default: // Transmogrify
+        {
+            if (!sender && !action)
+            {
+                OnGossipHello(player, creature);
+                return;
+            }
+
+            GossipTransmogrify(player, creature, action, sender);
+            CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
+        }
+        break;
     }
 }
 
