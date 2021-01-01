@@ -28,6 +28,8 @@ Bash:
 Cmake:
   - ./*.cmake
   - ./cmake/**/*
+  - src/**/*.cmake
+  - src/**/CMakeLists.txt
 
 Workflow:
   - .github/workflows/*
