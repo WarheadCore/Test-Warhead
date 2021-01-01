@@ -15,9 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+void AddSC_AntiAD();
 void AddSC_Transmogrification();
 
 void AddWarheadScripts()
 {
+    AddSC_AntiAD();
     AddSC_Transmogrification();
 }
