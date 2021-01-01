@@ -1,3 +1,6 @@
+Dependence:
+  - dep/**/*
+
 DB:
   - sql/**/*.sql
 
@@ -9,11 +12,11 @@ Scripts:
   - src/server/scripts/**/*.h
 
 Scripts Warhead:
-  - src/server/scripts/Warhead/*.cpp
-  - src/server/scripts/Warhead/*.h
+  - src/server/scripts/Warhead/**/*
+  - src/server/scripts/Warhead/**/*
 
 Tools:
-  - src/server/tools/**/*
+  - src/tools/**/*
 
 Documentation:
   - ./*.md
@@ -24,6 +27,9 @@ Bash:
 
 Cmake:
   - ./*.cmake
+  - ./cmake/**/*
+  - src/**/*.cmake
+  - src/**/CMakeLists.txt
 
 Workflow:
   - .github/workflows/*
