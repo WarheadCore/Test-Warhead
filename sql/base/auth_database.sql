@@ -796,7 +796,7 @@ SET @saved_cs_client = @@ character_set_client;
 
 SET character_set_client = utf8;
 
-/*!50001 CREATE VIEW `vw_log_history` AS SELECT 
+/*!50001 CREATE VIEW `vw_log_history` AS SELECT
  1 AS `First Logged`,
  1 AS `Last Logged`,
  1 AS `Occurrences`,
