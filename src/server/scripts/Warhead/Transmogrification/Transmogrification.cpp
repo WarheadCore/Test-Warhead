@@ -1110,7 +1110,6 @@ void Transmogrification::GossipShowTransmogItems(Player* player, Creature* creat
 void Transmogrification::GossipRemoveAllTransmogrifications(Player* player)
 {
     bool removed = false;
-    auto session = player->GetSession();
 
     for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
     {
@@ -1129,8 +1128,6 @@ void Transmogrification::GossipRemoveAllTransmogrifications(Player* player)
 
 void Transmogrification::GossipRemoveSingleTransmogrifications(Player* player, uint32 const& action)
 {
-    auto session = player->GetSession();
-
     Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, action);
     if (!newItem)
         return;
@@ -1395,7 +1392,7 @@ void Transmogrification::OnGossipSelectCode(Player* player, Creature* creature, 
         return;
     }
 
-    SavePreset(player, creature, std::string(code));
+    SavePreset(player, std::string(code));
 
     CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
 }
