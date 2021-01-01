@@ -14,7 +14,7 @@ if(WIN32 AND MSVC)
     ${CMAKE_SOURCE_DIR}/src/common/Debugging/WheatyExceptionReport.h
   )
 endif()
-
+ 
 add_subdirectory(genrev)
 add_subdirectory(common)
 
