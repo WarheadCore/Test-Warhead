@@ -15,7 +15,7 @@ if(NOT BUILDDIR)
   # Workaround for funny MSVC behaviour - this segment is only used when using cmake gui
   set(BUILDDIR ${CMAKE_BINARY_DIR})
 endif()
-
+ 
 if(WITHOUT_GIT)
   set(rev_date "1970-01-01 00:00:00 +0000")
   set(rev_hash "unknown")

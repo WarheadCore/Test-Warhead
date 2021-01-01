@@ -19,7 +19,7 @@
 #   # Exclude
 #   ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders
 #   ${CMAKE_CURRENT_SOURCE_DIR}/Platform)
-#
+# 
 function(CollectSourceFiles current_dir variable)
   list(FIND ARGN "${current_dir}" IS_EXCLUDED)
   if(IS_EXCLUDED EQUAL -1)
