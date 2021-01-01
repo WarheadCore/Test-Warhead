@@ -59,7 +59,6 @@ public:
     void OnGossipSelectCode(Player* player, Creature* creature, uint32 const& action, uint32 const& sender, const char* code);
 
 private:
-
     // Use IsAllowed() and IsNotAllowed()
     // these are thread unsafe, but assumed to be static data so it should be safe
     std::set<uint32> Allowed;
@@ -94,7 +93,7 @@ private:
     std::string const GetGossipItemName(Player* player, uint8 gossipItem);
 
     bool CanSavePresets(Player* player);
-    void SavePreset(Player* player, Creature* creature, std::string const& name);
+    void SavePreset(Player* player, std::string const& name);
 
     // Private gossips
     void GossipShowTransmogItems(Player* player, Creature* creature, uint8 slot);

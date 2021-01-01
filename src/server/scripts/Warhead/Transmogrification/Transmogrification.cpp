@@ -955,9 +955,9 @@ bool Transmogrification::CanSavePresets(Player* player)
     return CONF_GET_BOOL("Transmogrification.EnableSets") && static_cast<uint32>(_presetByName[player->GetGUID()].size()) < CONF_GET_UINT("Transmogrification.MaxSets");
 }
 
-void Transmogrification::SavePreset(Player* player, Creature* creature, std::string const& name)
+void Transmogrification::SavePreset(Player* player, std::string const& name)
 {
-    if (!name.length() || name.find_first_not_of(ALLOWED_SYMBOLS) != std::string::npos)
+    if (name.empty() || name.find_first_not_of(ALLOWED_SYMBOLS) != std::string::npos)
     {
         SendNotification(player, TRANSMOG_LOCALE_PRESET_ERR_INVALID_NAME);
         return;

@@ -29,7 +29,7 @@ public:
     class TransmogAI : public ScriptedAI
     {
     public:
-        TransmogAI(Creature* creature) : ScriptedAI(creature) {}
+        TransmogAI(Creature* creature) : ScriptedAI(creature) { }
 
         bool OnGossipHello(Player* player) override
         {
