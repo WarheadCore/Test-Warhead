@@ -104,7 +104,7 @@ private:
     void GossipViewPreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
     void GossipDeletePreset(Player* player, uint32 const& action);
     void GossipSavePreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
-    void GossipTransmogrify(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
+    void GossipTransmogrify(Player* player, uint32 const& action, uint32 const& sender);
 
     using TransmogrificationDataContainer = std::unordered_map<ObjectGuid::LowType, ObjectGuid::LowType>;
     using TransmogrificationMapContainer = std::unordered_map<ObjectGuid::LowType, TransmogrificationDataContainer>;
