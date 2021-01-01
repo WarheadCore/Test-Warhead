@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,23 +19,23 @@
 #include "Bag.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
-#include "DBCStructure.h"
 #include "GameEventMgr.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "ModuleLocale.h"
 #include "Item.h"
-#include "ItemTemplate.h"
 #include "Log.h"
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "ScriptMgr.h"
-#include "SharedDefines.h"
 #include "ScriptedGossip.h"
 #include "WorldSession.h"
 #include "World.h"
-#include <sstream>
-#include <string>
+
+namespace
+{
+    constexpr char ALLOWED_SYMBOLS[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя _.,'1234567890";
+}
 
 enum StringLocales : uint8
 {
@@ -957,7 +957,7 @@ bool Transmogrification::CanSavePresets(Player* player)
 
 void Transmogrification::SavePreset(Player* player, Creature* creature, std::string const& name)
 {
-    if (name.find('"') != std::string::npos || name.find('\\') != std::string::npos)
+    if (!name.length() || name.find_first_not_of(ALLOWED_SYMBOLS) != std::string::npos)
     {
         SendNotification(player, TRANSMOG_LOCALE_PRESET_ERR_INVALID_NAME);
         return;
