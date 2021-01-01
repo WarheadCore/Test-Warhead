@@ -100,7 +100,7 @@ private:
     void GossipRemoveAllTransmogrifications(Player* player);
     void GossipRemoveSingleTransmogrifications(Player* player, uint32 const& action);
     void GossipShowPresetsMenu(Player* player, Creature* creature);
-    void GossipUsePreset(Player* player, Creature* creature, uint32 const& action);
+    void GossipUsePreset(Player* player, uint32 const& action);
     void GossipViewPreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
     void GossipDeletePreset(Player* player, Creature* creature, uint32 const& action);
     void GossipSavePreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);

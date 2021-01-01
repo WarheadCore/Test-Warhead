@@ -1157,7 +1157,7 @@ void Transmogrification::GossipShowPresetsMenu(Player* player, Creature* creatur
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
 
-void Transmogrification::GossipUsePreset(Player* player, Creature* creature, uint32 const& action)
+void Transmogrification::GossipUsePreset(Player* player, uint32 const& action)
 {
     // action = presetID
     for (auto const& itr : _presetById[player->GetGUID()][action])
@@ -1318,7 +1318,7 @@ void Transmogrification::OnGossipSelect(Player* player, Creature* creature, uint
                 return;
             }
 
-            GossipUsePreset(player, creature, action);
+            GossipUsePreset(player, action);
             OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 6, action);
         }
         break;
