@@ -918,7 +918,6 @@ void Transmogrification::LoadPlayerAtLogin(Player* player)
                 _dataMapStore[itemGUID] = playerGUID;
                 _mapStore[playerGUID][itemGUID] = fakeEntry;
             }
-
         } while (result->NextRow());
 
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
