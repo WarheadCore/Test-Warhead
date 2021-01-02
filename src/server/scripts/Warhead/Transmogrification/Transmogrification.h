@@ -20,6 +20,9 @@
 
 #include "Common.h"
 #include "ObjectGuid.h"
+#include <map>
+#include <set>
+#include <unordered_map>
 #include <vector>
 
 #define MAX_OPTIONS 25 // do not alter
@@ -30,7 +33,7 @@ class Creature;
 class WorldSession;
 struct ItemTemplate;
 
-class WH_GAME_API Transmogrification
+class Transmogrification
 {
     Transmogrification() = default;
     ~Transmogrification() = default;
