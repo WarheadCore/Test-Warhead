@@ -3,6 +3,7 @@
 -- ----------------------------
 
 DROP TABLE IF EXISTS `anti_ad_patterns`;
+
 CREATE TABLE `anti_ad_patterns` (
     `Pattern` varchar(255) CHARACTER
     SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -16,8 +17,8 @@ SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 INSERT INTO `anti_ad_patterns` (`Pattern`)
         VALUES ('?:[-a-z0-9@:%_\\+~.#=]{2,256}\\.)?([-a-z0-9@:%_\\+~#=]*)\\.[a-z]{2,6}\\b(?:[-a-z0-9@:%_\\+.~#?&\\/\\/=]*'), ('м\\s*а\\s*м\\s*у'), ('м\\s*а\\s*т\\s*ь'), ('w\\s*o\\s*w');
-
 -- Set module name
+
 SET @MODULE_NAME := 'mod-anti-ad';
 
 -- ----------------------------
