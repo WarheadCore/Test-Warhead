@@ -157,10 +157,10 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
     uint32 index = 0;
     if (!isRated && !isPremade)
         index += PVP_TEAMS_COUNT;
-    
+
     if (ginfo->Team == HORDE)
         index++;
-    
+
     LOG_DEBUG("bg.battleground", "Adding Group to BattlegroundQueue bgTypeId : %u, bracket_id : %u, index : %u", BgTypeId, bracketId, index);
 
     sScriptMgr->OnQueueAddGroup(this, ginfo, index, leader, grp, bracketEntry, isPremade);
