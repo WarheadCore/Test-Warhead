@@ -79,7 +79,7 @@ struct is_script_database_bound<AreaTriggerScript>
 
 template<>
 struct is_script_database_bound<BattlefieldScript>
-        : std::true_type { };
+    : std::true_type { };
 
 template<>
 struct is_script_database_bound<BattlegroundScript>
@@ -2040,9 +2040,9 @@ void ScriptMgr::OnGuildAddMember(Guild* guild, Player* player, uint8& plRank)
     FOREACH_SCRIPT(GuildScript)->OnAddMember(guild, player, plRank);
 }
 
-void ScriptMgr::OnGuildRemoveMember(Guild* guild, Player* player, bool isDisbanding, bool isKicked)
+void ScriptMgr::OnGuildRemoveMember(Guild* guild, Player* player, ObjectGuid guid, bool isDisbanding, bool isKicked)
 {
-    FOREACH_SCRIPT(GuildScript)->OnRemoveMember(guild, player, isDisbanding, isKicked);
+    FOREACH_SCRIPT(GuildScript)->OnRemoveMember(guild, player, guid, isDisbanding, isKicked);
 }
 
 void ScriptMgr::OnGuildMOTDChanged(Guild* guild, const std::string& newMotd)
@@ -2152,6 +2152,58 @@ void ScriptMgr::ModifyVehiclePassengerExitPos(Unit* passenger, Vehicle* vehicle,
 {
     FOREACH_SCRIPT(UnitScript)->ModifyVehiclePassengerExitPos(passenger, vehicle, pos);
     FOREACH_SCRIPT(CreatureScript)->ModifyVehiclePassengerExitPos(passenger, vehicle, pos);
+}
+
+// BGScript
+void ScriptMgr::OnBattlegroundStart(Battleground* bg)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundStart(bg);
+}
+
+void ScriptMgr::OnBattlegroundEnd(Battleground* bg, uint32 winner)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundEnd(bg, winner);
+}
+
+void ScriptMgr::OnBattlegroundUpdate(Battleground* bg, uint32 diff)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundUpdate(bg, diff);
+}
+
+void ScriptMgr::OnBattlegroundAddPlayer(Battleground* bg, Player* player)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundAddPlayer(bg, player);
+}
+
+void ScriptMgr::OnBattlegroundBeforeAddPlayer(Battleground* bg, Player* player)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundBeforeAddPlayer(bg, player);
+}
+
+void ScriptMgr::OnBattlegroundRemovePlayerAtLeave(Battleground* bg, ObjectGuid guid, bool transport, bool sendPacket)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundRemovePlayerAtLeave(bg, guid, transport, sendPacket);
+}
+
+void ScriptMgr::OnQueueAddGroup(BattlegroundQueue* queue, GroupQueueInfo* ginfo, uint32& index, Player* leader, Group* grp, PvPDifficultyEntry const* bracketEntry, bool isPremade)
+{
+    FOREACH_SCRIPT(BGScript)->OnQueueAddGroup(queue, ginfo, index, leader, grp, bracketEntry, isPremade);
+}
+
+bool ScriptMgr::CanFillPlayersToBG(BattlegroundQueue* queue, Battleground* bg, const int32 aliFree, const int32 hordeFree, BattlegroundBracketId bracket_id)
+{
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(BGScript, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanFillPlayersToBG(queue, bg, aliFree, hordeFree, bracket_id))
+            ret = false; // we change ret value only when scripts return false
+
+    return ret;
+}
+
+void ScriptMgr::OnCheckNormalMatch(BattlegroundQueue* queue, uint32& Coef, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers)
+{
+    FOREACH_SCRIPT(BGScript)->OnCheckNormalMatch(queue, Coef, bgTemplate, bracket_id, minPlayers, maxPlayers);
 }
 
 SpellScriptLoader::SpellScriptLoader(char const* name)

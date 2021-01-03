@@ -1724,7 +1724,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     }
     else
     {
-        if (GetClass() == CLASS_DEATH_KNIGHT && GetMapId() == 609 && !IsGameMaster() && !HasSpell(50977))
+        if (!(options & TELE_TO_SKIP_START_ZONE_DK) && GetClass() == CLASS_DEATH_KNIGHT && GetMapId() == 609 && !IsGameMaster() && !HasSpell(50977))
             return false;
 
         // far teleport to another map
@@ -5834,6 +5834,7 @@ void Player::UpdateWeaponsSkillsToMaxSkillsForLevel()
         uint32 pskill = itr->first;
         if (IsProfessionOrRidingSkill(pskill))
             continue;
+
         uint32 valueIndex = PLAYER_SKILL_VALUE_INDEX(itr->second.pos);
         uint32 data = GetUInt32Value(valueIndex);
         uint32 max = SKILL_MAX(data);
@@ -5844,8 +5845,12 @@ void Player::UpdateWeaponsSkillsToMaxSkillsForLevel()
             if (itr->second.uState != SKILL_NEW)
                 itr->second.uState = SKILL_CHANGED;
         }
+
         if (pskill == SKILL_DEFENSE)
             UpdateDefenseBonusesMod();
+
+        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, pskill);
+        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, pskill);
     }
 }
 
