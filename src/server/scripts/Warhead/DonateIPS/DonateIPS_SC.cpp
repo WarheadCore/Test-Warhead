@@ -281,7 +281,7 @@ public:
 
         sDonateIPS->LoadShopStore();
 
-        scheduler.Schedule(15s, [this](TaskContext context)
+        scheduler.Schedule(15s, [](TaskContext context)
         {
             sDonateIPS->SendDonate();
 
