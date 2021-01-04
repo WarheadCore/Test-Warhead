@@ -130,7 +130,8 @@ void ArenaReward::SendRewardArena(Battleground* bg, uint32 winner)
                     count = itemCountWinner;
 
                 player->AddItem(itemID, count);
-                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы %s матч и получили|r %s x%u", isWinner ? "выйграли" : "проиграли", sGameLocale->GetItemLink(itemID).c_str(), count);
+                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы %s матч и получили|r %s x%u", isWinner ? "выйграли" : "проиграли",
+                        sGameLocale->GetItemLink(itemID).c_str(), count);
             }
         }
     };

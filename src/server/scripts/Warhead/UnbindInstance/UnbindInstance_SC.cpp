@@ -59,26 +59,26 @@ public:
 
             switch (action)
             {
-                case GOSSIP_ACTION_INFO_MAIN_MENU:
-                    sUI->SendGossipHello(player, me);
-                    break;
-                case GOSSIP_ACTION_INFO_DUNGEON_HEROIC:
-                    sUI->SendBindList(player, me, 1, false);
-                    break;
-                case GOSSIP_ACTION_INFO_RAID_10_NORMAL:
-                    sUI->SendBindList(player, me, 0);
-                    break;
-                case GOSSIP_ACTION_INFO_RAID_25_NORMAL:
-                    sUI->SendBindList(player, me, 1);
-                    break;
-                case GOSSIP_ACTION_INFO_RAID_10_HEROIC:
-                    sUI->SendBindList(player, me, 2);
-                    break;
-                case GOSSIP_ACTION_INFO_RAID_25_HEROIC:
-                    sUI->SendBindList(player, me, 3);
-                    break;
-                default:
-                    break;
+            case GOSSIP_ACTION_INFO_MAIN_MENU:
+                sUI->SendGossipHello(player, me);
+                break;
+            case GOSSIP_ACTION_INFO_DUNGEON_HEROIC:
+                sUI->SendBindList(player, me, 1, false);
+                break;
+            case GOSSIP_ACTION_INFO_RAID_10_NORMAL:
+                sUI->SendBindList(player, me, 0);
+                break;
+            case GOSSIP_ACTION_INFO_RAID_25_NORMAL:
+                sUI->SendBindList(player, me, 1);
+                break;
+            case GOSSIP_ACTION_INFO_RAID_10_HEROIC:
+                sUI->SendBindList(player, me, 2);
+                break;
+            case GOSSIP_ACTION_INFO_RAID_25_HEROIC:
+                sUI->SendBindList(player, me, 3);
+                break;
+            default:
+                break;
             }
 
             return true;
