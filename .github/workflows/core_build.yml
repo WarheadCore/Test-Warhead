@@ -1,7 +1,13 @@
 name: core-build
 on:
   push:
+    branches:
+      - '**'
+      - '!restyled/*'
   pull_request:
+    branches:
+      - '**'
+      - '!restyled/*'
 
 jobs:
   build:
