@@ -80,6 +80,7 @@ struct GroupQueueInfo;
 namespace Warhead::ChatCommands { struct ChatCommandBuilder; }
 
 enum BattlegroundTypeId : uint32;
+enum BattlegroundBracketId;
 enum ContentLevels : uint8;
 enum Difficulty : uint8;
 enum DuelCompleteType : uint8;
