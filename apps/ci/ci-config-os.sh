@@ -19,6 +19,10 @@ case $COMPILER in
     time sudo apt-get install -y clang-10
     ;;
 
+  "clang11" )
+    time sudo apt-get install -y clang-11
+    ;;
+
   * )
     echo "Unknown compiler $COMPILER"
     exit 1
