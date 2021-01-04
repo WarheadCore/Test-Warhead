@@ -147,7 +147,7 @@ private:
             break;
         }
 
-        player->SaveToDB(false, false);
+        player->SaveToDB();
         player->UpdateWeaponsSkillsToMaxSkillsForLevel();
     }
 };

@@ -1,4 +1,4 @@
-/*
+﻿/*
 * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
 *
 * This program is free software; you can redistribute it and/or modify it
@@ -16,14 +16,19 @@
 */
 
 #include "UnbindInstance.h"
-#include "Log.h"
+#include "DatabaseEnv.h"
+#include "DBCStores.h"
+#include "DBCEnums.h"
 #include "GameConfig.h"
-#include "StringFormat.h"
-#include "ScriptedGossip.h"
-#include "MapManager.h"
-#include "InstanceSaveMgr.h"
 #include "GameLocale.h"
 #include "Chat.h"
+#include "Log.h"
+#include "MapManager.h"
+#include "ObjectMgr.h"
+#include "InstanceSaveMgr.h"
+#include "StringFormat.h"
+#include "ScriptedGossip.h"
+#include "WorldSession.h"
 
 namespace
 {
@@ -33,7 +38,7 @@ namespace
         if (!map)
             return "Неизвестно";
 
-        return map->name[localeIndex];
+        return map->MapName[localeIndex];
     }
 
     std::string const GetDiffName(Difficulty diff, bool isRaid = true)
@@ -70,11 +75,11 @@ namespace
         return "###";
     }
 
-    bool IsExistBindDifficulty(uint32 guidLow, Difficulty diff, bool isRaid = true)
+    bool IsExistBindDifficulty(Player* player, Difficulty diff, bool isRaid = true)
     {
         uint8 count = 0;
 
-        auto const& boundMap = sInstanceSaveMgr->PlayerGetBoundInstances(guidLow, diff);
+        auto const& boundMap = player->GetBoundInstances(diff);
         if (boundMap.empty())
             return false;
 
@@ -89,9 +94,9 @@ namespace
         return count ? true : false;
     }
 
-    uint8 GetCountInstanceBind(uint32 guidLow, Difficulty diff, bool isRaid = true)
+    uint8 GetCountInstanceBind(Player* player, Difficulty diff, bool isRaid = true)
     {
-        auto const& boundMap = sInstanceSaveMgr->PlayerGetBoundInstances(guidLow, diff);
+        auto const& boundMap = player->GetBoundInstances(diff);
         if (boundMap.empty())
             return 0;
 
@@ -108,13 +113,13 @@ namespace
         return count;
     }
 
-    bool IsExistBind(uint32 guidLow)
+    bool IsExistBind(Player* player)
     {
-        if (IsExistBindDifficulty(guidLow, DUNGEON_DIFFICULTY_HEROIC, false))
+        if (IsExistBindDifficulty(player, DUNGEON_DIFFICULTY_HEROIC, false))
             return true;
 
         for (uint8 i = 0; i < MAX_DIFFICULTY; ++i)
-            if (IsExistBindDifficulty(guidLow, Difficulty(i)))
+            if (IsExistBindDifficulty(player, Difficulty(i)))
                 return true;
 
         return false;
@@ -207,25 +212,23 @@ void UnbindInstance::SendGossipHello(Player* player, Creature* creature)
 {
     ClearGossipMenuFor(player);
 
-    uint32 guidLow = player->GetGUIDLow();
-
-    if (!IsExistBind(guidLow))
+    if (!IsExistBind(player))
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, "-- Вы не имеете кд ни на что", GOSSIP_SENDER_MAIN, 0);
 
-    if (::IsExistBindDifficulty(guidLow, DUNGEON_DIFFICULTY_HEROIC, false))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Героические подземелья", ::GetCountInstanceBind(guidLow, DUNGEON_DIFFICULTY_HEROIC, false)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DUNGEON_HEROIC);
+    if (::IsExistBindDifficulty(player, DUNGEON_DIFFICULTY_HEROIC, false))
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Героические подземелья", ::GetCountInstanceBind(player, DUNGEON_DIFFICULTY_HEROIC, false)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DUNGEON_HEROIC);
 
-    if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_10MAN_NORMAL))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 об.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_10MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_NORMAL);
+    if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_10MAN_NORMAL))
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 об.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_10MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_NORMAL);
 
-    if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_25MAN_NORMAL))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 об.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_25MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_NORMAL);
+    if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_25MAN_NORMAL))
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 об.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_25MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_NORMAL);
 
-    if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_10MAN_HEROIC))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 гер.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_10MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_HEROIC);
+    if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_10MAN_HEROIC))
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 гер.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_10MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_HEROIC);
 
-    if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_25MAN_HEROIC))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 гер.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_25MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_HEROIC);
+    if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_25MAN_HEROIC))
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 гер.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_25MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_HEROIC);
 
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
@@ -236,7 +239,7 @@ void UnbindInstance::SendBindList(Player* player, Creature* creature, uint8 diff
 
     auto _diff = static_cast<Difficulty>(diff);
 
-    auto const& boundMap = sInstanceSaveMgr->PlayerGetBoundInstances(player->GetGUIDLow(), _diff);
+    auto const& boundMap = player->GetBoundInstances(_diff);
     if (boundMap.empty())
     {
         SendGossipHello(player, creature);
@@ -273,14 +276,14 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
 
     auto diff = static_cast<Difficulty>(sender - GOSSIP_SENDER_DIFFICULTY);
 
-    auto const save = sInstanceSaveMgr->PlayerGetInstanceSave(player->GetGUIDLow(), mapID, diff);
-    if (!save)
+    auto const& instanceBind = player->GetBoundInstance(mapID, diff);
+    if (!instanceBind)
     {
         SendGossipHello(player, creature);
         return;
     }
 
-    bool isRaidDiff = save->GetMapEntry()->IsRaid();
+    bool isRaidDiff = instanceBind->save->GetMapEntry()->IsRaid();
     uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
     std::string const mapName = ::GetMapName(mapID, localeIndex);
     std::string const diffName = ::GetDiffName(diff, isRaidDiff);
@@ -349,14 +352,14 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
 
     auto diff = static_cast<Difficulty>(sender - GOSSIP_SENDER_DIFFICULTY);
 
-    auto const save = sInstanceSaveMgr->PlayerGetInstanceSave(player->GetGUIDLow(), mapID, diff);
-    if (!save)
+    auto const& instanceBind = player->GetBoundInstance(mapID, diff);
+    if (!instanceBind)
     {
         SendGossipHello(player, creature);
         return;
     }
 
-    bool isRaidDiff = save->GetMapEntry()->IsRaid();
+    bool isRaidDiff = instanceBind->save->GetMapEntry()->IsRaid();
 
     auto GetCostCount = [&]() -> uint32
     {
@@ -429,7 +432,7 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
 
     player->DestroyItemCount(itemID, itemCount, true);
     handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Удалено сохранение:|r %s (%s)", mapName.c_str(), diffName.c_str());
-    sInstanceSaveMgr->PlayerUnbindInstance(player->GetGUIDLow(), mapID, diff, true, player);
+    player->UnbindInstance(mapID, diff);
     SaveLogUnbind(player, mapID, sender - GOSSIP_SENDER_DIFFICULTY, itemID, isRaidDiff);
 
     SendGossipHello(player, creature);
@@ -437,7 +440,6 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
 
 void UnbindInstance::SaveLogUnbind(Player* player, uint32 mapID, uint8 diff, uint32 itemID, bool isRaid /*= true*/)
 {
-    uint32 lowGuid = player->GetGUIDLow();
     std::string const& itemName = sGameLocale->GetItemNameLocale(itemID, 8);
     std::string const& mapName = ::GetMapName(mapID, 8);
     std::string const& diffName = ::GetDiffName(static_cast<Difficulty>(diff), isRaid);
@@ -445,5 +447,5 @@ void UnbindInstance::SaveLogUnbind(Player* player, uint32 mapID, uint8 diff, uin
     std::string const& info = Warhead::StringFormat("%s (%s). %s. %s", mapName.c_str(), diffName.c_str(), player->GetName().c_str(), itemName.c_str());
 
     CharacterDatabase.PExecute("INSERT INTO `unbind_instance_logs`(`Info`, `PlayerGuid`, `MapID`, `Difficulty`, `ItemID`) VALUES ('%s', %u, %u, %u, %u)",
-                               info.c_str(), lowGuid, mapID, diff, itemID);
+                               info.c_str(), player->GetGUID().GetCounter(), mapID, diff, itemID);
 }

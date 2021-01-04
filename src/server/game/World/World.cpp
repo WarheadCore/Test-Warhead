@@ -1666,9 +1666,9 @@ void World::SetInitialWorldSettings()
     LOG_INFO("server.loading", "Starting Mail System");
     sMailMgr->Initialize();
 
-    ///- Initialize Mails
+    ///- Initialize Mails External
     LOG_INFO("server.loading", "Starting Mail External System");
-    sMailExternalMgr->Initialize();
+    sMailExternal->Initialize();
 
     ///- Initialize Warden
     LOG_INFO("server.loading", "Loading Warden Checks...");
@@ -1977,7 +1977,7 @@ void World::Update(uint32 diff)
 
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update external mails"));
-        sMailExternalMgr->Update(diff);
+        sMailExternal->Update(diff);
     }
 
     ///- Delete all characters which have been deleted X days before

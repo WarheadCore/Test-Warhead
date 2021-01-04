@@ -29,6 +29,7 @@
 #include "Log.h"
 #include "ObjectAccessor.h"
 #include "Player.h"
+#include "ScriptMgr.h"
 #include "World.h"
 
 /*********************************************************/
@@ -672,7 +673,7 @@ bool BattlegroundQueue::CheckNormalMatch(Battleground* bg_template, Battleground
 {
     uint32 coef = 1;
 
-    sScriptMgr->OnCheckNormalMatch(this, coef, bgTemplate, bracket_id, minPlayers, maxPlayers);
+    sScriptMgr->OnCheckNormalMatch(this, coef, bg_template, bracket_id, minPlayers, maxPlayers);
 
     minPlayers = minPlayers * coef;
 

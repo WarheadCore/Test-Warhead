@@ -84,8 +84,8 @@ GuildCriteriaStruct* GuildCriteria::GetCriteria(uint32 criteriaID)
 
 void GuildCriteria::AddBaseCriterias()
 {
-    for (auto const& itr : sGuildLevelSystem->GetBaseCriterias())
-        _guildCriteria.insert(std::make_pair(itr.first, itr.second));
+    for (auto const& [criteriaID, data] : sGuildLevelSystem->GetBaseCriterias())
+        _guildCriteria.emplace(criteriaID, data);
 }
 
 void GuildCriteria::RescalingCriterias()
@@ -96,12 +96,9 @@ void GuildCriteria::RescalingCriterias()
     if (!members)
         LOG_FATAL("module.gls", "> GLS: No members count in guild (%u)", _guildID);
 
-    for (auto& itr : _guildCriteria)
+    for (auto& [criteriaID, criteria] : _guildCriteria)
     {
-        auto& criteria = itr.second;
-
         float coef = criteria.Coef;
-        uint32 criteriaID = itr.first;
         uint32 minPlayers = criteria.MinPlayersCount;
         uint32 diff = members > minPlayers ? members - minPlayers : 0;
 
@@ -117,7 +114,8 @@ void GuildCriteria::RescalingCriterias()
 
 void GuildCriteria::AddProgress(uint32 criteriaID, GuildCriteriaProgressStruct& _data)
 {
-    _guildCriteriaProgress.insert(std::make_pair(criteriaID, _data));
+    // @TODO Add empty check
+    _guildCriteriaProgress.emplace(criteriaID, _data);
 }
 
 void GuildCriteria::AddEmptyProgress(uint32 criteriaID)
@@ -269,18 +267,23 @@ uint32 GuildCriteria::GetCountCriteriaProgressDone()
 
 void GuildCriteria::UnLearnSpells(ObjectGuid guid)
 {
-    auto trans = CharacterDatabase.BeginTransaction();
     Player* player = ObjectAccessor::FindPlayer(guid);
+    auto trans = CharacterDatabase.BeginTransaction();
+    auto stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SPELL_BY_SPELL);
 
-    for (auto const& itr : _guildCriteriaProgress)
+    for (auto const& [criteriaID, criteriaProgress] : _guildCriteriaProgress)
     {
-        uint32 spellID = itr.second.SelectedSpell;
+        uint32 spellID = criteriaProgress.SelectedSpell;
 
         if (player && player->HasSpell(spellID))
             player->RemoveSpell(spellID, false, false);
 
         if (!player)
-            trans->PAppend("DELETE FROM `character_spell` WHERE `guid` = %u AND `spell` = %u", guid.GetCounter(), spellID);
+        {
+            stmt->setUInt32(0, spellID);
+            stmt->setUInt32(1, guid.GetCounter());
+            trans->Append(stmt);
+        }
     }
 
     CharacterDatabase.CommitTransaction(trans);
@@ -288,9 +291,9 @@ void GuildCriteria::UnLearnSpells(ObjectGuid guid)
 
 void GuildCriteria::LearnSpells(Player* player)
 {
-    for (auto const& itr : _guildCriteriaProgress)
+    for (auto const& [criteriaID, criteriaProgress] : _guildCriteriaProgress)
     {
-        uint32 spellID = itr.second.SelectedSpell;
+        uint32 spellID = criteriaProgress.SelectedSpell;
 
         if (!player->HasSpell(spellID))
             player->LearnSpell(spellID, false);
@@ -1015,7 +1018,7 @@ void GuildLevelSystem::GetRewardsCriteria(Player* player, Creature* creature, ui
             trans->PAppend("INSERT INTO `character_spell`(`guid`, `spell`, `specMask`) VALUES (%u, %u, 255)", member.GetGUID().GetCounter(), spellID);
         else
         {
-            auto player = member.FindPlayer();
+            auto player = ObjectAccessor::FindPlayerByLowGUID(lowGuid);
             if (!player)
                 return;
 

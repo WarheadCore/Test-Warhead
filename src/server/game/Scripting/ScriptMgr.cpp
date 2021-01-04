@@ -2401,6 +2401,12 @@ GroupScript::GroupScript(char const* name)
     ScriptRegistry<GroupScript>::Instance()->AddScript(this);
 }
 
+BGScript::BGScript(char const* name)
+    : ScriptObject(name)
+{
+    ScriptRegistry<BGScript>::Instance()->AddScript(this);
+}
+
 // Specialize for each script type class like so:
 template class WH_GAME_API ScriptRegistry<SpellScriptLoader>;
 template class WH_GAME_API ScriptRegistry<ServerScript>;
@@ -2429,3 +2435,4 @@ template class WH_GAME_API ScriptRegistry<GuildScript>;
 template class WH_GAME_API ScriptRegistry<GroupScript>;
 template class WH_GAME_API ScriptRegistry<UnitScript>;
 template class WH_GAME_API ScriptRegistry<AccountScript>;
+template class WH_GAME_API ScriptRegistry<BGScript>;

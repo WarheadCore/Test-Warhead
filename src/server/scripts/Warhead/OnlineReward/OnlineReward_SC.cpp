@@ -28,12 +28,12 @@ class OnlineReward_Player : public PlayerScript
 public:
     OnlineReward_Player() : PlayerScript("OnlineReward_Player") { }
 
-    void OnLogin(Player* player) override
+    void OnLogin(Player* player, bool /*first*/) override
     {
         if (!CONF_GET_BOOL("OnlineReward.Enable"))
             return;
 
-        sOL->AddRewardHistory(player->GetGUIDLow());
+        sOL->AddRewardHistory(player->GetGUID());
     }
 
     void OnLogout(Player* player) override
@@ -41,7 +41,7 @@ public:
         if (!CONF_GET_BOOL("OnlineReward.Enable"))
             return;
 
-        sOL->DeleteRewardHistory(player->GetGUIDLow());
+        sOL->DeleteRewardHistory(player->GetGUID());
     }
 };
 
