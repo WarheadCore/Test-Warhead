@@ -3444,7 +3444,7 @@ void ObjectMgr::LoadVehicleTemplate()
 
     if (!result)
     {
-        TC_LOG_INFO("server.loading", ">> Loaded 0 vehicle template. DB table `vehicle_template` is empty.");
+        LOG_INFO("server.loading", ">> Loaded 0 vehicle template. DB table `vehicle_template` is empty.");
         return;
     }
 
@@ -3456,7 +3456,7 @@ void ObjectMgr::LoadVehicleTemplate()
 
         if (!sObjectMgr->GetCreatureTemplate(creatureId))
         {
-            TC_LOG_ERROR("sql.sql", "Table `vehicle_template`: Vehicle %u does not exist.", creatureId);
+            LOG_ERROR("sql.sql", "Table `vehicle_template`: Vehicle %u does not exist.", creatureId);
             continue;
         }
 
@@ -3465,7 +3465,7 @@ void ObjectMgr::LoadVehicleTemplate()
 
     } while (result->NextRow());
 
-    TC_LOG_INFO("server.loading", ">> Loaded " SZFMTD " Vehicle Template entries in %u ms", _vehicleTemplateStore.size(), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded " SZFMTD " Vehicle Template entries in %u ms", _vehicleTemplateStore.size(), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void ObjectMgr::LoadVehicleAccessories()
