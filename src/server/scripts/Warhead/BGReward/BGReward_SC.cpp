@@ -49,26 +49,26 @@ public:
 
             switch (player->GetZoneId())
             {
-                case 3277: // Warsong Gulch
-                    player->AddItem(CONF_GET_INT("BGReward.ItemID.WSG"), rewardCount);
-                    break;
-                case 3358: // Arathi Basin
-                    player->AddItem(CONF_GET_INT("BGReward.ItemID.Arathi"), rewardCount);
-                    break;
-                case 3820: // Eye of the Storm
-                    player->AddItem(CONF_GET_INT("BGReward.ItemID.Eye"), rewardCount);
-                    break;
-                case 4710: // Isle of Conquest
-                    player->AddItem(CONF_GET_INT("BGReward.ItemID.Isle"), rewardCount);
-                    break;
-                case 4384: // Strand of the Ancients
-                    player->AddItem(CONF_GET_INT("BGReward.ItemID.Ancients"), rewardCount);
-                    break;
-                case 2597: // Alterac Valley
-                    player->AddItem(CONF_GET_INT("BGReward.ItemID.Alterac"), rewardCount);
-                    break;
-                default:
-                    break;
+            case 3277: // Warsong Gulch
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.WSG"), rewardCount);
+                break;
+            case 3358: // Arathi Basin
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Arathi"), rewardCount);
+                break;
+            case 3820: // Eye of the Storm
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Eye"), rewardCount);
+                break;
+            case 4710: // Isle of Conquest
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Isle"), rewardCount);
+                break;
+            case 4384: // Strand of the Ancients
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Ancients"), rewardCount);
+                break;
+            case 2597: // Alterac Valley
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Alterac"), rewardCount);
+                break;
+            default:
+                break;
             }
         }
     }

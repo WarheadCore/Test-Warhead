@@ -47,28 +47,28 @@ namespace
         {
             switch (diff)
             {
-                case RAID_DIFFICULTY_10MAN_NORMAL:
-                    return "10 об.";
-                case RAID_DIFFICULTY_25MAN_NORMAL:
-                    return "25 об.";
-                case RAID_DIFFICULTY_10MAN_HEROIC:
-                    return "10 гер.";
-                case RAID_DIFFICULTY_25MAN_HEROIC:
-                    return "25 гер.";
-                default:
-                    break;
+            case RAID_DIFFICULTY_10MAN_NORMAL:
+                return "10 об.";
+            case RAID_DIFFICULTY_25MAN_NORMAL:
+                return "25 об.";
+            case RAID_DIFFICULTY_10MAN_HEROIC:
+                return "10 гер.";
+            case RAID_DIFFICULTY_25MAN_HEROIC:
+                return "25 гер.";
+            default:
+                break;
             }
         }
         else // if dungeon
         {
             switch (diff)
             {
-                case DUNGEON_DIFFICULTY_NORMAL:
-                    return "5 об.";
-                case DUNGEON_DIFFICULTY_HEROIC:
-                    return "5 гер.";
-                default:
-                    break;
+            case DUNGEON_DIFFICULTY_NORMAL:
+                return "5 об.";
+            case DUNGEON_DIFFICULTY_HEROIC:
+                return "5 гер.";
+            default:
+                break;
             }
         }
 
@@ -216,19 +216,24 @@ void UnbindInstance::SendGossipHello(Player* player, Creature* creature)
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, "-- Вы не имеете кд ни на что", GOSSIP_SENDER_MAIN, 0);
 
     if (::IsExistBindDifficulty(player, DUNGEON_DIFFICULTY_HEROIC, false))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Героические подземелья", ::GetCountInstanceBind(player, DUNGEON_DIFFICULTY_HEROIC, false)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DUNGEON_HEROIC);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Героические подземелья", ::GetCountInstanceBind(player, DUNGEON_DIFFICULTY_HEROIC, false)),
+                         GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DUNGEON_HEROIC);
 
     if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_10MAN_NORMAL))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 об.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_10MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_NORMAL);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 об.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_10MAN_NORMAL)), GOSSIP_SENDER_MAIN,
+                         GOSSIP_ACTION_INFO_RAID_10_NORMAL);
 
     if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_25MAN_NORMAL))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 об.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_25MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_NORMAL);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 об.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_25MAN_NORMAL)), GOSSIP_SENDER_MAIN,
+                         GOSSIP_ACTION_INFO_RAID_25_NORMAL);
 
     if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_10MAN_HEROIC))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 гер.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_10MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_HEROIC);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 гер.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_10MAN_HEROIC)), GOSSIP_SENDER_MAIN,
+                         GOSSIP_ACTION_INFO_RAID_10_HEROIC);
 
     if (::IsExistBindDifficulty(player, RAID_DIFFICULTY_25MAN_HEROIC))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 гер.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_25MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_HEROIC);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 гер.", ::GetCountInstanceBind(player, RAID_DIFFICULTY_25MAN_HEROIC)), GOSSIP_SENDER_MAIN,
+                         GOSSIP_ACTION_INFO_RAID_25_HEROIC);
 
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
@@ -305,28 +310,28 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
         {
             switch (diff)
             {
-                case RAID_DIFFICULTY_10MAN_NORMAL:
-                    return uiCostsStore.CountForRaid10Normal;
-                case RAID_DIFFICULTY_25MAN_NORMAL:
-                    return uiCostsStore.CountForRaid25Normal;
-                case RAID_DIFFICULTY_10MAN_HEROIC:
-                    return uiCostsStore.CountForRaid10Heroic;
-                case RAID_DIFFICULTY_25MAN_HEROIC:
-                    return uiCostsStore.CountForRaid25Heroic;
-                default:
-                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                    break;
+            case RAID_DIFFICULTY_10MAN_NORMAL:
+                return uiCostsStore.CountForRaid10Normal;
+            case RAID_DIFFICULTY_25MAN_NORMAL:
+                return uiCostsStore.CountForRaid25Normal;
+            case RAID_DIFFICULTY_10MAN_HEROIC:
+                return uiCostsStore.CountForRaid10Heroic;
+            case RAID_DIFFICULTY_25MAN_HEROIC:
+                return uiCostsStore.CountForRaid25Heroic;
+            default:
+                LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                break;
             }
         }
         else // if dungeon
         {
             switch (diff)
             {
-                case DUNGEON_DIFFICULTY_HEROIC:
-                    return uiCostsStore.CountForDungeonHeroic;
-                default:
-                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                    break;
+            case DUNGEON_DIFFICULTY_HEROIC:
+                return uiCostsStore.CountForDungeonHeroic;
+            default:
+                LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                break;
             }
         }
 
@@ -373,28 +378,28 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
         {
             switch (diff)
             {
-                case RAID_DIFFICULTY_10MAN_NORMAL:
-                    return uiCostsStore.CountForRaid10Normal;
-                case RAID_DIFFICULTY_25MAN_NORMAL:
-                    return uiCostsStore.CountForRaid25Normal;
-                case RAID_DIFFICULTY_10MAN_HEROIC:
-                    return uiCostsStore.CountForRaid10Heroic;
-                case RAID_DIFFICULTY_25MAN_HEROIC:
-                    return uiCostsStore.CountForRaid25Heroic;
-                default:
-                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                    break;
+            case RAID_DIFFICULTY_10MAN_NORMAL:
+                return uiCostsStore.CountForRaid10Normal;
+            case RAID_DIFFICULTY_25MAN_NORMAL:
+                return uiCostsStore.CountForRaid25Normal;
+            case RAID_DIFFICULTY_10MAN_HEROIC:
+                return uiCostsStore.CountForRaid10Heroic;
+            case RAID_DIFFICULTY_25MAN_HEROIC:
+                return uiCostsStore.CountForRaid25Heroic;
+            default:
+                LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                break;
             }
         }
         else // if dungeon
         {
             switch (diff)
             {
-                case DUNGEON_DIFFICULTY_HEROIC:
-                    return uiCostsStore.CountForDungeonHeroic;
-                default:
-                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                    break;
+            case DUNGEON_DIFFICULTY_HEROIC:
+                return uiCostsStore.CountForDungeonHeroic;
+            default:
+                LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                break;
             }
         }
 

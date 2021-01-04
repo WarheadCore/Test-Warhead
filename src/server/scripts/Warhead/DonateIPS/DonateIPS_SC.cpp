@@ -145,7 +145,8 @@ public:
                 }
             }
             else if (_data.Type != IPSShopType::IPS_SHOP_TYPE_ITEM && _data.Value)
-                LOG_ERROR("sql.sql", "> IPS Shop: Шоп айди (%u) не является предметом, для него не нужно указывать количество. Установлено 0", _data.ShopID);
+                LOG_ERROR("sql.sql", "> IPS Shop: Шоп айди (%u) не является предметом, для него не нужно указывать количество. Установлено 0",
+                          _data.ShopID);
 
             _shopStore.insert(std::make_pair(_data.ShopID, _data));
 
@@ -168,24 +169,24 @@ private:
 
         switch (shopID->Type)
         {
-            case IPSShopType::IPS_SHOP_TYPE_ITEM:
-                SendRewardItem(ipsData->CharName, shopID->Value, ipsData->Value);
-                break;
-            case IPSShopType::IPS_SHOP_TYPE_CHAR_RENAME:
-                SendRewardRename(ipsData->CharName);
-                break;
-            case IPSShopType::IPS_SHOP_TYPE_CHAR_RACE:
-                SendRewardChangeRace(ipsData->CharName);
-                break;
-            case IPSShopType::IPS_SHOP_TYPE_CHAR_FACTION:
-                SendRewardChangeFaction(ipsData->CharName);
-                break;
-            case IPSShopType::IPS_SHOP_TYPE_CHAR_CUSTOMIZE:
-                SendRewardChangeCustomize(ipsData->CharName);
-                break;
-            default:
-                LOG_FATAL("modules.ips", "> DonateIPS: Неверый тип шоп айди (%u)", static_cast<uint32>(shopID->Type));
-                return;
+        case IPSShopType::IPS_SHOP_TYPE_ITEM:
+            SendRewardItem(ipsData->CharName, shopID->Value, ipsData->Value);
+            break;
+        case IPSShopType::IPS_SHOP_TYPE_CHAR_RENAME:
+            SendRewardRename(ipsData->CharName);
+            break;
+        case IPSShopType::IPS_SHOP_TYPE_CHAR_RACE:
+            SendRewardChangeRace(ipsData->CharName);
+            break;
+        case IPSShopType::IPS_SHOP_TYPE_CHAR_FACTION:
+            SendRewardChangeFaction(ipsData->CharName);
+            break;
+        case IPSShopType::IPS_SHOP_TYPE_CHAR_CUSTOMIZE:
+            SendRewardChangeCustomize(ipsData->CharName);
+            break;
+        default:
+            LOG_FATAL("modules.ips", "> DonateIPS: Неверый тип шоп айди (%u)", static_cast<uint32>(shopID->Type));
+            return;
         }
 
         CharacterDatabase.PExecute("UPDATE `shop_purchase` SET `flag` = 1 WHERE `id` = %u", ipsData->ID);

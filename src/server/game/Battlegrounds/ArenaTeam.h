@@ -115,94 +115,94 @@ struct ArenaTeamStats
 
 class WH_GAME_API ArenaTeam
 {
-    public:
-        ArenaTeam();
-        ~ArenaTeam();
+public:
+    ArenaTeam();
+    ~ArenaTeam();
 
-        bool Create(ObjectGuid captainGuid, uint8 type, std::string const& teamName, uint32 backgroundColor, uint8 emblemStyle, uint32 emblemColor, uint8 borderStyle, uint32 borderColor);
-        void Disband(WorldSession* session);
-        void Disband();
+    bool Create(ObjectGuid captainGuid, uint8 type, std::string const& teamName, uint32 backgroundColor, uint8 emblemStyle, uint32 emblemColor, uint8 borderStyle, uint32 borderColor);
+    void Disband(WorldSession* session);
+    void Disband();
 
-        typedef std::list<ArenaTeamMember> MemberList;
+    typedef std::list<ArenaTeamMember> MemberList;
 
-        uint32 GetId() const { return TeamId; }
-        uint32 GetType() const { return Type; }
-        uint8 GetSlot() const { return GetSlotByType(GetType()); }
-        static uint8 GetSlotByType(uint32 type);
-        ObjectGuid GetCaptain() const  { return CaptainGuid; }
-        std::string const& GetName() const { return TeamName; }
-        ArenaTeamStats const& GetStats() const { return Stats; }
+    uint32 GetId() const { return TeamId; }
+    uint32 GetType() const { return Type; }
+    uint8 GetSlot() const { return GetSlotByType(GetType()); }
+    static uint8 GetSlotByType(uint32 type);
+    ObjectGuid GetCaptain() const  { return CaptainGuid; }
+    std::string const& GetName() const { return TeamName; }
+    ArenaTeamStats const& GetStats() const { return Stats; }
 
-        uint32 GetRating() const          { return Stats.Rating; }
-        uint32 GetAverageMMR(Group* group) const;
+    uint32 GetRating() const          { return Stats.Rating; }
+    uint32 GetAverageMMR(Group* group) const;
 
-        void SetCaptain(ObjectGuid guid);
-        bool SetName(std::string const& name);
-        bool AddMember(ObjectGuid PlayerGuid);
-        void DelMember(ObjectGuid guid, bool cleanDb);
+    void SetCaptain(ObjectGuid guid);
+    bool SetName(std::string const& name);
+    bool AddMember(ObjectGuid PlayerGuid);
+    void DelMember(ObjectGuid guid, bool cleanDb);
 
-        size_t GetMembersSize() const { return Members.size(); }
-        bool Empty() const { return Members.empty(); }
-        MemberList::iterator m_membersBegin() { return Members.begin(); }
-        MemberList::iterator m_membersEnd() { return Members.end(); }
-        MemberList& GetMembers() { return Members; }
-        bool IsMember(ObjectGuid guid) const;
+    size_t GetMembersSize() const { return Members.size(); }
+    bool Empty() const { return Members.empty(); }
+    MemberList::iterator m_membersBegin() { return Members.begin(); }
+    MemberList::iterator m_membersEnd() { return Members.end(); }
+    MemberList& GetMembers() { return Members; }
+    bool IsMember(ObjectGuid guid) const;
 
-        ArenaTeamMember* GetMember(ObjectGuid guid);
-        ArenaTeamMember* GetMember(std::string const& name);
+    ArenaTeamMember* GetMember(ObjectGuid guid);
+    ArenaTeamMember* GetMember(std::string const& name);
 
-        bool IsFighting() const;
+    bool IsFighting() const;
 
-        bool LoadArenaTeamFromDB(QueryResult arenaTeamDataResult);
-        bool LoadMembersFromDB(QueryResult arenaTeamMembersResult);
-        void LoadStatsFromDB(uint32 ArenaTeamId);
-        void SaveToDB();
+    bool LoadArenaTeamFromDB(QueryResult arenaTeamDataResult);
+    bool LoadMembersFromDB(QueryResult arenaTeamMembersResult);
+    void LoadStatsFromDB(uint32 ArenaTeamId);
+    void SaveToDB();
 
-        void BroadcastPacket(WorldPacket* packet);
-        void BroadcastEvent(ArenaTeamEvents event, ObjectGuid guid, uint8 strCount, std::string const& str1, std::string const& str2, std::string const& str3);
-        void NotifyStatsChanged();
+    void BroadcastPacket(WorldPacket* packet);
+    void BroadcastEvent(ArenaTeamEvents event, ObjectGuid guid, uint8 strCount, std::string const& str1, std::string const& str2, std::string const& str3);
+    void NotifyStatsChanged();
 
-        void MassInviteToEvent(WorldSession* session);
+    void MassInviteToEvent(WorldSession* session);
 
-        void Roster(WorldSession* session);
-        void Query(WorldSession* session);
-        void SendStats(WorldSession* session);
-        void Inspect(WorldSession* session, ObjectGuid guid);
+    void Roster(WorldSession* session);
+    void Query(WorldSession* session);
+    void SendStats(WorldSession* session);
+    void Inspect(WorldSession* session, ObjectGuid guid);
 
-        uint32 GetPoints(uint32 MemberRating);
-        int32 GetMatchmakerRatingMod(uint32 ownRating, uint32 opponentRating, bool won);
-        int32 GetRatingMod(uint32 ownRating, uint32 opponentRating, bool won);
-        float GetChanceAgainst(uint32 ownRating, uint32 opponentRating);
-        int32 WonAgainst(uint32 Own_MMRating, uint32 Opponent_MMRating, int32& rating_change);
-        void MemberWon(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange);
-        int32 LostAgainst(uint32 Own_MMRating, uint32 Opponent_MMRating, int32& rating_change);
-        void MemberLost(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange = -12);
-        void OfflineMemberLost(ObjectGuid guid, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange = -12);
+    uint32 GetPoints(uint32 MemberRating);
+    int32 GetMatchmakerRatingMod(uint32 ownRating, uint32 opponentRating, bool won);
+    int32 GetRatingMod(uint32 ownRating, uint32 opponentRating, bool won);
+    float GetChanceAgainst(uint32 ownRating, uint32 opponentRating);
+    int32 WonAgainst(uint32 Own_MMRating, uint32 Opponent_MMRating, int32& rating_change);
+    void MemberWon(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange);
+    int32 LostAgainst(uint32 Own_MMRating, uint32 Opponent_MMRating, int32& rating_change);
+    void MemberLost(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange = -12);
+    void OfflineMemberLost(ObjectGuid guid, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange = -12);
 
-        void UpdateArenaPointsHelper(std::map<uint32, uint32> & PlayerPoints);
+    void UpdateArenaPointsHelper(std::map<uint32, uint32>& PlayerPoints);
 
-        bool FinishWeek(); // returns true if arena team played this week
-        void FinishGame(int32 mod);
+    bool FinishWeek(); // returns true if arena team played this week
+    void FinishGame(int32 mod);
 
-        void SetPreviousOpponents(uint32 arenaTeamId) { PreviousOpponents = arenaTeamId; }
-        uint32 GetPreviousOpponents() { return PreviousOpponents; }
+    void SetPreviousOpponents(uint32 arenaTeamId) { PreviousOpponents = arenaTeamId; }
+    uint32 GetPreviousOpponents() { return PreviousOpponents; }
 
-    protected:
+protected:
 
-        uint32 TeamId;
-        uint8 Type;
-        std::string TeamName;
-        ObjectGuid CaptainGuid;
+    uint32 TeamId;
+    uint8 Type;
+    std::string TeamName;
+    ObjectGuid CaptainGuid;
 
-        uint32 BackgroundColor; // ARGB format
-        uint8 EmblemStyle;      // icon id
-        uint32 EmblemColor;     // ARGB format
-        uint8 BorderStyle;      // border image id
-        uint32 BorderColor;     // ARGB format
+    uint32 BackgroundColor; // ARGB format
+    uint8 EmblemStyle;      // icon id
+    uint32 EmblemColor;     // ARGB format
+    uint8 BorderStyle;      // border image id
+    uint32 BorderColor;     // ARGB format
 
-        MemberList Members;
-        ArenaTeamStats Stats;
+    MemberList Members;
+    ArenaTeamStats Stats;
 
-        uint32 PreviousOpponents;
+    uint32 PreviousOpponents;
 };
 #endif
