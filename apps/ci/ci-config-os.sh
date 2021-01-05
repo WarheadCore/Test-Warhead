@@ -11,19 +11,19 @@ time sudo apt-get install -y ccache cmake make gcc g++ clang \
   libboost-system1.6*-dev libboost-filesystem1.6*-dev libboost-program-options1.6*-dev libboost-iostreams1.6*-dev
 
 case $COMPILER in
-  "clang7" )
-    time sudo apt-get install -y clang-7    
+  "clang7")
+    time sudo apt-get install -y clang-7
     ;;
 
-  "clang10" )
+  "clang10")
     time sudo apt-get install -y clang-10
     ;;
 
-  "clang11" )
+  "clang11")
     time sudo apt-get install -y clang-11
     ;;
 
-  * )
+  *)
     echo "Unknown compiler $COMPILER"
     exit 1
     ;;
