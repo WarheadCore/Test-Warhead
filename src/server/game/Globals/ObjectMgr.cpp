@@ -9552,7 +9552,7 @@ QuestPOIWrapper const* ObjectMgr::GetQuestPOIWrapper(uint32 questId) const
 
 VehicleTemplate const* ObjectMgr::GetVehicleTemplate(Vehicle* veh) const
 {
-    return Trinity::Containers::MapGetValuePtr(_vehicleTemplateStore, veh->GetCreatureEntry());
+    return Warhead::Containers::MapGetValuePtr(_vehicleTemplateStore, veh->GetCreatureEntry());
 }
 
 VehicleAccessoryList const* ObjectMgr::GetVehicleAccessoryList(Vehicle* veh) const
