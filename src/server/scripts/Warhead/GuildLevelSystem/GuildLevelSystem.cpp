@@ -690,14 +690,16 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
 
     if (itemCount > needItems)
     {
-        handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Вы хотите вложить|r %s |cff6C8CD5больше, чем можно|r %u|cff6C8CD5. Введите корректное число|r", ItemLink.c_str(), needItems);
+        handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Вы хотите вложить|r %s |cff6C8CD5больше, чем можно|r %u|cff6C8CD5. Введите корректное число|r",
+                                ItemLink.c_str(), needItems);
         ShowInvestedMenu(player, creature, sender, action);
         return;
     }
 
     player->DestroyItemCount(itemID, itemCount, true);
     criteriaProgress->AddItemProgess(criteriaID, itemType, itemCount);
-    SendGuildFormat(guildID, "|cffff0000#|r %s |cff6C8CD5вложил|r %u %s. |cff6C8CD5Осталось -|r %u", handler.playerLink(player->GetName()).c_str(), itemCount, ItemLink.c_str(), needItems - itemCount);
+    SendGuildFormat(guildID, "|cffff0000#|r %s |cff6C8CD5вложил|r %u %s. |cff6C8CD5Осталось -|r %u", handler.playerLink(player->GetName()).c_str(), itemCount, ItemLink.c_str(),
+                    needItems - itemCount);
 
     if (criteriaProgress->GetCountProgressDone(criteriaID) == criteriaProgress->GetMaxCountProgressDone(criteriaID))
         SendGuildFormat(player->GetGuildId(), "|cffff0000#|r |cff6C8CD5Гильдия выполнила критерий|r %u", criteriaID);
@@ -756,7 +758,8 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
 
     player->DestroyItemCount(itemID, itemCount, true);
     criteriaProgress->AddItemProgess(criteriaID, itemType, itemCount);
-    SendGuildFormat(guildID, "|cffff0000#|r %s |cff6C8CD5вложил|r %u %s. |cff6C8CD5Осталось -|r %u", handler.playerLink(player->GetName()).c_str(), itemCount, ItemLink.c_str(), needItems - itemCount);
+    SendGuildFormat(guildID, "|cffff0000#|r %s |cff6C8CD5вложил|r %u %s. |cff6C8CD5Осталось -|r %u", handler.playerLink(player->GetName()).c_str(), itemCount, ItemLink.c_str(),
+                    needItems - itemCount);
     ShowInvestedMenu(player, creature, sender, criteriaID + GLS_GOSSIP_CRITERIA_ID);
 }
 
@@ -1153,7 +1156,8 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
     if (itemsNeed)
     {
         AddGossipItemFor(player, 10, "- Вложить выборочно", sender, action, "Введите количество", 0, true);
-        AddGossipItemFor(player, 10, Warhead::StringFormat("- Вложить %s (%u)", itemCount == itemsNeed ? "до конца" : "всё что есть", itemCount), sender, criteriaID + GLS_GOSSIP_CRITERIA_ID_FULL,
+        AddGossipItemFor(player, 10, Warhead::StringFormat("- Вложить %s (%u)", itemCount == itemsNeed ? "до конца" : "всё что есть", itemCount), sender,
+                         criteriaID + GLS_GOSSIP_CRITERIA_ID_FULL,
                          Warhead::StringFormat("Вы уверены, что хотите вложить %s %u?", itemLink.c_str(), playerItemCount), 0, false);
     }
 

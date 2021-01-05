@@ -137,29 +137,29 @@ public:
 
             switch (action)
             {
-                case 1:
-                    AddGossipItemFor(player, 10, Warhead::StringFormat("> Количество участников %u", player->GetGuild()->GetMemberCount()), GOSSIP_SENDER_MAIN, 1);
-                    AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
-                    SendGossipMenuFor(player, 1, me->GetGUID());
-                    break;
-                case 2: // Вклад в ги
-                    sGuildLevelSystem->ShowAllCriteriaInfo(player, me);
-                    break;
-                case 3: // Получить награды
-                    sGuildLevelSystem->ShowAllCriteriaInfo(player, me);
-                    break;
-                case 4: // Завершить стадию
-                    sGuildLevelSystem->SetNextStage(player);
-                    CloseGossipMenuFor(player);
-                    break;
-                case 100: // Выход
-                    CloseGossipMenuFor(player);
-                    break;
-                case 99: // Главное меню
-                    OnGossipHello(player);
-                    break;
-                default:
-                    break;
+            case 1:
+                AddGossipItemFor(player, 10, Warhead::StringFormat("> Количество участников %u", player->GetGuild()->GetMemberCount()), GOSSIP_SENDER_MAIN, 1);
+                AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
+                SendGossipMenuFor(player, 1, me->GetGUID());
+                break;
+            case 2: // Вклад в ги
+                sGuildLevelSystem->ShowAllCriteriaInfo(player, me);
+                break;
+            case 3: // Получить награды
+                sGuildLevelSystem->ShowAllCriteriaInfo(player, me);
+                break;
+            case 4: // Завершить стадию
+                sGuildLevelSystem->SetNextStage(player);
+                CloseGossipMenuFor(player);
+                break;
+            case 100: // Выход
+                CloseGossipMenuFor(player);
+                break;
+            case 99: // Главное меню
+                OnGossipHello(player);
+                break;
+            default:
+                break;
             }
 
             return true;

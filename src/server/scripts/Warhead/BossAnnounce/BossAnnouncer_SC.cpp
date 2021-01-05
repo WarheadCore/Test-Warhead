@@ -75,16 +75,16 @@ private:
 
         switch (map->GetDifficulty())
         {
-            case RAID_DIFFICULTY_10MAN_NORMAL:
-                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_NORMAL, localeIndex);
-            case RAID_DIFFICULTY_10MAN_HEROIC:
-                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_HEROIC, localeIndex);
-            case RAID_DIFFICULTY_25MAN_NORMAL:
-                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_NORMAL, localeIndex);
-            case RAID_DIFFICULTY_25MAN_HEROIC:
-                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_HEROIC, localeIndex);
-            default:
-                return "";
+        case RAID_DIFFICULTY_10MAN_NORMAL:
+            return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_NORMAL, localeIndex);
+        case RAID_DIFFICULTY_10MAN_HEROIC:
+            return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_HEROIC, localeIndex);
+        case RAID_DIFFICULTY_25MAN_NORMAL:
+            return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_NORMAL, localeIndex);
+        case RAID_DIFFICULTY_25MAN_HEROIC:
+            return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_HEROIC, localeIndex);
+        default:
+            return "";
         }
     }
 

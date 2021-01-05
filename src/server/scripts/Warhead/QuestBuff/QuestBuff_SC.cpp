@@ -109,7 +109,7 @@ public:
 
     uint32 GetHighSpellByCategory(Player* player, uint32 Cat)
     {
-        if(!player)
+        if (!player)
             return 0;
 
         uint32 HighSpellRank = GetHighRankByCategory(player, Cat);
