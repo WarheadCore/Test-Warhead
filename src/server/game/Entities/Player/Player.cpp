@@ -6572,6 +6572,42 @@ void Player::RewardReputation(Quest const* quest)
     }
 }
 
+/*
+ *  If in a battleground or battlefield player dies, and an enemy removes the insignia, the player's bones is lootable
+ *  Called by remove insignia spell effect
+ */
+void Player::RemovePVPInsignia(Player* looter)
+{
+    // If player is not in battleground and not in battlefield
+    if (!GetBattlegroundId() && !sBattlefieldMgr->GetEnabledBattlefield(GetZoneId()))
+        return;
+
+    // If not released spirit, do it !
+    if (m_deathTimer > 0)
+    {
+        m_deathTimer = 0;
+        BuildPlayerRepop();
+        RepopAtGraveyard();
+    }
+
+    _corpseLocation.WorldRelocate();
+
+    // We have to convert player corpse to bones, not to be able to resurrect there
+    // SpawnCorpseBones isn't handy, 'cos it saves player
+    Corpse* bones = GetMap()->ConvertCorpseToBones(GetGUID(), true);
+    if (!bones)
+        return;
+
+    // Now we must make bones lootable, and send player loot
+    bones->SetFlag(CORPSE_FIELD_DYNAMIC_FLAGS, CORPSE_DYNFLAG_LOOTABLE);
+
+    // We store the level of our player in the gold field
+    // We retrieve this information at Player::SendLoot()
+    bones->loot.gold = getLevel();
+    bones->lootRecipient = looter;
+    looter->SendLoot(bones->GetGUID(), LOOT_INSIGNIA);
+}
+
 void Player::UpdateHonorFields()
 {
     /// called when rewarding honor and at each save
@@ -8203,40 +8239,6 @@ bool Player::CheckAmmoCompatibility(ItemTemplate const* ammo_proto) const
     return true;
 }
 
-/*  If in a battleground a player dies, and an enemy removes the insignia, the player's bones is lootable
-    Called by remove insignia spell effect    */
-void Player::RemovedInsignia(Player* looterPlr)
-{
-    // If player is not in battleground and not in worldpvpzone
-    if (!GetBattlegroundId() && !IsInWorldPvpZone())
-        return;
-
-    // If not released spirit, do it !
-    if (m_deathTimer > 0)
-    {
-        m_deathTimer = 0;
-        BuildPlayerRepop();
-        RepopAtGraveyard();
-    }
-
-    _corpseLocation.WorldRelocate();
-
-    // We have to convert player corpse to bones, not to be able to resurrect there
-    // SpawnCorpseBones isn't handy, 'cos it saves player while he in BG
-    Corpse* bones = GetMap()->ConvertCorpseToBones(GetGUID(), true);
-    if (!bones)
-        return;
-
-    // Now we must make bones lootable, and send player loot
-    bones->SetFlag(CORPSE_FIELD_DYNAMIC_FLAGS, CORPSE_DYNFLAG_LOOTABLE);
-
-    // We store the level of our player in the gold field
-    // We retrieve this information at Player::SendLoot()
-    bones->loot.gold = GetLevel();
-    bones->lootRecipient = looterPlr;
-    looterPlr->SendLoot(bones->GetGUID(), LOOT_INSIGNIA);
-}
-
 void Player::SendLootRelease(ObjectGuid guid) const
 {
     WorldPacket data(SMSG_LOOT_RELEASE_RESPONSE, (8+1));
@@ -8431,7 +8433,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type)
             }
         }
     }
-    else if (guid.IsCorpse())                          // remove insignia
+    else if (guid.IsCorpse()) // remove insignia
     {
         Corpse* bones = ObjectAccessor::GetCorpse(*this, guid);
 
@@ -8445,7 +8447,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type)
 
         if (loot->loot_type == LOOT_NONE)
         {
-            uint32 pLevel = bones->loot.gold;
+            float playerLevel = bones->loot.gold;
             bones->loot.clear();
 
             // For AV Achievement
@@ -8455,12 +8457,12 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type)
                     loot->FillLoot(PLAYER_CORPSE_LOOT_ENTRY, LootTemplates_Creature, this, true);
             }
             // For wintergrasp Quests
-            else if (GetZoneId() == AREA_WINTERGRASP)
+            else if (GetZoneId() == BATTLEFIELD_ZONEID_WINTERGRASP)
                 loot->FillLoot(PLAYER_CORPSE_LOOT_ENTRY, LootTemplates_Creature, this, true);
 
             // It may need a better formula
             // Now it works like this: lvl10: ~6copper, lvl70: ~9silver
-            bones->loot.gold = uint32(urand(50, 150) * 0.016f * std::pow(float(pLevel) / 5.76f, 2.5f) * CONF_GET_FLOAT("Rate.Drop.Money"));
+            bones->loot.gold = uint32(urand(50, 150) * 0.016f * std::pow(playerLevel / 5.76f, 2.5f) * CONF_GET_FLOAT("Rate.Drop.Money"));
         }
 
         if (bones->lootRecipient != this)
@@ -8673,7 +8675,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
     Battleground* battleground = GetBattleground();
     OutdoorPvP* outdoorPvP = sOutdoorPvPMgr->GetOutdoorPvPToZoneId(zoneId);
     InstanceScript* instance = GetInstanceScript();
-    Battlefield* battlefield = sBattlefieldMgr->GetBattlefieldToZoneId(zoneId);
+    Battlefield* battlefield = sBattlefieldMgr->GetBattlefield(zoneId);
 
     LOG_DEBUG("network", "Player::SendInitWorldStates: Sending SMSG_INIT_WORLD_STATES for Map: %u, Zone: %u", mapId, zoneId);
 

@@ -4964,7 +4964,7 @@ void Spell::EffectSkinPlayerCorpse(SpellEffIndex /*effIndex*/)
     if (!player || !target || target->IsAlive())
         return;
 
-    target->RemovedInsignia(player);
+    target->RemovePVPInsignia(player);
 }
 
 void Spell::EffectStealBeneficialBuff(SpellEffIndex effIndex)

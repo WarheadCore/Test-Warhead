@@ -37,7 +37,7 @@
 #include <readline/history.h>
 #endif
 
-static constexpr char CLI_PREFIX[] = "TC> ";
+static constexpr char CLI_PREFIX[] = "Warhead> ";
 
 static inline void PrintCliPrefix()
 {
