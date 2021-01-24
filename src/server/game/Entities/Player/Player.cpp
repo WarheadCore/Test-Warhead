@@ -19902,7 +19902,7 @@ void Player::_SaveSkills(CharacterDatabaseTransaction trans)
                 break;
             }
         }
-        
+
         itr->second.uState = SKILL_UNCHANGED;
 
         ++itr;

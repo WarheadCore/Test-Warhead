@@ -104,7 +104,6 @@ public:
     }
 };
 
-
 class CrossFactionBG_World : public WorldScript
 {
 public:
