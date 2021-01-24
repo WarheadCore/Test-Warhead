@@ -56,6 +56,7 @@ class AchievementMgr;
 class Bag;
 class Battleground;
 class CinematicMgr;
+class CrossFactionData;
 class Channel;
 class CharacterCreateInfo;
 class Creature;
@@ -499,11 +500,10 @@ enum SkillUpdateState
 
 struct SkillStatusData
 {
-    SkillStatusData(uint8 _pos, SkillUpdateState _uState) : pos(_pos), uState(_uState)
-    {
-    }
+    SkillStatusData(uint8 _pos, SkillUpdateState _uState) : pos(_pos), uState(_uState) { }
     uint8 pos;
     SkillUpdateState uState;
+    bool DefaultSkill = false;
 };
 
 typedef std::unordered_map<uint32, SkillStatusData> SkillStatusMap;
@@ -878,6 +878,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
 {
     friend class WorldSession;
     friend class CinematicMgr;
+    friend class CrossFactionData;
     friend void AddItemToUpdateQueueOf(Item* item, Player* player);
     friend void RemoveItemFromUpdateQueueOf(Item* item, Player* player);
     public:
@@ -1720,7 +1721,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void UpdateWeaponSkill(Unit* victim, WeaponAttackType attType);
         void UpdateCombatSkills(Unit* victim, WeaponAttackType attType, bool defense);
 
-        void SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal);
+        void SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal, bool defaultSkill = false);
         uint16 GetMaxSkillValue(uint32 skill) const;        // max + perm. bonus + temp bonus
         uint16 GetPureMaxSkillValue(uint32 skill) const;    // max
         uint16 GetSkillValue(uint32 skill) const;           // skill value + perm. bonus + temp bonus
@@ -1744,7 +1745,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void CheckAreaExploreAndOutdoor(void);
 
         static uint32 TeamForRace(uint8 race);
-        uint32 GetTeam() const { return m_team; }
+        uint32 GetTeam() const { return GetBGTeam(); }
         TeamId GetTeamId() const { return m_team == ALLIANCE ? TEAM_ALLIANCE : TEAM_HORDE; }
         void SetFactionForRace(uint8 race);
 
@@ -2166,6 +2167,8 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
 
         std::string GetDebugInfo() const override;
 
+        CrossFactionData* GetCrossFactionData() { return _crossFactionData.get(); }
+
     protected:
         // Gamemaster whisper whitelist
         GuidList WhisperList;
@@ -2499,6 +2502,8 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         uint32 manaBeforeDuel;
 
         WorldLocation _corpseLocation;
+
+        std::unique_ptr<CrossFactionData> _crossFactionData;
 };
 
 WH_GAME_API void AddItemsSetItem(Player* player, Item* item);

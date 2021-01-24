@@ -2196,9 +2196,14 @@ bool ScriptMgr::CanFillPlayersToBG(BattlegroundQueue* queue, Battleground* bg, c
     return ret;
 }
 
-void ScriptMgr::OnCheckNormalMatch(BattlegroundQueue* queue, uint32& Coef, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers)
+bool ScriptMgr::OnCheckNormalMatch(BattlegroundQueue* queue, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers)
 {
-    FOREACH_SCRIPT(BGScript)->OnCheckNormalMatch(queue, Coef, bgTemplate, bracket_id, minPlayers, maxPlayers);
+    FOREACH_SCRIPT(BGScript)->OnCheckNormalMatch(queue, bgTemplate, bracket_id, minPlayers, maxPlayers);
+}
+
+void ScriptMgr::OnQueueRemovePlayer(BattlegroundQueue* queue, ObjectGuid guid, bool decreaseInvitedCount, uint32& index, uint32& pvpTeamsCount)
+{
+    FOREACH_SCRIPT(BGScript)->OnQueueRemovePlayer(queue, guid, decreaseInvitedCount, index, pvpTeamsCount);
 }
 
 // MiscScript

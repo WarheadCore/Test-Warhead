@@ -107,6 +107,7 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "WorldStatePackets.h"
+#include "CrossFactionData.h"
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
@@ -411,6 +412,8 @@ Player::Player(WorldSession* session): Unit(true)
     m_reputationMgr = new ReputationMgr(this);
 
     m_groupUpdateTimer.Reset(5000);
+
+    _crossFactionData = std::make_unique<CrossFactionData>(this);
 }
 
 Player::~Player()
@@ -509,6 +512,7 @@ bool Player::Create(ObjectGuid::LowType guidlow, CharacterCreateInfo* createInfo
 
     SetRace(createInfo->Race);
     SetClass(createInfo->Class);
+    _crossFactionData->InitializeData();
     SetGender(createInfo->Gender);
     SetPowerType(Powers(powertype), false);
     InitDisplayIds();
@@ -5856,7 +5860,7 @@ void Player::UpdateWeaponsSkillsToMaxSkillsForLevel()
 
 // This functions sets a skill line value (and adds if doesn't exist yet)
 // To "remove" a skill line, set it's values to zero
-void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
+void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal, bool defaultSkill /*= false*/)
 {
     if (!id)
         return;
@@ -5867,6 +5871,9 @@ void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
     //has skill
     if (itr != mSkillStatus.end() && itr->second.uState != SKILL_DELETED)
     {
+        if (itr->second.DefaultSkill)
+            itr->second.DefaultSkill = defaultSkill;
+
         currVal = SKILL_VALUE(GetUInt32Value(PLAYER_SKILL_VALUE_INDEX(itr->second.pos)));
         if (newVal)
         {
@@ -17104,7 +17111,12 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
 
     SetRace(fields[3].GetUInt8());
     SetClass(fields[4].GetUInt8());
+    _crossFactionData->InitializeData();
+    _LoadBGData(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_BG_DATA));
     SetGender(gender);
+
+    if (m_bgData.bgTeam && sBattlegroundMgr->GetBattleground(m_bgData.bgInstanceID, m_bgData.bgTypeID) && !_crossFactionData->NativeTeam())
+        SetRace(_crossFactionData->GetFakeRace());
 
     // check if race/class combination is valid
     PlayerInfo const* info = sObjectMgr->GetPlayerInfo(GetRace(), GetClass());
@@ -17240,7 +17252,6 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
 
     _LoadBoundInstances(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_BOUND_INSTANCES));
     _LoadInstanceTimeRestrictions(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_INSTANCE_LOCK_TIMES));
-    _LoadBGData(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_BG_DATA));
 
     GetSession()->SetPlayer(this);
     MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
@@ -17647,6 +17658,8 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     InitTalentForLevel();
     LearnDefaultSkills();
     LearnCustomSpells();
+
+    _crossFactionData->ReplaceRacials();
 
     // must be before inventory (some items required reputation check)
     m_reputationMgr->LoadFromDB(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_REPUTATION));
@@ -19107,7 +19120,7 @@ void Player::SaveToDB(CharacterDatabaseTransaction trans, bool create /* = false
         stmt->setUInt32(index++, GetGUID().GetCounter());
         stmt->setUInt32(index++, GetSession()->GetAccountId());
         stmt->setString(index++, GetName());
-        stmt->setUInt8(index++, GetRace());
+        stmt->setUInt8(index++, _crossFactionData->GetOriginalRace());
         stmt->setUInt8(index++, GetClass());
         stmt->setUInt8(index++, GetNativeGender());   // save gender from PLAYER_BYTES_3, UNIT_BYTES_0 changes with every transform effect
         stmt->setUInt8(index++, GetLevel());
@@ -19217,7 +19230,7 @@ void Player::SaveToDB(CharacterDatabaseTransaction trans, bool create /* = false
         // Update query
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHARACTER);
         stmt->setString(index++, GetName());
-        stmt->setUInt8(index++, GetRace());
+        stmt->setUInt8(index++, _crossFactionData->GetOriginalRace());
         stmt->setUInt8(index++, GetClass());
         stmt->setUInt8(index++, GetNativeGender());   // save gender from PLAYER_BYTES_3, UNIT_BYTES_0 changes with every transform effect
         stmt->setUInt8(index++, GetLevel());
@@ -19840,7 +19853,8 @@ void Player::_SaveMonthlyQuestStatus(CharacterDatabaseTransaction trans)
 void Player::_SaveSkills(CharacterDatabaseTransaction trans)
 {
     CharacterDatabasePreparedStatement* stmt;
-    // we don't need transactions here.
+
+    // We don't need transactions here.
     for (SkillStatusMap::iterator itr = mSkillStatus.begin(); itr != mSkillStatus.end();)
     {
         if (itr->second.uState == SKILL_UNCHANGED)
@@ -19864,8 +19878,10 @@ void Player::_SaveSkills(CharacterDatabaseTransaction trans)
         uint16 value = SKILL_VALUE(valueData);
         uint16 max = SKILL_MAX(valueData);
 
-        switch (itr->second.uState)
+        if (!itr->second.DefaultSkill)
         {
+            switch (itr->second.uState)
+            {
             case SKILL_NEW:
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHAR_SKILLS);
                 stmt->setUInt32(0, GetGUID().GetCounter());
@@ -19873,7 +19889,6 @@ void Player::_SaveSkills(CharacterDatabaseTransaction trans)
                 stmt->setUInt16(2, value);
                 stmt->setUInt16(3, max);
                 trans->Append(stmt);
-
                 break;
             case SKILL_CHANGED:
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_SKILLS);
@@ -19882,11 +19897,12 @@ void Player::_SaveSkills(CharacterDatabaseTransaction trans)
                 stmt->setUInt32(2, GetGUID().GetCounter());
                 stmt->setUInt16(3, uint16(itr->first));
                 trans->Append(stmt);
-
                 break;
             default:
                 break;
+            }
         }
+        
         itr->second.uState = SKILL_UNCHANGED;
 
         ++itr;
@@ -20468,7 +20484,13 @@ void Player::Say(std::string_view text, Language language, WorldObject const* /*
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_SAY, language, this, this, _text);
-    SendMessageToSetInRange(&data, CONF_GET_FLOAT("ListenRange.Say"), true);
+    SendMessageToSetInRange(&data, CONF_GET_FLOAT("ListenRange.Say"), !CONF_GET_BOOL("CrossFactionData.Enable"));
+
+    if (CONF_GET_BOOL("CrossFactionData.Enable"))
+    {
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_SAY, LANG_UNIVERSAL, this, nullptr, _text);
+        SendDirectMessage(&data);
+    }
 }
 
 void Player::Say(uint32 textId, WorldObject const* target /*= nullptr*/)
@@ -20483,7 +20505,13 @@ void Player::Yell(std::string_view text, Language language, WorldObject const* /
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_YELL, language, this, this, _text);
-    SendMessageToSetInRange(&data, CONF_GET_FLOAT("ListenRange.Yell"), true);
+    SendMessageToSetInRange(&data, CONF_GET_FLOAT("ListenRange.Yell"), !CONF_GET_BOOL("CrossFactionData.Enable"));
+
+    if (CONF_GET_BOOL("CrossFactionData.Enable"))
+    {
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_YELL, LANG_UNIVERSAL, this, nullptr, _text);
+        SendDirectMessage(&data);
+    }
 }
 
 void Player::Yell(uint32 textId, WorldObject const* target /*= nullptr*/)
@@ -20498,7 +20526,13 @@ void Player::TextEmote(std::string_view text, WorldObject const* /*= nullptr*/, 
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_EMOTE, LANG_UNIVERSAL, this, this, _text);
-    SendMessageToSetInRange(&data, CONF_GET_FLOAT("ListenRange.TextEmote"), true, !GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHAT));
+    SendMessageToSetInRange(&data, CONF_GET_FLOAT("ListenRange.TextEmote"), !CONF_GET_BOOL("CrossFactionData.Enable"), !GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHAT));
+
+    if (CONF_GET_BOOL("CrossFactionData.Enable"))
+    {
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_EMOTE, LANG_UNIVERSAL, this, nullptr, _text);
+        SendDirectMessage(&data);
+    }
 }
 
 void Player::TextEmote(uint32 textId, WorldObject const* target /*= nullptr*/, bool /*isBossEmote = false*/)
@@ -21917,11 +21951,12 @@ void Player::SetBGTeam(uint32 team)
 {
     m_bgData.bgTeam = team;
     SetArenaFaction(uint8(team == ALLIANCE ? 1 : 0));
+    _crossFactionData->SetCrossFactionData();
 }
 
 uint32 Player::GetBGTeam() const
 {
-    return m_bgData.bgTeam ? m_bgData.bgTeam : GetTeam();
+    return m_bgData.bgTeam ? m_bgData.bgTeam : m_team;
 }
 
 void Player::LeaveBattleground(bool teleportToEntryPoint)
@@ -22713,7 +22748,7 @@ void Player::LearnDefaultSkill(uint32 skillId, uint16 rank)
     switch (GetSkillRangeType(rcInfo))
     {
         case SKILL_RANGE_LANGUAGE:
-            SetSkill(skillId, 0, 300, 300);
+            SetSkill(skillId, 0, 300, 300, true);
             break;
         case SKILL_RANGE_LEVEL:
         {
@@ -22730,11 +22765,11 @@ void Player::LearnDefaultSkill(uint32 skillId, uint16 rank)
             else if (skillId == SKILL_LOCKPICKING)
                 skillValue = std::max<uint16>(1, GetSkillValue(SKILL_LOCKPICKING));
 
-            SetSkill(skillId, 0, skillValue, maxValue);
+            SetSkill(skillId, 0, skillValue, maxValue, true);
             break;
         }
         case SKILL_RANGE_MONO:
-            SetSkill(skillId, 0, 1, 1);
+            SetSkill(skillId, 0, 1, 1, true);
             break;
         case SKILL_RANGE_RANK:
         {
@@ -22749,7 +22784,7 @@ void Player::LearnDefaultSkill(uint32 skillId, uint16 rank)
             else if (GetClass() == CLASS_DEATH_KNIGHT)
                 skillValue = std::min(std::max<uint16>({ uint16(1), uint16((GetLevel() - 1) * 5) }), maxValue);
 
-            SetSkill(skillId, rank, skillValue, maxValue);
+            SetSkill(skillId, rank, skillValue, maxValue, true);
             break;
         }
         default:

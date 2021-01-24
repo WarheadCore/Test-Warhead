@@ -136,7 +136,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
 {
     BattlegroundBracketId bracketId = bracketEntry->GetBracketId();
 
-    // create new ginfo
+    // Create new ginfo
     GroupQueueInfo* ginfo            = new GroupQueueInfo;
     ginfo->BgTypeId                  = BgTypeId;
     ginfo->ArenaType                 = ArenaType;
@@ -146,6 +146,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
     ginfo->JoinTime                  = GameTime::GetGameTimeMS();
     ginfo->RemoveInviteTime          = 0;
     ginfo->Team                      = leader->GetTeam();
+    ginfo->OriginalTeam              = leader->GetTeam();
     ginfo->ArenaTeamRating           = ArenaRating;
     ginfo->ArenaMatchmakerRating     = MatchmakerRating;
     ginfo->PreviousOpponentsTeamId   = PreviousOpponentsArenaTeamId;
@@ -154,17 +155,18 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
 
     ginfo->Players.clear();
 
-    //compute index (if group is premade or joined a rated match) to queues
+    // Compute index (if group is premade or joined a rated match) to queues
     uint32 index = 0;
+
     if (!isRated && !isPremade)
         index += PVP_TEAMS_COUNT;
 
     if (ginfo->Team == HORDE)
         index++;
 
-    LOG_DEBUG("bg.battleground", "Adding Group to BattlegroundQueue bgTypeId : %u, bracket_id : %u, index : %u", BgTypeId, bracketId, index);
-
     sScriptMgr->OnQueueAddGroup(this, ginfo, index, leader, grp, bracketEntry, isPremade);
+
+    LOG_DEBUG("bg.battleground", "Adding Group to BattlegroundQueue bgTypeId : %u, bracket_id : %u, index : %u", BgTypeId, bracketId, index);
 
     uint32 lastOnlineTime = GameTime::GetGameTimeMS();
 
@@ -314,12 +316,15 @@ void BattlegroundQueue::RemovePlayer(ObjectGuid guid, bool decreaseInvitedCount)
     // we count from MAX_BATTLEGROUND_QUEUES - 1 to 0
 
     uint32 index = (group->Team == HORDE) ? BG_QUEUE_PREMADE_HORDE : BG_QUEUE_PREMADE_ALLIANCE;
+    uint32 pvpTeamsCount = PVP_TEAMS_COUNT;
+
+    sScriptMgr->OnQueueRemovePlayer(this, guid, decreaseInvitedCount, index, pvpTeamsCount);
 
     for (int32 bracket_id_tmp = MAX_BATTLEGROUND_BRACKETS - 1; bracket_id_tmp >= 0 && bracket_id == -1; --bracket_id_tmp)
     {
         //we must check premade and normal team's queue - because when players from premade are joining bg,
         //they leave groupinfo so we can't use its players size to find out index
-        for (uint32 j = index; j < BG_QUEUE_GROUP_TYPES_COUNT; j += PVP_TEAMS_COUNT)
+        for (uint32 j = index; j < BG_QUEUE_GROUP_TYPES_COUNT; j += pvpTeamsCount)
         {
             GroupsQueueType::iterator k = m_QueuedGroups[bracket_id_tmp][j].begin();
             for (; k != m_QueuedGroups[bracket_id_tmp][j].end(); ++k)
@@ -671,11 +676,8 @@ bool BattlegroundQueue::CheckPremadeMatch(BattlegroundBracketId bracket_id, uint
 // this method tries to create battleground or arena with MinPlayersPerTeam against MinPlayersPerTeam
 bool BattlegroundQueue::CheckNormalMatch(Battleground* bg_template, BattlegroundBracketId bracket_id, uint32 minPlayers, uint32 maxPlayers)
 {
-    uint32 coef = 1;
-
-    sScriptMgr->OnCheckNormalMatch(this, coef, bg_template, bracket_id, minPlayers, maxPlayers);
-
-    minPlayers = minPlayers * coef;
+    if (!sScriptMgr->CanCheckNormalMatch(this, bg_template, bracket_id, minPlayers, maxPlayers))
+        return;
 
     GroupsQueueType::const_iterator itr_team[PVP_TEAMS_COUNT];
     for (uint32 i = 0; i < PVP_TEAMS_COUNT; i++)
@@ -691,14 +693,17 @@ bool BattlegroundQueue::CheckNormalMatch(Battleground* bg_template, Battleground
             }
         }
     }
-    //try to invite same number of players - this cycle may cause longer wait time even if there are enough players in queue, but we want ballanced bg
+
+    // Try to invite same number of players - this cycle may cause longer wait time even if there are enough players in queue, but we want ballanced bg
     uint32 j = TEAM_ALLIANCE;
     if (m_SelectionPools[TEAM_HORDE].GetPlayerCount() < m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount())
         j = TEAM_HORDE;
-    if (CONF_GET_INT("Battleground.InvitationType") != BG_QUEUE_INVITATION_TYPE_NO_BALANCE
-        && m_SelectionPools[TEAM_HORDE].GetPlayerCount() >= minPlayers && m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount() >= minPlayers)
+
+    if (CONF_GET_INT("Battleground.InvitationType") != BG_QUEUE_INVITATION_TYPE_NO_BALANCE &&
+        m_SelectionPools[TEAM_HORDE].GetPlayerCount() >= minPlayers &&
+        m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount() >= minPlayers)
     {
-        //we will try to invite more groups to team with less players indexed by j
+        // We will try to invite more groups to team with less players indexed by j
         ++(itr_team[j]);                                         //this will not cause a crash, because for cycle above reached break;
         for (; itr_team[j] != m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE + j].end(); ++(itr_team[j]))
         {
@@ -706,14 +711,17 @@ bool BattlegroundQueue::CheckNormalMatch(Battleground* bg_template, Battleground
                 if (!m_SelectionPools[j].AddGroup(*(itr_team[j]), m_SelectionPools[(j + 1) % PVP_TEAMS_COUNT].GetPlayerCount()))
                     break;
         }
-        // do not allow to start bg with more than 2 players more on 1 faction
+
+        // Do not allow to start bg with more than 2 players more on 1 faction
         if (abs((int32)(m_SelectionPools[TEAM_HORDE].GetPlayerCount() - m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount())) > 2)
             return false;
     }
-    //allow 1v0 if debug bg
+
+    // Allow 1v0 if debug bg
     if (sBattlegroundMgr->isTesting() && bg_template->isBattleground() && (m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount() || m_SelectionPools[TEAM_HORDE].GetPlayerCount()))
         return true;
-    //return true if there are enough players in selection pools - enable to work .debug bg command correctly
+
+    // Return true if there are enough players in selection pools - enable to work .debug bg command correctly
     return m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount() >= minPlayers && m_SelectionPools[TEAM_HORDE].GetPlayerCount() >= minPlayers;
 }
 

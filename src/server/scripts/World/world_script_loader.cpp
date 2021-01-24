@@ -36,6 +36,7 @@ void AddSC_xp_boost();
 // player
 void AddSC_chat_log();
 void AddSC_action_ip_logger();
+void AddSC_CrossFacrionData();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
@@ -63,4 +64,6 @@ void AddWorldScripts()
 
     if (CONF_GET_INT("XP.Boost.Daymask"))
         AddSC_xp_boost();
+
+    AddSC_CrossFacrionData();
 }

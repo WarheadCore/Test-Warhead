@@ -43,6 +43,7 @@
 #include "Warden.h"
 #include "WorldPacket.h"
 #include "MuteManager.h"
+#include "CrossFactionData.h"
 #include <algorithm>
 
 inline bool isNasty(uint8 c)
@@ -348,10 +349,26 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                     return;
                 }
 
-                if (GetPlayer()->GetTeam() != receiver->GetTeam() && !HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHAT))
+                if (!CONF_GET_BOOL("CrossFactionData.Enable") && GetPlayer()->GetTeam() != receiver->GetTeam() && !HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHAT))
                 {
                     SendWrongFactionNotice();
                     return;
+                }
+
+                // This could all be implemented as a oneliner, but it hurts
+                // my head even thinking about it, this is easy and readable.
+                if (CONF_GET_BOOL("CrossFactionData.Enable"))
+                {
+                    if (GetPlayer()->GetBattleground() == receiver->GetBattleground() && GetPlayer()->GetTeam() != receiver->GetTeam())
+                    {
+                        SendWrongFactionNotice();
+                        return;
+                    }
+                    else if (GetPlayer()->GetBattleground() != receiver->GetBattleground() && GetPlayer()->GetCrossFactionData()->GetOriginalTeam() != receiver->GetCrossFactionData()->GetOriginalTeam())
+                    {
+                        SendWrongFactionNotice();
+                        return;
+                    }
                 }
             }
 

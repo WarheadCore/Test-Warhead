@@ -1606,6 +1606,15 @@ AllowTwoSide.Trade = 0
 TalentsInspecting = 1
 
 #
+#    TalentsInspecting
+#        Description: Allow/disallow crossfaction data (expiremental)
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+#
+
+CrossFactionData.Enable = 0
+
+#
 ###################################################################################################
 
 ###################################################################################################
