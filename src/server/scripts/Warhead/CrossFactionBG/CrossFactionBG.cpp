@@ -30,7 +30,7 @@ public:
 
     void Sort()
     {
-        sort([](GroupQueueInfo* a, GroupQueueInfo* b)
+        sort([](GroupQueueInfo * a, GroupQueueInfo * b)
         {
             return a->JoinTime < b->JoinTime;
         });
@@ -94,8 +94,8 @@ bool CFBGQueue::CFBGGroupInserter(BattlegroundQueue* queue, Battleground* bg, Ba
 
         // Return when we're ready to start a BG, if we're in startup process
         if (queue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount() >= MinPlayers &&
-            queue->m_SelectionPools[TEAM_HORDE].GetPlayerCount() >= MinPlayers &&
-            !Filling)
+                queue->m_SelectionPools[TEAM_HORDE].GetPlayerCount() >= MinPlayers &&
+                !Filling)
             startable = true;
     }
 

@@ -100,14 +100,14 @@ WH_COMMON_API std::string Warhead::Time::ToTimeString<Microseconds>(uint64 durat
 
         switch (timeFormat)
         {
-            case TimeFormat::ShortText:
-                ss << shortText;
-                break;
-            case TimeFormat::FullText:
-                ss << (timeType == 1 ? fullText1 : fullText);
-                break;
-            default:
-                ss << "<Unknown time format>";
+        case TimeFormat::ShortText:
+            ss << shortText;
+            break;
+        case TimeFormat::FullText:
+            ss << (timeType == 1 ? fullText1 : fullText);
+            break;
+        default:
+            ss << "<Unknown time format>";
         }
     };
 
