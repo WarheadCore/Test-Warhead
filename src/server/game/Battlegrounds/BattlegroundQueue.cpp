@@ -677,7 +677,7 @@ bool BattlegroundQueue::CheckPremadeMatch(BattlegroundBracketId bracket_id, uint
 bool BattlegroundQueue::CheckNormalMatch(Battleground* bg_template, BattlegroundBracketId bracket_id, uint32 minPlayers, uint32 maxPlayers)
 {
     if (!sScriptMgr->CanCheckNormalMatch(this, bg_template, bracket_id, minPlayers, maxPlayers))
-        return;
+        return true;
 
     GroupsQueueType::const_iterator itr_team[PVP_TEAMS_COUNT];
     for (uint32 i = 0; i < PVP_TEAMS_COUNT; i++)

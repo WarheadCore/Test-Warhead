@@ -2196,9 +2196,15 @@ bool ScriptMgr::CanFillPlayersToBG(BattlegroundQueue* queue, Battleground* bg, c
     return ret;
 }
 
-bool ScriptMgr::OnCheckNormalMatch(BattlegroundQueue* queue, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers)
+bool ScriptMgr::CanCheckNormalMatch(BattlegroundQueue* queue, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers)
 {
-    FOREACH_SCRIPT(BGScript)->OnCheckNormalMatch(queue, bgTemplate, bracket_id, minPlayers, maxPlayers);
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(BGScript, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanCheckNormalMatch(queue, bgTemplate, bracket_id, minPlayers, maxPlayers))
+            ret = false; // we change ret value only when scripts return false
+
+    return ret;
 }
 
 void ScriptMgr::OnQueueRemovePlayer(BattlegroundQueue* queue, ObjectGuid guid, bool decreaseInvitedCount, uint32& index, uint32& pvpTeamsCount)
