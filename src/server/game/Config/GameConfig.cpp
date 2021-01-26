@@ -347,6 +347,7 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     AddOption<bool>("PartyRaidWarnings");
     AddOption<bool>("CacheDataQueries");
     AddOption<bool>("CheckGameObjectLoS");
+    AddOption<bool>("CrossFactionData.Enable");
 
     LOG_INFO("config", "> Loaded %u bool configs", static_cast<uint32>(_boolConfigs.size()));
 }

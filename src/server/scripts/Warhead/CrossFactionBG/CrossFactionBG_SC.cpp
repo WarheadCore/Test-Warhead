@@ -58,19 +58,23 @@ public:
     {
         if (sCFBGQueue->MixPlayersToBG(queue, bg, bracket_id))
             return false;
+
+        return true;
     }
 
     bool CanCheckNormalMatch(BattlegroundQueue* queue, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers) override
     {
         if (sCFBGQueue->CheckMixedMatch(queue, bgTemplate, bracket_id, minPlayers, maxPlayers))
             return false;
+
+        return true;
     }
 };
 
-class CrossFactionBattlegroundCommandScript : public CommandScript
+class CrossFactionBG_Command : public CommandScript
 {
 public:
-    CrossFactionBattlegroundCommandScript() : CommandScript("CrossFactionBattlegroundCommandScript") { }
+    CrossFactionBG_Command() : CommandScript("CrossFactionBG_Command") { }
 
     Warhead::ChatCommands::ChatCommandTable GetCommands() const override
     {
@@ -121,5 +125,6 @@ public:
 void AddSC_CrossFactionBG()
 {
     new CrossFactionBG_BG();
+    new CrossFactionBG_Command();
     new CrossFactionBG_World();
 }

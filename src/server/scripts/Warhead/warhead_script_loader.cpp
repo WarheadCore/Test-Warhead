@@ -19,6 +19,7 @@ void AddSC_AntiAD();
 void AddSC_ArenaReward();
 void AddSC_BGReward();
 void AddSC_BossAnnouncer();
+void AddSC_CrossFactionBG();
 void AddSC_DonateIPS();
 void AddSC_DungeonBuff();
 void AddSC_FactionsIconsChannel();
@@ -38,6 +39,7 @@ void AddWarheadScripts()
     AddSC_ArenaReward();
     AddSC_BGReward();
     AddSC_BossAnnouncer();
+    AddSC_CrossFactionBG();
     AddSC_DonateIPS();
     AddSC_DungeonBuff();
     AddSC_FactionsIconsChannel();

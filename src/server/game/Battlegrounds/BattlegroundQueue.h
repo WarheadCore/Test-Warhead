@@ -111,7 +111,7 @@ class WH_GAME_API BattlegroundQueue
         GroupsQueueType m_QueuedGroups[MAX_BATTLEGROUND_BRACKETS][BG_QUEUE_GROUP_TYPES_COUNT];
 
         // class to select and invite groups to bg
-        class SelectionPool
+        class WH_GAME_API SelectionPool
         {
         public:
             SelectionPool(): PlayerCount(0) { }
