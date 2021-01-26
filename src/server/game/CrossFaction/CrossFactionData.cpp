@@ -165,4 +165,9 @@ void CrossFactionData::InitializeData()
     ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(_fakeRace);
     _fakeFaction = rEntry ? rEntry->FactionID : 0;
     _fakeTeam = Player::TeamForRace(_fakeRace);
+
+    LOG_INFO("scripts.warhead", "> CFData: Player (%s), %u/%u ' %u/%u",
+        _player->GetGUID().ToString().c_str(),
+        _originalRace, _fakeRace,
+        _originalFaction, _fakeFaction);
 }

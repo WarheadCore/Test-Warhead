@@ -56,18 +56,12 @@ public:
 
     bool CanFillPlayersToBG(BattlegroundQueue* queue, Battleground* bg, const int32 /*aliFree*/, const int32 /*hordeFree*/, BattlegroundBracketId bracket_id) override
     {
-        if (sCFBGQueue->MixPlayersToBG(queue, bg, bracket_id))
-            return false;
-
-        return true;
+        return !sCFBGQueue->MixPlayersToBG(queue, bg, bracket_id);
     }
 
     bool CanCheckNormalMatch(BattlegroundQueue* queue, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers) override
     {
-        if (sCFBGQueue->CheckMixedMatch(queue, bgTemplate, bracket_id, minPlayers, maxPlayers))
-            return false;
-
-        return true;
+        return !sCFBGQueue->CheckMixedMatch(queue, bgTemplate, bracket_id, minPlayers, maxPlayers);
     }
 };
 
