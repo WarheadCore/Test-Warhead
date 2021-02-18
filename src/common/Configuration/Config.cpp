@@ -144,7 +144,7 @@ T ConfigMgr::GetValueDefault(std::string const& name, T const& def) const
     if (itr == _configOptions.end())
     {
         LOG_WARN("config", "> Config: Missing name %s in config, add \"%s = %s\"",
-            name.c_str(), name.c_str(), *Warhead::ToString(def).c_str());
+            name.c_str(), name.c_str(), Warhead::ToString(def).c_str());
         return def;
     }
 
@@ -152,7 +152,7 @@ T ConfigMgr::GetValueDefault(std::string const& name, T const& def) const
     if (!value)
     {
         LOG_ERROR("config", "> Config: Bad value defined for name '%s', going to use '%s' instead",
-            name.c_str(), *Warhead::ToString(def).c_str());
+            name.c_str(), Warhead::ToString(def).c_str());
         return def;
     }
 
