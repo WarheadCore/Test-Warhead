@@ -43,7 +43,7 @@ bool Metric::Connect()
     if (error)
     {
         LOG_ERROR("metric", "Error connecting to '%s:%s', disabling Metric. Error message : %s",
-            _hostname.c_str(), _port.c_str(), error.message().c_str());
+                  _hostname.c_str(), _port.c_str(), error.message().c_str());
         _enabled = false;
         return false;
     }
@@ -160,12 +160,12 @@ void Metric::SendBatch()
 
         switch (data->Type)
         {
-            case METRIC_DATA_VALUE:
-                batchedData << "value=" << data->Value;
-                break;
-            case METRIC_DATA_EVENT:
-                batchedData << "title=\"" << data->Title << "\",text=\"" << data->Text << "\"";
-                break;
+        case METRIC_DATA_VALUE:
+            batchedData << "value=" << data->Value;
+            break;
+        case METRIC_DATA_EVENT:
+            batchedData << "title=\"" << data->Title << "\",text=\"" << data->Text << "\"";
+            break;
         }
 
         batchedData << " ";
@@ -200,9 +200,7 @@ void Metric::SendBatch()
     unsigned int status_code = 0;
     GetDataStream() >> status_code;
     if (status_code != 204)
-    {
         LOG_ERROR("metric", "Error sending data, returned HTTP code: %u", status_code);
-    }
 
     // Read and ignore the status description
     std::string status_description;

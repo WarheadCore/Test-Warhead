@@ -43,7 +43,7 @@ struct SecretInfo
     int bits;
     ServerProcessTypes owner;
     uint64 _flags;
-    uint16 flags() const { return static_cast<uint16>(_flags >> (16*THIS_SERVER_PROCESS)); }
+    uint16 flags() const { return static_cast<uint16>(_flags >> (16 * THIS_SERVER_PROCESS)); }
 };
 
 static constexpr SecretInfo secret_info[NUM_SECRETS] =
@@ -122,7 +122,7 @@ void SecretMgr::AttemptLoad(Secrets i, LogLevel errorLevel, std::unique_lock<std
     if (
         ((!oldDigest) != (!currentValue)) || // there is an old digest, but no current secret (or vice versa)
         (oldDigest && !Warhead::Crypto::Argon2::Verify(currentValue->AsHexStr(), *oldDigest)) // there is an old digest, and the current secret does not match it
-        )
+    )
     {
         if (info.owner != THIS_SERVER_PROCESS)
         {
@@ -173,10 +173,10 @@ Optional<std::string> SecretMgr::AttemptTransition(Secrets i, Optional<BigNumber
 
     switch (i)
     {
-        case SECRET_TOTP_MASTER_KEY:
-        {
-            QueryResult result = LoginDatabase.Query("SELECT id, totp_secret FROM account");
-            if (result) do
+    case SECRET_TOTP_MASTER_KEY:
+    {
+        QueryResult result = LoginDatabase.Query("SELECT id, totp_secret FROM account");
+        if (result) do
             {
                 Field* fields = result->Fetch();
                 if (fields[1].IsNull())
@@ -204,10 +204,10 @@ Optional<std::string> SecretMgr::AttemptTransition(Secrets i, Optional<BigNumber
                 trans->Append(updateStmt);
             } while (result->NextRow());
 
-            break;
-        }
-        default:
-            return std::string("Unknown secret index - huh?");
+        break;
+    }
+    default:
+        return std::string("Unknown secret index - huh?");
     }
 
     if (hadOldSecret)

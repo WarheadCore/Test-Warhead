@@ -91,9 +91,9 @@ void IpLocationStore::Load()
         _ipLocationStore.emplace_back(uint32(atoul(ipFrom.c_str())), uint32(atoul(ipTo.c_str())), std::move(countryCode), std::move(countryName));
     }
 
-    std::sort(_ipLocationStore.begin(), _ipLocationStore.end(), [](IpLocationRecord const& a, IpLocationRecord const& b) { return a.IpFrom < b.IpFrom; });
-    ASSERT(std::is_sorted(_ipLocationStore.begin(), _ipLocationStore.end(), [](IpLocationRecord const& a, IpLocationRecord const& b) { return a.IpFrom < b.IpTo; }),
-        "Overlapping IP ranges detected in database file");
+    std::sort(_ipLocationStore.begin(), _ipLocationStore.end(), [](IpLocationRecord const & a, IpLocationRecord const & b) { return a.IpFrom < b.IpFrom; });
+    ASSERT(std::is_sorted(_ipLocationStore.begin(), _ipLocationStore.end(), [](IpLocationRecord const & a, IpLocationRecord const & b) { return a.IpFrom < b.IpTo; }),
+    "Overlapping IP ranges detected in database file");
 
     databaseFile.close();
 
@@ -104,7 +104,7 @@ void IpLocationStore::Load()
 IpLocationRecord const* IpLocationStore::GetLocationRecord(std::string const& ipAddress) const
 {
     uint32 ip = Warhead::Net::address_to_uint(Warhead::Net::make_address_v4(ipAddress));
-    auto itr = std::upper_bound(_ipLocationStore.begin(), _ipLocationStore.end(), ip, [](uint32 ip, IpLocationRecord const& loc) { return ip < loc.IpTo; });
+    auto itr = std::upper_bound(_ipLocationStore.begin(), _ipLocationStore.end(), ip, [](uint32 ip, IpLocationRecord const & loc) { return ip < loc.IpTo; });
     if (itr == _ipLocationStore.end())
         return nullptr;
 

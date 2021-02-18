@@ -395,7 +395,7 @@ bool World::HasRecentlyDisconnected(WorldSession* session)
         }
     }
     return false;
- }
+}
 
 int32 World::GetQueuePos(WorldSession* sess)
 {
@@ -489,7 +489,7 @@ void World::LoadConfigSettings(bool reload)
     SetNewCharString(CONF_GET_STR("PlayerStart.String"));
 
     ///- Read all rates from the config file
-    auto CheckRate = [](std::string const& optionName)
+    auto CheckRate = [](std::string const & optionName)
     {
         auto _rate = CONF_GET_FLOAT(optionName);
 
@@ -532,7 +532,7 @@ void World::LoadConfigSettings(bool reload)
 
     sGameConfig->SetOption<float>("DurabilityLoss.OnDeath", tempFloatOption / 100.0f);
 
-    auto CheckDurabilityLossChance = [&tempFloatOption](std::string const& optionName)
+    auto CheckDurabilityLossChance = [&tempFloatOption](std::string const & optionName)
     {
         tempFloatOption = CONF_GET_FLOAT(optionName);
         if (tempFloatOption < 0.0f)
@@ -601,7 +601,7 @@ void World::LoadConfigSettings(bool reload)
     if (reload)
         sMapMgr->SetMapUpdateInterval(CONF_GET_INT("MapUpdateInterval"));
 
-    auto CheckMinScaledXPRatio = [&tempIntOption](std::string const& optionName)
+    auto CheckMinScaledXPRatio = [&tempIntOption](std::string const & optionName)
     {
         tempIntOption = CONF_GET_INT(optionName);
         if (tempIntOption > 100)
@@ -615,7 +615,7 @@ void World::LoadConfigSettings(bool reload)
     CheckMinScaledXPRatio("MinCreatureScaledXPRatio");
     CheckMinScaledXPRatio("MinDiscoveredScaledXPRatio");
 
-    auto CheckMinName = [](std::string const& optionName, int32 const& maxNameSymols)
+    auto CheckMinName = [](std::string const & optionName, int32 const & maxNameSymols)
     {
         int32 confSymbols = CONF_GET_INT(optionName);
         if (confSymbols < 1 || confSymbols > maxNameSymols)
@@ -701,7 +701,7 @@ void World::LoadConfigSettings(bool reload)
         sGameConfig->SetOption<int32>("StartPlayerMoney", MAX_MONEY_AMOUNT);
     }
 
-    auto CheckPoints = [](std::string const& startPointsOptionName, std::string const& maxPointsOptionName)
+    auto CheckPoints = [](std::string const & startPointsOptionName, std::string const & maxPointsOptionName)
     {
         int32 maxPoints = CONF_GET_INT(maxPointsOptionName);
         if (maxPoints < 0)
@@ -730,7 +730,7 @@ void World::LoadConfigSettings(bool reload)
     if (tempIntOption > maxPlayerLevel)
     {
         LOG_ERROR("config", "RecruitAFriend.MaxLevel (%i) must be in the range 0..MaxLevel(%u). Set to %u.",
-            tempIntOption, maxPlayerLevel, 60);
+                  tempIntOption, maxPlayerLevel, 60);
 
         sGameConfig->SetOption<int32>("RecruitAFriend.MaxLevel", 60);
     }
@@ -803,7 +803,7 @@ void World::LoadConfigSettings(bool reload)
 
     if (!reload)
         LOG_TRACE("config", "Will clear `logs` table of entries older than %i seconds every %u minutes.",
-            CONF_GET_INT("LogDB.Opt.ClearTime"), tempIntOption);
+                  CONF_GET_INT("LogDB.Opt.ClearTime"), tempIntOption);
 
     tempIntOption = CONF_GET_INT("MaxOverspeedPings");
     if (tempIntOption != 0 && tempIntOption < 2)
@@ -813,7 +813,7 @@ void World::LoadConfigSettings(bool reload)
     }
 
     // note: disable value (-1) will assigned as 0xFFFFFFF, to prevent overflow at calculations limit it to max possible player level MAX_LEVEL(100)
-    auto CheckQuestLevelHideDiff = [&tempIntOption](std::string const& optionName)
+    auto CheckQuestLevelHideDiff = [&tempIntOption](std::string const & optionName)
     {
         tempIntOption = CONF_GET_INT(optionName);
         if (tempIntOption > MAX_LEVEL)
@@ -823,7 +823,7 @@ void World::LoadConfigSettings(bool reload)
     CheckQuestLevelHideDiff("Quests.LowLevelHideDiff");
     CheckQuestLevelHideDiff("Quests.HighLevelHideDiff");
 
-    auto CheckResetTime = [&tempIntOption](std::string const& optionName)
+    auto CheckResetTime = [&tempIntOption](std::string const & optionName)
     {
         tempIntOption = CONF_GET_INT(optionName);
         if (tempIntOption > 23)
@@ -859,7 +859,7 @@ void World::LoadConfigSettings(bool reload)
             LOG_ERROR("config", "ClientCacheVersion can't be negative %d, ignored.", clientCacheId);
     }
 
-    auto CheckLogRecordsCount = [&tempIntOption](std::string const& optionName, int32 const& maxRecords)
+    auto CheckLogRecordsCount = [&tempIntOption](std::string const & optionName, int32 const & maxRecords)
     {
         tempIntOption = CONF_GET_INT(optionName);
         if (tempIntOption > maxRecords)
@@ -934,20 +934,20 @@ void World::LoadConfigSettings(bool reload)
 
     if (noGrayAggroAbove > maxPlayerLevel)
     {
-       LOG_ERROR("config", "NoGrayAggro.Above (%i) must be in range 0..%u. Set to %u.", noGrayAggroAbove, maxPlayerLevel, maxPlayerLevel);
-       sGameConfig->SetOption<int32>("NoGrayAggro.Above", maxPlayerLevel);
+        LOG_ERROR("config", "NoGrayAggro.Above (%i) must be in range 0..%u. Set to %u.", noGrayAggroAbove, maxPlayerLevel, maxPlayerLevel);
+        sGameConfig->SetOption<int32>("NoGrayAggro.Above", maxPlayerLevel);
     }
 
     if (noGrayAggroBelow > maxPlayerLevel)
     {
-       LOG_ERROR("config", "NoGrayAggro.Below (%i) must be in range 0..%u. Set to %u.", noGrayAggroBelow, maxPlayerLevel, maxPlayerLevel);
-       sGameConfig->SetOption<int32>("NoGrayAggro.Below", maxPlayerLevel);
+        LOG_ERROR("config", "NoGrayAggro.Below (%i) must be in range 0..%u. Set to %u.", noGrayAggroBelow, maxPlayerLevel, maxPlayerLevel);
+        sGameConfig->SetOption<int32>("NoGrayAggro.Below", maxPlayerLevel);
     }
 
     if (noGrayAggroAbove > 0 && noGrayAggroAbove < noGrayAggroBelow)
     {
-       LOG_ERROR("config", "NoGrayAggro.Below (%i) cannot be greater than NoGrayAggro.Above (%i). Set to %i.", noGrayAggroBelow, noGrayAggroAbove, noGrayAggroAbove);
-       sGameConfig->SetOption<int32>("NoGrayAggro.Below", noGrayAggroAbove);
+        LOG_ERROR("config", "NoGrayAggro.Below (%i) cannot be greater than NoGrayAggro.Above (%i). Set to %i.", noGrayAggroBelow, noGrayAggroAbove, noGrayAggroAbove);
+        sGameConfig->SetOption<int32>("NoGrayAggro.Below", noGrayAggroAbove);
     }
 
     // Respawn Settings
@@ -974,7 +974,7 @@ void World::LoadConfigSettings(bool reload)
 
     CheckResetTime("Respawn.RestartQuietTime");
 
-    auto CheckDynamicRate = [&tempFloatOption](std::string const& optionName)
+    auto CheckDynamicRate = [&tempFloatOption](std::string const & optionName)
     {
         tempFloatOption = CONF_GET_FLOAT(optionName);
         if (tempFloatOption < 0.0f)
@@ -992,7 +992,7 @@ void World::LoadConfigSettings(bool reload)
 
     ///- Read the "Data" directory from the config file
     std::string dataPath = CONF_GET_STR("DataDir");
-    if (dataPath.empty() || (dataPath.at(dataPath.length()-1) != '/' && dataPath.at(dataPath.length()-1) != '\\'))
+    if (dataPath.empty() || (dataPath.at(dataPath.length() - 1) != '/' && dataPath.at(dataPath.length() - 1) != '\\'))
         dataPath.push_back('/');
 
 #if WARHEAD_PLATFORM == WARHEAD_PLATFORM_UNIX || WARHEAD_PLATFORM == WARHEAD_PLATFORM_APPLE
@@ -1088,14 +1088,14 @@ void World::SetInitialWorldSettings()
 
     ///- Check the existence of the map files for all races' startup areas.
     if (!MapManager::ExistMapAndVMap(0, -6240.32f, 331.033f)
-        || !MapManager::ExistMapAndVMap(0, -8949.95f, -132.493f)
-        || !MapManager::ExistMapAndVMap(1, -618.518f, -4251.67f)
-        || !MapManager::ExistMapAndVMap(0, 1676.35f, 1677.45f)
-        || !MapManager::ExistMapAndVMap(1, 10311.3f, 832.463f)
-        || !MapManager::ExistMapAndVMap(1, -2917.58f, -257.98f)
-        || (CONF_GET_INT("Expansion") && (
-            !MapManager::ExistMapAndVMap(530, 10349.6f, -6357.29f) ||
-            !MapManager::ExistMapAndVMap(530, -3961.64f, -13931.2f))))
+            || !MapManager::ExistMapAndVMap(0, -8949.95f, -132.493f)
+            || !MapManager::ExistMapAndVMap(1, -618.518f, -4251.67f)
+            || !MapManager::ExistMapAndVMap(0, 1676.35f, 1677.45f)
+            || !MapManager::ExistMapAndVMap(1, 10311.3f, 832.463f)
+            || !MapManager::ExistMapAndVMap(1, -2917.58f, -257.98f)
+            || (CONF_GET_INT("Expansion") && (
+                    !MapManager::ExistMapAndVMap(530, 10349.6f, -6357.29f) ||
+                    !MapManager::ExistMapAndVMap(530, -3961.64f, -13931.2f))))
     {
         LOG_FATAL("server.loading", "Unable to load critical files - server shutting down !!!");
         exit(1);
@@ -1600,18 +1600,18 @@ void World::SetInitialWorldSettings()
     GameTime::UpdateGameTimers();
 
     LoginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, uptime, revision) VALUES(%u, %u, 0, '%s')",
-                            realm.Id.Realm, uint32(GameTime::GetStartTime()), GitRevision::GetFullVersion());       // One-time query
+                           realm.Id.Realm, uint32(GameTime::GetStartTime()), GitRevision::GetFullVersion());       // One-time query
 
-    m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
+    m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS_PENDING].SetInterval(250);
     m_timers[WUPDATE_UPTIME].SetInterval(CONF_GET_INT("UpdateUptimeInterval") * MINUTE * IN_MILLISECONDS);
-                                                            //Update "uptime" table based on configuration entry in minutes.
+    //Update "uptime" table based on configuration entry in minutes.
     m_timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);
-                                                            //erase corpses every 20 minutes
+    //erase corpses every 20 minutes
     m_timers[WUPDATE_CLEANDB].SetInterval(CONF_GET_INT("LogDB.Opt.ClearInterval") * MINUTE * IN_MILLISECONDS);
-                                                            // clean logs table every 14 days by default
+    // clean logs table every 14 days by default
     m_timers[WUPDATE_AUTOBROADCAST].SetInterval(CONF_GET_INT("AutoBroadcast.Timer"));
-    m_timers[WUPDATE_DELETECHARS].SetInterval(DAY*IN_MILLISECONDS); // check for chars to delete every day
+    m_timers[WUPDATE_DELETECHARS].SetInterval(DAY * IN_MILLISECONDS); // check for chars to delete every day
 
     // for AhBot
     m_timers[WUPDATE_AHBOT].SetInterval(CONF_GET_INT("AuctionHouseBot.Update.Interval") * IN_MILLISECONDS); // every 20 sec
@@ -1700,7 +1700,7 @@ void World::SetInitialWorldSettings()
     // Preload all cells, if required for the base maps
     if (CONF_GET_BOOL("BaseMapLoadAllGrids"))
     {
-        sMapMgr->DoForAllMaps([](Map* map)
+        sMapMgr->DoForAllMaps([](Map * map)
         {
             if (!map->Instanceable())
             {
@@ -1747,7 +1747,7 @@ void World::DetectDBCLang()
     std::string availableLocalsStr;
 
     uint8 default_locale = TOTAL_LOCALES;
-    for (uint8 i = default_locale-1; i < TOTAL_LOCALES; --i)  // -1 will be 255 due to uint8
+    for (uint8 i = default_locale - 1; i < TOTAL_LOCALES; --i) // -1 will be 255 due to uint8
     {
         if (race->Name[i][0] != '\0')                     // check by race names
         {
@@ -1759,10 +1759,8 @@ void World::DetectDBCLang()
     }
 
     if (default_locale != m_lang_confid && m_lang_confid < TOTAL_LOCALES &&
-        (m_availableDbcLocaleMask & (1 << m_lang_confid)))
-    {
+            (m_availableDbcLocaleMask & (1 << m_lang_confid)))
         default_locale = m_lang_confid;
-    }
 
     if (default_locale >= TOTAL_LOCALES)
     {
@@ -2025,7 +2023,7 @@ void World::Update(uint32 diff)
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Remove old corpses"));
         m_timers[WUPDATE_CORPSES].Reset();
-        sMapMgr->DoForAllMaps([](Map* map)
+        sMapMgr->DoForAllMaps([](Map * map)
         {
             map->RemoveOldCorpses();
         });
@@ -2102,13 +2100,11 @@ void World::SendGlobalMessage(WorldPacket const* packet, WorldSession* self, uin
     for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (itr->second &&
-            itr->second->GetPlayer() &&
-            itr->second->GetPlayer()->IsInWorld() &&
-            itr->second != self &&
-            (team == 0 || itr->second->GetPlayer()->GetTeam() == team))
-        {
+                itr->second->GetPlayer() &&
+                itr->second->GetPlayer()->IsInWorld() &&
+                itr->second != self &&
+                (team == 0 || itr->second->GetPlayer()->GetTeam() == team))
             itr->second->SendPacket(packet);
-        }
     }
 }
 
@@ -2137,43 +2133,43 @@ namespace Warhead
 {
     class WorldWorldTextBuilder
     {
-        public:
-            typedef std::vector<WorldPacket*> WorldPacketList;
-            explicit WorldWorldTextBuilder(uint32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) { }
-            void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
+    public:
+        typedef std::vector<WorldPacket*> WorldPacketList;
+        explicit WorldWorldTextBuilder(uint32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) { }
+        void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
+        {
+            char const* text = sGameLocale->GetWarheadString(i_textId, loc_idx);
+
+            if (i_args)
             {
-                char const* text = sGameLocale->GetWarheadString(i_textId, loc_idx);
+                // we need copy va_list before use or original va_list will corrupted
+                va_list ap;
+                va_copy(ap, *i_args);
 
-                if (i_args)
-                {
-                    // we need copy va_list before use or original va_list will corrupted
-                    va_list ap;
-                    va_copy(ap, *i_args);
+                char str[2048];
+                vsnprintf(str, 2048, text, ap);
+                va_end(ap);
 
-                    char str[2048];
-                    vsnprintf(str, 2048, text, ap);
-                    va_end(ap);
-
-                    do_helper(data_list, &str[0]);
-                }
-                else
-                    do_helper(data_list, (char*)text);
+                do_helper(data_list, &str[0]);
             }
-        private:
-            char* lineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = nullptr; return start; }
-            void do_helper(WorldPacketList& data_list, char* text)
+            else
+                do_helper(data_list, (char*)text);
+        }
+    private:
+        char* lineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = nullptr; return start; }
+        void do_helper(WorldPacketList& data_list, char* text)
+        {
+            char* pos = text;
+            while (char* line = lineFromMessage(pos))
             {
-                char* pos = text;
-                while (char* line = lineFromMessage(pos))
-                {
-                    WorldPacket* data = new WorldPacket();
-                    ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, nullptr, nullptr, line);
-                    data_list.push_back(data);
-                }
+                WorldPacket* data = new WorldPacket();
+                ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, nullptr, nullptr, line);
+                data_list.push_back(data);
             }
+        }
 
-            uint32 i_textId;
-            va_list* i_args;
+        uint32 i_textId;
+        va_list* i_args;
     };
 }                                                           // namespace Warhead
 
@@ -2249,11 +2245,11 @@ bool World::SendZoneMessage(uint32 zone, WorldPacket const* packet, WorldSession
     for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (itr->second &&
-            itr->second->GetPlayer() &&
-            itr->second->GetPlayer()->IsInWorld() &&
-            itr->second->GetPlayer()->GetZoneId() == zone &&
-            itr->second != self &&
-            (team == 0 || itr->second->GetPlayer()->GetTeam() == team))
+                itr->second->GetPlayer() &&
+                itr->second->GetPlayer()->IsInWorld() &&
+                itr->second->GetPlayer()->GetZoneId() == zone &&
+                itr->second != self &&
+                (team == 0 || itr->second->GetPlayer()->GetTeam() == team))
         {
             itr->second->SendPacket(packet);
             foundPlayerToSend = true;
@@ -2352,11 +2348,11 @@ void World::ShutdownMsg(bool show, Player* player, const std::string& reason)
 
     ///- Display a message every 12 hours, hours, 5 minutes, minute, 5 seconds and finally seconds
     if (show ||
-        (m_ShutdownTimer < 5* MINUTE && (m_ShutdownTimer % 15) == 0) || // < 5 min; every 15 sec
-        (m_ShutdownTimer < 15 * MINUTE && (m_ShutdownTimer % MINUTE) == 0) || // < 15 min ; every 1 min
-        (m_ShutdownTimer < 30 * MINUTE && (m_ShutdownTimer % (5 * MINUTE)) == 0) || // < 30 min ; every 5 min
-        (m_ShutdownTimer < 12 * HOUR && (m_ShutdownTimer % HOUR) == 0) || // < 12 h ; every 1 h
-        (m_ShutdownTimer > 12 * HOUR && (m_ShutdownTimer % (12 * HOUR)) == 0)) // > 12 h ; every 12 h
+            (m_ShutdownTimer < 5 * MINUTE && (m_ShutdownTimer % 15) == 0) || // < 5 min; every 15 sec
+            (m_ShutdownTimer < 15 * MINUTE && (m_ShutdownTimer % MINUTE) == 0) || // < 15 min ; every 1 min
+            (m_ShutdownTimer < 30 * MINUTE && (m_ShutdownTimer % (5 * MINUTE)) == 0) || // < 30 min ; every 5 min
+            (m_ShutdownTimer < 12 * HOUR && (m_ShutdownTimer % HOUR) == 0) || // < 12 h ; every 1 h
+            (m_ShutdownTimer > 12 * HOUR && (m_ShutdownTimer % (12 * HOUR)) == 0)) // > 12 h ; every 12 h
     {
         std::string str = Warhead::Time::ToTimeString<Seconds>(m_ShutdownTimer, TimeOutput::Milliseconds, TimeFormat::Numeric);
         if (!reason.empty())
@@ -2408,8 +2404,8 @@ void World::UpdateSessions(uint32 diff)
 {
     {
         WH_METRIC_DETAILED_NO_THRESHOLD_TIMER("world_update_time",
-            WH_METRIC_TAG("type", "Add sessions"),
-            WH_METRIC_TAG("parent_type", "Update sessions"));
+                                              WH_METRIC_TAG("type", "Add sessions"),
+                                              WH_METRIC_TAG("parent_type", "Update sessions"));
         ///- Add new sessions
         WorldSession* sess = nullptr;
         while (addSessQueue.next(sess))
@@ -2501,7 +2497,7 @@ void World::SendAutoBroadcast()
         sWorld->SendWorldText(LANG_AUTO_BROADCAST, msg.c_str());
     else if (abcenter == 1)
     {
-        WorldPacket data(SMSG_NOTIFICATION, (msg.size()+1));
+        WorldPacket data(SMSG_NOTIFICATION, (msg.size() + 1));
         data << msg;
         sWorld->SendGlobalMessage(&data);
     }
@@ -2509,7 +2505,7 @@ void World::SendAutoBroadcast()
     {
         sWorld->SendWorldText(LANG_AUTO_BROADCAST, msg.c_str());
 
-        WorldPacket data(SMSG_NOTIFICATION, (msg.size()+1));
+        WorldPacket data(SMSG_NOTIFICATION, (msg.size() + 1));
         data << msg;
         sWorld->SendGlobalMessage(&data);
     }
@@ -2784,7 +2780,7 @@ void World::ResetGuildCap()
 
 void World::UpdateMaxSessionCounters()
 {
-    m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size()-m_QueuedPlayer.size()));
+    m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size() - m_QueuedPlayer.size()));
     m_maxQueuedSessionCount = std::max(m_maxQueuedSessionCount, uint32(m_QueuedPlayer.size()));
 }
 
@@ -2836,8 +2832,7 @@ void World::LoadWorldStates()
         Field* fields = result->Fetch();
         m_worldstates[fields[0].GetUInt32()] = fields[1].GetUInt32();
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u world states in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");

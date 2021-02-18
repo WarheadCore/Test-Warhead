@@ -108,17 +108,17 @@ int main(int argc, char** argv)
     sLog->Initialize();
 
     Warhead::Banner::Show("authserver",
-        [](char const* text)
-        {
-            LOG_INFO("server.authserver", "%s", text);
-        },
-        []()
-        {
-            LOG_INFO("server.authserver", "> Using configuration file:       %s", sConfigMgr->GetFilename().c_str());
-            LOG_INFO("server.authserver", "> Using SSL version:              %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
-            LOG_INFO("server.authserver", "> Using Boost version:            %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
-        }
-    );
+                          [](char const * text)
+    {
+        LOG_INFO("server.authserver", "%s", text);
+    },
+    []()
+    {
+        LOG_INFO("server.authserver", "> Using configuration file:       %s", sConfigMgr->GetFilename().c_str());
+        LOG_INFO("server.authserver", "> Using SSL version:              %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+        LOG_INFO("server.authserver", "> Using Boost version:            %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
+    }
+                         );
 
     // authserver PID file creation
     std::string pidFile = sConfigMgr->GetOption<std::string>("PidFile", "");
@@ -203,9 +203,9 @@ int main(int argc, char** argv)
         serviceStatusWatchTimer = std::make_shared<Warhead::Asio::DeadlineTimer>(*ioContext);
         serviceStatusWatchTimer->expires_from_now(boost::posix_time::seconds(1));
         serviceStatusWatchTimer->async_wait(std::bind(&ServiceStatusWatcher,
-            std::weak_ptr<Warhead::Asio::DeadlineTimer>(serviceStatusWatchTimer),
-            std::weak_ptr<Warhead::Asio::IoContext>(ioContext),
-            std::placeholders::_1));
+                                            std::weak_ptr<Warhead::Asio::DeadlineTimer>(serviceStatusWatchTimer),
+                                            std::weak_ptr<Warhead::Asio::IoContext>(ioContext),
+                                            std::placeholders::_1));
     }
 #endif
 
@@ -232,7 +232,7 @@ bool StartDB()
     // Increasing it is just silly since only 1 will be used ever.
     DatabaseLoader loader("server.authserver", DatabaseLoader::DATABASE_NONE);
     loader
-        .AddDatabase(LoginDatabase, "Login");
+    .AddDatabase(LoginDatabase, "Login");
 
     if (!loader.Load())
         return false;
@@ -310,16 +310,16 @@ variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, s
 {
     options_description all("Allowed options");
     all.add_options()
-        ("help,h", "print usage message")
-        ("version,v", "print version build info")
-        ("config,c", value<fs::path>(&configFile)->default_value(fs::path(sConfigMgr->GetConfigPath() + std::string(_WARHEAD_REALM_CONFIG))),
-                     "use <arg> as configuration file")
-        ;
+    ("help,h", "print usage message")
+    ("version,v", "print version build info")
+    ("config,c", value<fs::path>(&configFile)->default_value(fs::path(sConfigMgr->GetConfigPath() + std::string(_WARHEAD_REALM_CONFIG))),
+     "use <arg> as configuration file")
+    ;
 #if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     options_description win("Windows platform specific options");
     win.add_options()
-        ("service,s", value<std::string>(&configService)->default_value(""), "Windows service options: [install | uninstall]")
-        ;
+    ("service,s", value<std::string>(&configService)->default_value(""), "Windows service options: [install | uninstall]")
+    ;
 
     all.add(win);
 #else

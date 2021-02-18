@@ -45,7 +45,7 @@ bool AuctionBotConfig::Initialize()
     }
 
     if (GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO) == 0 && GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO) == 0 && GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO) == 0 &&
-        !GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_NEUTRAL_ENABLED))
+            !GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED) && !GetConfig(CONFIG_AHBOT_BUYER_NEUTRAL_ENABLED))
     {
         LOG_INFO("ahbot", "All feature of AuctionHouseBot are disabled!");
         return false;
@@ -61,7 +61,7 @@ bool AuctionBotConfig::Initialize()
     {
         LOG_INFO("ahbot", "AllowTwoSide.Interaction.Auction is enabled, AuctionHouseBot faction-specific settings might not work as expected!");
         if (GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO) != 0 || GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO) != 0
-            || GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) || GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED))
+                || GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED) || GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED))
             LOG_WARN("ahbot", "AllowTwoSide.Interaction.Auction is enabled, AuctionHouseBot should be enabled only for Neutral faction!");
     }
 
@@ -352,12 +352,12 @@ uint32 AuctionBotConfig::GetConfigItemAmountRatio(AuctionHouseType houseType) co
 {
     switch (houseType)
     {
-        case AUCTION_HOUSE_ALLIANCE:
-            return GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO);
-        case AUCTION_HOUSE_HORDE:
-            return GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO);
-        default:
-            return GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO);
+    case AUCTION_HOUSE_ALLIANCE:
+        return GetConfig(CONFIG_AHBOT_ALLIANCE_ITEM_AMOUNT_RATIO);
+    case AUCTION_HOUSE_HORDE:
+        return GetConfig(CONFIG_AHBOT_HORDE_ITEM_AMOUNT_RATIO);
+    default:
+        return GetConfig(CONFIG_AHBOT_NEUTRAL_ITEM_AMOUNT_RATIO);
     }
 }
 
@@ -365,12 +365,12 @@ uint32 AuctionBotConfig::GetConfigPriceRatio(AuctionHouseType houseType) const
 {
     switch (houseType)
     {
-        case AUCTION_HOUSE_ALLIANCE:
-            return GetConfig(CONFIG_AHBOT_ALLIANCE_PRICE_RATIO);
-        case AUCTION_HOUSE_HORDE:
-            return GetConfig(CONFIG_AHBOT_HORDE_PRICE_RATIO);
-        default:
-            return GetConfig(CONFIG_AHBOT_NEUTRAL_PRICE_RATIO);
+    case AUCTION_HOUSE_ALLIANCE:
+        return GetConfig(CONFIG_AHBOT_ALLIANCE_PRICE_RATIO);
+    case AUCTION_HOUSE_HORDE:
+        return GetConfig(CONFIG_AHBOT_HORDE_PRICE_RATIO);
+    default:
+        return GetConfig(CONFIG_AHBOT_NEUTRAL_PRICE_RATIO);
     }
 }
 
@@ -378,12 +378,12 @@ bool AuctionBotConfig::GetConfigBuyerEnabled(AuctionHouseType houseType) const
 {
     switch (houseType)
     {
-        case AUCTION_HOUSE_ALLIANCE:
-            return GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED);
-        case AUCTION_HOUSE_HORDE:
-            return GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED);
-        default:
-            return GetConfig(CONFIG_AHBOT_BUYER_NEUTRAL_ENABLED);
+    case AUCTION_HOUSE_ALLIANCE:
+        return GetConfig(CONFIG_AHBOT_BUYER_ALLIANCE_ENABLED);
+    case AUCTION_HOUSE_HORDE:
+        return GetConfig(CONFIG_AHBOT_BUYER_HORDE_ENABLED);
+    default:
+        return GetConfig(CONFIG_AHBOT_BUYER_NEUTRAL_ENABLED);
     }
 }
 
@@ -391,20 +391,20 @@ uint32 AuctionBotConfig::GetConfigItemQualityAmount(AuctionQuality quality) cons
 {
     switch (quality)
     {
-        case AUCTION_QUALITY_GRAY:
-            return GetConfig(CONFIG_AHBOT_ITEM_GRAY_AMOUNT);
-        case AUCTION_QUALITY_WHITE:
-            return GetConfig(CONFIG_AHBOT_ITEM_WHITE_AMOUNT);
-        case AUCTION_QUALITY_GREEN:
-            return GetConfig(CONFIG_AHBOT_ITEM_GREEN_AMOUNT);
-        case AUCTION_QUALITY_BLUE:
-            return GetConfig(CONFIG_AHBOT_ITEM_BLUE_AMOUNT);
-        case AUCTION_QUALITY_PURPLE:
-            return GetConfig(CONFIG_AHBOT_ITEM_PURPLE_AMOUNT);
-        case AUCTION_QUALITY_ORANGE:
-            return GetConfig(CONFIG_AHBOT_ITEM_ORANGE_AMOUNT);
-        default:
-            return GetConfig(CONFIG_AHBOT_ITEM_YELLOW_AMOUNT);
+    case AUCTION_QUALITY_GRAY:
+        return GetConfig(CONFIG_AHBOT_ITEM_GRAY_AMOUNT);
+    case AUCTION_QUALITY_WHITE:
+        return GetConfig(CONFIG_AHBOT_ITEM_WHITE_AMOUNT);
+    case AUCTION_QUALITY_GREEN:
+        return GetConfig(CONFIG_AHBOT_ITEM_GREEN_AMOUNT);
+    case AUCTION_QUALITY_BLUE:
+        return GetConfig(CONFIG_AHBOT_ITEM_BLUE_AMOUNT);
+    case AUCTION_QUALITY_PURPLE:
+        return GetConfig(CONFIG_AHBOT_ITEM_PURPLE_AMOUNT);
+    case AUCTION_QUALITY_ORANGE:
+        return GetConfig(CONFIG_AHBOT_ITEM_ORANGE_AMOUNT);
+    default:
+        return GetConfig(CONFIG_AHBOT_ITEM_YELLOW_AMOUNT);
     }
 }
 

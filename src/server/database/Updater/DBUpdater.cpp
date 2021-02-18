@@ -51,7 +51,7 @@ bool DBUpdaterUtil::CheckExecutable()
         }
 
         LOG_FATAL("sql.updates", "Didn't find any executable MySQL binary at \'%s\' or in path, correct the path in the *.conf (\"MySQLExecutable\").",
-            absolute(exe).generic_string().c_str());
+                  absolute(exe).generic_string().c_str());
 
         return false;
     }
@@ -81,7 +81,7 @@ template<>
 std::string DBUpdater<LoginDatabaseConnection>::GetBaseFile()
 {
     return BuiltInConfig::GetSourceDirectory() +
-        "/sql/base/auth_database.sql";
+           "/sql/base/auth_database.sql";
 }
 
 template<>
@@ -140,7 +140,7 @@ template<>
 std::string DBUpdater<CharacterDatabaseConnection>::GetBaseFile()
 {
     return BuiltInConfig::GetSourceDirectory() +
-        "/sql/base/characters_database.sql";
+           "/sql/base/characters_database.sql";
 }
 
 template<>
@@ -161,7 +161,7 @@ template<class T>
 bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
 {
     LOG_INFO("sql.updates", "Database \"%s\" does not exist, do you want to create it? [yes (default) / no]: ",
-        pool.GetConnectionInfo()->database.c_str());
+             pool.GetConnectionInfo()->database.c_str());
 
     std::string answer;
     std::getline(std::cin, answer);
@@ -188,11 +188,12 @@ bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
     try
     {
         DBUpdater<T>::ApplyFile(pool, pool.GetConnectionInfo()->host, pool.GetConnectionInfo()->user, pool.GetConnectionInfo()->password,
-            pool.GetConnectionInfo()->port_or_socket, "", pool.GetConnectionInfo()->ssl, temp);
+                                pool.GetConnectionInfo()->port_or_socket, "", pool.GetConnectionInfo()->ssl, temp);
     }
     catch (UpdateException&)
     {
-        LOG_FATAL("sql.updates", "Failed to create database %s! Does the user (named in *.conf) have `CREATE`, `ALTER`, `DROP`, `INSERT` and `DELETE` privileges on the MySQL server?", pool.GetConnectionInfo()->database.c_str());
+        LOG_FATAL("sql.updates", "Failed to create database %s! Does the user (named in *.conf) have `CREATE`, `ALTER`, `DROP`, `INSERT` and `DELETE` privileges on the MySQL server?",
+                  pool.GetConnectionInfo()->database.c_str());
         boost::filesystem::remove(temp);
         return false;
     }
@@ -215,22 +216,24 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
 
     if (!is_directory(sourceDirectory))
     {
-        LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\warheadcore). Shutting down.", sourceDirectory.generic_string().c_str());
+        LOG_ERROR("sql.updates",
+                  "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\warheadcore). Shutting down.",
+                  sourceDirectory.generic_string().c_str());
         return false;
     }
 
-    UpdateFetcher updateFetcher(sourceDirectory, [&](std::string const& query) { DBUpdater<T>::Apply(pool, query); },
-        [&](Path const& file) { DBUpdater<T>::ApplyFile(pool, file); },
-            [&](std::string const& query) -> QueryResult { return DBUpdater<T>::Retrieve(pool, query); });
+    UpdateFetcher updateFetcher(sourceDirectory, [&](std::string const & query) { DBUpdater<T>::Apply(pool, query); },
+    [&](Path const & file) { DBUpdater<T>::ApplyFile(pool, file); },
+    [&](std::string const & query) -> QueryResult { return DBUpdater<T>::Retrieve(pool, query); });
 
     UpdateResult result;
     try
     {
         result = updateFetcher.Update(
-            sConfigMgr->GetOption<bool>("Updates.Redundancy", true),
-            sConfigMgr->GetOption<bool>("Updates.AllowRehash", true),
-            sConfigMgr->GetOption<bool>("Updates.ArchivedRedundancy", false),
-            sConfigMgr->GetOption<int32>("Updates.CleanDeadRefMaxCount", 3));
+                     sConfigMgr->GetOption<bool>("Updates.Redundancy", true),
+                     sConfigMgr->GetOption<bool>("Updates.AllowRehash", true),
+                     sConfigMgr->GetOption<bool>("Updates.ArchivedRedundancy", false),
+                     sConfigMgr->GetOption<int32>("Updates.CleanDeadRefMaxCount", 3));
     }
     catch (UpdateException&)
     {
@@ -238,7 +241,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
     }
 
     std::string const info = Warhead::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
-        result.recent, result.archived);
+                             result.recent, result.archived);
 
     if (!result.updated)
         LOG_INFO("sql.updates", ">> %s database is up-to-date! %s", DBUpdater<T>::GetTableName().c_str(), info.c_str());
@@ -276,21 +279,21 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
     {
         switch (DBUpdater<T>::GetBaseLocationType())
         {
-            case LOCATION_REPOSITORY:
-            {
-                LOG_ERROR("sql.updates", ">> Base file \"%s\" is missing. Try fixing it by cloning the source again.",
-                    base.generic_string().c_str());
+        case LOCATION_REPOSITORY:
+        {
+            LOG_ERROR("sql.updates", ">> Base file \"%s\" is missing. Try fixing it by cloning the source again.",
+                      base.generic_string().c_str());
 
-                break;
-            }
-            case LOCATION_DOWNLOAD:
-            {
-                std::string const filename = base.filename().generic_string();
-                std::string const workdir = boost::filesystem::current_path().generic_string();
-                LOG_ERROR("sql.updates", ">> File \"%s\" is missing, download it from \"https://github.com/TrinityCore/TrinityCore/releases\"" \
-                    " uncompress it and place the file \"%s\" in the directory \"%s\".", filename.c_str(), filename.c_str(), workdir.c_str());
-                break;
-            }
+            break;
+        }
+        case LOCATION_DOWNLOAD:
+        {
+            std::string const filename = base.filename().generic_string();
+            std::string const workdir = boost::filesystem::current_path().generic_string();
+            LOG_ERROR("sql.updates", ">> File \"%s\" is missing, download it from \"https://github.com/TrinityCore/TrinityCore/releases\"" \
+                      " uncompress it and place the file \"%s\" in the directory \"%s\".", filename.c_str(), filename.c_str(), workdir.c_str());
+            break;
+        }
         }
         return false;
     }
@@ -327,13 +330,13 @@ template<class T>
 void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, Path const& path)
 {
     DBUpdater<T>::ApplyFile(pool, pool.GetConnectionInfo()->host, pool.GetConnectionInfo()->user, pool.GetConnectionInfo()->password,
-        pool.GetConnectionInfo()->port_or_socket, pool.GetConnectionInfo()->database, pool.GetConnectionInfo()->ssl, path);
+                            pool.GetConnectionInfo()->port_or_socket, pool.GetConnectionInfo()->database, pool.GetConnectionInfo()->ssl, path);
 }
 
 template<class T>
 void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& host, std::string const& user,
-    std::string const& password, std::string const& port_or_socket, std::string const& database, std::string const& ssl,
-    Path const& path)
+                             std::string const& password, std::string const& port_or_socket, std::string const& database, std::string const& ssl,
+                             Path const& path)
 {
     std::vector<std::string> args;
     args.reserve(7);
@@ -383,16 +386,16 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
 
     // Invokes a mysql process which doesn't leak credentials to logs
     int const ret = Warhead::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
-                                 "sql.updates", path.generic_string(), true);
+                                          "sql.updates", path.generic_string(), true);
 
     if (ret != EXIT_SUCCESS)
     {
         LOG_FATAL("sql.updates", "Applying of file \'%s\' to database \'%s\' failed!" \
-            " If you are a user, please pull the latest revision from the repository. "
-            "Also make sure you have not applied any of the databases with your sql client. "
-            "You cannot use auto-update system and import sql files from WarheadCore repository with your sql client. "
-            "If you are a developer, please fix your sql query.",
-            path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
+                  " If you are a user, please pull the latest revision from the repository. "
+                  "Also make sure you have not applied any of the databases with your sql client. "
+                  "You cannot use auto-update system and import sql files from WarheadCore repository with your sql client. "
+                  "If you are a developer, please fix your sql query.",
+                  path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
 
         throw UpdateException("update failed");
     }

@@ -25,7 +25,7 @@ namespace Warhead
 {
     /// Default TC string format function.
     template<typename Format, typename... Args>
-    inline std::string StringFormat(Format&& fmt, Args&&... args)
+    inline std::string StringFormat(Format&& fmt, Args&& ... args)
     {
         try
         {
