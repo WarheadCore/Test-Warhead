@@ -34,8 +34,7 @@
 #include "Item.h"
 #include "Language.h"
 #include "Log.h"
-#include "Mail.h"
-#include "Mail.h"
+#include "MailMgr.h"
 #include "Map.h"
 #include "MapManager.h"
 #include "ObjectMgr.h"
@@ -1565,7 +1564,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
             }
         }
 
-        std::list<Item*>itemlist;
+        std::vector<Item*>itemlist;
         CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
         Item* item = reward->ItemId ? Item::CreateItem(reward->ItemId, 1, GetPlayer()) : nullptr;

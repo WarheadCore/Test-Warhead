@@ -20,8 +20,7 @@
 #include "DatabaseEnv.h"
 #include "Item.h"
 #include "Language.h"
-#include "Mail.h"
-#include "Mail.h"
+#include "MailMgr.h"
 #include "ObjectMgr.h"
 #include "Pet.h"
 #include "Player.h"
@@ -187,7 +186,7 @@ public:
             }
         }
 
-        std::list<Item*>itemlist;
+        std::vector<Item*>itemlist;
         CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
         for (ItemPairs::const_iterator itr = items.begin(); itr != items.end(); ++itr)
         {

@@ -1,5 +1,5 @@
 /*
- * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ * Copyright (C) 2019+ ATieshCore <https://at-wow.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,25 +15,33 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MAIL_EXTERNAL_H
-#define _MAIL_EXTERNAL_H
+#ifndef _MAILEXTERNAL_H
+#define _MAILEXTERNAL_H
 
 #include "Common.h"
+#include "ObjectGuid.h"
 
-class WH_GAME_API MailExternal
+class WH_GAME_API MailExternalMgr
 {
+private:
+    MailExternalMgr() { };
+    ~MailExternalMgr() { };
+
 public:
-    static MailExternal* instance();
+    static MailExternalMgr* instance();
 
     void Initialize();
+
     void Update(uint32 diff);
-    void AddMail(std::string_view charName, std::string_view thanksSubject, std::string_view thanksText, uint32 money, uint32 itemID, uint32 itemCount, uint32 creatureEntry);
+
+protected:
+    void _DoUpdate();
 
 private:
-    void SendMails();
-    void GetMailsFromDB();
+    // update interval
+    uint32 m_updateTimer;
 };
 
-#define sMailExternal MailExternal::instance()
+#define sMailExternalMgr MailExternalMgr::instance()
 
 #endif // _MAILEXTERNAL_H

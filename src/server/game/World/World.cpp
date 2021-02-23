@@ -58,8 +58,8 @@
 #include "Log.h"
 #include "LootItemStorage.h"
 #include "LootMgr.h"
-#include "Mail.h"
-#include "MailExternal.h"
+#include "MailMgr.h"
+#include "MailExternalMgr.h"
 #include "M2Stores.h"
 #include "MapManager.h"
 #include "Memory.h"
@@ -766,13 +766,6 @@ void World::LoadConfigSettings(bool reload)
     {
         LOG_ERROR("config", "GM.StartLevel (%i) must be in range 1..%u. Set to %u.", tempIntOption, MAX_LEVEL, MAX_LEVEL);
         sGameConfig->SetOption<int32>("GM.StartLevel", MAX_LEVEL);
-    }
-
-    tempIntOption = CONF_GET_INT("CleanOldMailTime");
-    if (tempIntOption > 23)
-    {
-        LOG_ERROR("config", "CleanOldMailTime (%u) must be an hour, between 0 and 23. Set to 4.", tempIntOption);
-        sGameConfig->SetOption<int32>("CleanOldMailTime", 4);
     }
 
     tempIntOption = CONF_GET_INT("UpdateUptimeInterval");

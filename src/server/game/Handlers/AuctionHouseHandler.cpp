@@ -26,8 +26,7 @@
 #include "Item.h"
 #include "Language.h"
 #include "Log.h"
-#include "Mail.h"
-#include "Mail.h"
+#include "MailMgr.h"
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
 #include "Player.h"
@@ -640,7 +639,7 @@ void WorldSession::HandleAuctionRemoveItem(WorldPacket& recvData)
                 player->ModifyMoney(-int32(auctionCut));
             }
 
-            std::list<Item*> itemlist;
+            std::vector<Item*> itemlist;
             itemlist.push_back(pItem);
             // item will deleted or added to received mail list
             sMailMgr->SendMailByAuctionHouseWithItems(auction, player->GetGUID().GetCounter(), auction->BuildAuctionMailSubject(AUCTION_CANCELED), AuctionEntry::BuildAuctionMailBody(0, 0, auction->buyout, auction->deposit, 0), 0, itemlist, MAIL_CHECK_MASK_COPIED);
