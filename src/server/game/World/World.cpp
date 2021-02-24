@@ -58,8 +58,8 @@
 #include "Log.h"
 #include "LootItemStorage.h"
 #include "LootMgr.h"
-#include "MailMgr.h"
-#include "MailExternalMgr.h"
+#include "Mail.h"
+#include "MailExternal.h"
 #include "M2Stores.h"
 #include "MapManager.h"
 #include "Memory.h"
@@ -1661,7 +1661,7 @@ void World::SetInitialWorldSettings()
 
     ///- Initialize Mails
     LOG_INFO("server.loading", "Starting Mail System");
-    sMailMgr->Initialize();
+    sMail->Initialize();
 
     ///- Initialize Mails External
     LOG_INFO("server.loading", "Starting Mail External System");
@@ -1981,7 +1981,7 @@ void World::Update(uint32 diff)
 
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update mails"));
-        sMailMgr->Update(diff);
+        sMail->Update(diff);
     }
 
     {

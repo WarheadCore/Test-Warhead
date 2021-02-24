@@ -26,7 +26,7 @@
 #include "Language.h"
 #include "Log.h"
 #include "Mail.h"
-#include "MailMgr.h"
+#include "Mail.h"
 #include "MailPackets.h"
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
@@ -136,7 +136,7 @@ void WorldSession::HandleSendMail(WorldPackets::Mail::SendMailClient& sendMail)
     }
 
     // do not allow to have more than 100 mails in mailbox.. mails count is in opcode uint8!!! - so max can be 255..
-    if (sMailMgr->GetMailBoxSize(receiverGuid) > 100)
+    if (sMail->GetMailBoxSize(receiverGuid) > 100)
     {
         player->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_CAP_REACHED);
         return;
@@ -296,9 +296,9 @@ void WorldSession::HandleSendMail(WorldPackets::Mail::SendMailClient& sendMail)
         sendMail.Cod = 0;
 
     if (!sendMail.Attachments.empty())
-        sMailMgr->SendMailWithItemsBy(player, receiverGuid.GetCounter(), sendMail.Subject, sendMail.Body, sendMail.SendMoney, maillist, sendMail.Body.empty() ? MAIL_CHECK_MASK_COPIED : MAIL_CHECK_MASK_HAS_BODY, deliver_delay, sendMail.Cod);
+        sMail->SendMailWithItemsBy(player, receiverGuid.GetCounter(), sendMail.Subject, sendMail.Body, sendMail.SendMoney, maillist, sendMail.Body.empty() ? MAIL_CHECK_MASK_COPIED : MAIL_CHECK_MASK_HAS_BODY, deliver_delay, sendMail.Cod);
     else
-        sMailMgr->SendMailBy(player, receiverGuid.GetCounter(), sendMail.Subject, sendMail.Body, sendMail.SendMoney, sendMail.Body.empty() ? MAIL_CHECK_MASK_COPIED : MAIL_CHECK_MASK_HAS_BODY, deliver_delay, sendMail.Cod);
+        sMail->SendMailBy(player, receiverGuid.GetCounter(), sendMail.Subject, sendMail.Body, sendMail.SendMoney, sendMail.Body.empty() ? MAIL_CHECK_MASK_COPIED : MAIL_CHECK_MASK_HAS_BODY, deliver_delay, sendMail.Cod);
 
     player->SaveInventoryAndGoldToDB(trans);
     CharacterDatabase.CommitTransaction(trans);
@@ -313,7 +313,7 @@ void WorldSession::HandleMailMarkAsRead(WorldPackets::Mail::MailMarkAsRead& mark
     if (!CanOpenMailBox(markAsRead.Mailbox))
         return;
 
-    if (!sMailMgr->HandleMailMarkAsRead(markAsRead.MailID))
+    if (!sMail->HandleMailMarkAsRead(markAsRead.MailID))
         return;
 
     if (_player->unReadMails)
@@ -326,7 +326,7 @@ void WorldSession::HandleMailDelete(WorldPackets::Mail::MailDelete& mailDelete)
     if (!CanOpenMailBox(mailDelete.Mailbox))
         return;
 
-    if (sMailMgr->HandleMailDelete(mailDelete.MailID))
+    if (sMail->HandleMailDelete(mailDelete.MailID))
         _player->SendMailResult(mailDelete.MailID, MAIL_DELETED, MAIL_OK);
     else
         _player->SendMailResult(mailDelete.MailID, MAIL_DELETED, MAIL_ERR_INTERNAL_ERROR);
@@ -336,7 +336,7 @@ void WorldSession::HandleMailReturnToSender(WorldPackets::Mail::MailReturnToSend
 {
     if (!CanOpenMailBox(returnToSender.Mailbox))
         return;
-    MailResponseResult result = sMailMgr->HandleMailReturnToSender(returnToSender.MailID);
+    MailResponseResult result = sMail->HandleMailReturnToSender(returnToSender.MailID);
     _player->SendMailResult(returnToSender.MailID, MAIL_RETURNED_TO_SENDER, result);
 }
 
@@ -348,7 +348,7 @@ void WorldSession::HandleMailTakeItem(WorldPackets::Mail::MailTakeItem& takeItem
 
     uint32 msg_result = 0;
     uint32 count = 0;
-    MailResponseResult result = sMailMgr->HandleMailTakeItem(_player, takeItem.MailID, takeItem.AttachID, count, msg_result);
+    MailResponseResult result = sMail->HandleMailTakeItem(_player, takeItem.MailID, takeItem.AttachID, count, msg_result);
     _player->SendMailResult(takeItem.MailID, MAIL_ITEM_TAKEN, result, msg_result, takeItem.AttachID, count);
 }
 
@@ -358,7 +358,7 @@ void WorldSession::HandleMailTakeMoney(WorldPackets::Mail::MailTakeMoney& takeMo
         return;
 
     uint32 msg_result = 0;
-    MailResponseResult result = sMailMgr->HandleMailTakeMoney(_player, takeMoney.MailID, msg_result);
+    MailResponseResult result = sMail->HandleMailTakeMoney(_player, takeMoney.MailID, msg_result);
     _player->SendMailResult(takeMoney.MailID, MAIL_MONEY_TAKEN, result, msg_result);
 }
 
@@ -369,7 +369,7 @@ void WorldSession::HandleGetMailList(WorldPackets::Mail::MailGetList& getList)
         return;
 
     WorldPacket data(SMSG_MAIL_LIST_RESULT, (200));         // guess size
-    sMailMgr->HandleGetMailList(_player, data);
+    sMail->HandleGetMailList(_player, data);
     SendPacket(&data);
 
     // recalculate m_nextMailDelivereTime and unReadMails
@@ -383,7 +383,7 @@ void WorldSession::HandleMailCreateTextItem(WorldPackets::Mail::MailCreateTextIt
         return;
 
     uint32 msg_result = 0;
-    MailResponseResult result = sMailMgr->HandleMailCreateTextItem(_player, createTextItem.MailID, msg_result);
+    MailResponseResult result = sMail->HandleMailCreateTextItem(_player, createTextItem.MailID, msg_result);
     _player->SendMailResult(createTextItem.MailID, MAIL_MADE_PERMANENT, result, msg_result);
 }
 
@@ -393,7 +393,7 @@ void WorldSession::HandleQueryNextMailTime(WorldPacket& /*recvData*/)
 
     if (_player->unReadMails > 0)
     {
-        if (!sMailMgr->HandleQueryNextMailTime(_player, data))
+        if (!sMail->HandleQueryNextMailTime(_player, data))
         {
             data << float(-DAY);
             data << uint32(0);

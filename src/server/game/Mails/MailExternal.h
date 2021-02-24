@@ -27,13 +27,13 @@ public:
 
     void Initialize();
     void Update(uint32 diff);
-    void AddMail(std::string_view charName, std::string_view thanksSubject, std::string_view thanksText, uint32 money, uint32 itemID, uint32 itemCount, uint32 creatureEntry);
+    void AddMail(std::string_view charName, std::string_view thanksSubject, std::string_view thanksText, uint32 money, uint32 itemID, uint32 itemCount, uint32 creatureEntry = 0);
 
 private:
     void SendMails();
     void GetMailsFromDB();
 };
 
-#define sMailExternalMgr MailExternalMgr::instance()
+#define sMailExternal MailExternal::instance()
 
 #endif // _MAIL_EXTERNAL_H_
