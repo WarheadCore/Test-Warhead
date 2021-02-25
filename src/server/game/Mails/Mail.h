@@ -177,7 +177,7 @@ protected:
     void RemoveMailItemsByMailId(uint32 mailID, CharacterDatabaseTransaction trans);
 
     // helper
-    bool PrepareMessageAttributeBy(Object* sender, [[maybe_unused]] ObjectGuid::LowType receiver, uint8& messageType, uint8& stationery, ObjectGuid::LowType& m_senderId, uint32 deliver_delay, uint32 COD, time_t& expireTime, time_t& deliverTime);
+    bool PrepareMessageAttributeBy(Object* sender, ObjectGuid::LowType receiver, uint8& messageType, uint8& stationery, ObjectGuid::LowType& m_senderId, uint32 deliver_delay, uint32 COD, time_t& expireTime, time_t& deliverTime);
     bool PrepareMessageAttributeByGUID(ObjectGuid::LowType sender, uint8 messageType, uint8& stationery, uint32 deliver_delay, uint32 COD, time_t& expireTime, time_t& deliverTime);
     bool PrepareMessageAttributeForAuctionAndCalendar(uint32 deliver_delay, uint32 COD, time_t& expireTime, time_t& deliverTime);
 

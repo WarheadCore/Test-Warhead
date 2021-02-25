@@ -404,7 +404,7 @@ void GameMail::ClearDependInstanceItemsBeforeDeletePlayer(ObjectGuid::LowType pl
     CharacterDatabase.CommitTransaction(trans);
 }
 
-bool GameMail::PrepareMessageAttributeBy(Object* sender, ObjectGuid::LowType receiver, uint8& messageType, uint8& stationery, ObjectGuid::LowType& m_senderId, uint32 deliver_delay, uint32 COD, time_t& expireTime, time_t& deliverTime)
+bool GameMail::PrepareMessageAttributeBy(Object* sender, [[maybe_unused]] ObjectGuid::LowType receiver, uint8& messageType, uint8& stationery, ObjectGuid::LowType& m_senderId, uint32 deliver_delay, uint32 COD, time_t& expireTime, time_t& deliverTime)
 {
     stationery = MAIL_STATIONERY_DEFAULT;
 
