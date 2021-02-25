@@ -18,10 +18,10 @@
 #include "MailExternal.h"
 #include "CharacterCache.h"
 #include "DatabaseEnv.h"
-#include "ObjectMgr.h"
-#include "Mail.h"
 #include "Item.h"
 #include "Log.h"
+#include "Mail.h"
+#include "ObjectMgr.h"
 #include "TaskScheduler.h"
 
 namespace

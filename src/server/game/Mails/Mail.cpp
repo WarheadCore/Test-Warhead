@@ -22,22 +22,22 @@
 #include "BattlegroundMgr.h"
 #include "CalendarMgr.h"
 #include "CharacterCache.h"
-#include "DatabaseEnv.h"
 #include "DBCStores.h"
-#include "GameTime.h"
-#include "GameLocale.h"
+#include "DatabaseEnv.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
+#include "GameTime.h"
 #include "Guild.h"
-#include "ObjectAccessor.h"
-#include "ObjectMgr.h"
-#include "Player.h"
-#include "RBAC.h"
 #include "Item.h"
 #include "Language.h"
 #include "Log.h"
 #include "LootMgr.h"
-#include "WorldSession.h"
+#include "ObjectAccessor.h"
+#include "ObjectMgr.h"
+#include "Player.h"
+#include "RBAC.h"
 #include "WorldPacket.h"
+#include "WorldSession.h"
 
 constexpr uint32 MAX_NETCLIENT_PACKET_SIZE = 32767 - 1; // Client hardcap: int16 with trailing zero space otherwise crash on memory free
 constexpr uint32 MAIL_UPDATE_INTERVAL = 1000; // 1 sec
@@ -188,7 +188,8 @@ void GameMail::SendMailByAuctionHouseWithItems(AuctionEntry* sender, ObjectGuid:
     SendMailItems(messageType, stationery, m_senderId, receiver, subject, body, money, itemlist, expireTime, deliverTime, COD, checkMask);
 }
 
-void GameMail::SendMailByCalendarEvent(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void GameMail::SendMailByCalendarEvent(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money,
+    MailCheckMask checkMask /*= MAIL_CHECK_MASK_NONE*/, uint32 deliver_delay /*= 0*/, uint32 COD /*= 0*/)
 {
     if (!sender || !receiver)
         return;
@@ -204,7 +205,8 @@ void GameMail::SendMailByCalendarEvent(CalendarEvent* sender, ObjectGuid::LowTyp
     SendMail(messageType, stationery, senderID, receiver, subject, body, money, expireTime, deliverTime, COD, checkMask);
 }
 
-void GameMail::SendMailByCalendarEventWithItems(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money, std::vector<Item*> const& itemlist, MailCheckMask checkMask, uint32 deliver_delay, uint32 COD)
+void GameMail::SendMailByCalendarEventWithItems(CalendarEvent* sender, ObjectGuid::LowType receiver, std::string const& subject, std::string const& body, uint32 money,
+    std::vector<Item*> const& itemlist, MailCheckMask checkMask /*= MAIL_CHECK_MASK_NONE*/, uint32 deliver_delay /*= 0*/, uint32 COD /*= 0*/)
 {
     if (!sender || !receiver)
         return;
@@ -220,7 +222,7 @@ void GameMail::SendMailByCalendarEventWithItems(CalendarEvent* sender, ObjectGui
     SendMailItems(messageType, stationery, senderID, receiver, subject, body, money, itemlist, expireTime, deliverTime, COD, checkMask);
 }
 
-void GameMail::SendMailWithTemplateBy(Object* sender, ObjectGuid::LowType receiver, uint16 mailTemplateId, MailCheckMask checkMask, uint32 deliver_delay)
+void GameMail::SendMailWithTemplateBy(Object* sender, ObjectGuid::LowType receiver, uint16 mailTemplateId, MailCheckMask checkMask /*= MAIL_CHECK_MASK_HAS_BODY*/, uint32 deliver_delay /*= 0*/)
 {
     if (!sender || !receiver || !mailTemplateId)
         return;
@@ -241,7 +243,7 @@ void GameMail::SendMailWithTemplateBy(Object* sender, ObjectGuid::LowType receiv
     SendMailTemplate(messageType, stationery, mailTemplateId, senderID, receiver, money, expireTime, deliverTime, checkMask);
 }
 
-void GameMail::SendMailWithTemplateByGUID(ObjectGuid::LowType sender, ObjectGuid::LowType receiver, uint8 messageType, uint16 mailTemplateId, MailCheckMask checkMask, uint32 deliver_delay)
+void GameMail::SendMailWithTemplateByGUID(ObjectGuid::LowType sender, ObjectGuid::LowType receiver, uint8 messageType, uint16 mailTemplateId, MailCheckMask checkMask /*= MAIL_CHECK_MASK_HAS_BODY*/, uint32 deliver_delay /*= 0*/)
 {
     if (!sender || !receiver)
         return;
@@ -357,7 +359,6 @@ void GameMail::ClearDependInstanceItem(ObjectGuid::LowType playerId, uint32 mail
                 pItem->SaveToDB(trans);              // it also deletes item object!
                 continue;
             }
-
         } while (resultItems->NextRow());
     }
 }
