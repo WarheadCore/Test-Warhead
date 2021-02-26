@@ -20,6 +20,7 @@
 
 #include "Common.h"
 #include "ObjectGuid.h"
+#include "Timer.h"
 
 class Item;
 class Object;
@@ -27,7 +28,6 @@ class Player;
 
 struct AuctionEntry;
 struct CalendarEvent;
-struct TimeTracker;
 
 inline constexpr uint32 MAIL_BODY_ITEM_TEMPLATE = 8383;     // - plain letter, A Dusty Unsent Letter: 889
 inline constexpr uint32 MAX_MAIL_ITEMS = 12;
