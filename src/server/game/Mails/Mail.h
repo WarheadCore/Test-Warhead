@@ -29,6 +29,8 @@ class Player;
 struct AuctionEntry;
 struct CalendarEvent;
 
+enum MailResponseResult : uint8;
+
 inline constexpr uint32 MAIL_BODY_ITEM_TEMPLATE = 8383;     // - plain letter, A Dusty Unsent Letter: 889
 inline constexpr uint32 MAX_MAIL_ITEMS = 12;
 
