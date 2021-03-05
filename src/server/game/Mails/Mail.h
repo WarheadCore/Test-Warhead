@@ -25,6 +25,7 @@
 class Item;
 class Object;
 class Player;
+class WorldPacket;
 
 struct AuctionEntry;
 struct CalendarEvent;
