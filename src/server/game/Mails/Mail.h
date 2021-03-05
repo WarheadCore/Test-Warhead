@@ -19,6 +19,7 @@
 #define _MAIL_H
 
 #include "Common.h"
+#include "DatabaseEnv.h"
 #include "ObjectGuid.h"
 #include "Timer.h"
 
