@@ -30,7 +30,7 @@
 #include "GameConfig.h"
 
 CalendarInvite::CalendarInvite() : _inviteId(1), _eventId(0), _invitee(), _senderGUID(), _statusTime(GameTime::GetGameTime()),
-_status(CALENDAR_STATUS_INVITED), _rank(CALENDAR_RANK_PLAYER), _text("") { }
+    _status(CALENDAR_STATUS_INVITED), _rank(CALENDAR_RANK_PLAYER), _text("") { }
 
 CalendarInvite::~CalendarInvite()
 {
@@ -96,8 +96,7 @@ void CalendarMgr::LoadFromDB()
             _maxEventId = std::max(_maxEventId, eventId);
 
             ++count;
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u calendar events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 
@@ -125,8 +124,7 @@ void CalendarMgr::LoadFromDB()
             _maxInviteId = std::max(_maxInviteId, inviteId);
 
             ++count;
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u calendar invites in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -203,7 +201,8 @@ void CalendarMgr::RemoveEvent(CalendarEvent* calendarEvent, ObjectGuid remover)
             if (Player* premover = ObjectAccessor::FindConnectedPlayer(invite->GetInviteeGUID()))
             {
                 if (sMail->GetMailBoxSize(invite->GetInviteeGUID()) + premover->GetAuctionLotsCount() < CONF_GET_UINT("Antispam.Mail.Controller"))
-                    sMail->SendMailByCalendarEvent(calendarEvent, invite->GetInviteeGUID().GetCounter(), calendarEvent->BuildCalendarMailSubject(remover), calendarEvent->BuildCalendarMailBody(), 0, MAIL_CHECK_MASK_COPIED);
+                    sMail->SendMailByCalendarEvent(calendarEvent, invite->GetInviteeGUID().GetCounter(), calendarEvent->BuildCalendarMailSubject(remover), calendarEvent->BuildCalendarMailBody(), 0,
+                                                   MAIL_CHECK_MASK_COPIED);
             }
         }
 
@@ -453,13 +452,13 @@ uint32 CalendarMgr::GetPlayerNumPending(ObjectGuid guid)
     {
         switch ((*itr)->GetStatus())
         {
-            case CALENDAR_STATUS_INVITED:
-            case CALENDAR_STATUS_TENTATIVE:
-            case CALENDAR_STATUS_NOT_SIGNED_UP:
-                ++pendingNum;
-                break;
-            default:
-                break;
+        case CALENDAR_STATUS_INVITED:
+        case CALENDAR_STATUS_TENTATIVE:
+        case CALENDAR_STATUS_NOT_SIGNED_UP:
+            ++pendingNum;
+            break;
+        default:
+            break;
         }
     }
 
@@ -523,7 +522,7 @@ void CalendarMgr::SendCalendarEventInvite(CalendarInvite const& invite)
 void CalendarMgr::SendCalendarEventUpdateAlert(CalendarEvent const& calendarEvent, time_t oldEventTime)
 {
     WorldPacket data(SMSG_CALENDAR_EVENT_UPDATED_ALERT, 1 + 8 + 4 + 4 + 4 + 1 + 4 +
-        calendarEvent.GetTitle().size() + calendarEvent.GetDescription().size() + 1 + 4 + 4);
+                     calendarEvent.GetTitle().size() + calendarEvent.GetDescription().size() + 1 + 4 + 4);
     data << uint8(1);       // unk
     data << uint64(calendarEvent.GetEventId());
     data.AppendPackedTime(oldEventTime);
@@ -606,9 +605,8 @@ void CalendarMgr::SendCalendarEventInviteAlert(CalendarEvent const& calendarEven
         if (Guild* guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId()))
             guild->BroadcastPacket(&data);
     }
-    else
-        if (Player* player = ObjectAccessor::FindConnectedPlayer(invite.GetInviteeGUID()))
-            player->SendDirectMessage(&data);
+    else if (Player* player = ObjectAccessor::FindConnectedPlayer(invite.GetInviteeGUID()))
+        player->SendDirectMessage(&data);
 }
 
 void CalendarMgr::SendCalendarEvent(ObjectGuid guid, CalendarEvent const& calendarEvent, CalendarSendEventType sendType)
@@ -689,14 +687,14 @@ void CalendarMgr::SendCalendarCommandResult(ObjectGuid guid, CalendarError err, 
         data << uint8(0);
         switch (err)
         {
-            case CALENDAR_ERROR_OTHER_INVITES_EXCEEDED:
-            case CALENDAR_ERROR_ALREADY_INVITED_TO_EVENT_S:
-            case CALENDAR_ERROR_IGNORING_YOU_S:
-                data << param;
-                break;
-            default:
-                data << uint8(0);
-                break;
+        case CALENDAR_ERROR_OTHER_INVITES_EXCEEDED:
+        case CALENDAR_ERROR_ALREADY_INVITED_TO_EVENT_S:
+        case CALENDAR_ERROR_IGNORING_YOU_S:
+            data << param;
+            break;
+        default:
+            data << uint8(0);
+            break;
         }
 
         data << uint32(err);
