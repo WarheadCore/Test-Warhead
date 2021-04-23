@@ -26,7 +26,6 @@ Script Data End */
 #include "ScriptMgr.h"
 #include "DatabaseEnv.h"
 #include "Mail.h"
-#include "Mail.h"
 #include "Map.h"
 #include "MotionMaster.h"
 #include "Player.h"
@@ -64,12 +63,7 @@ public:
 
     struct npc_mageguard_dalaranAI : public ScriptedAI
     {
-        npc_mageguard_dalaranAI(Creature* creature) : ScriptedAI(creature)
-        {
-            creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_NORMAL, true);
-            creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
-        }
+        npc_mageguard_dalaranAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() override { }
 
@@ -195,7 +189,7 @@ class npc_minigob_manabonk : public CreatureScript
             void SendMailToPlayer(Player* player) const
             {
                 int16 deliverDelay = irand(MAIL_DELIVER_DELAY_MIN, MAIL_DELIVER_DELAY_MAX);
-                sMailMgr->SendMailWithTemplateByGUID(me->GetEntry(), player->GetGUID().GetCounter(), MAIL_CREATURE, MAIL_MINIGOB_ENTRY, MAIL_CHECK_MASK_NONE, deliverDelay);
+                sMail->SendMailWithTemplateByGUID(me->GetEntry(), player->GetGUID().GetCounter(), MAIL_CREATURE, MAIL_MINIGOB_ENTRY, MAIL_CHECK_MASK_NONE, deliverDelay);
             }
 
             void UpdateAI(uint32 diff) override

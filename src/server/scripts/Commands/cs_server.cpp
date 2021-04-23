@@ -38,6 +38,7 @@ EndScriptData */
 #include "RBAC.h"
 #include "Realm.h"
 #include "ServerMotd.h"
+#include "Timer.h"
 #include "UpdateTime.h"
 #include "Util.h"
 #include "VMapFactory.h"
@@ -146,7 +147,7 @@ public:
 
         handler->PSendSysMessage("Compiled on: %s", GitRevision::GetHostOSVersion());
 
-        uint32 updateFlags = sConfigMgr->GetIntDefault("Updates.EnableDatabases", DatabaseLoader::DATABASE_NONE);
+        uint32 updateFlags = sConfigMgr->GetOption<int32>("Updates.EnableDatabases", DatabaseLoader::DATABASE_NONE);
         if (!updateFlags)
             handler->SendSysMessage("Automatic database updates are disabled for all databases!");
         else
@@ -260,7 +261,7 @@ public:
         uint32 queuedClientsNum     = sWorld->GetQueuedSessionCount();
         uint32 maxActiveClientsNum  = sWorld->GetMaxActiveSessionCount();
         uint32 maxQueuedClientsNum  = sWorld->GetMaxQueuedSessionCount();
-        std::string uptime          = secsToTimeString(GameTime::GetUptime());
+        std::string uptime          = Warhead::Time::ToTimeString<Seconds>(GameTime::GetUptime(), TimeOutput::Seconds, TimeFormat::FullText);
         uint32 updateTime           = sWorldUpdateTime.GetLastUpdateTime();
 
         handler->PSendSysMessage("%s", GitRevision::GetFullVersion());
@@ -268,9 +269,10 @@ public:
         handler->PSendSysMessage(LANG_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
         handler->PSendSysMessage(LANG_UPTIME, uptime.c_str());
         handler->PSendSysMessage(LANG_UPDATE_DIFF, updateTime);
+
         // Can't use sWorld->ShutdownMsg here in case of console command
         if (sWorld->IsShuttingDown())
-            handler->PSendSysMessage(LANG_SHUTDOWN_TIMELEFT, secsToTimeString(sWorld->GetShutDownTimeLeft()).c_str());
+            handler->PSendSysMessage(LANG_SHUTDOWN_TIMELEFT, Warhead::Time::ToTimeString<Seconds>(sWorld->GetShutDownTimeLeft(), TimeOutput::Seconds, TimeFormat::FullText).c_str());
 
         return true;
     }
@@ -301,7 +303,7 @@ public:
                 sWorld->SetPlayerSecurityLimit(SEC_ADMINISTRATOR);
             else if (strncmp(paramStr, "reset", limit) == 0)
             {
-                sWorld->SetPlayerAmountLimit(sConfigMgr->GetIntDefault("PlayerLimit", 100));
+                sWorld->SetPlayerAmountLimit(sConfigMgr->GetOption<int32>("PlayerLimit", 100));
                 sWorld->LoadDBAllowedSecurityLevel();
             }
             else
@@ -476,7 +478,7 @@ private:
         }
         else
         {
-            delay = TimeStringToSecs(std::string(delayStr));
+            delay = Warhead::Time::TimeStringTo<Seconds>(delayStr);
 
             if (delay == 0)
                 return false;

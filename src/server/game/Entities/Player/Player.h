@@ -660,7 +660,9 @@ enum TeleportToOptions
     TELE_TO_NOT_UNSUMMON_PET    = 0x08,
     TELE_TO_SPELL               = 0x10,
     TELE_TO_TRANSPORT_TELEPORT  = 0x20,
-    TELE_REVIVE_AT_TELEPORT     = 0x40
+    TELE_REVIVE_AT_TELEPORT     = 0x40,
+    TELE_TO_NOT_LEAVE_TAXI      = 0x80,
+    TELE_TO_SKIP_START_ZONE_DK  = 0x100
 };
 
 /// Type of environmental damages
@@ -964,6 +966,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         void SetPvPDeath(bool on) { if (on) m_ExtraFlags |= PLAYER_EXTRA_PVP_DEATH; else m_ExtraFlags &= ~PLAYER_EXTRA_PVP_DEATH; }
 
         uint32 GetXP() const { return GetUInt32Value(PLAYER_XP); }
+        uint32 GetXPForNextLevel() const { return GetUInt32Value(PLAYER_NEXT_LEVEL_XP); }
         void SetXP(uint32 xp) { SetUInt32Value(PLAYER_XP, xp); }
         void GiveXP(uint32 xp, Unit* victim, float group_rate = 1.0f);
         void GiveLevel(uint8 level);
@@ -2156,6 +2159,7 @@ class WH_GAME_API Player : public Unit, public GridObject<Player>
         bool SetHover(bool enable, bool packetOnly = false, bool updateAnimationTier = true) override;
 
         bool CanFly() const override { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY); }
+        bool CanEnterWater() const override { return true; }
 
         std::string GetMapAreaAndZoneString() const;
         std::string GetCoordsMapAreaAndZoneString() const;

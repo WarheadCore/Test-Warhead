@@ -1574,16 +1574,6 @@ bool ScriptMgr::OnCastItemCombatSpell(Player* player, Unit* victim, SpellInfo co
     return tmpscript->OnCastItemCombatSpell(player, victim, spellInfo, item);
 }
 
-void ScriptMgr::OnMirrorImageDisplayItem(const Item* item, uint32& display)
-{
-    FOREACH_SCRIPT(ItemScript)->OnMirrorImageDisplayItem(item, display);
-}
-
-void ScriptMgr::OnItemDelFromDB(CharacterDatabaseTransaction trans, ObjectGuid::LowType itemGuid)
-{
-    FOREACH_SCRIPT(ItemScript)->OnItemDelFromDB(trans, itemGuid);
-}
-
 CreatureAI* ScriptMgr::GetCreatureAI(Creature* creature)
 {
     ASSERT(creature);
@@ -1813,6 +1803,11 @@ void ScriptMgr::OnShutdown()
     FOREACH_SCRIPT(WorldScript)->OnShutdown();
 }
 
+void ScriptMgr::OnLoadCustomScripts()
+{
+    FOREACH_SCRIPT(WorldScript)->OnLoadCustomScripts();
+}
+
 bool ScriptMgr::OnCriteriaCheck(uint32 scriptId, Player* source, Unit* target)
 {
     ASSERT(source);
@@ -2040,9 +2035,9 @@ void ScriptMgr::OnGuildAddMember(Guild* guild, Player* player, uint8& plRank)
     FOREACH_SCRIPT(GuildScript)->OnAddMember(guild, player, plRank);
 }
 
-void ScriptMgr::OnGuildRemoveMember(Guild* guild, Player* player, bool isDisbanding, bool isKicked)
+void ScriptMgr::OnGuildRemoveMember(Guild* guild, Player* player, ObjectGuid guid, bool isDisbanding, bool isKicked)
 {
-    FOREACH_SCRIPT(GuildScript)->OnRemoveMember(guild, player, isDisbanding, isKicked);
+    FOREACH_SCRIPT(GuildScript)->OnRemoveMember(guild, player, guid, isDisbanding, isKicked);
 }
 
 void ScriptMgr::OnGuildMOTDChanged(Guild* guild, const std::string& newMotd)
@@ -2152,6 +2147,69 @@ void ScriptMgr::ModifyVehiclePassengerExitPos(Unit* passenger, Vehicle* vehicle,
 {
     FOREACH_SCRIPT(UnitScript)->ModifyVehiclePassengerExitPos(passenger, vehicle, pos);
     FOREACH_SCRIPT(CreatureScript)->ModifyVehiclePassengerExitPos(passenger, vehicle, pos);
+}
+
+// BGScript
+void ScriptMgr::OnBattlegroundStart(Battleground* bg)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundStart(bg);
+}
+
+void ScriptMgr::OnBattlegroundEnd(Battleground* bg, uint32 winner)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundEnd(bg, winner);
+}
+
+void ScriptMgr::OnBattlegroundUpdate(Battleground* bg, uint32 diff)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundUpdate(bg, diff);
+}
+
+void ScriptMgr::OnBattlegroundAddPlayer(Battleground* bg, Player* player)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundAddPlayer(bg, player);
+}
+
+void ScriptMgr::OnBattlegroundBeforeAddPlayer(Battleground* bg, Player* player)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundBeforeAddPlayer(bg, player);
+}
+
+void ScriptMgr::OnBattlegroundRemovePlayerAtLeave(Battleground* bg, ObjectGuid guid, bool transport, bool sendPacket)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundRemovePlayerAtLeave(bg, guid, transport, sendPacket);
+}
+
+void ScriptMgr::OnQueueAddGroup(BattlegroundQueue* queue, GroupQueueInfo* ginfo, uint32& index, Player* leader, Group* grp, PvPDifficultyEntry const* bracketEntry, bool isPremade)
+{
+    FOREACH_SCRIPT(BGScript)->OnQueueAddGroup(queue, ginfo, index, leader, grp, bracketEntry, isPremade);
+}
+
+bool ScriptMgr::CanFillPlayersToBG(BattlegroundQueue* queue, Battleground* bg, const int32 aliFree, const int32 hordeFree, BattlegroundBracketId bracket_id)
+{
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(BGScript, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanFillPlayersToBG(queue, bg, aliFree, hordeFree, bracket_id))
+            ret = false; // we change ret value only when scripts return false
+
+    return ret;
+}
+
+void ScriptMgr::OnCheckNormalMatch(BattlegroundQueue* queue, uint32& Coef, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers)
+{
+    FOREACH_SCRIPT(BGScript)->OnCheckNormalMatch(queue, Coef, bgTemplate, bracket_id, minPlayers, maxPlayers);
+}
+
+// MiscScript
+void ScriptMgr::OnMirrorImageDisplayItem(const Item* item, uint32& display)
+{
+    FOREACH_SCRIPT(MiscScript)->OnMirrorImageDisplayItem(item, display);
+}
+
+void ScriptMgr::OnItemDelFromDB(CharacterDatabaseTransaction trans, ObjectGuid::LowType itemGuid)
+{
+    FOREACH_SCRIPT(MiscScript)->OnItemDelFromDB(trans, itemGuid);
 }
 
 SpellScriptLoader::SpellScriptLoader(char const* name)
@@ -2349,6 +2407,18 @@ GroupScript::GroupScript(char const* name)
     ScriptRegistry<GroupScript>::Instance()->AddScript(this);
 }
 
+BGScript::BGScript(char const* name)
+    : ScriptObject(name)
+{
+    ScriptRegistry<BGScript>::Instance()->AddScript(this);
+}
+
+MiscScript::MiscScript(char const* name)
+    : ScriptObject(name)
+{
+    ScriptRegistry<MiscScript>::Instance()->AddScript(this);
+}
+
 // Specialize for each script type class like so:
 template class WH_GAME_API ScriptRegistry<SpellScriptLoader>;
 template class WH_GAME_API ScriptRegistry<ServerScript>;
@@ -2377,3 +2447,5 @@ template class WH_GAME_API ScriptRegistry<GuildScript>;
 template class WH_GAME_API ScriptRegistry<GroupScript>;
 template class WH_GAME_API ScriptRegistry<UnitScript>;
 template class WH_GAME_API ScriptRegistry<AccountScript>;
+template class WH_GAME_API ScriptRegistry<BGScript>;
+template class WH_GAME_API ScriptRegistry<MiscScript>;

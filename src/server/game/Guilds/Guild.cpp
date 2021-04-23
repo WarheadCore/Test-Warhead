@@ -2120,7 +2120,7 @@ bool Guild::Validate()
         _SetLeaderGUID(*pLeader);
 
     // Check config if multiple guildmasters are allowed
-    if (!sConfigMgr->GetBoolDefault("Guild.AllowMultipleGuildMaster", 0))
+    if (!sConfigMgr->GetOption<bool>("Guild.AllowMultipleGuildMaster", 0))
         for (auto& [guid, member] : m_members)
             if ((member.GetRankId() == GR_GUILDMASTER) && !member.IsSamePlayer(m_leaderGuid))
                 member.ChangeRank(trans, GR_OFFICER);
@@ -2317,7 +2317,7 @@ void Guild::DeleteMember(CharacterDatabaseTransaction trans, ObjectGuid guid, bo
         }
     }
     // Call script on remove before member is actually removed from guild (and database)
-    sScriptMgr->OnGuildRemoveMember(this, player, isDisbanding, isKicked);
+    sScriptMgr->OnGuildRemoveMember(this, player, guid, isDisbanding, isKicked);
 
     m_members.erase(lowguid);
 

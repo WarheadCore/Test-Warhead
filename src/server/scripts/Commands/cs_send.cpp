@@ -21,11 +21,11 @@
 #include "Item.h"
 #include "Language.h"
 #include "Mail.h"
-#include "Mail.h"
 #include "ObjectMgr.h"
 #include "Pet.h"
 #include "Player.h"
 #include "RBAC.h"
+#include "Timer.h"
 #include "WorldSession.h"
 
 #if WARHEAD_COMPILER == WARHEAD_COMPILER_GNU
@@ -95,7 +95,7 @@ public:
         if (handler->GetSession())
             pguid = handler->GetSession()->GetPlayer()->GetGUID().GetCounter();
 
-        sMailMgr->SendMailByGUID(pguid, targetGuid.GetCounter(), MAIL_NORMAL, subject, text, 0);
+        sMail->SendMailByGUID(pguid, targetGuid.GetCounter(), MAIL_NORMAL, subject, text, 0);
 
         std::string nameLink = handler->playerLink(targetName);
         handler->PSendSysMessage(LANG_MAIL_SENT, nameLink.c_str());
@@ -186,7 +186,7 @@ public:
             }
         }
 
-        std::list<Item*>itemlist;
+        std::vector<Item*>itemlist;
         CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
         for (ItemPairs::const_iterator itr = items.begin(); itr != items.end(); ++itr)
         {
@@ -202,7 +202,7 @@ public:
         if (handler->GetSession())
             pguid = handler->GetSession()->GetPlayer()->GetGUID().GetCounter();
 
-        sMailMgr->SendMailWithItemsByGUID(pguid, receiverGuid.GetCounter(), MAIL_NORMAL, subject, text, 0, itemlist);
+        sMail->SendMailWithItemsByGUID(pguid, receiverGuid.GetCounter(), MAIL_NORMAL, subject, text, 0, itemlist);
         itemlist.clear();
 
         std::string nameLink = handler->playerLink(receiverName);
@@ -250,7 +250,7 @@ public:
         if (handler->GetSession())
             pguid = handler->GetSession()->GetPlayer()->GetGUID().GetCounter();
 
-        sMailMgr->SendMailByGUID(pguid, receiverGuid.GetCounter(), MAIL_NORMAL, subject, text, money);
+        sMail->SendMailByGUID(pguid, receiverGuid.GetCounter(), MAIL_NORMAL, subject, text, money);
 
         std::string nameLink = handler->playerLink(receiverName);
         handler->PSendSysMessage(LANG_MAIL_SENT, nameLink.c_str());
@@ -292,10 +292,11 @@ public:
     /// Send a message to a player in game
     static bool HandleExpireTime(ChatHandler* handler, char const* /*args*/)
     {
-        time_t expTime = sMailMgr->GetMailMgrExpiryTimer();
+        time_t expTime = sMail->GetMailMgrExpiryTimer();
+
         /// - Send the message
-        std::string time = secsToTimeString(uint64(expTime));
-        handler->PSendSysMessage("|cffff0000[next ExpiryMail will in]:|r %s", time);
+        std::string time = Warhead::Time::ToTimeString<Seconds>(expTime);
+        handler->PSendSysMessage("|cffff0000[next ExpiryMail will in]:|r %s", time.c_str());
 
         return true;
     }

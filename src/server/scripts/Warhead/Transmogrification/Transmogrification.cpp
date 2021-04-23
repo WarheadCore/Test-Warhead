@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,21 +17,21 @@
 
 #include "Transmogrification.h"
 #include "Bag.h"
-#include "DatabaseEnv.h"
 #include "DBCStores.h"
-#include "GameEventMgr.h"
+#include "DatabaseEnv.h"
 #include "GameConfig.h"
+#include "GameEventMgr.h"
 #include "GameLocale.h"
-#include "ModuleLocale.h"
 #include "Item.h"
 #include "Log.h"
+#include "ModuleLocale.h"
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
-#include "WorldSession.h"
 #include "World.h"
+#include "WorldSession.h"
 
 namespace
 {
@@ -105,7 +105,7 @@ void Transmogrification::Init()
 
     if (!sObjectMgr->GetItemTemplate(tokenEntry))
     {
-        LOG_ERROR("module.transmog", "Transmogrification.TokenEntry (%u) does not exist. Using default.", tokenEntry);
+        LOG_ERROR("scripts.warhead", "Transmogrification.TokenEntry (%u) does not exist. Using default.", tokenEntry);
         sGameConfig->SetOption<int32>("Transmogrification.TokenEntry", 49426);
     }
 }
@@ -240,7 +240,7 @@ std::string const Transmogrification::GetSlotName(Player* player, uint8 slot) co
             return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_TABARD, localeIndex).value_or("Tabard"); // Tabard
         default:
         {
-            LOG_FATAL("module.transmog", "> Transmog: unknown slot (%u)", slot);
+            LOG_FATAL("scripts.warhead", "> Transmog: unknown slot (%u)", slot);
             return "";
         }
     }
@@ -576,21 +576,15 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
     if (IsRangedWeapon(source->Class, source->SubClass) != IsRangedWeapon(target->Class, target->SubClass))
         return false;
 
-    if (source->SubClass != target->SubClass && !IsRangedWeapon(target->Class, target->SubClass))
+    if (source->SubClass != target->SubClass && !IsRangedWeapon(target->Class, target->SubClass) && !IsAllowed(source->ItemId))
     {
         if (source->Class == ITEM_CLASS_ARMOR && !CONF_GET_BOOL("Transmogrification.AllowMixedArmorTypes"))
             return false;
 
         if (source->Class == ITEM_CLASS_WEAPON && !player->GetSkillValue(target->GetSkill()))
             return false;
-    }
 
-    if (!CONF_GET_BOOL("Transmogrification.AllowMixedWeaponTypes") && source->InventoryType != target->InventoryType)
-    {
-        if (target->Class != ITEM_CLASS_WEAPON || source->Class != ITEM_CLASS_WEAPON)
-            return false;
-
-        if (source->InventoryType == INVTYPE_2HWEAPON || target->InventoryType == INVTYPE_2HWEAPON)
+        if (source->Class == ITEM_CLASS_WEAPON && !CONF_GET_BOOL("Transmogrification.AllowMixedWeaponTypes"))
             return false;
     }
 
@@ -799,7 +793,7 @@ void Transmogrification::LoadConfig(bool reload)
 
     if (!reload)
     {
-        LOG_DEBUG("module.transmog", "Deleting non-existing transmogrification entries...");
+        LOG_DEBUG("scripts.warhead", "Deleting non-existing transmogrification entries...");
         CharacterDatabase.DirectExecute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
 
         // Clean even if disabled
@@ -1412,4 +1406,3 @@ void Transmogrification::SetVisibleItemSlot(Player* player, uint8 slot, Item* it
     if (uint32 entry = GetFakeEntry(item->GetGUID()))
         player->SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), entry);
 }
-

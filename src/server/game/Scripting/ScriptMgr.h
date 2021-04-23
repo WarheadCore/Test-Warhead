@@ -32,6 +32,7 @@ class AuraScript;
 class Battlefield;
 class Battleground;
 class BattlegroundMap;
+class BattlegroundQueue;
 class Channel;
 class Creature;
 class CreatureAI;
@@ -73,10 +74,13 @@ struct CreatureData;
 struct ItemTemplate;
 struct MapEntry;
 struct Position;
+struct PvPDifficultyEntry;
+struct GroupQueueInfo;
 
 namespace Warhead::ChatCommands { struct ChatCommandBuilder; }
 
 enum BattlegroundTypeId : uint32;
+enum BattlegroundBracketId : uint8;
 enum ContentLevels : uint8;
 enum Difficulty : uint8;
 enum DuelCompleteType : uint8;
@@ -276,6 +280,9 @@ class WH_GAME_API WorldScript : public ScriptObject
 
         // Called when the world is actually shut down.
         virtual void OnShutdown() { }
+
+        // Called before init server
+        virtual void OnLoadCustomScripts() { }
 };
 
 class WH_GAME_API FormulaScript : public ScriptObject
@@ -389,11 +396,6 @@ class WH_GAME_API ItemScript : public ScriptObject
 
         // Called before casting a combat spell from this item (chance on hit spells of item template, can be used to prevent cast if returning false)
         virtual bool OnCastItemCombatSpell(Player* /*player*/, Unit* /*victim*/, SpellInfo const* /*spellInfo*/, Item* /*item*/) { return true; }
-
-        virtual void OnMirrorImageDisplayItem(const Item* /*item*/, uint32& /*display*/) { }
-
-        // Called before item delete
-        virtual void OnItemDelFromDB(CharacterDatabaseTransaction /*trans*/, ObjectGuid::LowType /*itemGuid*/) { }
 };
 
 class WH_GAME_API UnitScript : public ScriptObject
@@ -787,7 +789,7 @@ class WH_GAME_API GuildScript : public ScriptObject
         virtual void OnAddMember(Guild* /*guild*/, Player* /*player*/, uint8& /*plRank*/) { }
 
         // Called when a member is removed from the guild.
-        virtual void OnRemoveMember(Guild* /*guild*/, Player* /*player*/, bool /*isDisbanding*/, bool /*isKicked*/) { }
+        virtual void OnRemoveMember(Guild* /*guild*/, Player* /*player*/, ObjectGuid /*guid*/, bool /*isDisbanding*/, bool /*isKicked*/) { }
 
         // Called when the guild MOTD (message of the day) changes.
         virtual void OnMOTDChanged(Guild* /*guild*/, const std::string& /*newMotd*/) { }
@@ -838,6 +840,56 @@ class WH_GAME_API GroupScript : public ScriptObject
 
         // Called when a group is disbanded.
         virtual void OnDisband(Group* /*group*/) { }
+};
+
+class WH_GAME_API BGScript : public ScriptObject
+{
+protected:
+
+    BGScript(char const* name);
+
+public:
+
+    // Start Battlegroud
+    virtual void OnBattlegroundStart(Battleground* /*bg*/) { }
+
+    // End Battleground
+    virtual void OnBattlegroundEnd(Battleground* /*bg*/, uint32 /*winner*/) { }
+
+    // Update Battlegroud
+    virtual void OnBattlegroundUpdate(Battleground* /*bg*/, uint32 /*diff*/) { }
+
+    // Add Player in Battlegroud
+    virtual void OnBattlegroundAddPlayer(Battleground* /*bg*/, Player* /*player*/) { }
+
+    // Before added player in Battlegroud
+    virtual void OnBattlegroundBeforeAddPlayer(Battleground* /*bg*/, Player* /*player*/) { }
+
+    // Remove player at leave BG
+    virtual void OnBattlegroundRemovePlayerAtLeave(Battleground* /*bg*/, ObjectGuid /*guid*/, bool /*transport*/, bool /*sendPacket*/) { }
+
+    virtual void OnQueueAddGroup(BattlegroundQueue* /*queue*/, GroupQueueInfo* /*ginfo*/, uint32& /*index*/, Player* /*leader*/, Group* /*grp*/, PvPDifficultyEntry const* /*bracketEntry*/, bool /*isPremade*/) { }
+
+    virtual bool CanFillPlayersToBG(BattlegroundQueue* /*queue*/, Battleground* /*bg*/, const int32 /*aliFree*/, const int32 /*hordeFree*/, BattlegroundBracketId /*bracket_id*/) { return true; }
+
+    virtual bool CanFillPlayersToBGWithSpecific(BattlegroundQueue* /*queue*/, Battleground* /*bg*/, const int32 /*aliFree*/, const int32 /*hordeFree*/,
+        BattlegroundBracketId /*thisBracketId*/, BattlegroundQueue* /*specificQueue*/, BattlegroundBracketId /*specificBracketId*/) { return true; }
+
+    virtual void OnCheckNormalMatch(BattlegroundQueue* /*queue*/, uint32& /*Coef*/, Battleground* /*bgTemplate*/, BattlegroundBracketId /*bracket_id*/, uint32& /*minPlayers*/, uint32& /*maxPlayers*/) { }
+};
+
+class WH_GAME_API MiscScript : public ScriptObject
+{
+protected:
+
+    MiscScript(char const* name);
+
+public:
+    // Called before SendPacket in HandleMirrorImageDataRequest
+    virtual void OnMirrorImageDisplayItem(const Item* /*item*/, uint32& /*display*/) { }
+
+    // Called before item delete
+    virtual void OnItemDelFromDB(CharacterDatabaseTransaction /*trans*/, ObjectGuid::LowType /*itemGuid*/) { }
 };
 
 // Manages registration, loading, and execution of scripts.
@@ -924,6 +976,7 @@ class WH_GAME_API ScriptMgr
         void OnWorldUpdate(uint32 diff);
         void OnStartup();
         void OnShutdown();
+        void OnLoadCustomScripts();
 
     public: /* FormulaScript */
 
@@ -956,8 +1009,6 @@ class WH_GAME_API ScriptMgr
         bool OnItemExpire(Player* player, ItemTemplate const* proto);
         bool OnItemRemove(Player* player, Item* item);
         bool OnCastItemCombatSpell(Player* player, Unit* victim, SpellInfo const* spellInfo, Item* item);
-        void OnMirrorImageDisplayItem(const Item* item, uint32& display);
-        void OnItemDelFromDB(CharacterDatabaseTransaction trans, ObjectGuid::LowType itemGuid);
 
     public: /* CreatureScript */
 
@@ -1079,7 +1130,7 @@ class WH_GAME_API ScriptMgr
     public: /* GuildScript */
 
         void OnGuildAddMember(Guild* guild, Player* player, uint8& plRank);
-        void OnGuildRemoveMember(Guild* guild, Player* player, bool isDisbanding, bool isKicked);
+        void OnGuildRemoveMember(Guild* guild, Player* player, ObjectGuid guid, bool isDisbanding, bool isKicked);
         void OnGuildMOTDChanged(Guild* guild, const std::string& newMotd);
         void OnGuildInfoChanged(Guild* guild, const std::string& newInfo);
         void OnGuildCreate(Guild* guild, Player* leader, const std::string& name);
@@ -1107,6 +1158,25 @@ class WH_GAME_API ScriptMgr
         void ModifyMeleeDamage(Unit* target, Unit* attacker, uint32& damage);
         void ModifySpellDamageTaken(Unit* target, Unit* attacker, int32& damage);
         void ModifyVehiclePassengerExitPos(Unit* passenger, Vehicle* vehicle, Position& pos);
+
+    public: /* BGScript */
+
+        void OnBattlegroundStart(Battleground* bg);
+        void OnBattlegroundEnd(Battleground* bg, uint32 winner);
+        void OnBattlegroundUpdate(Battleground* bg, uint32 diff);
+        void OnBattlegroundAddPlayer(Battleground* bg, Player* player);
+        void OnBattlegroundBeforeAddPlayer(Battleground* bg, Player* player);
+        void OnBattlegroundRemovePlayerAtLeave(Battleground* bg, ObjectGuid guid, bool transport, bool sendPacket);
+        void OnQueueAddGroup(BattlegroundQueue* queue, GroupQueueInfo* ginfo, uint32& index, Player* leader, Group* grp, PvPDifficultyEntry const* bracketEntry, bool isPremade);
+        bool CanFillPlayersToBG(BattlegroundQueue* queue, Battleground* bg, const int32 aliFree, const int32 hordeFree, BattlegroundBracketId bracket_id);
+        bool CanFillPlayersToBGWithSpecific(BattlegroundQueue* queue, Battleground* bg, const int32 aliFree, const int32 hordeFree,
+            BattlegroundBracketId thisBracketId, BattlegroundQueue* specificQueue, BattlegroundBracketId specificBracketId);
+        void OnCheckNormalMatch(BattlegroundQueue* queue, uint32& Coef, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers);
+
+    public: /* MiscScript */
+
+        void OnMirrorImageDisplayItem(const Item* item, uint32& display);
+        void OnItemDelFromDB(CharacterDatabaseTransaction trans, ObjectGuid::LowType itemGuid);
 
     private:
         uint32 _scriptCount;
